@@ -8,7 +8,10 @@ Layout inspired by the [Academic Pages](https://academicpages.github.io/) templa
 - Page content lives in `_src/pages/*.html` (one file per page; a small `title:`/`description:` header, then the body).
 - The shared sidebar / menu / footer is `_src/layout.html`.
 - Styles are in `style.css`.
-- Run `python3 build.py` to regenerate the top-level `*.html` files, then commit everything.
+- Run `python3 build.py` to regenerate `index.html`, then commit everything.
+  All pages are bundled into the single `index.html`; the menu switches sections
+  client-side (`#about`, `#publications`, ...) so navigation is instant. The other
+  top-level `*.html` files are tiny redirects kept for old links.
 
 ## Assets
 

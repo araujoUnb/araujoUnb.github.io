@@ -3,23 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{title}} — Daniel Costa Araújo</title>
+  <title>Daniel Costa Araújo — University of Brasília</title>
   <meta name="description" content="{{description}}">
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=5">
+  <script>document.documentElement.classList.add('js');</script>
   <link rel="icon" href="assets/unb.png">
 </head>
 <body>
 
 <header class="masthead">
   <div class="container">
-    <a class="site-title" href="index.html">Daniel Costa Araújo</a>
+    <a class="site-title" href="#about">Daniel Costa Araújo</a>
     <nav>
       <ul>
-        <li><a href="index.html" {{active:index}}>About</a></li>
-        <li><a href="publications.html" {{active:publications}}>Publications</a></li>
-        <li><a href="projects.html" {{active:projects}}>Projects</a></li>
-        <li><a href="teaching.html" {{active:teaching}}>Teaching</a></li>
-        <li><a href="students.html" {{active:students}}>Students</a></li>
+        <li><a href="#about" data-view="about">About</a></li>
+        <li><a href="#publications" data-view="publications">Publications</a></li>
+        <li><a href="#projects" data-view="projects">Projects</a></li>
+        <li><a href="#teaching" data-view="teaching">Teaching</a></li>
+        <li><a href="#students" data-view="students">Students</a></li>
         <li><a href="assets/cv_daniel_araujo.pdf">CV</a></li>
       </ul>
     </nav>
@@ -58,7 +59,7 @@
   </aside>
 
   <main class="content">
-{{content}}
+{{views}}
   </main>
 </div>
 
@@ -67,6 +68,25 @@
     © Daniel Costa Araújo · Faculdade do Gama, Universidade de Brasília · Last updated {{updated}}.
   </div>
 </footer>
+
+<script>
+(function () {
+  var views = document.querySelectorAll('.view');
+  var links = document.querySelectorAll('.masthead nav a[data-view]');
+  function show(name, scroll) {
+    var found = false;
+    views.forEach(function (v) { var on = v.dataset.view === name; v.classList.toggle('active', on); if (on) found = true; });
+    if (!found) { return show('about', scroll); }
+    links.forEach(function (a) { a.classList.toggle('active', a.dataset.view === name); });
+    var h = document.querySelector('.view.active .page-title');
+    document.title = (h ? h.textContent + ' — ' : '') + 'Daniel Costa Araújo';
+    if (scroll) window.scrollTo(0, 0);
+  }
+  function route(scroll) { show((location.hash || '#about').slice(1), scroll); }
+  window.addEventListener('hashchange', function () { route(true); });
+  route(false);
+})();
+</script>
 
 </body>
 </html>

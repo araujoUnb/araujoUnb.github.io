@@ -137,3 +137,8 @@ dl.students dd { margin: .1rem 0 0; color: var(--muted); font-size: .92rem; }
   td { border: 0; padding: .1rem 0; }
   td.code { font-weight: 700; }
 }
+
+/* Single-page views: only the active section is shown when JS is available */
+html.js .view { display: none; }
+html.js .view.active { display: block; }
+html:not(.js) .view + .view { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-strong); }
