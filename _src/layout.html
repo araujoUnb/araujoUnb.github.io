@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}} — Daniel Costa Araújo</title>
+  <meta name="description" content="{{description}}">
+  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="icon" href="assets/unb.png">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="container">
+    <a class="site-title" href="index.html">Daniel Costa Araújo</a>
+    <nav>
+      <ul>
+        <li><a href="index.html" {{active:index}}>About</a></li>
+        <li><a href="publications.html" {{active:publications}}>Publications</a></li>
+        <li><a href="projects.html" {{active:projects}}>Projects</a></li>
+        <li><a href="teaching.html" {{active:teaching}}>Teaching</a></li>
+        <li><a href="students.html" {{active:students}}>Students</a></li>
+        <li><a href="assets/cv_daniel_araujo.pdf">CV</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container page">
+  <aside class="sidebar">
+    <img class="avatar" src="assets/profile.jpg" alt="Daniel Costa Araújo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="avatar-fallback" aria-hidden="true">DA</div>
+    <div class="name">Daniel Costa Araújo</div>
+    <div class="bio">Adjunct Professor of Electronic Engineering · Array signal processing &amp; wireless communications</div>
+    <ul class="links">
+      <li><span class="ico">🏛</span><a href="https://fcte.unb.br/">University of Brasília (FCTE / Gama)</a></li>
+      <li><span class="ico">🎛</span><a href="https://eletronica.unb.br/">Electronic Engineering</a></li>
+      <li><span class="ico">📡</span><a href="https://lab-telecom.unb.br/">LabTelecom</a></li>
+      <li><span class="ico">📍</span>Brasília, Brazil</li>
+      <li><span class="ico">✉</span><a href="mailto:daniel.araujo@unb.br">daniel.araujo@unb.br</a></li>
+      <li><span class="ico">🆔</span><a href="https://orcid.org/0000-0002-9107-1300" rel="me">ORCID</a></li>
+      <li><span class="ico">📚</span><a href="http://lattes.cnpq.br/4333596254925501">Lattes CV</a></li>
+      <li><span class="ico">🎓</span><a href="https://sigaa.unb.br/sigaa/public/docente/portal.jsf?siape=3157968">SIGAA (UnB)</a></li>
+      <li><span class="ico">💼</span><a href="https://www.linkedin.com/in/araujo0686/">LinkedIn</a></li>
+      <li><span class="ico">🐙</span><a href="https://github.com/araujoUnb">GitHub</a></li>
+      <li><span class="ico">📄</span><a href="assets/cv_daniel_araujo.pdf">Curriculum Vitae (PDF)</a></li>
+    </ul>
+    <div class="logos">
+      <a class="logo-card" href="https://lab-telecom.unb.br/" title="LabTelecom — Shared Teaching and Research Laboratory in Telecommunications">
+        <img src="assets/labtelecom_mark.png" alt="LabTelecom">
+        <span class="caption">LabTelecom · lab-telecom.unb.br</span>
+      </a>
+      <a class="logo-card" href="https://www.unb.br/" title="Universidade de Brasília">
+        <img src="assets/unb.png" alt="Universidade de Brasília">
+        <span class="caption">Universidade de Brasília</span>
+      </a>
+    </div>
+  </aside>
+
+  <main class="content">
+{{content}}
+  </main>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    © Daniel Costa Araújo · Faculdade do Gama, Universidade de Brasília · Last updated {{updated}}.
+  </div>
+</footer>
+
+</body>
+</html>
