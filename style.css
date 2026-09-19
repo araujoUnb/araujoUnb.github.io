@@ -115,7 +115,8 @@ ol.pubs li { margin-bottom: .7rem; }
 ol.pubs .me { font-weight: 700; color: var(--heading); }
 ol.pubs .venue { font-style: italic; }
 ol.pubs .doi { font-size: .86rem; white-space: nowrap; }
-ol.pubs .badge { font-size: .72rem; padding: .05rem .4rem; border-radius: 3px; background: var(--accent); color: #fff; font-weight: 600; margin-left: .3rem; vertical-align: middle; }
+ol.pubs .badge { font-size: .72rem; padding: .05rem .4rem; border-radius: 3px; background: var(--accent); color: #fff; font-weight: 600; margin-left: .3rem; vertical-align: middle; white-space: nowrap; }
+ol.pubs .badge.soft { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 
 dl.students { margin: 0; }
 dl.students dt { font-weight: 600; color: var(--heading); margin-top: .7rem; }
