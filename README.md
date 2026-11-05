@@ -8,6 +8,7 @@ Layout inspired by the [Academic Pages](https://academicpages.github.io/) templa
 - Page content lives in `_src/pages/*.html` (one file per page; a small `title:`/`description:` header, then the body).
 - The shared sidebar / menu / footer is `_src/layout.html`.
 - Styles are in `style.css`.
+- In `_src/pages/publications.html`, every `<li>` needs a `data-year="YYYY"` attribute: it drives the year filter.
 - Run `python3 build.py` to regenerate `index.html`, then commit everything.
   All pages are bundled into the single `index.html`; the menu switches sections
   client-side (`#about`, `#publications`, ...) so navigation is instant. The other

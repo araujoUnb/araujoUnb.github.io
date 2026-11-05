@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Daniel Costa Araújo — University of Brasília</title>
   <meta name="description" content="{{description}}">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
   <script>document.documentElement.classList.add('js');</script>
   <link rel="icon" href="assets/unb.png">
 </head>
@@ -17,11 +17,13 @@
     <nav>
       <ul>
         <li><a href="#about" data-view="about">About</a></li>
+        <li><a href="#experience" data-view="experience">Experience</a></li>
         <li><a href="#publications" data-view="publications">Publications</a></li>
         <li><a href="#projects" data-view="projects">Projects</a></li>
         <li><a href="#teaching" data-view="teaching">Teaching</a></li>
         <li><a href="#students" data-view="students">Students</a></li>
         <li><a href="#service" data-view="service">Service</a></li>
+        <li><a href="#contact" data-view="contact">Contact</a></li>
         <li><a href="assets/cv_daniel_araujo.pdf">CV</a></li>
       </ul>
     </nav>
@@ -87,6 +89,61 @@
   window.addEventListener('hashchange', function () { route(true); });
   route(false);
 })();
+</script>
+
+<script>
+(function () {
+  var search = document.getElementById('pub-search');
+  var type = document.getElementById('pub-type');
+  var year = document.getElementById('pub-year');
+  var count = document.getElementById('pub-count');
+  var lists = document.querySelectorAll('ol.pubs[data-type]');
+  var items = [];
+  // Ignore case, accents and the dash variants used in titles (Araújo = araujo, Multi‑Bit = multi-bit).
+  function norm(s) {
+    return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[‐-―−]/g, '-').toLowerCase();
+  }
+  lists.forEach(function (ol) {
+    var lis = ol.querySelectorAll('li');
+    lis.forEach(function (li, i) {
+      li.value = ol.reversed ? lis.length - i : i + 1; // keep each entry's number while filtering
+      items.push({ li: li, type: ol.dataset.type, year: li.dataset.year, text: norm(li.textContent) });
+    });
+  });
+  Array.from(new Set(items.map(function (it) { return it.year; }))).sort().reverse().forEach(function (y) {
+    year.add(new Option(y, y));
+  });
+  function apply() {
+    var words = norm(search.value).split(/\s+/).filter(Boolean);
+    var shown = 0;
+    items.forEach(function (it) {
+      var on = (!type.value || it.type === type.value) && (!year.value || it.year === year.value) &&
+        words.every(function (w) { return it.text.indexOf(w) !== -1; });
+      it.li.hidden = !on;
+      if (on) shown++;
+    });
+    lists.forEach(function (ol) {
+      var empty = !ol.querySelector('li:not([hidden])');
+      ol.hidden = empty;
+      ol.previousElementSibling.hidden = empty;
+    });
+    count.textContent = !shown ? 'No publications found' :
+      (shown === items.length ? shown : shown + ' of ' + items.length) + ' publications';
+  }
+  search.addEventListener('input', apply);
+  type.addEventListener('change', apply);
+  year.addEventListener('change', apply);
+  apply();
+})();
+</script>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target.elements;
+  location.href = 'mailto:daniel.araujo@unb.br?subject=' + encodeURIComponent('Message from ' + f.name.value) +
+    '&body=' + encodeURIComponent(f.message.value + '\n\n' + f.name.value + '\n' + f.email.value);
+});
 </script>
 
 </body>

@@ -10,7 +10,7 @@ stub is also written so old links keep working. Run `python3 build.py` after edi
 import datetime, pathlib
 
 ROOT = pathlib.Path(__file__).parent
-ORDER = ["index", "publications", "projects", "teaching", "students", "service"]
+ORDER = ["index", "experience", "publications", "projects", "teaching", "students", "service", "contact"]
 SLUG = {"index": "about"}
 
 layout = (ROOT / "_src" / "layout.html").read_text(encoding="utf-8")
