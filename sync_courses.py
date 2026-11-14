@@ -3,7 +3,8 @@
 
 Each topic can have an interactive HTML deck, a PDF (Beamer) or both; paths are
 relative to the course folder under ~/Documentos/UnB/Aulas. Edit COURSES to add,
-rename or reorder topics (modules are (folder, heading, topics)), then run `python3 sync_courses.py` and `python3 build.py`.
+rename or reorder topics (modules are (folder, heading, topics); a deck split into
+one file per section lists them under "parts"), then run `python3 sync_courses.py` and `python3 build.py`.
 """
 import html, pathlib, re, shutil, unicodedata
 
@@ -69,7 +70,18 @@ COURSES = {
                 ("Forças magnéticas", {"pdf": "magnetostatica/latex-slide/forca_magnetica/main.pdf"}),
             ]),
             ("maxwell", "Campos variantes no tempo", [
-                ("Equações de Maxwell", {"pdf": "maxwell/Latex-slide/main.pdf", "html": "maxwell/html/maxwell.html"}),
+                ("Equações de Maxwell", {"pdf": "maxwell/Latex-slide/main.pdf", "html": "maxwell/html/maxwell.html",
+                                         "parts": [
+                    ("maxwell-01-estatica.html", "Estática e regime variante"),
+                    ("maxwell-02-faraday.html", "Lei de Faraday"),
+                    ("maxwell-03-ampere-maxwell.html", "Lei de Ampère–Maxwell"),
+                    ("maxwell-04-onda.html", "Equação de onda 3D"),
+                    ("maxwell-05-perdas.html", "Meios com perdas"),
+                    ("maxwell-06-poynting.html", "Vetor de Poynting"),
+                    ("maxwell-07-polarizacao.html", "Polarização"),
+                    ("maxwell-08-contorno.html", "Condições de contorno"),
+                    ("maxwell-09-reflexao-normal.html", "Reflexão em incidência normal"),
+                ]}),
             ]),
         ],
     ),
@@ -83,7 +95,7 @@ def slug(text):
     return re.sub(r"[^a-z0-9]+", "_", t).strip("_")
 
 
-REF = re.compile(r'(?:src|href|data-href)="([^"#:?$]+\.(?:png|jpe?g|gif|svg|webp|mp4|webm|css|js|html))"')
+REF = re.compile(r'(?:src|href|data-href)="([^"#:?$]+\.(?:png|jpe?g|gif|svg|webp|mp4|webm|css|js|html))(?:[#?][^"]*)?"')
 
 
 def copy_deck(s, d, seen):
@@ -133,7 +145,15 @@ for name, c in COURSES.items():
                     links.append(("en", f"{mdir}/{en.name}"))
             head = f'<a href="{links[0][1]}">{html.escape(title)}</a>'
             extra = " · ".join(f'<a href="{r}">{LABEL[k]}</a>' for k, r in links) if len(links) > 1 else LABEL[links[0][0]]
-            rows.append(f'    <li>{head} <span class="muted">({extra})</span></li>')
+            parts = ""
+            if files.get("parts"):  # an HTML deck split into one file per section
+                base = (src / files["html"]).parent
+                for f, _ in files["parts"]:
+                    copy_deck(base / f, dst / mdir / f, seen)
+                parts = "\n      <ol>\n" + "\n".join(
+                    f'        <li><a href="{mdir}/{f}">{html.escape(t)}</a></li>' for f, t in files["parts"]
+                ) + "\n      </ol>\n    "
+            rows.append(f'    <li>{head} <span class="muted">({extra})</span>{parts}</li>')
         sections.append(f"<h2>{html.escape(mtitle)}</h2>\n<ol>\n" + "\n".join(rows) + "\n</ol>")
 
     page = f"""<!DOCTYPE html>
