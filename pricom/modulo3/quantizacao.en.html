@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- =====================================================================
+     MOTOR REVEAL.JS 5.1.0, local em lib/ (sem CDN para o reveal), com notas (S) e quadro (B, C).
      AULA: QUANTIZAÇÃO, a partir do MODELO DE AULA INTERATIVA — UnB / LabTelecom (tema "unbclean", palco 1600x900)
      Arquivo único e autocontido: CSS, logos (data: URI), MathJax 3.2.2 (cdnjs)
      e o script do deck. Para começar uma aula nova: copie este arquivo,
@@ -25,6 +26,8 @@
   };
 </script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="lib/reveal/dist/reveal.css">
+<link rel="stylesheet" href="lib/reveal-plugins/chalkboard/style.css">
 <style>
 /* Layout: the UnB/LabTelecom "unbclean" Beamer theme on a 1600x900 stage
    (1 cm of the 16 cm Beamer page = 100 px). Single light look, as in the PDF slides.
@@ -55,8 +58,6 @@ body { margin: 0; background: var(--letterbox); color: var(--unb-text); font-fam
 #stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center center; background: #ffffff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
 
 /* ---- frame anatomy (template) ---- */
-.slide { position: absolute; inset: 0; display: none; font-size: 26px; line-height: 1.42; }
-.slide.active { display: block; }
 .slide .logo-head { position: absolute; top: 45px; right: 100px; height: 55px; }
 .frametitle { position: absolute; top: 45px; left: 100px; right: 520px; }
 .frametitle h2 { margin: 0; font-size: 44px; font-weight: 700; color: var(--unb-primary); line-height: 1.1; }
@@ -151,7 +152,7 @@ dl.syms::before { content: "Symbols"; font-weight: 700; color: var(--unb-seconda
 
 /* instruments */
 .inst { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 40px; flex: 1; min-height: 0; }
-.controls { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
+.painel { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
 .ctl { display: grid; gap: 4px; }
 .ctl .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .ctl output { font-family: var(--font-mono); font-size: 18px; color: var(--unb-primary); font-variant-numeric: tabular-nums; }
@@ -194,8 +195,6 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .toc .d { display: block; font-size: 20px; color: var(--unb-muted); margin-left: 34px; }
 .refs { columns: 2; column-gap: 50px; font-size: 18px; line-height: 1.3; }
 .refs p { break-inside: avoid; margin: 0 0 7px; padding-left: 2.3em; text-indent: -2.3em; }
-@media (max-width: 760px) { .refs { columns: 1; font-size: 14px; } }
-
 /* navigation bar (outside the slide) */
 nav.ctrl { position: fixed; left: 0; right: 0; bottom: 0; height: calc(48px + env(safe-area-inset-bottom, 0px)); padding: 0 16px env(safe-area-inset-bottom, 0px); display: flex; align-items: center; gap: 12px; background: #fff; border-top: 1px solid var(--rule); font-size: 15px; color: var(--unb-muted); }
 nav.ctrl .progress { position: absolute; left: 0; top: -1px; height: 3px; background: var(--unb-secondary); transition: width .2s; }
@@ -205,29 +204,6 @@ nav.ctrl #sec { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; te
 nav.ctrl select { font: inherit; font-size: 14px; color: var(--unb-primary); max-width: 260px; padding: 3px 6px; }
 :focus-visible { outline: 3px solid var(--unb-secondary); outline-offset: 2px; }
 
-@media (max-width: 760px) {
-  body { overflow: auto; background: #fff; }
-  #deck { position: static; background: #fff; overflow: visible; padding-inline: 16px; }
-  #stage { position: static; width: auto; height: auto; transform: none !important; box-shadow: none; }
-  .slide { position: relative; display: block; padding-block: 28px 20px; border-bottom: 2px solid var(--unb-secondary); font-size: 17px; }
-  .slide .logo-head, .foot, .stepinfo, nav.ctrl { display: none; }
-  .frametitle, .body, .titlepage, .divider { position: static; inset: auto; }
-  .frametitle { margin-bottom: 18px; } .frametitle h2 { font-size: 26px; } .frametitle .sub { font-size: 17px; }
-  .body { gap: 14px; }
-  .titlepage h1 { font-size: 40px; } .titlepage .subtitle { font-size: 20px; } .titlepage .logos { gap: 12px; } .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
-  .titlepage .author { font-size: 20px; } .titlepage .inst, .titlepage .date { font-size: 16px; } .titlepage .mid { margin: 28px 0; }
-  .divider .num { font-size: 56px; } .divider .ttl { font-size: 30px; } .divider .what { font-size: 17px; }
-  .cols, .inst, .plots.two, .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .toc { font-size: 19px; } .toc .d { font-size: 15px; }
-  .step, .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } .step .why, .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
-  .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .dlayout .step .m { font-size: 17px; }
-  dl.syms, .figcap, .symline { font-size: 15px; } dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
-  .block, .block .bt, .controls, .readouts, .legend, .cap, .try { font-size: 15px; }
-  .eqn > .tag, .step .tag { font-size: 14px; }
-  table { font-size: 15px; min-width: 540px; }
-  code { overflow-wrap: anywhere; }
-}
 @media (prefers-reduced-motion: reduce) { .step, nav.ctrl .progress { transition: none; } }
 /* passos de texto e blocos revelados por passo */
 .step.txt { display: block; font-size: 22px; line-height: 1.38; padding: 6px 0 6px 14px; }
@@ -244,7 +220,6 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
-@media (max-width: 760px) { .note, svg.notelayer { display: none; } }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -273,12 +248,39 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
 .codtab td.mono { font-family: var(--font-mono); }
 .codtab td.hlon { color: var(--unb-alert); }
 .codtab td.g.hlon { color: var(--unb-secondary); }
+
+/* ---------- reveal.js: palco 1600x900, barra embaixo, passos como fragmentos ---------- */
+body.reveal-viewport { background: var(--letterbox); line-height: normal; }
+html:not(.reveal-print) .reveal { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: calc(48px + env(safe-area-inset-bottom, 0px)); width: auto; height: auto; }
+html:fullscreen:not(.reveal-print) .reveal { top: 0; bottom: 0; }
+html:fullscreen nav.ctrl { display: none; }
+.reveal .slides { text-align: left; }
+.reveal .slides > section.slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; padding: 0; margin: 0; box-sizing: border-box; font-size: 26px; line-height: 1.42; text-align: left; background: #fff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
+html.reveal-print .reveal .slides > section.slide { box-shadow: none; }
+/* os passos usam as próprias classes .hidden e .current, não o visual de fragmento do reveal */
+.reveal .slides section .step.fragment { opacity: 1; visibility: inherit; transform: none; transition: opacity .35s ease, transform .35s ease, border-color .35s; will-change: auto; }
+.reveal .slides section .step.fragment.hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+.reveal .slides section .step.fragment.block { transition: opacity .35s ease, transform .35s ease, box-shadow .35s; }
+/* visão geral */
+.reveal.overview .slides > section.slide { box-shadow: 0 0 0 1px var(--rule); }
+/* PDF: estado final, sem transições */
+html.reveal-print *, html.reveal-print *::before { transition: none !important; animation: none !important; }
+html.reveal-print nav.ctrl { display: none; }
+html.reveal-print svg.notelayer path.ln { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+nav.ctrl { z-index: 40; line-height: normal; }
+/* dentro da visão do apresentador (S) as miniaturas não mostram a barra */
+html.receiver nav.ctrl { display: none; }
+/* quadro (chalkboard) sem Font Awesome: ícones da paleta desenhados em CSS */
+.palette .fa-square::before { content: ""; display: inline-block; width: .9em; height: .9em; background: currentColor; border-radius: 2px; vertical-align: middle; }
+.boardhandle .fa-chevron-up::before { content: "▲"; color: #fff; font-style: normal; }
+.boardhandle .fa-chevron-down::before { content: "▼"; color: #fff; font-style: normal; }
+.boardhandle a { text-decoration: none; }
 </style>
 </head>
 <body>
 
-<div id="deck" aria-roledescription="presentation">
-<div id="stage">
+<div class="reveal" aria-roledescription="presentation">
+<div class="slides">
 
 <!-- =====================================================================
      SLIDES. Cada <section class="slide"> é um slide do palco 1600x900.
@@ -309,6 +311,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
     </div>
     <div class="date" data-cfg="rodape_titulo">use ← → to advance, F for full screen</div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ roteiro ============ -->
@@ -327,12 +330,14 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <p>J. G. Proakis and M. Salehi, Fundamentals of Communication Systems, 2nd ed., section 7.2, with Examples 7.2.1 to 7.2.3 and Tables 7.1 and 7.2. The equations are numbered independently in this lecture.</p></div>
     <p class="symline">The animated figures and the instruments are computed in the browser from the equations themselves.</p>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 1 ============ -->
 <section class="slide" id="sec1" data-sec="1 Scalar quantizer" data-nonum>
   <div class="divider"><div class="num">1</div><div class="ttl">Scalar quantizer</div><div class="gbar"></div>
   <div class="what">After sampling, time is discrete, but the amplitude is still continuous. The quantizer replaces each sample by one of \(N\) levels.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ amplitude contínua ============ -->
@@ -348,6 +353,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">The price is an error that can never be undone: the difference between the sample and the chosen level. This error is the quantization noise.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ quantizador escalar ============ -->
@@ -368,6 +374,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
     </div>
   </div>
   <div class="note" data-on="2" data-to="es-x6">level at the middle of the region</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ erro de quantização ============ -->
@@ -382,12 +389,14 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">Outside the range the last level stays fixed and the error grows without bound: this is overload. The design chooses the range so that this is rare.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 2 ============ -->
 <section class="slide" id="sec2" data-sec="2 Distortion and SQNR" data-nonum>
   <div class="divider"><div class="num">2</div><div class="ttl">Distortion and SQNR</div><div class="gbar"></div>
   <div class="what">The error is random. The measure is the mean squared error, and comparing it with the signal power gives the SQNR.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ distorção e SQNR ============ -->
@@ -411,6 +420,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   </div>
   <div class="note" data-on="2" data-to="di-err">function of \(X\): average weighted by the density</div>
   <div class="note" data-on="3" data-to="di-xk">in \(\mathcal R_k\) the quantizer equals the constant \(\hat x_k\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ exemplo gaussiano ============ -->
@@ -435,6 +445,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="3" data-to="ga-bits">bits per sample</div>
   <div class="note" data-on="3" data-to="ga-fs">\(f_s=2W\)</div>
   <div class="note" data-on="4" data-to="ga-d">8 integrals of the Gaussian, done with the \(Q\) function</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ erro quase uniforme ============ -->
@@ -450,6 +461,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">Working hypothesis for the uniform quantizer without overload.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ Delta^2/12 ============ -->
@@ -475,6 +487,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="2" data-to="u-prim">antiderivative of \(e^2\)</div>
   <div class="note" data-on="3" data-to="u-p2">\(e^3\) is odd: the two terms add</div>
   <div class="note" data-on="6" data-to="u-ex">the approximation already works with only 8 levels</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ SQNR e bits ============ -->
@@ -500,6 +513,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="4" data-to="b-t1">\(4.77\) dB</div>
   <div class="note" data-on="4" data-to="b-t2">\(6.02\,\nu\) dB</div>
   <div class="note" data-on="4" data-to="b-t3">depends only on the signal</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ dois sinais típicos ============ -->
@@ -521,12 +535,14 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 3 ============ -->
 <section class="slide" id="sec3" data-sec="3 Range and nonuniform quantization" data-nonum>
   <div class="divider"><div class="num">3</div><div class="ttl">Range and nonuniform quantization</div><div class="gbar"></div>
   <div class="what">Where to place the range \([-x_{\max},x_{\max}]\), and what is gained with regions of different sizes: the Lloyd-Max conditions.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ escolha da faixa ============ -->
@@ -542,6 +558,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">The levels in the center are used a lot and those at the edges almost never. Hence the question: what if the regions had different sizes?</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ instrumento: SQNR ============ -->
@@ -550,7 +567,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="frametitle"><h2>SQNR, bits and range</h2><div class="sub">Instrument · midrise uniform quantizer · Eqs. (3), (4) and (6)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><label for="sq-src">Sample</label><select id="sq-src"><option value="g" selected>Gaussian with variance σ²</option><option value="s">sinusoid with amplitude A</option></select></div>
         <div class="ctl"><div class="row"><label for="sq-nu">\(\nu\), bits per sample</label><output id="sq-nu-o"></output></div><input id="sq-nu" type="range" min="1" max="10" step="1" value="3"></div>
         <div class="ctl"><div class="row"><label for="sq-x" id="sq-xl">\(x_{\max}/\sigma\)</label><output id="sq-x-o"></output></div><input id="sq-x" type="range" min="0.5" max="7" step="0.01" value="4"></div>
@@ -563,6 +580,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ não uniforme ============ -->
@@ -578,6 +596,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
         \[ D=\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \tag{3}\]</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ condição das fronteiras ============ -->
@@ -602,6 +621,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="1" data-to="fr-inf">lower limit of \(\mathcal R_{k+1}\)</div>
   <div class="note" data-on="2" data-to="fr-d1" style="max-width:520px">fundamental theorem of calculus: integrand at the limit, with a \(-\) sign at the lower limit</div>
   <div class="note" data-on="4" data-to="fr-sg">\(\hat x_k&lt;a_k&lt;\hat x_{k+1}\): opposite signs</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ condição dos níveis ============ -->
@@ -623,6 +643,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   </div>
   <div class="note" data-on="1" data-to="nv-der">derivative of \((x-\hat x_k)^2\) with respect to \(\hat x_k\)</div>
   <div class="note" data-on="2" data-to="nv-cte">constant, comes out of the integral</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ Lloyd-Max na prática ============ -->
@@ -655,12 +676,14 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">For the Gaussian, nonuniformity yields only another \(0.35\) dB. The gain is much larger for densities concentrated around zero, such as that of speech: this is the idea behind companding, in PCM.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 4 ============ -->
 <section class="slide" id="sec4" data-sec="4 Lloyd-Max example" data-nonum>
   <div class="divider"><div class="num">4</div><div class="ttl">Lloyd-Max example</div><div class="gbar"></div>
   <div class="what">Laplacian density with 4 levels: the centroids come out in closed form and the iteration fits on the board.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ exemplo de Lloyd-Max ============ -->
@@ -684,6 +707,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   </div>
   <div class="note" data-on="1" data-to="lx-e2">\(\int_0^\infty x^n e^{-x}dx=n!\)</div>
   <div class="note" data-on="4" data-to="lx-out">the tail carries almost all of it</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ centroides da laplaciana ============ -->
@@ -709,6 +733,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="3" data-to="ce-x2">the exponential tail is memoryless: the centroid always sits \(1\) beyond \(a\)</div>
   <div class="note" data-on="5" data-to="ce-n1" style="left:560px; top:418px">\(\big[-(x+1)e^{-x}\big]_0^a\)</div>
   <div class="note" data-on="5" data-to="ce-d1" style="left:560px; top:500px">\(\big[-e^{-x}\big]_0^a\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ primeira iteração ============ -->
@@ -734,6 +759,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="note" data-on="3" data-to="it-n2">the outer level rises from \(1.5\) to \(2\)</div>
   <div class="note" data-on="4" data-to="it-e1">\(e^{-1}\approx 0.368\)</div>
   <div class="note" data-on="5" data-to="it-n1">the inner one drops closer to \(0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ convergência ============ -->
@@ -763,6 +789,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <div class="step txt">Note that at the fixed point \(\hat x_2=a+1\) and \(a=(\hat x_1+\hat x_2)/2\) give \(\hat x_1=a-1\): the three formulas hold at the same time, so no step changes anything anymore.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ instrumento: Lloyd-Max ============ -->
@@ -771,7 +798,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <div class="frametitle"><h2>Lloyd-Max iteration</h2><div class="sub">Instrument · Eqs. (3), (7) and (8)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><label for="lm-pdf">Density</label><select id="lm-pdf"><option value="l" selected>Laplacian with variance 2</option><option value="g">Gaussian, σ = 1</option></select></div>
         <div class="ctl"><label for="lm-n">Number of levels \(N\)</label><select id="lm-n"><option value="2">2</option><option value="4" selected>4</option><option value="8">8</option></select></div>
         <div class="ctl"><div class="row"><label for="lm-it">Iteration</label><output id="lm-it-o"></output></div><input id="lm-it" type="range" min="0" max="25" step="1" value="0"></div>
@@ -784,12 +811,14 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 5 ============ -->
 <section class="slide" id="sec5" data-sec="5 Encoding" data-nonum>
   <div class="divider"><div class="num">5</div><div class="ttl">Encoding</div><div class="gbar"></div>
   <div class="what">Each level becomes a word of \(\nu\) bits. Sampling, quantization and encoding together make up PCM.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ codificação ============ -->
@@ -810,6 +839,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
         <tbody id="codbody"></tbody></table></div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ fluxo de bits ============ -->
@@ -832,6 +862,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   </div>
   <div class="note" data-on="5" data-to="fl-nu">bits per sample</div>
   <div class="note" data-on="5" data-to="fl-fs">samples per second</div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ referências ============ -->
@@ -843,6 +874,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
       <p>[1] John G. Proakis and Masoud Salehi. Fundamentals of Communication Systems. Pearson, Upper Saddle River, NJ, 2nd ed., 2014.</p>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 </div>
 </div>
@@ -854,11 +886,17 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <span id="pg"></span>
   <span id="sec"></span>
   <button id="gotoc" type="button" title="Go to the outline (R)">Outline</button>
-  <select id="secsel" aria-label="Go to a section (S)"></select>
+  <select id="secsel" aria-label="Go to a section (G)" title="Sections (G)"></select>
+  <button id="ovw" type="button" title="Overview (Esc)">Overview</button>
+  <button id="pen" type="button" title="Pen on the slide (C)">Pen</button>
+  <button id="board" type="button" title="Blank whiteboard (B)">Board</button>
   <button id="lang" type="button" title="Versão em português" data-href="quantizacao.html">PT</button>
-  <button id="full" type="button">Full screen</button>
+  <button id="full" type="button" title="Full screen (F)">Full screen</button>
 </nav>
 
+<script src="lib/reveal/dist/reveal.js"></script>
+<script src="lib/reveal/plugin/notes/notes.js"></script>
+<script src="lib/reveal-plugins/chalkboard/plugin.js"></script>
 <script>
 (() => {
 "use strict";
@@ -884,7 +922,7 @@ const CONFIG = {
   subtitulo: "Scalar quantizer, distortion and SQNR, Lloyd-Max and encoding",
   autor: "Prof. Daniel Costa Araújo",
   instituicao: "Faculty of Science and Technology in Engineering (FCTE), University of Brasília (UnB)<br>LabTelecom",
-  rodape_titulo: "FGA0092 Principles of Communication for Engineering · Module 3 · use ← → to advance, F for full screen",
+  rodape_titulo: "FGA0092 Principles of Communication for Engineering · Module 3 · use ← → to advance, F for full screen, S for the speaker view",
   contato: "Daniel Araújo · LabTelecom, FCTE, University of Brasília (UnB)",
   rodape: "Quantization &nbsp;|&nbsp; Daniel Araújo",
 };
@@ -1685,11 +1723,21 @@ $("lm-pdf").addEventListener("change", drawLloydInst); $("lm-n").addEventListene
     `<td data-show="2-" class="mono"${k === 3 || k === 4 ? ' data-hl="3-"' : ""}>${b3(k)}</td><td data-show="4-" class="mono g"${k === 3 || k === 4 ? ' data-hl="4-"' : ""}>${b3(k ^ (k >> 1))}</td></tr>`).join("");
 })();
 
-// ---------- deck: footer, numbering, overlays, navigation, scaling ----------
+// =====================================================================
+//  Motor do deck sobre o reveal.js 5.1.0 (lib/reveal, sem CDN).
+//  Cada .step do slide vira fragmento do reveal: o primeiro passo já
+//  aparece ao entrar no slide, como no motor antigo, e o passo k ≥ 2
+//  recebe data-fragment-index = k − 2. O passo atual de um slide é lido
+//  das classes .visible que o reveal põe nos fragmentos; assim o mesmo
+//  código pinta o slide ao vivo, na visão geral e nas páginas do PDF.
+//  As figuras (FIGS), os instrumentos (DRAW) e as notas com seta são os
+//  do motor antigo, chamados pelos eventos do reveal.
+// =====================================================================
 // Registre cada instrumento: chave do data-draw -> função de desenho.
 const DRAW = { sqnrinst: drawSqnrInst, lloydinst: drawLloydInst };
-const deck = $("deck"), stage = $("stage"), slides = [...document.querySelectorAll(".slide")];
-const narrow = () => window.matchMedia("(max-width: 760px)").matches;
+const PRINT = /print-pdf/i.test(location.search);
+if (/receiver/i.test(location.search)) document.documentElement.classList.add("receiver");
+const slides = [...document.querySelectorAll(".reveal .slides > section")];
 const numbered = slides.filter((sl) => !sl.hasAttribute("data-nonum"));
 const UNB = document.querySelector('.titlepage .logos img').getAttribute("src");
 const LAB = $("lablogo").getAttribute("src");
@@ -1699,62 +1747,68 @@ numbered.forEach((sl, i) => {
   f.className = "foot";
   f.innerHTML = `<span>${CONFIG.rodape}</span>` +
     `<span class="right"><img src="${UNB}" alt=""><span class="n">${i + 1}<span>&thinsp;/&thinsp;${numbered.length}</span></span></span>`;
-  sl.appendChild(f);
-  if (sl.querySelector(".step")) { const si = document.createElement("div"); si.className = "stepinfo"; sl.appendChild(si); }
+  sl.insertBefore(f, sl.querySelector("aside.notes"));
+  if (sl.querySelector(".step")) { const si = document.createElement("div"); si.className = "stepinfo"; sl.insertBefore(si, sl.querySelector("aside.notes")); }
 });
-let cur = 0, shown = 0;
 const steps = (sl) => [...sl.querySelectorAll(".step")];
-function paintSteps() {
-  const st = steps(slides[cur]);
+// passos -> fragmentos do reveal
+slides.forEach((sl) => steps(sl).forEach((e, k) => { if (k > 0) { e.classList.add("fragment"); e.dataset.fragmentIndex = k - 1; } }));
+// passo atual: 1 + fragmentos visíveis; 0 em slide sem passos
+const shownOf = (sl) => { const n = sl.querySelectorAll(".step").length; return n ? 1 + sl.querySelectorAll(".step.fragment.visible").length : 0; };
+// arrastar o dedo sobre controles e figuras não troca de slide
+document.querySelectorAll(".painel, canvas, select, input, nav.ctrl").forEach((e) => e.setAttribute("data-prevent-swipe", ""));
+const slideNum = (sl) => { const k = numbered.indexOf(sl); return k >= 0 ? [k + 1, " / ", numbered.length] : [""]; };
+
+function paintSteps(sl, shown) {
+  const st = steps(sl);
   st.forEach((e, k) => { e.classList.toggle("hidden", k >= shown); e.classList.toggle("current", k === shown - 1 && shown < st.length + 1 && st.length > 1); });
-  const info = slides[cur].querySelector(".stepinfo");
+  const info = sl.querySelector(".stepinfo");
   if (info) info.textContent = st.length ? `step ${Math.max(shown, 1)} / ${st.length}` : "";
-  slides[cur].querySelectorAll(".syms [data-from]").forEach((e) => {
+  sl.querySelectorAll(".syms [data-from]").forEach((e) => {
     const k = Number(e.dataset.from);
     e.classList.toggle("hidden", k > Math.max(shown, 1));
     e.classList.toggle("new", k === Math.max(shown, 1) && st.length > 0);
   });
-  const kk = Math.max(shown, 1), win = Number(slides[cur].dataset.window || 0);
-  steps(slides[cur]).forEach((e, k) => e.classList.toggle("gone", win > 0 && k < kk - win));
-  slides[cur].querySelectorAll("[data-show]").forEach((e) => { e.classList.toggle("on", e.dataset.show.split(",").some((r) => { const [a, b] = r.split("-").map(Number); return kk >= a && kk <= (b || 1e9); })); });
-  slides[cur].querySelectorAll("[data-hl]").forEach((e) => { const [a, b] = e.dataset.hl.split("-").map(Number); e.classList.toggle("hlon", kk >= a && kk <= (b || 1e9)); });
-  refreshFigs();
-  scheduleNotes();
+  const kk = Math.max(shown, 1), win = Number(sl.dataset.window || 0);
+  st.forEach((e, k) => e.classList.toggle("gone", win > 0 && k < kk - win));
+  sl.querySelectorAll("[data-show]").forEach((e) => { e.classList.toggle("on", e.dataset.show.split(",").some((r) => { const [a, b] = r.split("-").map(Number); return kk >= a && kk <= (b || 1e9); })); });
+  sl.querySelectorAll("[data-hl]").forEach((e) => { const [a, b] = e.dataset.hl.split("-").map(Number); e.classList.toggle("hlon", kk >= a && kk <= (b || 1e9)); });
 }
 // ---------- anotações com seta (notas .note ligadas a \cssId{...} das equações) ----------
 // <div class="note" data-on="3" data-to="id"> aparece no passo 3 (ou "3-5") com uma seta
 // até o elemento id; sem left/top no style, a nota fica abaixo do último passo, sob o alvo.
+// Os alvos são procurados dentro do slide, porque o PDF clona o slide uma vez por passo.
 const SVGNS = "http://www.w3.org/2000/svg";
 document.querySelectorAll(".note").forEach((n) => { if (!n.style.left) n.dataset.auto = "1"; });
 const onRange = (s, k) => { const [a, b] = s.split("-").map(Number); return k >= a && k <= (b || a); };
-function drawNotes(sl, animate) {
+let markerSeq = 0;
+function drawNotes(sl, shown, animate) {
   const notes = [...sl.querySelectorAll(".note")], links = [...sl.querySelectorAll(".link")]; if (!notes.length && !links.length) return;
   let layer = sl.querySelector("svg.notelayer");
-  if (!layer) { layer = document.createElementNS(SVGNS, "svg"); layer.setAttribute("class", "notelayer"); layer.setAttribute("viewBox", "0 0 1600 900"); sl.appendChild(layer); }
-  layer.innerHTML = `<defs><marker id="nah-${sl.id}" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css("--accent-3")}"/></marker></defs>`;
-  if (narrow() || sl !== slides[cur]) { notes.forEach((n) => n.classList.remove("on")); return; }
-  const k = Math.max(shown, 1), S = STAGE_SCALE || 1, sr = sl.getBoundingClientRect();
+  if (!layer) { layer = document.createElementNS(SVGNS, "svg"); layer.setAttribute("class", "notelayer"); layer.setAttribute("viewBox", "0 0 1600 900"); sl.insertBefore(layer, sl.querySelector("aside.notes")); }
+  const mk = "nah-" + (++markerSeq);
+  layer.innerHTML = `<defs><marker id="${mk}" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css("--accent-3")}"/></marker></defs>`;
+  const k = Math.max(shown, 1), sr = sl.getBoundingClientRect(), S = sr.width / 1600 || 1;
+  const byId = (id) => sl.querySelector(`[id="${id}"]`);
   const rel = (el) => { const r = el.getBoundingClientRect(); return { x: (r.left - sr.left) / S, y: (r.top - sr.top) / S, w: r.width / S, h: r.height / S }; };
   const vis = notes.filter((n) => onRange(n.dataset.on, k));
   notes.forEach((n) => n.classList.toggle("on", vis.includes(n)));
   // ligações elemento do circuito -> termo da equação: <div class="link" data-on="k" data-from="id" data-to="id">rótulo</div>
   for (const lk of links.filter((l) => onRange(l.dataset.on, k))) {
-    const se = document.getElementById(lk.dataset.from), te = document.getElementById(lk.dataset.to);
+    const se = byId(lk.dataset.from), te = byId(lk.dataset.to);
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x, acima = tb.y + tb.h < sb.y;
-    // termo acima e à esquerda: sai pela esquerda do elemento e chega por baixo do termo, na vertical,
-    // sem atravessar o resto da linha da equação (abaixo do passo atual não há nada visível)
+    const left = tb.x + tb.w < sb.x;
     const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
     const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
     const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
-    const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#nah-${sl.id})`); layer.appendChild(p);
+    const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
     if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
-  const tg = (n) => (n.dataset.to || "").split(/\s+/).map((id) => document.getElementById(id)).filter(Boolean).map(rel);
+  const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
   const st = steps(sl), der = sl.querySelector(".deriv") || sl.querySelector(".body");
   if (st.length && der) {
@@ -1783,129 +1837,159 @@ function drawNotes(sl, animate) {
       const vert = Math.abs(ey - sy) > Math.abs(ex - sx) * 0.5;
       const d = vert ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}` : `M${sx},${sy} C${(sx + ex) / 2},${sy} ${(sx + ex) / 2},${ey} ${ex},${ey}`;
       const p = document.createElementNS(SVGNS, "path");
-      p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#nah-${sl.id})`);
+      p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`);
       layer.appendChild(p);
       if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
     }
   }
 }
+function clearNotes(sl) { const l = sl.querySelector("svg.notelayer"); if (l) l.innerHTML = ""; sl.querySelectorAll(".note").forEach((n) => n.classList.remove("on")); }
 let noteTimer = 0;
-function scheduleNotes() { const sl = slides[cur]; const l = sl.querySelector("svg.notelayer"); if (l) l.innerHTML = ""; sl.querySelectorAll(".note").forEach((n) => n.classList.remove("on")); clearTimeout(noteTimer); noteTimer = setTimeout(() => drawNotes(slides[cur], true), 380); }
+function scheduleNotes(sl) {
+  clearNotes(sl); clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => { if (Reveal.getCurrentSlide() === sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), true); }, 380);
+}
 
+// ---------- figuras animadas e instrumentos ----------
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T0 = performance.now();
-function drawFigsAt(now) {
-  const list = narrow() ? slides.filter((sl) => sl.dataset.fig) : (slides[cur] && slides[cur].dataset.fig ? [slides[cur]] : []);
-  for (const sl of list) {
-    const cv = sl.querySelector("canvas[data-figcanvas]");
-    if (!cv || !cv.clientWidth) continue;
-    const n = steps(sl).length, stp = narrow() ? Math.max(n, 1) : Math.max(n ? shown : 1, 1);
-    const { ctx, w, h } = setupCanvas(cv);
-    ctx.clearRect(0, 0, w, h);
-    let cap = null;
-    try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, REDUCED ? 2.2 : (now - T0) / 1000); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
-    const capEl = sl.querySelector(".figcap");
-    if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
-  }
+function drawFig(sl, tsec) {
+  if (!sl.dataset.fig || !FIGS[sl.dataset.fig]) return;
+  const cv = sl.querySelector("canvas[data-figcanvas]");
+  if (!cv || !cv.clientWidth) return;
+  const n = steps(sl).length, stp = Math.max(n ? shownOf(sl) : 1, 1);
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.clearRect(0, 0, w, h);
+  let cap = null;
+  try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, tsec); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
+  const capEl = sl.querySelector(".figcap");
+  if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
 }
-function refreshFigs() { requestAnimationFrame((ts) => drawFigsAt(ts)); }
-function figLoop(ts) { if (!document.hidden) drawFigsAt(ts); requestAnimationFrame(figLoop); }
-if (!REDUCED) requestAnimationFrame(figLoop);
-function drawVisible() {
-  const list = narrow() ? slides : [slides[cur]];
-  for (const sl of list) { const k = sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+let ready = false;
+const tnow = (now) => REDUCED ? 2.2 : (now - T0) / 1000;
+function drawFigsAt(now) { if (!ready) return; const sl = Reveal.getCurrentSlide(); if (sl) drawFig(sl, tnow(now)); }
+function refreshFigs() { requestAnimationFrame(drawFigsAt); }
+function figLoop(ts) { if (!document.hidden && !Reveal.isOverview()) drawFigsAt(ts); requestAnimationFrame(figLoop); }
+function drawInst(sl) { const k = sl && sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+function drawVisible() { if (ready) drawInst(Reveal.getCurrentSlide()); }
+
+// ---------- barra de navegação ----------
+const tocIdx = slides.findIndex((sl) => sl.dataset.sec === "Outline");
+function updateNav(sl) {
+  const h = Reveal.getIndices(sl).h, fr = Reveal.availableFragments();
+  const nm = slideNum(sl);
+  $("pg").textContent = nm.length > 1 ? nm.join("") : "";
+  $("bar").style.width = `${(100 * (h + 1)) / slides.length}%`;
+  $("prev").disabled = Reveal.isFirstSlide() && !fr.prev;
+  $("next").disabled = Reveal.isLastSlide() && !fr.next;
+  $("sec").textContent = sl.dataset.sec || "";
 }
-function fit() {
-  if (narrow()) { STAGE_SCALE = 1; stage.style.transform = ""; slides.forEach((sl) => sl.classList.add("static")); return; }
-  slides.forEach((sl) => sl.classList.remove("static"));
-  const r = deck.getBoundingClientRect();
-  STAGE_SCALE = Math.min(r.width / 1600, r.height / 900);
-  stage.style.transform = `translate(-50%, -50%) scale(${STAGE_SCALE})`;
+function onState() {
+  if (!ready) return;
+  const sl = Reveal.getCurrentSlide(); if (!sl) return;
+  paintSteps(sl, shownOf(sl)); refreshFigs(); scheduleNotes(sl); updateNav(sl);
 }
-function show(i, opts = {}) {
-  cur = Math.max(0, Math.min(slides.length - 1, i));
-  const n = steps(slides[cur]).length;
-  shown = opts.allSteps ? n : (n ? 1 : 0);
-  slides.forEach((sl, k) => sl.classList.toggle("active", k === cur));
-  paintSteps();
-  const k = numbered.indexOf(slides[cur]);
-  $("pg").textContent = k >= 0 ? `${k + 1} / ${numbered.length}` : "";
-  $("bar").style.width = `${(100 * (cur + 1)) / slides.length}%`;
-  $("prev").disabled = cur === 0 && shown <= 1;
-  $("next").disabled = cur === slides.length - 1 && shown >= n;
-  $("sec").textContent = slides[cur].dataset.sec || "";
-  try { history.replaceState(null, "", "#" + (cur + 1)); } catch (e) { /* sandboxed viewer */ }
-  requestAnimationFrame(drawVisible);
+// visão geral: pinta todos os slides no estado em que o reveal os deixou
+function paintAll() {
+  slides.forEach((sl) => { paintSteps(sl, shownOf(sl)); drawFig(sl, 2.2); drawInst(sl); });
 }
-function forward() {
-  const n = steps(slides[cur]).length;
-  if (shown < n) { shown++; paintSteps(); $("next").disabled = cur === slides.length - 1 && shown >= n; $("prev").disabled = false; }
-  else if (cur < slides.length - 1) show(cur + 1);   // no último passo do último slide, não faz nada
-}
-function backward() {
-  if (shown > 1) { shown--; paintSteps(); $("next").disabled = false; }
-  else if (cur > 0) show(cur - 1, { allSteps: true });
-}
-$("prev").addEventListener("click", backward);
-$("next").addEventListener("click", forward);
-document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
-  const g = a.dataset.go, idx = slides.findIndex((sl) => sl.id === g);
-  if (idx >= 0) show(idx);
-}));
-document.addEventListener("keydown", (e) => {
-  if (narrow()) return;
-  const t = e.target;
-  const field = t && (t.tagName === "SELECT" || (t.tagName === "INPUT" && t.type === "range"));
-  if (field && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " "].includes(e.key)) return;
-  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); forward(); }
-  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); backward(); }
-  else if (e.key === "Home") show(0);
-  else if (e.key === "End") show(slides.length - 1, { allSteps: true });
-  else if (e.key === "f" || e.key === "F") toggleFull();
-});
 function toggleFull() {
   try {
     if (document.fullscreenElement) document.exitFullscreen();
-    else if (deck.requestFullscreen) deck.requestFullscreen().catch(() => {});
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
   } catch (e) { /* not available in this viewer */ }
 }
-$("full").addEventListener("click", toggleFull);
-// navegação por seção: botão Roteiro, lista com os divisores e atalhos R e S
-const tocIdx = slides.findIndex((sl) => sl.dataset.sec === "Outline");
-$("gotoc").addEventListener("click", () => { if (tocIdx >= 0) show(tocIdx); });
 const secsel = $("secsel");
 secsel.innerHTML = `<option value="">Sections…</option>` + slides.map((sl, i) => sl.hasAttribute("data-nonum") && sl.id ? `<option value="${i}">${(sl.querySelector(".divider .num")?.textContent || "") + " " + (sl.querySelector(".divider .ttl")?.textContent || "")}</option>` : sl.id === "refs" ? `<option value="${i}">References</option>` : "").join("");
-secsel.addEventListener("change", () => { const v = secsel.value; if (v !== "") show(Number(v)); secsel.value = ""; secsel.blur(); });
-document.addEventListener("keydown", (e) => {
-  if (narrow() || e.target.tagName === "SELECT" || e.target.tagName === "INPUT") return;
-  if (e.key === "r" || e.key === "R") { if (tocIdx >= 0) show(tocIdx); }
-  else if (e.key === "s" || e.key === "S") { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } }
+secsel.addEventListener("change", () => { const v = secsel.value; if (v !== "") Reveal.slide(Number(v)); secsel.value = ""; secsel.blur(); });
+const goToc = () => { if (tocIdx >= 0) Reveal.slide(tocIdx); };
+const openSec = () => { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } };
+$("prev").addEventListener("click", () => Reveal.prev());
+$("next").addEventListener("click", () => Reveal.next());
+$("gotoc").addEventListener("click", goToc);
+$("full").addEventListener("click", toggleFull);
+$("board").addEventListener("click", () => RevealChalkboard.toggleChalkboard());
+$("pen").addEventListener("click", () => RevealChalkboard.toggleNotesCanvas());
+$("ovw").addEventListener("click", () => Reveal.toggleOverview());
+document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
+  const idx = slides.findIndex((sl) => sl.id === a.dataset.go);
+  if (idx >= 0) Reveal.slide(idx);
+}));
+// versão inglesa, ainda no motor antigo: #N.k com N contado a partir de 1 e k o passo
+$("lang").addEventListener("click", (e) => {
+  const sl = Reveal.getCurrentSlide(), h = Reveal.getIndices().h, k = shownOf(sl);
+  location.href = e.currentTarget.dataset.href + "#" + (h + 1) + (k > 1 ? "." + k : "");
 });
-let x0 = null;
-stage.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-stage.addEventListener("touchend", (e) => {
-  if (x0 === null || narrow()) return;
-  const dx = e.changedTouches[0].clientX - x0; x0 = null;
-  if (e.target.closest("input, select, button, canvas")) return;
-  if (Math.abs(dx) > 60) (dx < 0 ? forward : backward)();
-}, { passive: true });
 
+// ---------- redesenho após resize, fontes e MathJax ----------
 let pending = false;
-const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; fit(); drawVisible(); refreshFigs(); drawNotes(slides[cur], false); }); } };
-new ResizeObserver(schedule).observe(deck);
-window.addEventListener("resize", schedule);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
-window.__mathReady = schedule;
-// deep links: #12 opens slide 12, #12.4 opens slide 12 at step 4
+const schedule = () => {
+  if (PRINT || pending) return;
+  pending = true;
+  requestAnimationFrame(() => {
+    pending = false; if (!ready) return;
+    STAGE_SCALE = Reveal.getScale() || 1;
+    drawVisible(); refreshFigs();
+    const sl = Reveal.getCurrentSlide();
+    if (sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), false);
+  });
+};
+
+// ---------- PDF: ?print-pdf, uma página por passo ----------
+function printAll() {
+  STAGE_SCALE = 2;   // canvas com o dobro de pixels no PDF
+  const pages = [...document.querySelectorAll(".reveal .slides .pdf-page > section")];
+  pages.forEach((sl) => paintSteps(sl, shownOf(sl)));
+  pages.forEach((sl) => { drawFig(sl, 2.2); drawInst(sl); });
+  pages.forEach((sl) => drawNotes(sl, shownOf(sl), false));
+  document.documentElement.dataset.printReady = "1";
+}
+
+// links antigos do motor anterior, #N e #N.k, viram #/N−1/0/k−2
 const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
-fit();
-show(hm ? Number(hm[1]) - 1 : 0);
-if (hm && hm[2]) { shown = Math.max(1, Math.min(steps(slides[cur]).length, Number(hm[2]))); paintSteps(); }
+if (hm) { const h = Math.max(Number(hm[1]) - 1, 0), k = Number(hm[2] || 1); try { history.replaceState(null, "", "#/" + h + (k > 1 ? "/0/" + (k - 2) : "")); } catch (e) { /* sandboxed viewer */ } }
+
+function start() {
+  Reveal.on("slidechanged", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("fragmentshown", onState);
+  Reveal.on("fragmenthidden", onState);
+  Reveal.on("resize", schedule);
+  Reveal.on("overviewshown", paintAll);
+  Reveal.on("overviewhidden", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("pdf-ready", printAll);
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0.01, minScale: 0.05, maxScale: 4,
+    center: false, controls: false, progress: false,
+    hash: true, fragmentInURL: true, history: false, respondToHashChanges: true,
+    transition: "none", transitionSpeed: "fast", backgroundTransition: "none",
+    slideNumber: slideNum, showSlideNumber: "speaker",
+    pdfSeparateFragments: true, pdfMaxPagesPerSlide: 100,
+    keyboard: { 70: toggleFull },
+    chalkboard: { theme: "whiteboard", storage: "pricom-quantizacao-quadro", toggleChalkboardButton: false, toggleNotesButton: false, colorButtons: true, boardHandle: true, transition: 300 },
+    plugins: [RevealNotes, RevealChalkboard],
+  }).then(() => {
+    Reveal.addKeyBinding({ keyCode: 82, key: "R", description: "Outline" }, goToc);
+    Reveal.addKeyBinding({ keyCode: 71, key: "G", description: "Sections" }, openSec);
+    ready = true;
+    STAGE_SCALE = PRINT ? 2 : (Reveal.getScale() || 1);
+    if (PRINT) return;
+    onState(); drawVisible();
+    if (!REDUCED) requestAnimationFrame(figLoop);
+  });
+}
+// No PDF o reveal clona os slides: a matemática precisa estar pronta antes.
+let started = false;
+const startOnce = () => { if (!started) { started = true; start(); } };
+if (PRINT) {
+  const fontsOk = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  window.__mathReady = () => fontsOk.then(startOnce);
+  setTimeout(startOnce, 20000);   // sem internet, o MathJax não chega
+} else {
+  window.__mathReady = schedule;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  window.addEventListener("resize", schedule);
+  startOnce();
+}
 })();
-document.getElementById("lang").addEventListener("click", e => {
-  const ss = [...document.querySelectorAll(".slide")], i = ss.findIndex(s => s.classList.contains("active"));
-  const k = i >= 0 ? ss[i].querySelectorAll(".step:not(.hidden)").length : 0;
-  location.href = e.currentTarget.dataset.href + (i >= 0 ? "#" + (i + 1) + (k > 1 ? "." + k : "") : location.hash);
-});
 </script>
 </body>

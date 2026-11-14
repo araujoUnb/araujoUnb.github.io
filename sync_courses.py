@@ -100,6 +100,12 @@ def copy_deck(s, d, seen):
             continue
         if not (s.parent / ref).exists():
             raise SystemExit(f"{s}: missing local file {ref}")
+        top = pathlib.PurePosixPath(ref).parts[0]
+        if top == "lib" and (d.parent / top) not in seen:
+            # Vendored libraries (reveal.js + plugins) load assets at runtime (e.g. the
+            # chalkboard plugin's img/*.png) that no src/href names: copy the whole folder.
+            seen.add(d.parent / top)
+            shutil.copytree(s.parent / top, d.parent / top, dirs_exist_ok=True)
         copy_deck(s.parent / ref, d.parent / ref, seen)
 
 

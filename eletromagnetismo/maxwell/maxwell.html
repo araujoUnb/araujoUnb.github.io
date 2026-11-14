@@ -2118,6 +2118,308 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   </div>
 </section>
 
+<section class="slide" id="s-rn" data-nav="9. Reflexão em incidência normal" data-sec="Reflexão em incidência normal" data-nonum>
+  <div class="divider"><div class="num">9</div><div class="ttl">Reflexão em incidência normal</div><div class="gbar"></div>
+  <div class="what">Uma onda plana encontra a fronteira entre dois meios. Impondo a continuidade de \(E_t\) e \(H_t\), saem os coeficientes de reflexão e de transmissão, a onda estacionária e o balanço de potência.</div></div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · montagem">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Onda plana incidindo numa interface</h2><div class="sub">Meio 1 em \(z&lt;0\), meio 2 em \(z&gt;0\); ondas incidente (i), refletida (r) e transmitida (t)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnsetup"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Fasores (fator \(e^{j\omega t}\) omitido). Incidente, ao longo de \(+\az\):</div>
+          <div class="m">\[ \vE_{is}=E_{io}\,e^{-\gamma_1z}\,\ax,\qquad \vH_{is}=\frac{E_{io}}{\eta_1}\,e^{-\gamma_1z}\,\ay \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">Refletida, ao longo de \(-\az\), com \(\vE\) também em \(\ax\):</div>
+          <div class="stack">
+            <div class="m" data-s="2-2">\[ \vE_{rs}=E_{ro}\,e^{+\gamma_1z}\,\ax \]</div>
+            <div class="m" id="rn-hr" data-s="3-3">\[ \hat{\mathbf a}_H=\hat{\mathbf a}_k\times\hat{\mathbf a}_E=(-\az)\times\ax=-\ay \]</div>
+            <div class="m" data-s="4">\[ \vE_{rs}=E_{ro}\,e^{+\gamma_1z}\,\ax,\qquad \vH_{rs}=-\frac{E_{ro}}{\eta_1}\,e^{+\gamma_1z}\,\ay \]</div>
+          </div></div>
+        <div class="ln" data-s="4"><div class="nt">Transmitida, ao longo de \(+\az\) no meio 2:</div>
+          <div class="m">\[ \vE_{ts}=E_{to}\,e^{-\gamma_2z}\,\ax,\qquad \vH_{ts}=\frac{E_{to}}{\eta_2}\,e^{-\gamma_2z}\,\ay \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">Incógnitas: \(E_{ro}\) e \(E_{to}\), amplitudes em \(z=0\). No meio 1, \(\vE_1=\vE_i+\vE_r\); no meio 2, \(\vE_2=\vE_t\).</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#rn-lHr" data-b="#rn-hr" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Incidência normal · condições de contorno">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Condições de contorno em \(z=0\)</h2><div class="sub">As ondas são transversais: \(\vE\) e \(\vH\) são inteiramente tangenciais à interface</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnbc"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt" id="rn-n1">\(E_t\) contínua e, sem corrente superficial, \(H_t\) contínua. Em \(z=0\) todas as exponenciais valem \(1\).</div></div>
+        <div class="ln" data-s="2"><div class="nt">Campo elétrico (\(\ax\)):</div>
+          <div class="m">\[ \vE_i(0)+\vE_r(0)=\vE_t(0)\quad\Rightarrow\quad E_{io}+E_{ro}=E_{to} \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Campo magnético (\(\ay\)):</div>
+          <div class="m">\[ \vH_i(0)+\vH_r(0)=\vH_t(0)\quad\Rightarrow\quad \frac{E_{io}-E_{ro}}{\eta_1}=\frac{E_{to}}{\eta_2} \]</div></div>
+        <div class="ln" data-s="4"><div class="nt">O sinal negativo de \(E_{ro}\) vem de \(\vH_r\) apontar para \(-\ay\). Duas equações lineares, duas incógnitas.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#rn-pz" data-b="#rn-n1" data-s="1-1" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Incidência normal · coeficientes">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Coeficientes de reflexão e de transmissão</h2><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd" style="grid-template-columns: 430px minmax(0,1fr)">
+      <div class="dv tool">
+        <div class="tl"><span class="tn">Condições em \(z=0\)</span><span id="rn-c1">\(E_{io}+E_{ro}=E_{to}\)</span></div>
+        <div class="tl"><span>\(\dfrac{E_{io}-E_{ro}}{\eta_1}=\dfrac{E_{to}}{\eta_2}\)</span></div>
+        <ul class="sq f21" data-s="6" style="margin-top:10px">
+          <li>Complexos se algum meio tem perdas.</li>
+          <li>\(|\Gamma|\le1\), mas \(\tau\) pode passar de \(1\).</li>
+          <li>Para \(\vH\): \(H_{ro}/H_{io}=-\Gamma\), \(H_{to}/H_{io}=\tau\,\eta_1/\eta_2\).</li>
+        </ul>
+      </div>
+      <div class="dv">
+        <div class="ln" data-s="2"><div class="nt">Substituindo \(E_{to}\) na segunda e multiplicando por \(\eta_1\eta_2\):</div>
+          <div class="stack">
+            <div class="m" id="rn-s1" data-s="2-2">\[ \eta_2\,(E_{io}-E_{ro})=\eta_1\,(E_{io}+E_{ro}) \]</div>
+            <div class="m" data-s="3-3">\[ E_{ro}\,(\eta_2+\eta_1)=E_{io}\,(\eta_2-\eta_1) \]</div>
+            <div class="m" data-s="4">\[ \boxed{\,\Gamma=\frac{E_{ro}}{E_{io}}=\frac{\eta_2-\eta_1}{\eta_2+\eta_1}\,} \]</div>
+          </div>
+          <div class="nt" data-s="4">\(\Gamma\): <b>coeficiente de reflexão</b>.</div></div>
+        <div class="ln" data-s="5"><div class="nt">Da primeira equação, \(E_{to}=E_{io}(1+\Gamma)\):</div>
+          <div class="m">\[ \boxed{\,\tau=\frac{E_{to}}{E_{io}}=1+\Gamma=\frac{2\eta_2}{\eta_2+\eta_1}\,} \]</div>
+          <div class="nt">\(\tau\): <b>coeficiente de transmissão</b>.</div></div>
+        <div class="ln" data-s="7"><div class="nt">\(\eta_1=\eta_2\): \(\Gamma=0\), sem reflexão (meios casados), mesmo com \(\varepsilon\) e \(\mu\) diferentes.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#rn-c1" data-b="#rn-s1" data-s="2-2" data-pa="r" data-pb="l" data-bend="90" data-c="dash"></span>
+</section>
+
+<section class="slide" data-sec="Incidência normal · condutor perfeito">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Meio 2 condutor perfeito: onda estacionária</h2><div class="sub">Meio 1 sem perdas (\(\gamma_1=j\beta_1\)); \(\sigma_2\to\infty\) dá \(\eta_2=0\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnpec"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Com \(\eta_2=0\):</div>
+          <div class="m">\[ \Gamma=\frac{0-\eta_1}{0+\eta_1}=-1,\qquad \tau=0 \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">Campo total no meio 1, com \(E_{ro}=-E_{io}\) e \(e^{j\theta}-e^{-j\theta}=2j\sen\theta\):</div>
+          <div class="stack">
+            <div class="m" data-s="2-2">\[ \vE_{1s}=E_{io}\left(e^{-j\beta_1z}-e^{+j\beta_1z}\right)\ax \]</div>
+            <div class="m" data-s="3">\[ \vE_{1s}=-2j\,E_{io}\sen\beta_1z\;\ax \]</div>
+          </div></div>
+        <div class="ln" data-s="3"><div class="nt">De volta ao tempo, \(\vE_1=\mathrm{Re}\{\vE_{1s}e^{j\omega t}\}\):</div>
+          <div class="stack">
+            <div class="m" data-s="3-3">\[ \vE_1=2E_{io}\sen\beta_1z\;\mathrm{Re}\{-j\cos\omega t+\sen\omega t\}\,\ax \]</div>
+            <div class="m" data-s="4">\[ \boxed{\,\vE_1=2E_{io}\sen\beta_1z\,\sen\omega t\;\ax\,} \]</div>
+          </div></div>
+        <div class="ln" data-s="5"><div class="nt">Forma espacial fixa, só a amplitude oscila: a onda não viaja. Nós de \(\vE\) em \(z=-n\lambda/2\), inclusive na parede.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · H e potência">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Onda estacionária: \(\vH\) e potência</h2><div class="sub">Mesmos passos para \(\vH_1\), com \(H_{ro}=-\Gamma H_{io}=+H_{io}\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnpech"></div>
+      <div class="dv">
+        <div class="ln"><div class="m">\[ \vH_{1s}=\frac{E_{io}}{\eta_1}\left(e^{-j\beta_1z}+e^{+j\beta_1z}\right)\ay=\frac{2E_{io}}{\eta_1}\cos\beta_1z\;\ay \]</div></div>
+        <div class="ln eqbox" data-s="2"><div class="m">\[ \boxed{\,\vH_1=\frac{2E_{io}}{\eta_1}\cos\beta_1z\,\cos\omega t\;\ay\,} \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Na parede (\(z=0\)): \(E_1=0\) e \(H_1\) máximo, sustentado pela corrente superficial \(\vec{\mathbf K}=-\az\times\vH_1\).</div></div>
+        <div class="ln" data-s="4"><div class="nt">\(\vE_1\) e \(\vH_1\) estão defasados de \(90^\circ\) no tempo:</div>
+          <div class="m">\[ \langle\sen\omega t\,\cos\omega t\rangle=0\quad\Rightarrow\quad\boxed{\,\vec{\mathcal P}_{\mathrm{ave}}=0\,} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">A energia oscila entre \(\vE\) e \(\vH\) a cada quarto de ciclo, mas não flui: tudo o que chega é refletido.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · máximos e mínimos">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Dois meios sem perdas: máximos e mínimos</h2><div class="sub">\(\eta_1\), \(\eta_2\) reais, logo \(\Gamma\) real, \(-1&lt;\Gamma&lt;1\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnenv"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Amplitude do campo total no meio 1 (\(\gamma_1=j\beta_1\)):</div>
+          <div class="stack">
+            <div class="m" data-s="1-1">\[ |\vE_{1s}|=\left|E_{io}\,e^{-j\beta_1z}+\Gamma E_{io}\,e^{+j\beta_1z}\right| \]</div>
+            <div class="m" data-s="2-2">\[ |\vE_{1s}|=E_{io}\,\cancel{\left|e^{-j\beta_1z}\right|}\,\left|1+\Gamma\,e^{j2\beta_1z}\right| \]</div>
+            <div class="m" data-s="3">\[ |\vE_{1s}|=E_{io}\sqrt{1+\Gamma^2+2\Gamma\cos2\beta_1z} \]</div>
+          </div></div>
+        <div class="ln" data-s="4"><div class="nt">\(\Gamma&gt;0\) (\(\eta_2&gt;\eta_1\)): máximo onde \(\cos2\beta_1z=1\) (\(n=0,1,2,\dots\)):</div>
+          <div class="m">\[ z_{\max}=-n\frac{\lambda_1}{2},\qquad z_{\min}=-(2n+1)\frac{\lambda_1}{4} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">\(\Gamma&lt;0\) (\(\eta_2&lt;\eta_1\)): máximos e mínimos trocam de lugar.</div></div>
+        <div class="ln" data-s="6"><div class="nt">Máximos separados de \(\lambda_1/2\). No meio 2 só há onda viajante: amplitude constante \(|\tau|E_{io}\).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · razão de onda estacionária">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Razão de onda estacionária</h2><div class="bar"></div></div>
+  <div class="body">
+    <div class="dv" style="max-width:1350px">
+      <div class="ln"><div class="nt">Os extremos de \(\sqrt{1+\Gamma^2+2\Gamma\cos2\beta_1z}\) ocorrem com \(\cos2\beta_1z=\pm1\):</div>
+        <div class="m">\[ |\vE_1|_{\max}=E_{io}\,(1+|\Gamma|),\qquad |\vE_1|_{\min}=E_{io}\,(1-|\Gamma|) \]</div></div>
+      <div class="ln" data-s="2"><div class="nt">A razão entre eles (a mesma para \(|\vH_1|\)) é a <b>razão de onda estacionária</b>:</div>
+        <div class="m">\[ \boxed{\,s=\frac{|\vE_1|_{\max}}{|\vE_1|_{\min}}=\frac{1+|\Gamma|}{1-|\Gamma|}\,}\qquad\Leftrightarrow\qquad |\Gamma|=\frac{s-1}{s+1},\qquad s_{\mathrm{dB}}=20\log_{10}s \]</div></div>
+      <table class="cmp" data-s="3" style="--w:330px"><colgroup><col style="width:330px"><col><col><col></colgroup>
+        <tr><th>situação</th><th>\(|\Gamma|\)</th><th>\(s\)</th><th>meio 1</th></tr>
+        <tr><td>meios casados (\(\eta_1=\eta_2\))</td><td>\(0\)</td><td>\(1\)</td><td>só onda viajante</td></tr>
+        <tr><td>dois dielétricos</td><td>\(0&lt;|\Gamma|&lt;1\)</td><td>\(1&lt;s&lt;\infty\)</td><td>viajante + estacionária</td></tr>
+        <tr><td>condutor perfeito</td><td>\(1\)</td><td>\(\infty\)</td><td>estacionária pura (nós com \(|\vE|=0\))</td></tr>
+      </table>
+      <div class="ln" data-s="4"><div class="nt">Medindo \(s\) e a posição de um mínimo com uma sonda, obtém-se \(\Gamma\) e, dele, o \(\eta_2\) de um meio desconhecido.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · balanço de potência">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Balanço de potência</h2><div class="sub">Dois meios sem perdas: \(\Gamma\) e \(\tau\) reais</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnpow"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Densidade média de potência de cada onda, \(E_0^2/2\eta\):</div>
+          <div class="m">\[ \mathcal P_i=\frac{E_{io}^2}{2\eta_1} \]</div></div>
+        <div class="ln" data-s="2"><div class="m">\[ \mathcal P_r=\frac{\Gamma^2E_{io}^2}{2\eta_1}=\Gamma^2\,\mathcal P_i \]</div></div>
+        <div class="ln" data-s="3"><div class="m">\[ \mathcal P_t=\frac{\tau^2E_{io}^2}{2\eta_2}=\frac{\eta_1}{\eta_2}\,\tau^2\,\mathcal P_i \]</div></div>
+        <div class="ln" data-s="4"><div class="nt">Somando as frações refletida e transmitida:</div>
+          <div class="stack">
+            <div class="m" data-s="4-4">\[ \Gamma^2+\frac{\eta_1}{\eta_2}\tau^2=\frac{(\eta_2-\eta_1)^2+4\eta_1\eta_2}{(\eta_2+\eta_1)^2} \]</div>
+            <div class="m" data-s="5">\[ \Gamma^2+\frac{\eta_1}{\eta_2}\tau^2=\frac{(\eta_2+\eta_1)^2}{(\eta_2+\eta_1)^2}=1\quad\Rightarrow\quad\boxed{\,\mathcal P_i=\mathcal P_r+\mathcal P_t\,} \]</div>
+          </div></div>
+        <div class="ln" data-s="6"><div class="nt">Por isso \(\tau&gt;1\) não viola nada: \(\tau\) compara campos, não potências.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · explorando" data-draw="rn">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Reflexão e transmissão ao vivo</h2><div class="sub">Figura interativa · meio 1 = espaço livre, meio 2 sem perdas (ou condutor perfeito)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="inst">
+      <div class="controls">
+        <div class="ctl"><div class="row"><label for="rn-er">\(\varepsilon_{r2}\)</label><output id="rn-er-o"></output></div><input id="rn-er" type="range" min="1" max="16" step="0.5" value="2"></div>
+        <div class="ctl"><div class="row"><label for="rn-mr">\(\mu_{r2}\)</label><output id="rn-mr-o"></output></div><input id="rn-mr" type="range" min="1" max="16" step="0.5" value="8"></div>
+        <label class="ctxt" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="rn-pec"> meio 2 condutor perfeito</label>
+        <label class="ctxt" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="rn-sep"> mostrar incidente e refletida</label>
+        <button class="btn ghost" id="rn-play" type="button">Pausar</button>
+        <div class="readouts" id="rn-read"></div>
+        <p class="try">Com \(\varepsilon_{r2}=\mu_{r2}\) não há reflexão. Condutor perfeito: nós fixos, a onda para de viajar.</p>
+      </div>
+      <div class="plots">
+        <div class="plot"><canvas id="rn-cv" height="500" aria-label="Campo total nos dois meios"></canvas>
+        <div class="cap">Azul: \(E_x(z,t)\) total; tracejado cinza: envoltória \(|\vE|\). Com a opção marcada, incidente (verde) e refletida (vermelho) separadas.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · exemplo">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: onda incidindo num meio magnético</h2><div class="bar"></div></div>
+  <div class="body" style="gap:14px">
+    <p style="font-size:25px;margin:0">No espaço livre (\(z\le0\)), uma onda plana com</p>
+    <div class="m" style="font-size:27px">\[ \vH_i=10\cos(10^8t-\beta z)\,\ax\ \ \mathrm{mA/m} \]</div>
+    <p style="font-size:25px;margin:0">incide normalmente sobre um meio sem perdas (\(\varepsilon=2\varepsilon_0\), \(\mu=8\mu_0\)) na região \(z\ge0\). Determine a onda refletida \(\vH_r\), \(\vE_r\) e a onda transmitida \(\vH_t\), \(\vE_t\).</p>
+    <div data-mount="rnexen"></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · exemplo: parâmetros">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: parâmetros e coeficientes</h2><div class="sub">\(\omega=10^8\) rad/s; meio 1 é o espaço livre</div><div class="bar"></div></div>
+  <div class="body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+      <div class="dv">
+        <div class="ln"><div class="nt">Meio 1 (espaço livre):</div>
+          <div class="m">\[ \beta_1=\frac{\omega}{c}=\frac{10^8}{3\times10^8}=\frac13\ \mathrm{rad/m} \]</div>
+          <div class="m">\[ \eta_1=\eta_0=120\pi\approx377\ \Omega \]</div></div>
+      </div>
+      <div class="dv" data-s="2">
+        <div class="ln"><div class="nt">Meio 2 (\(\varepsilon_r=2\), \(\mu_r=8\)):</div>
+          <div class="m">\[ \beta_2=\frac{\omega}{c}\sqrt{\mu_r\varepsilon_r}=\frac13\sqrt{16}=\frac43\ \mathrm{rad/m} \]</div>
+          <div class="m">\[ \eta_2=\eta_0\sqrt{\frac{\mu_r}{\varepsilon_r}}=\eta_0\sqrt4=2\eta_0 \]</div></div>
+      </div>
+    </div>
+    <div class="dv" style="margin-top:18px">
+      <div class="ln" data-s="3"><div class="nt">Coeficientes:</div>
+        <div class="m">\[ \Gamma=\frac{2\eta_0-\eta_0}{2\eta_0+\eta_0}=\boxed{\,\frac13\,},\qquad \tau=1+\Gamma=\boxed{\,\frac43\,} \]</div></div>
+      <div class="ln" data-s="4"><div class="nt">\(\eta_2&gt;\eta_1\), logo \(\Gamma&gt;0\): máximo de \(|\vE_1|\) na interface. O meio 2 tem \(\varepsilon\) maior, mas \(\mu\) maior ainda.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · exemplo: incidente e refletida">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: onda incidente e onda refletida</h2><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnexir"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt" id="rn-xn">Direção de \(\vE_i\), com \(\hat{\mathbf a}_k=\az\) e \(\hat{\mathbf a}_H=\ax\), e amplitude:</div>
+          <div class="m">\[ \hat{\mathbf a}_E=\hat{\mathbf a}_H\times\hat{\mathbf a}_k=\ax\times\az=-\ay,\qquad E_{io}=\eta_0H_{io}=10\,\eta_0\ \mathrm{mV/m} \]</div></div>
+        <div class="ln" data-s="2"><div class="m">\[ \vE_i=-10\,\eta_0\cos\!\big(10^8t-\tfrac{z}{3}\big)\,\ay\ \ \mathrm{mV/m}\qquad(10\eta_0\ \mathrm{mV/m}\approx3{,}77\ \mathrm{V/m}) \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Refletida: \(E_{ro}=\Gamma E_{io}\), direção \(-\ay\), viajando em \(-\az\):</div>
+          <div class="m">\[ \boxed{\,\vE_r=-\frac{10}{3}\,\eta_0\cos\!\big(10^8t+\tfrac{z}{3}\big)\,\ay\ \ \mathrm{mV/m}\,} \]</div></div>
+        <div class="ln" data-s="4"><div class="nt">\(\hat{\mathbf a}_H=\hat{\mathbf a}_k\times\hat{\mathbf a}_E=(-\az)\times(-\ay)=-\ax\), com \(H_{ro}=E_{ro}/\eta_0\):</div>
+          <div class="m">\[ \boxed{\,\vH_r=-\frac{10}{3}\cos\!\big(10^8t+\tfrac{z}{3}\big)\,\ax\ \ \mathrm{mA/m}\,} \]</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#rn-lEi" data-b="#rn-xn" data-s="1-1" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Incidência normal · exemplo: transmitida">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: onda transmitida</h2><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="rnext"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">\(E_{to}=\tau E_{io}\), direção \(-\ay\), número de onda \(\beta_2=4/3\) rad/m:</div>
+          <div class="stack">
+            <div class="m" data-s="1-1">\[ E_{to}=\frac43\,(10\,\eta_0)=\frac{40}{3}\,\eta_0\ \mathrm{mV/m} \]</div>
+            <div class="m" data-s="2">\[ \boxed{\,\vE_t=-\frac{40}{3}\,\eta_0\cos\!\big(10^8t-\tfrac{4z}{3}\big)\,\ay\ \ \mathrm{mV/m}\,} \]</div>
+          </div></div>
+        <div class="ln" data-s="3"><div class="nt">\(\hat{\mathbf a}_H=\az\times(-\ay)=\ax\), com \(H_{to}=E_{to}/\eta_2\):</div>
+          <div class="m">\[ H_{to}=\frac{40\,\eta_0/3}{2\,\eta_0}=\frac{20}{3}\ \mathrm{mA/m} \]</div></div>
+        <div class="ln eqbox" data-s="4"><div class="m">\[ \boxed{\,\vH_t=\frac{20}{3}\cos\!\big(10^8t-\tfrac{4z}{3}\big)\,\ax\ \ \mathrm{mA/m}\,} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">Atalho para \(\vH\): \(H_{ro}/H_{io}=-\Gamma=-\tfrac13\) e \(H_{to}/H_{io}=\tau\,\eta_1/\eta_2=\tfrac43\cdot\tfrac12=\tfrac23\).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Incidência normal · exemplo: conferências">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: conferências</h2><div class="sub">Condições de contorno, balanço de potência e razão de onda estacionária</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dv" style="max-width:1350px">
+      <div class="ln"><div class="nt">Em \(z=0\), campos tangenciais contínuos:</div>
+        <div class="m">\[ \vH_i(0)+\vH_r(0)=\big(10-\tfrac{10}{3}\big)\cos10^8t\,\ax=\tfrac{20}{3}\cos10^8t\,\ax=\vH_t(0)\ \ \checkmark \]</div>
+        <div class="m">\[ \vE_i(0)+\vE_r(0)=-\big(10+\tfrac{10}{3}\big)\eta_0\cos10^8t\,\ay=-\tfrac{40}{3}\eta_0\cos10^8t\,\ay=\vE_t(0)\ \ \checkmark \]</div></div>
+      <div class="ln" data-s="2"><div class="nt">Potência média por unidade de área, \(\tfrac12\eta H_0^2\):</div>
+        <div class="m">\[ \mathcal P_i=\tfrac12(120\pi)(10^{-2})^2\approx18{,}85\ \mathrm{mW/m^2},\qquad \mathcal P_r=\tfrac19\,\mathcal P_i\approx2{,}09\ \mathrm{mW/m^2} \]</div>
+        <div class="m">\[ \mathcal P_t=\tfrac12(240\pi)\big(\tfrac{20}{3}\times10^{-3}\big)^2\approx16{,}76\ \mathrm{mW/m^2}=\mathcal P_i-\mathcal P_r\ \ \checkmark \]</div></div>
+      <div class="ln" data-s="3"><div class="nt">Razão de onda estacionária no meio 1, com \(\lambda_1=2\pi/\beta_1=6\pi\) m:</div>
+        <div class="m">\[ s=\frac{1+1/3}{1-1/3}=2\ \ (6{,}0\ \mathrm{dB}),\qquad z_{\max}=-n\,\frac{\lambda_1}{2}=-3\pi n\ \mathrm{m} \]</div></div>
+    </div>
+  </div>
+</section>
+
 </div>
 </div>
 
@@ -3061,12 +3363,96 @@ function boardCcEx() {
     lb(O[0] + 52, O[1] + 80, Rw`\theta_2`, "R sm", S("4")) + lb(O[0] + 30, 52, Rw`\az`, "sm");
   return board(560, 440, svg, labels);
 }
+// ---------- quadros: reflexão em incidência normal ----------
+// meio 1 à esquerda (z < 0), meio 2 à direita; z para a direita, x para cima, y saindo da tela
+function rnBase(w, h, xI, l1 = "meio 1", l2 = "meio 2", fill2 = "rgba(192,120,40,.10)") {
+  const svg = `<rect x="0" y="0" width="${xI}" height="${h}" style="fill:rgba(0,59,92,.06)"/><rect x="${xI}" y="0" width="${w - xI}" height="${h}" style="fill:${fill2}"/>` +
+    G.ln(xI, 0, xI, h, "K", 2.4) + G.ar(10, h - 24, w - 8, h - 24, "M", 1.4);
+  return { svg, labels: lbt(14 + 4.6 * l1.length, 20, l1) + lbt(xI + 14 + 4.6 * l2.length, 20, l2) + lb(w - 18, h - 44, "z", "M sm") + lb(xI, h - 10, "0", "M sm") };
+}
+const rnAxes = (x, y) => ({ svg: G.ar(x, y, x, y - 50, "M", 1.6) + G.sym(x, y, 9, false, "M"), labels: lb(x + 16, y - 50, "x", "M sm") + lb(x + 22, y + 6, "y", "M sm") });
+// onda: E (azul) para cima com altura hE, H (verde) saindo/entrando, k (preto) no sentido dir
+function rnWave(x, y, dir, hE, Hout) {
+  return G.ar(x, y - 12, x, y - hE, "P", 3.4) + G.sym(x, y, 11, !Hout, "G") + G.ar(x + dir * 20, y, x + dir * 95, y, "K", 3);
+}
+function boardRnSetup() {
+  const B = rnBase(560, 440, 300, "meio 1 (η₁, γ₁)", "meio 2 (η₂, γ₂)"), A = rnAxes(500, 360);
+  let svg = B.svg + A.svg + rnWave(70, 150, 1, 90, true) + G.g(S("2"), rnWave(220, 300, -1, 55, false)) + G.g(S("4"), rnWave(350, 220, 1, 70, true));
+  const labels = B.labels + A.labels + lb(96, 70, Rw`\vE_i`, "P") + lb(40, 178, Rw`\vH_i`, "G") + lb(130, 175, Rw`+\az`, "sm") +
+    `<div ${S("2")}>` + lb(246, 252, Rw`\vE_r`, "P") + lb(160, 325, Rw`-\az`, "sm") + `</div>` + lb(220, 335, Rw`\vH_r`, "G", `id="rn-lHr" ${S("2")}`) +
+    `<div ${S("4")}>` + lb(376, 158, Rw`\vE_t`, "P") + lb(350, 255, Rw`\vH_t`, "G") + lb(410, 245, Rw`+\az`, "sm") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardRnBC() {
+  const B = rnBase(560, 440, 300);
+  let svg = B.svg + rnWave(70, 150, 1, 90, true) + rnWave(220, 300, -1, 55, false) + rnWave(350, 220, 1, 70, true) + G.ln(300, 0, 300, 440, "R", 4);
+  const labels = B.labels + lb(96, 70, Rw`\vE_i`, "P") + lb(246, 252, Rw`\vE_r`, "P") + lb(376, 158, Rw`\vE_t`, "P") + lb(250, 380, "z=0", "R sm", `id="rn-pz"`);
+  return board(560, 440, svg, labels);
+}
+// eixo para gráficos em z (z em unidades de lambda): z0..z1 -> X0..X1; valor v -> cy - v*A
+function rnPlot(z0, z1, X0, X1, cy, A) { const X = (z) => X0 + (z - z0) / (z1 - z0) * (X1 - X0); return { X, Y: (v) => cy - v * A, path: (f, a = z0, b = z1) => curvePath((x) => cy - f(z0 + (x - X0) / (X1 - X0) * (z1 - z0)) * A, X(a), X(b), 200) }; }
+function boardRnPec() {
+  const P = rnPlot(-1, 0, 60, 450, 215, 80);
+  let svg = `<rect x="450" y="40" width="40" height="350" style="fill:rgba(120,120,120,.35)"/>` + G.ar(50, 215, 520, 215, "M", 1.4) + G.ln(60, 40, 60, 390, "M", 1.4);
+  let cv = ""; for (const s of [Math.SQRT1_2, -Math.SQRT1_2, -1]) cv += G.pa(P.path((z) => 2 * Math.sin(TAU * z) * s), "P", 2, `style="opacity:.35"`);
+  svg += G.g(S("5"), cv + G.pa(P.path((z) => 2 * Math.sin(TAU * z)), "P", 3.4) + [-1, -0.5, 0].map((z) => G.dot(P.X(z), 215, 6, "R")).join(""));
+  for (const v of [2, -2]) svg += G.ln(54, P.Y(v), 66, P.Y(v), "M", 1.4);
+  const labels = lb(110, 28, "E_x(z,t)") + lb(26, P.Y(2), "2E_{io}", "M sm") + lb(24, P.Y(-2), "-2E_{io}", "M sm") + lb(P.X(-1), 406, Rw`-\lambda`, "M sm") + lb(P.X(-0.5), 410, Rw`-\tfrac{\lambda}{2}`, "M sm") + lb(P.X(0), 406, "0", "M sm") +
+    lbt(470, 418, "condutor perfeito") + lb(530, 200, "z", "M sm");
+  return board(560, 440, svg, labels);
+}
+function boardRnPecH() {
+  const P = rnPlot(-1, 0, 60, 450, 215, 80);
+  let svg = `<rect x="450" y="40" width="40" height="350" style="fill:rgba(120,120,120,.35)"/>` + G.ar(50, 215, 520, 215, "M", 1.4) + G.ln(60, 40, 60, 390, "M", 1.4);
+  svg += G.pa(P.path((z) => 2 * Math.sin(TAU * z)), "P", 3.4) + G.g(S("2"), G.pa(P.path((z) => 2 * Math.cos(TAU * z)), "G", 3.4, "", "9 6"));
+  const labels = lb(P.X(-0.75), P.Y(2) - 26, Rw`E_x,\ \omega t=\tfrac{\pi}{2}`, "P sm") + lb(P.X(-0.5), P.Y(-2) + 26, Rw`\eta_1H_y,\ \omega t=0`, "G sm", S("2")) +
+    [[-1, Rw`-\lambda`], [-0.75, Rw`-\tfrac{3\lambda}{4}`], [-0.5, Rw`-\tfrac{\lambda}{2}`], [-0.25, Rw`-\tfrac{\lambda}{4}`]].map(([z, t]) => lb(P.X(z), 408, t, "M sm")).join("") + lbt(470, 418, "condutor perfeito") + lb(530, 200, "z", "M sm");
+  return board(560, 440, svg, labels);
+}
+function boardRnEnv() {
+  const P = rnPlot(-1, 0.5, 90, 520, 330, 170), g = 1 / 3;
+  let svg = `<rect x="${P.X(0)}" y="60" width="${P.X(0.5) - P.X(0)}" height="270" style="fill:rgba(192,120,40,.12)"/>` + G.ln(P.X(0), 60, P.X(0), 330, "K", 2.2) +
+    G.ar(90, 330, 540, 330, "M", 1.4) + G.ar(90, 330, 90, 50, "M", 1.4) + G.ln(90, P.Y(1), 520, P.Y(1), "M", 1.2, "", "2 4");
+  svg += G.g(S("4"), G.pa(P.path((z) => Math.sqrt(1 + g * g + 2 * g * Math.cos(2 * TAU * z)), -1, 0), "P", 3.4) + G.ln(P.X(0), P.Y(4 / 3), P.X(0.5), P.Y(4 / 3), "P", 3.4));
+  svg += G.g(S("5"), G.pa(P.path((z) => Math.sqrt(1 + g * g - 2 * g * Math.cos(2 * TAU * z)), -1, 0), "R", 3.4, "", "9 6") + G.ln(P.X(0), P.Y(2 / 3), P.X(0.5), P.Y(2 / 3), "R", 3.4, "", "9 6"));
+  const labels = lb(118, 40, Rw`|\vE|/E_{io}`) + lb(70, P.Y(1), "1", "M sm") + lb(46, P.Y(4 / 3), Rw`1{+}|\Gamma|`, "M sm") + lb(46, P.Y(2 / 3), Rw`1{-}|\Gamma|`, "M sm") +
+    [[-1, Rw`-\lambda_1`], [-0.5, Rw`-\tfrac{\lambda_1}{2}`], [0, "0"]].map(([z, t]) => lb(P.X(z), 356, t, "M sm")).join("") + lb(540, 352, "z", "M sm") +
+    lb(P.X(0.25), P.Y(4 / 3) - 34, Rw`\Gamma=+\tfrac13`, "P sm", S("4")) + lb(P.X(0.25), P.Y(2 / 3) + 28, Rw`\Gamma=-\tfrac13`, "R sm", S("5"));
+  return board(560, 440, svg, labels);
+}
+function boardRnPow() {
+  const B = rnBase(560, 440, 300);
+  const fat = (x1, y, x2, w) => { const d = Math.sign(x2 - x1), hl = 14 + 1.6 * w, hw = 8 + w; return `<g style="opacity:.75"><line x1="${x1}" y1="${y}" x2="${x2 - d * hl}" y2="${y}" style="stroke:var(--cR);stroke-width:${w}"/>` + G.poly([[x2, y], [x2 - d * hl, y - hw], [x2 - d * hl, y + hw]], "var(--cR)", "R", 1) + `</g>`; };
+  let svg = B.svg + fat(20, 140, 270, 12) + G.g(S("2"), fat(285, 290, 80, 4)) + G.g(S("3"), fat(320, 220, 520, 10));
+  const labels = B.labels + lb(140, 106, Rw`\mathcal P_i`) + `<div ${S("2")}>` + lb(180, 320, Rw`\mathcal P_r`) + `</div><div ${S("3")}>` + lb(420, 186, Rw`\mathcal P_t`) + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardRnExEn() {
+  const B = rnBase(520, 170, 260, "espaço livre", "εr = 2, μr = 8");
+  return board(520, 170, B.svg + G.ar(40, 90, 230, 90, "K", 3), B.labels + lbt(135, 116, "onda incidente"));
+}
+// exemplo: H em x (para cima), E em -y (entrando)
+function rnWaveH(x, y, dir, hH, up) { return G.ar(x, y + (up ? -12 : 12), x, y + (up ? -hH : hH), "G", 3.4) + G.sym(x, y, 11, true, "P") + G.ar(x + dir * 20, y, x + dir * 95, y, "K", 3); }
+function boardRnExIR() {
+  const B = rnBase(560, 440, 300, "espaço livre", "εr = 2, μr = 8"), A = rnAxes(500, 360);
+  const svg = B.svg + A.svg + rnWaveH(70, 170, 1, 90, true) + G.g(S("3"), rnWaveH(220, 290, -1, 60, false));
+  const labels = B.labels + A.labels + lb(98, 88, Rw`\vH_i`, "G") + lb(40, 198, Rw`\vE_i`, "P", `id="rn-lEi"`) + lb(130, 195, Rw`+\az`, "sm") +
+    `<div ${S("3")}>` + lb(246, 266, Rw`\vE_r`, "P") + lb(248, 352, Rw`\vH_r`, "G") + lb(160, 315, Rw`-\az`, "sm") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardRnExT() {
+  const B = rnBase(560, 440, 300, "espaço livre", "εr = 2, μr = 8"), A = rnAxes(500, 360);
+  const svg = B.svg + A.svg + rnWaveH(350, 220, 1, 100, true);
+  const labels = B.labels + A.labels + lb(378, 128, Rw`\vH_t`, "G") + lb(350, 252, Rw`\vE_t`, "P") + lb(410, 245, Rw`+\az`, "sm");
+  return board(560, 440, svg, labels);
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, capjd: boardCapJd, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
   pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
   poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
-  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx };
+  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
+  rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT };
 document.querySelectorAll("[data-mount]").forEach((el) => { const f = BOARDS[el.dataset.mount]; if (f) el.outerHTML = f(); });
 
 // ---------- overlays e setas curvas ----------
@@ -3562,8 +3948,47 @@ function drawCc() {
 }
 bind(["cc-e1", "cc-e2", "cc-t"], { "cc-e1": (v) => fmtc(v, 1), "cc-e2": (v) => fmtc(v, 1), "cc-t": (v) => fmtc(v, 0) + "°" }, drawCc);
 
+// ---------- instrumento: reflexão em incidência normal ----------
+// meio 1 = espaço livre; z em unidades de lambda_1
+const RN = { t: 0, play: true, run: false, last: null };
+function drawRn() {
+  const cv = $("rn-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C();
+  const er = val("rn-er"), mr = val("rn-mr"), pec = $("rn-pec").checked, sep = $("rn-sep").checked;
+  const n = Math.sqrt(mr / er), G2 = pec ? -1 : (n - 1) / (n + 1), T = 1 + G2, k2 = Math.sqrt(er * mr), ph = TAU * 0.4 * RN.t;
+  const ml = 46, mr_ = 16, xI = ml + 0.62 * (w - ml - mr_), sc = (xI - ml) / 2, X = (z) => xI + z * sc, cy = h * 0.5, A = h * 0.2, Y = (v) => cy - A * v;
+  const zR = (w - mr_ - xI) / sc;
+  ctx.clearRect(0, 0, w, h);
+  ctx.save(); ctx.fillStyle = "rgba(0,59,92,.06)"; ctx.fillRect(0, 0, xI, h); ctx.fillStyle = pec ? "rgba(120,120,120,.35)" : "rgba(192,120,40,.10)"; ctx.fillRect(xI, 0, w - xI, h); ctx.restore();
+  line(ctx, xI, 0, xI, h, c.K, 2.4); arrowTo(ctx, ml - 30, cy, w - 4, cy, c.K, 1.2, 9);
+  for (const v of [-2, -1, 1, 2]) { line(ctx, ml - 30, Y(v), w, Y(v), c.GR, 1); txt(ctx, (v > 0 ? "" : "−") + Math.abs(v), 6, Y(v) + 5, { size: 14, c: c.M }); }
+  for (const z of [-2, -1.5, -1, -0.5]) { line(ctx, X(z), cy - 5, X(z), cy + 5, c.K, 1.2); txt(ctx, (z === -1 ? "−λ₁" : z === -2 ? "−2λ₁" : z === -0.5 ? "−λ₁/2" : "−3λ₁/2"), X(z), h - 10, { align: "center", size: 15, c: c.M }); }
+  txt(ctx, "espaço livre", 10, 22, { size: 16, c: c.M }); txt(ctx, pec ? "condutor perfeito" : `εr = ${fmtc(er, 1)}, μr = ${fmtc(mr, 1)}`, xI + 10, 22, { size: 16, c: c.M });
+  const curve = (f, z0, z1, col, lw, dash) => { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.beginPath();
+    for (let i = 0; i <= 400; i++) { const z = z0 + (z1 - z0) * i / 400, yv = Y(f(z)); i ? ctx.lineTo(X(z), yv) : ctx.moveTo(X(z), yv); } ctx.stroke(); ctx.restore(); };
+  const env = (z) => Math.sqrt(Math.max(0, 1 + G2 * G2 + 2 * G2 * Math.cos(2 * TAU * z)));
+  curve(env, -2, 0, c.M, 1.6, [6, 5]); curve((z) => -env(z), -2, 0, c.M, 1.6, [6, 5]);
+  if (sep) { curve((z) => Math.cos(ph - TAU * z), -2, 0, c.G, 2, [9, 5]); curve((z) => G2 * Math.cos(ph + TAU * z), -2, 0, c.R, 2, [9, 5]); }
+  curve((z) => Math.cos(ph - TAU * z) + G2 * Math.cos(ph + TAU * z), -2, 0, c.P, 3.2);
+  if (!pec) { curve(() => T, 0, zR, c.M, 1.6, [6, 5]); curve(() => -T, 0, zR, c.M, 1.6, [6, 5]); curve((z) => T * Math.cos(ph - TAU * k2 * z), 0, zR, c.P, 3.2); }
+  const s = Math.abs(G2) < 1 ? (1 + Math.abs(G2)) / (1 - Math.abs(G2)) : Infinity;
+  setRead("rn-read", `<span>\\(\\eta_2/\\eta_1\\): <b>${pec ? "0" : fmtc(n, 3)}</b></span><span>\\(\\Gamma\\): <b>${fmtc(G2, 3)}</b>, \\(\\tau\\): <b>${fmtc(T, 3)}</b></span>` +
+    `<span>\\(s\\): <b>${isFinite(s) ? fmtc(s, 2) + " (" + fmtc(20 * Math.log10(s), 1) + " dB)" : "∞"}</b></span><span>\\(\\mathcal P_r/\\mathcal P_i\\): <b>${fmtc(G2 * G2, 3)}</b>, \\(\\mathcal P_t/\\mathcal P_i\\): <b>${fmtc(1 - G2 * G2, 3)}</b></span>`);
+}
+function rnFrame(ts) {
+  const sl = $("rn-cv").closest(".slide");
+  if (!sl.classList.contains("active")) { RN.run = false; return; }
+  const dt = RN.last === null ? 0 : (ts - RN.last) / 1000; RN.last = ts;
+  if (RN.play) RN.t += dt;
+  drawRn(); requestAnimationFrame(rnFrame);
+}
+function startRn() { drawRn(); if (!RN.run) { RN.run = true; RN.last = null; requestAnimationFrame(rnFrame); } }
+bind(["rn-er", "rn-mr"], { "rn-er": (v) => fmtc(v, 1), "rn-mr": (v) => fmtc(v, 1) }, drawRn);
+$("rn-pec").addEventListener("change", drawRn); $("rn-sep").addEventListener("change", drawRn);
+$("rn-play").addEventListener("click", () => { RN.play = !RN.play; $("rn-play").textContent = RN.play ? "Pausar" : "Animar"; });
+
 const FIGS = {};
-const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc };
+const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn };
 
 // ---------- navegação: menu de seções, atalho R e link no rodapé ----------
 // ---------- navegação: menu de seções, atalho R e link no rodapé ----------
@@ -3707,7 +4132,8 @@ window.__mathReady = schedule;
 // deep links: #12 opens slide 12, #12.4 opens slide 12 at step 4
 const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
 fit();
-show(hm ? Number(hm[1]) - 1 : 0);
+const hid = (location.hash || "").match(/^#(s-[\w-]+)$/), iid = hid ? slides.findIndex((sl) => sl.id === hid[1]) : -1;
+show(hm ? Number(hm[1]) - 1 : Math.max(0, iid));
 if (hm && hm[2]) { shown = Math.max(1, Math.min(nsteps(slides[cur]), Number(hm[2]))); paintSteps(); }
 })();
 </script>
