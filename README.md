@@ -28,8 +28,10 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
-## PriCom lecture slides
+## Course slides
 
-`pricom/` holds the FGA0092 HTML lecture decks (one per topic) and an index page,
-linked from Teaching. They are copied from `~/Documentos/UnB/Aulas/curso_pricom/Modulo*/html/`:
-edit the `TOPICS` list in `sync_pricom.py` if needed, run `python3 sync_pricom.py`, then commit.
+`pricom/` (FGA0092) and `eletromagnetismo/` (FGA0119) hold the lecture slides
+(interactive HTML decks and/or PDFs, one entry per topic) and an index page,
+linked from Teaching. They are copied from `~/Documentos/UnB/Aulas/curso_*`:
+edit the `COURSES` list in `sync_courses.py` if needed, run `python3 sync_courses.py`
+and `python3 build.py`, then commit.
