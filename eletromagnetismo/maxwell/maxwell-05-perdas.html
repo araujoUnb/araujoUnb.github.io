@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- =====================================================================
-     MODELO DE AULA INTERATIVA — UnB / LabTelecom (tema "unbclean", palco 1600x900)
-     Arquivo único e autocontido: CSS, logos (data: URI), MathJax 3.2.2 (cdnjs)
-     e o script do deck. Para começar uma aula nova: copie este arquivo,
-     edite o bloco CONFIG no início do <script>, troque os slides de exemplo
-     e as funções da seção EXEMPLO do script. Ver README.md ao lado.
+     MODELO REVEAL.JS DA DISCIPLINA FGA0119 (Eletromagnetismo), derivado dos decks do PriCom
+     (reveal.js 5.1.0 local em lib/, notas S, quadro B, caneta C, visão geral Esc, PDF ?print-pdf).
+     NÃO EDITE OS HTML GERADOS: cada deck tem fonte/ (slides.html, code.js, extra.css, deck.py)
+     e é montado por Slides/html_comum/montar.py, que preenche os marcadores @...@,
+     os marcadores de slides, código e lista de partes deste modelo.
      ===================================================================== -->
 <title>Maxwell 5 · Meios com perdas</title>
 <meta name="description" content="Equações de Maxwell: campos variantes no tempo, ondas planas, potência, polarização, condições de contorno e reflexão.">
@@ -17,14 +17,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <script>
   window.MathJax = {
-    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams",
-      macros: { sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vB: "\\vec{\\mathbf B}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vJ: "\\vec{\\mathbf J}", dvl: "d\\vec{\\mathbf l}", dvS: "d\\vec{\\mathbf S}", az: "\\hat{\\mathbf a}_z", aphi: "\\hat{\\mathbf a}_\\phi", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", arho: "\\hat{\\mathbf a}_\\rho", vP: "\\vec{\\mathbf P}" } },
+    loader: { load: ["[tex]/html", "[tex]/color"] },
+    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color"] }, macros: { cb: ["{\\color[RGB]{0,59,92}{#1}}", 1], cg: ["{\\color[RGB]{0,102,51}{#1}}", 1], cr: ["{\\color[RGB]{176,58,46}{#1}}", 1], sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vB: "\\vec{\\mathbf B}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vJ: "\\vec{\\mathbf J}", dvl: "d\\vec{\\mathbf l}", dvS: "d\\vec{\\mathbf S}", az: "\\hat{\\mathbf a}_z", aphi: "\\hat{\\mathbf a}_\\phi", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", arho: "\\hat{\\mathbf a}_\\rho", vP: "\\vec{\\mathbf P}" } },
     svg: { fontCache: "global", displayAlign: "left", displayIndent: "0" },
     options: { enableMenu: false },
     startup: { ready() { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__mathReady && window.__mathReady()); } }
   };
 </script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="lib/reveal/dist/reveal.css">
+<link rel="stylesheet" href="lib/reveal-plugins/chalkboard/style.css">
 <style>
 /* Layout: the UnB/LabTelecom "unbclean" Beamer theme on a 1600x900 stage
    (1 cm of the 16 cm Beamer page = 100 px). Single light look, as in the PDF slides.
@@ -55,8 +57,6 @@ body { margin: 0; background: var(--letterbox); color: var(--unb-text); font-fam
 #stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center center; background: #ffffff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
 
 /* ---- frame anatomy (template) ---- */
-.slide { position: absolute; inset: 0; display: none; font-size: 26px; line-height: 1.42; }
-.slide.active { display: block; }
 .slide .logo-head { position: absolute; top: 45px; right: 100px; height: 55px; }
 .frametitle { position: absolute; top: 45px; left: 100px; right: 520px; }
 .frametitle h2 { margin: 0; font-size: 44px; font-weight: 700; color: var(--unb-primary); line-height: 1.1; }
@@ -151,7 +151,7 @@ dl.syms::before { content: "Símbolos"; font-weight: 700; color: var(--unb-secon
 
 /* instruments */
 .inst { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 40px; flex: 1; min-height: 0; }
-.controls { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
+.painel { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
 .ctl { display: grid; gap: 4px; }
 .ctl .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .ctl output { font-family: var(--font-mono); font-size: 18px; color: var(--unb-primary); font-variant-numeric: tabular-nums; }
@@ -190,7 +190,10 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .toc a { color: var(--unb-text); text-decoration: none; cursor: pointer; }
 .toc a b { color: var(--unb-primary); margin-right: 12px; }
 .toc a:hover { color: var(--unb-primary); }
+.toc a.soon { cursor: default; }
 .toc .d { display: block; font-size: 20px; color: var(--unb-muted); margin-left: 34px; }
+.refs { columns: 2; column-gap: 50px; font-size: 18px; line-height: 1.3; }
+.refs p { break-inside: avoid; margin: 0 0 7px; padding-left: 2.3em; text-indent: -2.3em; }
 
 /* navigation bar (outside the slide) */
 nav.ctrl { position: fixed; left: 0; right: 0; bottom: 0; height: calc(48px + env(safe-area-inset-bottom, 0px)); padding: 0 16px env(safe-area-inset-bottom, 0px); display: flex; align-items: center; gap: 12px; background: #fff; border-top: 1px solid var(--rule); font-size: 15px; color: var(--unb-muted); }
@@ -198,32 +201,134 @@ nav.ctrl .progress { position: absolute; left: 0; top: -1px; height: 3px; backgr
 nav.ctrl button { font: inherit; font-size: 15px; color: var(--unb-primary); background: #fff; border: 1px solid var(--rule); border-radius: 3px; padding: 4px 12px; cursor: pointer; }
 nav.ctrl button:disabled { opacity: .4; cursor: default; }
 nav.ctrl #sec { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+nav.ctrl select { font: inherit; font-size: 14px; color: var(--unb-primary); max-width: 260px; padding: 3px 6px; }
 :focus-visible { outline: 3px solid var(--unb-secondary); outline-offset: 2px; }
 
-@media (max-width: 760px) {
-  body { overflow: auto; background: #fff; }
-  #deck { position: static; background: #fff; overflow: visible; padding-inline: 16px; }
-  #stage { position: static; width: auto; height: auto; transform: none !important; box-shadow: none; }
-  .slide { position: relative; display: block; padding-block: 28px 20px; border-bottom: 2px solid var(--unb-secondary); font-size: 17px; }
-  .slide .logo-head, .foot, .stepinfo, nav.ctrl { display: none; }
-  .frametitle, .body, .titlepage, .divider { position: static; inset: auto; }
-  .frametitle { margin-bottom: 18px; } .frametitle h2 { font-size: 26px; } .frametitle .sub { font-size: 17px; }
-  .body { gap: 14px; }
-  .titlepage h1 { font-size: 40px; } .titlepage .subtitle { font-size: 20px; } .titlepage .logos { gap: 12px; } .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
-  .titlepage .author { font-size: 20px; } .titlepage .inst, .titlepage .date { font-size: 16px; } .titlepage .mid { margin: 28px 0; }
-  .divider .num { font-size: 56px; } .divider .ttl { font-size: 30px; } .divider .what { font-size: 17px; }
-  .cols, .inst, .plots.two, .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .toc { font-size: 19px; } .toc .d { font-size: 15px; }
-  .step, .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } .step .why, .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
-  .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .dlayout .step .m { font-size: 17px; }
-  dl.syms, .figcap, .symline { font-size: 15px; } dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
-  .block, .block .bt, .controls, .readouts, .legend, .cap, .try { font-size: 15px; }
-  .eqn > .tag, .step .tag { font-size: 14px; }
-  table { font-size: 15px; min-width: 540px; }
-  code { overflow-wrap: anywhere; }
-}
 @media (prefers-reduced-motion: reduce) { .step, nav.ctrl .progress { transition: none; } }
+/* passos de texto e blocos revelados por passo */
+.step.txt { display: block; font-size: 22px; line-height: 1.38; padding: 6px 0 6px 14px; }
+.table-wrap.step.txt { padding: 0 0 0 10px; }
+.block.step { display: flex; padding: 12px 18px; border-left: 5px solid var(--unb-primary); }
+.block.alert.step { border-left-color: var(--unb-alert); }
+.block.example.step { border-left-color: var(--unb-secondary); }
+.block.step.current { box-shadow: 0 0 0 2px var(--unb-alert); }
+/* anotações com seta, como no quadro: <div class="note" data-on="k" data-to="id1 id2"> */
+.note { position: absolute; left: 0; top: 0; z-index: 5; max-width: 380px; font-size: 18px; line-height: 1.3; color: var(--unb-alert); background: #fff; border: 1.5px solid var(--unb-alert); border-radius: 4px; padding: 5px 11px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.note.on { opacity: 1; }
+svg.notelayer { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; pointer-events: none; z-index: 4; overflow: visible; }
+svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2; }
+svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
+svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
+@keyframes drawln { to { stroke-dashoffset: 0; } }
+/* esquemático com blocos destacados por passo */
+.schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
+.schem img { width: 100%; display: block; }
+.schem .blk { position: absolute; border: 3px solid var(--unb-alert); border-radius: 6px; background: rgba(255, 220, 0, .10); box-shadow: 0 0 0 2000px rgba(255, 255, 255, .6); pointer-events: none; }
+.schem .blk b { position: absolute; left: -3px; top: -3px; background: var(--unb-alert); color: #fff; padding: 0 8px; border-radius: 4px 0 4px 0; font-size: 18px; }
+.slide:not(.static) .solo .step:not(.current) { display: none; }
+.solo .step.txt { font-size: 22px; border-left-color: var(--unb-alert); }
+.bn { color: var(--unb-primary); font-weight: 600; }
+.slide [data-show] { transition: opacity .3s; }
+.slide:not(.static) [data-show]:not(.on) { opacity: 0; }
+.link { display: none; }
+.slide:not(.static) .step.gone { display: none; }
+.schem.mini { width: 100%; margin: 0; border: 1px solid var(--rule); }
+.schem.mini .blk b { font-size: 14px; padding: 0 6px; }
+.schem .blk.tag { border: none; background: none; box-shadow: none; }
+.schem .blk.tag b { left: 4px; top: 4px; border-radius: 4px; }
+.swap { position: relative; }
+.swap > * { position: absolute; inset: 8px; }
+.swap svg { width: 100%; height: 100%; }
+svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+
+
+.grcwrap { height: auto; padding: 8px; background: #fff; }
+.grcfoto { display: block; width: 100%; height: auto; border-radius: 4px; }
+/* passos na mesma linha, como no quadro */
+.srow { display: flex; align-items: center; }
+.srow > .step { flex: 0 0 auto; }
+.srow > .step.cont { grid-template-columns: minmax(0, 1fr); padding-left: 6px; }
+.srow > .step.cont:last-child { flex: 1 1 auto; }
+.slide:not(.static) .srow > .step.cont.current { border-left-color: transparent; }
+.srow:has(.step.cont.current) > .step:first-child { border-left-color: var(--unb-alert); }
+
+/* ---------- reveal.js: palco 1600x900, barra embaixo, passos como fragmentos ---------- */
+body.reveal-viewport { background: var(--letterbox); line-height: normal; }
+html:not(.reveal-print) .reveal { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: calc(48px + env(safe-area-inset-bottom, 0px)); width: auto; height: auto; }
+html:fullscreen:not(.reveal-print) .reveal { top: 0; bottom: 0; }
+html:fullscreen nav.ctrl { display: none; }
+.reveal .slides { text-align: left; }
+.reveal .slides > section.slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; padding: 0; margin: 0; box-sizing: border-box; font-size: 26px; line-height: 1.42; text-align: left; background: #fff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
+html.reveal-print .reveal .slides > section.slide { box-shadow: none; }
+/* os passos usam as próprias classes .hidden e .current, não o visual de fragmento do reveal */
+.reveal .slides section .step.fragment { opacity: 1; visibility: inherit; transform: none; transition: opacity .35s ease, transform .35s ease, border-color .35s; will-change: auto; }
+.reveal .slides section .step.fragment.hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+.reveal .slides section .step.fragment.block { transition: opacity .35s ease, transform .35s ease, box-shadow .35s; }
+/* visão geral */
+.reveal.overview .slides > section.slide { box-shadow: 0 0 0 1px var(--rule); }
+/* PDF: estado final, sem transições */
+html.reveal-print *, html.reveal-print *::before { transition: none !important; animation: none !important; }
+html.reveal-print nav.ctrl { display: none; }
+html.reveal-print svg.notelayer path.ln { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+nav.ctrl { z-index: 40; line-height: normal; }
+/* dentro da visão do apresentador (S) as miniaturas não mostram a barra */
+html.receiver nav.ctrl { display: none; }
+/* quadro (chalkboard) sem Font Awesome: ícones da paleta desenhados em CSS */
+.palette .fa-square::before { content: ""; display: inline-block; width: .9em; height: .9em; background: currentColor; border-radius: 2px; vertical-align: middle; }
+.boardhandle .fa-chevron-up::before { content: "▲"; color: #fff; font-style: normal; }
+.boardhandle .fa-chevron-down::before { content: "▼"; color: #fff; font-style: normal; }
+.boardhandle a { text-decoration: none; }
+/* ---------- barra compacta: telas de toque e janelas estreitas ---------- */
+nav.ctrl #pg { white-space: nowrap; }
+nav.ctrl #more { display: none; }
+nav.ctrl #extra { display: contents; }
+@media (max-width: 1279px), (pointer: coarse) {
+  nav.ctrl { gap: 10px; }
+  nav.ctrl button { min-height: 38px; min-width: 44px; padding: 6px 12px; }
+  nav.ctrl #more { display: inline-block; font-size: 20px; line-height: 1; }
+  nav.ctrl #extra { display: none; position: absolute; right: 10px; bottom: calc(100% + 8px); flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; min-width: 220px; background: #fff; border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 28px rgba(0, 30, 50, .22); }
+  nav.ctrl #extra.open { display: flex; }
+  nav.ctrl #extra button, nav.ctrl #extra select { min-height: 42px; text-align: left; max-width: none; font-size: 16px; }
+}
+@media (max-width: 560px) { nav.ctrl #sec { display: none; } }
+
+/* ---------- modo coluna: celular em pé (até 760 px), sem o reveal ---------- */
+html.narrow, html.narrow body { height: auto; overflow: auto; background: #fff; }
+html.narrow .reveal { position: static; width: auto; height: auto; overflow: visible; padding-inline: 16px; touch-action: auto; }
+html.narrow .reveal .slides { position: static; width: auto; height: auto; inset: auto; margin: 0; transform: none !important; pointer-events: auto; perspective: none; }
+html.narrow .reveal .slides > section.slide { position: relative; display: block !important; inset: auto; width: auto; height: auto; padding: 28px 0 20px; font-size: 17px; box-shadow: none; border-bottom: 2px solid var(--unb-secondary); transform: none !important; }
+html.narrow .slide .logo-head, html.narrow .foot, html.narrow .stepinfo, html.narrow aside.notes, html.narrow .note, html.narrow svg.notelayer { display: none; }
+html.narrow .frametitle, html.narrow .body, html.narrow .titlepage, html.narrow .divider { position: static; inset: auto; }
+html.narrow .frametitle { margin-bottom: 18px; } html.narrow .frametitle h2 { font-size: 26px; } html.narrow .frametitle .sub { font-size: 17px; }
+html.narrow .body { gap: 14px; }
+html.narrow .titlepage h1 { font-size: 40px; } html.narrow .titlepage .subtitle { font-size: 20px; } html.narrow .titlepage .logos { gap: 12px; } html.narrow .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
+html.narrow .titlepage .author { font-size: 20px; } html.narrow .titlepage .inst, html.narrow .titlepage .date { font-size: 16px; } html.narrow .titlepage .mid { margin: 28px 0; }
+html.narrow .divider .num { font-size: 56px; } html.narrow .divider .ttl { font-size: 30px; } html.narrow .divider .what { font-size: 17px; }
+html.narrow .cols, html.narrow .inst, html.narrow .plots.two, html.narrow .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .toc { font-size: 19px; } html.narrow .toc .d { font-size: 15px; }
+html.narrow .step, html.narrow .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } html.narrow .step .why, html.narrow .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
+html.narrow .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .dlayout .step .m { font-size: 17px; }
+html.narrow dl.syms, html.narrow .figcap, html.narrow .symline { font-size: 15px; } html.narrow dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
+html.narrow .block, html.narrow .block .bt, html.narrow .painel, html.narrow .readouts, html.narrow .legend, html.narrow .cap, html.narrow .try { font-size: 15px; }
+html.narrow .eqn > .tag, html.narrow .step .tag { font-size: 14px; }
+html.narrow table { font-size: 15px; min-width: 540px; }
+html.narrow code { overflow-wrap: anywhere; }
+html.narrow .refs { columns: 1; font-size: 14px; }
+html.narrow .slide svg:not(.notelayer) { max-width: 100%; height: auto; }
+html.narrow mjx-container svg { max-width: none !important; }   /* a matemática encolhe pelo tamanho da fonte, não pela largura */
+html.narrow .deriv > *, html.narrow .step, html.narrow .step > * { min-width: 0; }
+html.narrow .step .m, html.narrow .eqn { overflow-x: auto; overflow-y: hidden; }
+html.narrow mjx-container[display="true"] { min-width: 0 !important; }
+html.narrow .trow.th { grid-template-columns: minmax(0, 1fr) auto; }
+html.narrow .srow { flex-direction: column; align-items: stretch; }
+html.narrow .srow > .step { flex: 1 1 auto; }
+/* no modo coluna a barra fica só com o menu de seções e partes, no canto */
+html.narrow nav.ctrl { position: fixed; left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: auto; padding: 0; gap: 0; background: none; border: 0; }
+html.narrow nav.ctrl > :not(#extra), html.narrow nav.ctrl #extra > :not(#secsel) { display: none !important; }
+html.narrow nav.ctrl #extra { display: contents !important; }
+html.narrow nav.ctrl #secsel { min-height: 40px; max-width: 70vw; background: #fff; box-shadow: 0 4px 14px rgba(0, 30, 50, .2); }
+.stepc { display: none !important; }
 
 /* ---- camada "quadro" (magnetostática) ---- */
 :root { --cK: var(--unb-text); --cP: var(--unb-primary); --cR: var(--unb-alert); --cG: var(--unb-secondary); --cM: var(--unb-muted); }
@@ -253,11 +358,25 @@ canvas.drag { touch-action: none; }
 .ctxt { font-size: 19px; line-height: 1.35; }
 .cmp td, .cmp th { padding: 8px 12px; font-size: 20px; vertical-align: middle; }
 .cmp td:first-child { color: var(--unb-primary); font-weight: 600; width: 190px; }
-@media (max-width: 760px) {
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1100px) {
   svg.ink { display: none; }
   .stack > * { grid-area: auto; }
   .qd { grid-template-columns: minmax(0, 1fr); }
-  .board { transform: scale(.55); transform-origin: left top; margin-bottom: -40%; }
+  .board { transform-origin: left top; }
+  .ln, .dv .ln { flex-wrap: wrap; row-gap: 6px; }
+  .slide .body, .slide .body * { min-width: 0; }
+  .slide p, .slide li, .slide .nt, .slide .ctxt { overflow-wrap: break-word; }
+  .ln > .nt, .ln > .tag, .ln > b { flex: 1 1 100%; }
+  .slide [style*="grid-template-columns"], .qd, .cols { grid-template-columns: minmax(0, 1fr) !important; }
+  .ln > .m, .ln > .nt, .ln, .eqbox { max-width: 100%; box-sizing: border-box; }
+  .ln > .m { overflow-x: auto; overflow-y: hidden; }
+  .slide .body [style*="width:"]:not(.board):not(canvas) { max-width: 100%; }
+  .slide mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; }
+  .slide table { display: block; max-width: 100%; overflow-x: auto; min-width: 0; }
+  .cmp td, .cmp th, .cmp.mx td, .cmp.mx th { font-size: 15px; padding: 6px 8px; }
+  .cmp td:first-child, .cmp.mx td:first-child, .cmp.mx td.nota { width: auto; }
+  .dv.tool { padding: 10px 12px; }
+  canvas { max-width: 100%; }
 }
 nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primary); background: #fff; border: 1px solid var(--rule); border-radius: 3px; padding: 3px 6px; max-width: 280px; }
 .foot a.home { color: var(--unb-primary); font-weight: 600; text-decoration: none; cursor: pointer; }
@@ -269,12 +388,15 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
 .dv.tool { gap: 16px; padding: 14px 18px; background: var(--unb-light); border-left: 5px solid var(--unb-primary); align-self: start; }
 .dv.tool .tl { font-size: 22px; display: flex; flex-direction: column; gap: 2px; }
 .dv.tool .tn { font-size: 16px; color: var(--unb-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+/* ---- motor reveal: sem "passo k/n" (o painel de controles chama-se .painel: .controls é do reveal) ---- */
+.stepinfo { display: none; }
+
 </style>
 </head>
 <body>
 
-<div id="deck" aria-roledescription="apresentação">
-<div id="stage">
+<div class="reveal" aria-roledescription="apresentação">
+<div class="slides">
 
 <!-- =====================================================================
      SLIDES. Cada <section class="slide"> é um slide do palco 1600x900.
@@ -305,6 +427,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
     </div>
     <div class="date" data-cfg="rodape_titulo">use ← → para avançar, F para tela cheia</div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ roteiro ============ -->
@@ -505,7 +628,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   <div class="frametitle"><h2>Onda num meio com perdas</h2><div class="sub">Figura interativa · \(E_x=E_0e^{-\alpha z}\cos(\omega t-\beta z)\) e \(\eta|H_y|\) atrasado de \(\theta_\eta\)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><label for="pd-mat">Material</label><select id="pd-mat"><option value="0">cobre</option><option value="1" selected>água do mar</option><option value="2">solo úmido</option><option value="3">solo seco</option><option value="4">vidro</option></select></div>
         <div class="ctl"><div class="row"><label for="pd-f">Frequência \(f\)</label><output id="pd-f-o"></output></div><input id="pd-f" type="range" min="2" max="11" step="0.1" value="6"></div>
         <button class="btn ghost" id="pd-play" type="button">Pausar</button>
@@ -587,6 +710,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   </div>
   <span class="lk" data-a="#ep-lz" data-b="#e1-r" data-s="3" data-pa="t" data-pb="l" data-bend="90"></span>
 </section>
+
 </div>
 </div>
 
@@ -596,9 +720,20 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   <button id="next" type="button" aria-label="Próximo">→</button>
   <span id="pg"></span>
   <span id="sec"></span>
-  <button id="full" type="button">Tela cheia</button>
+  <button id="more" type="button" aria-expanded="false" aria-controls="extra" title="Mais opções">⋯</button>
+  <div id="extra">
+    <button id="gotoc" type="button" title="Ir para o roteiro (R)">Roteiro</button>
+    <select id="secsel" aria-label="Ir para uma seção (G)" title="Seções (G)"></select>
+    <button id="ovw" type="button" title="Visão geral (Esc)">Visão geral</button>
+    <button id="pen" type="button" title="Caneta sobre o slide (C)">Caneta</button>
+    <button id="board" type="button" title="Quadro em branco (B)">Quadro</button>
+    <button id="full" type="button" title="Tela cheia (F)">Tela cheia</button>
+  </div>
 </nav>
 
+<script src="lib/reveal/dist/reveal.js"></script>
+<script src="lib/reveal/plugin/notes/notes.js"></script>
+<script src="lib/reveal-plugins/chalkboard/plugin.js"></script>
 <script>
 (() => {
 "use strict";
@@ -622,13 +757,14 @@ const CONFIG = {
   tituloAba: "Maxwell 5 · Meios com perdas",
   titulo: "Meios com perdas",
   subtitulo: "Equações de Maxwell · parte 5",
-  autor: "Daniel Araújo",
+  autor: "Prof. Daniel Costa Araújo",
   instituicao: "Faculdade de Ciências e Tecnologias em Engenharia (FCTE), Universidade de Brasília<br>LabTelecom",
-  rodape_titulo: "FGA0119 Eletromagnetismo · use ← → para avançar, F para tela cheia",
+  rodape_titulo: "FGA0119 Teoria de Eletromagnetismo · use ← → para avançar, F para tela cheia, S para a visão do apresentador",
   contato: "Daniel Araújo · LabTelecom, FCTE, Universidade de Brasília",
   rodape: "<a class=\"home\" data-go=\"s-roteiro\" title=\"Voltar ao roteiro (tecla R)\">↩ Roteiro</a> &nbsp;·&nbsp; Equações de Maxwell &nbsp;|&nbsp; Daniel Araújo",
 };
 document.title = CONFIG.tituloAba;
+document.querySelectorAll("canvas[height]").forEach((cv) => { cv.dataset.h = cv.getAttribute("height"); cv.style.height = cv.dataset.h + "px"; });
 document.querySelectorAll("[data-cfg]").forEach((el) => { const v = CONFIG[el.dataset.cfg]; if (v !== undefined) el.innerHTML = v; });
 window.addEventListener("error", (e) => { const d = document.documentElement; d.dataset.errs = (d.dataset.errs || "") + " | " + e.message; });
 const __ce = console.error.bind(console); console.error = (...a) => { const d = document.documentElement; d.dataset.errs = (d.dataset.errs || "") + " | " + a.map(String).join(" "); __ce(...a); };
@@ -686,13 +822,17 @@ function setupCanvas(cv) {
   const dpr = (window.devicePixelRatio || 1) * STAGE_SCALE, w = cv.clientWidth;
   if (!cv.dataset.h) cv.dataset.h = cv.getAttribute("height");
   const h = Number(cv.dataset.h);
-  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + "px"; }
+  cv.style.height = h + "px";
+  if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
   const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   return { ctx, w, h };
 }
 // o: xmin xmax ymin ymax xticks yticks xfmt yfmt xlabel ylabel series[{x,y,color,width,dash,pts,marker,size}] vlines hlines bands[{x0,x1,color}]
 function plot(cv, o) {
-  if (!cv.clientWidth) return null;
+  try { return plotRaw(cv, o); } catch (e) { console.error("plot " + (cv && cv.id), e); return null; }
+}
+function plotRaw(cv, o) {
+  if (!cv || !cv.clientWidth) return null;
   const { ctx, w, h } = setupCanvas(cv);
   const m = { l: o.ml || 58, r: 14, t: 12, b: 42 };
   const pw = w - m.l - m.r, ph = h - m.t - m.b;
@@ -1625,14 +1765,11 @@ const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFi
 document.querySelectorAll("[data-mount]").forEach((el) => { const f = BOARDS[el.dataset.mount]; if (f) el.outerHTML = f(); });
 
 // ---------- overlays e setas curvas ----------
-function sRange(el) { const m = (el.dataset.s || "").match(/^(\d+)(?:-(\d*))?$/); if (!m) return [1, Infinity]; return [Number(m[1]), m[2] === undefined || m[2] === "" ? Infinity : Number(m[2])]; }
-function paintOver(sl, s) { sl.querySelectorAll("[data-s]").forEach((el) => { const [a, b] = sRange(el); el.classList.toggle("off", s < a || s > b); }); }
-function overSteps(sl) { let n = Number(sl.dataset.steps || 0); sl.querySelectorAll("[data-s]").forEach((el) => { const [a, b] = sRange(el); n = Math.max(n, a, isFinite(b) ? b : 0); }); return n; }
 document.querySelectorAll(".slide").forEach((sl) => { if (sl.querySelector(".lk")) sl.insertAdjacentHTML("beforeend", `<svg class="ink" viewBox="0 0 1600 900" aria-hidden="true"></svg>`); });
 function drawLinks(sl) {
   const ink = sl && sl.querySelector(":scope > svg.ink"); if (!ink) return;
   const sr = sl.getBoundingClientRect(), k = sr.width / 1600;
-  if (!k || window.matchMedia("(max-width: 760px)").matches) { ink.innerHTML = ""; return; }
+  if (!k || document.documentElement.classList.contains("narrow")) { ink.innerHTML = ""; return; }
   const box = (e) => { const r = e.getBoundingClientRect(); return { x: (r.left - sr.left) / k, y: (r.top - sr.top) / k, w: r.width / k, h: r.height / k }; };
   const side = (b, s) => s === "l" ? [b.x, b.y + b.h / 2, -1, 0] : s === "r" ? [b.x + b.w, b.y + b.h / 2, 1, 0] : s === "t" ? [b.x + b.w / 2, b.y, 0, -1] : [b.x + b.w / 2, b.y + b.h, 0, 1];
   let out = "";
@@ -2159,26 +2296,53 @@ $("rn-play")?.addEventListener("click", () => { RN.play = !RN.play; $("rn-play")
 const FIGS = {};
 const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn };
 
-// ---------- navegação: menu de seções, atalho R e link no rodapé ----------
-// ---------- navegação: menu de seções, atalho R e link no rodapé ----------
-// DECKS: [{nav, href, cur}] quando o curso está separado em um arquivo por seção (injetado pelo build)
-const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": false}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": false}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": true}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}];
-const NAVSEL = (() => {
-  const nav = document.querySelector("nav.ctrl"), sel = document.createElement("select");
-  sel.id = "navsec"; sel.setAttribute("aria-label", "Ir para a seção");
-  const local = () => [...document.querySelectorAll(".slide")].forEach((sl, i) => { if (sl.dataset.nav) { const o = document.createElement("option"); o.value = i; o.textContent = sl.dataset.nav; sel.appendChild(o); } });
-  if (!DECKS) local();
-  else for (const d of DECKS) { if (d.cur) local(); else { const o = document.createElement("option"); o.value = "url:" + d.href; o.textContent = d.nav + " ↗"; sel.appendChild(o); } }
-  sel.addEventListener("change", () => { if (sel.value.startsWith("url:")) { location.href = sel.value.slice(4); return; } show(Number(sel.value)); sel.blur(); });
-  nav.insertBefore(sel, $("sec"));
-  return sel;
-})();
-function navSync(i) { let v = null; for (const o of NAVSEL.options) if (!o.value.startsWith("url:") && Number(o.value) <= i) v = o.value; if (v === null) { const o = [...NAVSEL.options].find((q) => !q.value.startsWith("url:")); if (o) v = o.value; } if (v !== null) NAVSEL.value = v; }
+// ---------- modo rolável (celular, tablet em pé): quadros e equações cabem na largura ----------
+function narrowFit() {
+  document.querySelectorAll(".slide .board").forEach((b) => {
+    b.style.transform = ""; b.style.marginRight = b.style.marginBottom = "";
+    const sl = b.closest(".slide"), W = (sl.querySelector(".body") || sl).clientWidth;
+    const w = b.offsetWidth, h = b.offsetHeight, s = Math.min(1, W / w);
+    if (s < 1) { b.style.transform = `scale(${s})`; b.style.marginRight = `${-(1 - s) * w}px`; b.style.marginBottom = `${-(1 - s) * h}px`; }
+  });
+  const R = document.documentElement.clientWidth - 12;   // borda direita útil
+  const ms = [...document.querySelectorAll(".slide mjx-container")].filter((m) => !m.closest(".board, mjx-container mjx-container"));
+  ms.forEach((m) => { m.style.fontSize = ""; });
+  ms.forEach((m) => {
+    const q = m.getBoundingClientRect(), w = Math.max(q.width, m.scrollWidth);
+    if (w && q.left + w > R) {
+      const s = Math.max(50, Math.floor(100 * (R - q.left) / w));
+      if (s < 100) m.style.fontSize = `${s}%`;
+    }
+  });
+}
+function wideFit() {
+  document.querySelectorAll(".slide .board").forEach((b) => { b.style.transform = b.style.marginRight = b.style.marginBottom = ""; });
+  document.querySelectorAll(".slide mjx-container").forEach((m) => { if (m.style.fontSize) m.style.fontSize = ""; });
+}
 
-// ---------- deck: footer, numbering, overlays, navigation, scaling ----------
+
+
+// =====================================================================
+//  Motor do deck sobre o reveal.js 5.1.0 (lib/reveal, sem CDN).
+//  Passos: um slide tem n = max(nº de .step, maior passo de data-s) passos;
+//  o script põe n − 1 fragmentos invisíveis (.stepc) e o passo atual é
+//  1 + fragmentos visíveis. Com ele se pintam os .step (hidden/current) e
+//  os overlays data-s="a", "a-b" ou "a-" (classe .off fora do intervalo);
+//  as setas curvas .lk (drawLinks do deck) são refeitas a cada passo.
+//  Assim o mesmo código pinta o slide ao vivo, na visão geral e no PDF.
+//  As figuras (FIGS), os instrumentos (DRAW) e as notas com seta são os
+//  do motor antigo, chamados pelos eventos do reveal.
+// =====================================================================
 // Registre cada instrumento: chave do data-draw -> função de desenho.
-const deck = $("deck"), stage = $("stage"), slides = [...document.querySelectorAll(".slide")];
-const narrow = () => window.matchMedia("(max-width: 760px)").matches;
+const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": false}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": false}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": true}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}];   // [{nav, href, cur}] quando o curso está separado em um arquivo por seção
+const PRINT = /print-pdf/i.test(location.search);
+// celular em pé: coluna rolável com todos os passos, sem o reveal (como no motor antigo)
+const NARROW_MQ = window.matchMedia("(max-width: 760px), (orientation: portrait) and (max-width: 1100px)");   // celular e tablet em pé
+const NARROW = NARROW_MQ.matches && !PRINT && !/receiver/i.test(location.search);
+if (NARROW) document.documentElement.classList.add("narrow");
+try { NARROW_MQ.addEventListener("change", () => location.reload()); } catch (e) { /* navegador antigo */ }
+if (/receiver/i.test(location.search)) document.documentElement.classList.add("receiver");
+const slides = [...document.querySelectorAll(".reveal .slides > section")];
 const numbered = slides.filter((sl) => !sl.hasAttribute("data-nonum"));
 const UNB = document.querySelector('.titlepage .logos img').getAttribute("src");
 const LAB = $("lablogo").getAttribute("src");
@@ -2188,126 +2352,294 @@ numbered.forEach((sl, i) => {
   f.className = "foot";
   f.innerHTML = `<span>${CONFIG.rodape}</span>` +
     `<span class="right"><img src="${UNB}" alt=""><span class="n">${i + 1}<span>&thinsp;/&thinsp;${numbered.length}</span></span></span>`;
-  sl.appendChild(f);
+  sl.insertBefore(f, sl.querySelector("aside.notes"));
+  if (sl.querySelector(".step")) { const si = document.createElement("div"); si.className = "stepinfo"; sl.insertBefore(si, sl.querySelector("aside.notes")); }
 });
-let cur = 0, shown = 0;
 const steps = (sl) => [...sl.querySelectorAll(".step")];
+// overlays: data-s="a" (do passo a em diante), "a-b" (de a a b) ou "a-" ; data-steps no slide força o total
+function sRange(el) { const m = (el.dataset.s || "").match(/^(\d+)(?:-(\d*))?$/); if (!m) return [1, Infinity]; return [Number(m[1]), m[2] === undefined || m[2] === "" ? Infinity : Number(m[2])]; }
+function paintOver(sl, s) { sl.querySelectorAll("[data-s]").forEach((el) => { const [a, b] = sRange(el); el.classList.toggle("off", s < a || s > b); }); }
+function overSteps(sl) { let n = Number(sl.dataset.steps || 0); sl.querySelectorAll("[data-s]").forEach((el) => { const [a, b] = sRange(el); n = Math.max(n, a, isFinite(b) ? b : 0); }); return n; }
 const nsteps = (sl) => Math.max(steps(sl).length, overSteps(sl));
-function paintSteps() {
-  const st = steps(slides[cur]);
+// passos -> fragmentos invisíveis do reveal
+slides.forEach((sl) => { const n = nsteps(sl); for (let k = 1; k < n; k++) { const f = document.createElement("span"); f.className = "fragment stepc"; f.dataset.fragmentIndex = k - 1; f.setAttribute("aria-hidden", "true"); sl.insertBefore(f, sl.querySelector("aside.notes")); } });
+// passo atual: 1 + fragmentos visíveis; 0 em slide sem passos
+const shownOf = (sl) => { const n = nsteps(sl); return NARROW ? n : n ? 1 + sl.querySelectorAll(".stepc.visible").length : 0; };
+const links = (sl) => { if (typeof drawLinks === "function") try { drawLinks(sl); } catch (e) { console.error("links", e); } };
+// arrastar o dedo sobre controles e figuras não troca de slide
+document.querySelectorAll(".painel, .controls, canvas, select, input, nav.ctrl").forEach((e) => e.setAttribute("data-prevent-swipe", ""));
+const slideNum = (sl) => { const k = numbered.indexOf(sl); return k >= 0 ? [k + 1, " / ", numbered.length] : [""]; };
+
+function paintSteps(sl, shown) {
+  const st = steps(sl);
   st.forEach((e, k) => { e.classList.toggle("hidden", k >= shown); e.classList.toggle("current", k === shown - 1 && shown < st.length + 1 && st.length > 1); });
-  const info = slides[cur].querySelector(".stepinfo");
+  const info = sl.querySelector(".stepinfo");
   if (info) info.textContent = st.length ? `passo ${Math.max(shown, 1)} / ${st.length}` : "";
-  slides[cur].querySelectorAll(".syms [data-from]").forEach((e) => {
+  sl.querySelectorAll(".syms [data-from]").forEach((e) => {
     const k = Number(e.dataset.from);
     e.classList.toggle("hidden", k > Math.max(shown, 1));
     e.classList.toggle("new", k === Math.max(shown, 1) && st.length > 0);
   });
-  paintOver(slides[cur], Math.max(shown, 1));
-  refreshFigs();
-  requestAnimationFrame(() => drawLinks(slides[cur]));
+  const kk = Math.max(shown, 1), win = Number(sl.dataset.window || 0);
+  st.forEach((e, k) => e.classList.toggle("gone", win > 0 && k < kk - win));
+  sl.querySelectorAll("[data-show]").forEach((e) => { e.classList.toggle("on", e.dataset.show.split(",").some((r) => { const [a, b] = r.split("-").map(Number); return kk >= a && kk <= (b || 1e9); })); });
+  paintOver(sl, kk);
 }
-const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const T0 = performance.now();
-function drawFigsAt(now) {
-  const list = narrow() ? slides.filter((sl) => sl.dataset.fig) : (slides[cur] && slides[cur].dataset.fig ? [slides[cur]] : []);
-  for (const sl of list) {
-    const cv = sl.querySelector("canvas[data-figcanvas]");
-    if (!cv || !cv.clientWidth) continue;
-    const n = nsteps(sl), stp = narrow() ? Math.max(n, 1) : Math.max(n ? shown : 1, 1);
-    const { ctx, w, h } = setupCanvas(cv);
-    ctx.clearRect(0, 0, w, h);
-    let cap = null;
-    try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, REDUCED ? 2.2 : (now - T0) / 1000); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
-    const capEl = sl.querySelector(".figcap");
-    if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
+// ---------- anotações com seta (notas .note ligadas a \cssId{...} das equações) ----------
+// <div class="note" data-on="3" data-to="id"> aparece no passo 3 (ou "3-5") com uma seta
+// até o elemento id; sem left/top no style, a nota fica abaixo do último passo, sob o alvo.
+// Os alvos são procurados dentro do slide, porque o PDF clona o slide uma vez por passo.
+const SVGNS = "http://www.w3.org/2000/svg";
+document.querySelectorAll(".note").forEach((n) => { if (!n.style.left) n.dataset.auto = "1"; });
+const onRange = (s, k) => { const [a, b] = s.split("-").map(Number); return k >= a && k <= (b || a); };
+let markerSeq = 0;
+function drawNotes(sl, shown, animate) {
+  const notes = [...sl.querySelectorAll(".note")], links = [...sl.querySelectorAll(".link")]; if (!notes.length && !links.length) return;
+  let layer = sl.querySelector("svg.notelayer");
+  if (!layer) { layer = document.createElementNS(SVGNS, "svg"); layer.setAttribute("class", "notelayer"); layer.setAttribute("viewBox", "0 0 1600 900"); sl.insertBefore(layer, sl.querySelector("aside.notes")); }
+  const mk = "nah-" + (++markerSeq);
+  layer.innerHTML = `<defs><marker id="${mk}" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css("--accent-3")}"/></marker></defs>`;
+  const k = Math.max(shown, 1), sr = sl.getBoundingClientRect(), S = sr.width / 1600 || 1;
+  const byId = (id) => sl.querySelector(`[id="${id}"]`);
+  const rel = (el) => { const r = el.getBoundingClientRect(); return { x: (r.left - sr.left) / S, y: (r.top - sr.top) / S, w: r.width / S, h: r.height / S }; };
+  const vis = notes.filter((n) => onRange(n.dataset.on, k));
+  notes.forEach((n) => n.classList.toggle("on", vis.includes(n)));
+  // ligações elemento do circuito -> termo da equação: <div class="link" data-on="k" data-from="id" data-to="id">rótulo</div>
+  for (const lk of links.filter((l) => onRange(l.dataset.on, k))) {
+    const se = byId(lk.dataset.from), te = byId(lk.dataset.to);
+    if (!se || !te) continue;
+    const sb = rel(se), tb = rel(te), pad = 4;
+    for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
+    const left = tb.x + tb.w < sb.x;
+    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+      : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
+    const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
+    if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+  }
+  const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
+  // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
+  const st = steps(sl), der = sl.querySelector(".deriv") || sl.querySelector(".body");
+  if (st.length && der) {
+    const D = rel(der), lastVis = st[Math.min(k, st.length) - 1], yb = (lastVis ? rel(lastVis).y + rel(lastVis).h : D.y) + 22;
+    const items = vis.filter((n) => n.dataset.auto).map((n) => { const ts = tg(n); const cx = ts.length ? ts.reduce((s, r) => s + r.x + r.w / 2, 0) / ts.length : D.x; return { n, cx }; }).sort((a, b) => a.cx - b.cx);
+    let xcur = D.x, y = yb, rowH = 0;
+    items.forEach(({ n, cx }) => {   // lado a lado; se não couber, nova linha
+      const nw = n.offsetWidth; let x = Math.max(cx - nw / 2, xcur);
+      if (x + nw > D.x + D.w && xcur > D.x) { y += rowH + 12; rowH = 0; xcur = D.x; x = Math.max(cx - nw / 2, xcur); }
+      x = Math.min(x, D.x + D.w - nw);
+      n.style.left = x + "px"; n.style.top = y + "px"; xcur = x + nw + 16; rowH = Math.max(rowH, n.offsetHeight);
+    });
+  }
+  for (const n of vis) {
+    const nb = { x: n.offsetLeft, y: n.offsetTop, w: n.offsetWidth, h: n.offsetHeight };
+    for (const tb of tg(n)) {
+      const pad = 4, hl = document.createElementNS(SVGNS, "rect");
+      Object.entries({ class: "hl", x: tb.x - pad, y: tb.y - pad, width: tb.w + 2 * pad, height: tb.h + 2 * pad, rx: 4 }).forEach(([a, v]) => hl.setAttribute(a, v));
+      layer.appendChild(hl);
+      const tcx = tb.x + tb.w / 2, tcy = tb.y + tb.h / 2;
+      let sx, sy, ex, ey;
+      if (tcy + tb.h / 2 + pad < nb.y) { sx = Math.min(Math.max(tcx, nb.x + 14), nb.x + nb.w - 14); sy = nb.y; ex = tcx; ey = tb.y + tb.h + pad + 2; }
+      else if (tb.y - pad > nb.y + nb.h) { sx = Math.min(Math.max(tcx, nb.x + 14), nb.x + nb.w - 14); sy = nb.y + nb.h; ex = tcx; ey = tb.y - pad - 2; }
+      else if (tcx < nb.x) { sx = nb.x; sy = nb.y + nb.h / 2; ex = tb.x + tb.w + pad + 2; ey = tcy; }
+      else { sx = nb.x + nb.w; sy = nb.y + nb.h / 2; ex = tb.x - pad - 2; ey = tcy; }
+      const vert = Math.abs(ey - sy) > Math.abs(ex - sx) * 0.5;
+      const d = vert ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}` : `M${sx},${sy} C${(sx + ex) / 2},${sy} ${(sx + ex) / 2},${ey} ${ex},${ey}`;
+      const p = document.createElementNS(SVGNS, "path");
+      p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`);
+      layer.appendChild(p);
+      if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
+    }
   }
 }
-function refreshFigs() { requestAnimationFrame((ts) => drawFigsAt(ts)); }
-function figLoop(ts) { if (!document.hidden) drawFigsAt(ts); requestAnimationFrame(figLoop); }
-if (!REDUCED) requestAnimationFrame(figLoop);
-function drawVisible() {
-  const list = narrow() ? slides : [slides[cur]];
-  for (const sl of list) { const k = sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+function clearNotes(sl) { const l = sl.querySelector("svg.notelayer"); if (l) l.innerHTML = ""; sl.querySelectorAll(".note").forEach((n) => n.classList.remove("on")); }
+let noteTimer = 0;
+function scheduleNotes(sl) {
+  clearNotes(sl); clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => { if (Reveal.getCurrentSlide() === sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), true); }, 380);
 }
-function fit() {
-  if (narrow()) { STAGE_SCALE = 1; stage.style.transform = ""; slides.forEach((sl) => { sl.classList.add("static"); paintOver(sl, nsteps(sl)); }); return; }
-  slides.forEach((sl) => sl.classList.remove("static"));
-  const r = deck.getBoundingClientRect();
-  STAGE_SCALE = Math.min(r.width / 1600, r.height / 900);
-  stage.style.transform = `translate(-50%, -50%) scale(${STAGE_SCALE})`;
+
+// ---------- figuras animadas e instrumentos ----------
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const T0 = performance.now();
+function drawFig(sl, tsec) {
+  if (!sl.dataset.fig || !FIGS[sl.dataset.fig]) return;
+  const cv = sl.querySelector("canvas[data-figcanvas]");
+  if (!cv || !cv.clientWidth) return;
+  const n = steps(sl).length, stp = Math.max(n ? shownOf(sl) : 1, 1);
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.clearRect(0, 0, w, h);
+  let cap = null;
+  try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, tsec); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
+  const capEl = sl.querySelector(".figcap");
+  if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
 }
-function show(i, opts = {}) {
-  cur = Math.max(0, Math.min(slides.length - 1, i));
-  const n = nsteps(slides[cur]);
-  shown = opts.allSteps ? n : (n ? 1 : 0);
-  slides.forEach((sl, k) => sl.classList.toggle("active", k === cur));
-  paintSteps();
-  const k = numbered.indexOf(slides[cur]);
-  $("pg").textContent = k >= 0 ? `${k + 1} / ${numbered.length}` : "";
-  $("bar").style.width = `${(100 * (cur + 1)) / slides.length}%`;
-  $("prev").disabled = cur === 0 && shown <= 1;
-  $("next").disabled = cur === slides.length - 1 && shown >= n;
-  $("sec").textContent = slides[cur].dataset.sec || "";
-  navSync(cur);
-  try { history.replaceState(null, "", "#" + (cur + 1)); } catch (e) { /* sandboxed viewer */ }
-  requestAnimationFrame(drawVisible);
+let ready = false;
+const tnow = (now) => REDUCED ? 2.2 : (now - T0) / 1000;
+function drawFigsAt(now) { if (!ready) return; const sl = Reveal.getCurrentSlide(); if (sl) drawFig(sl, tnow(now)); }
+function refreshFigs() { requestAnimationFrame(drawFigsAt); }
+function figLoop(ts) { if (!document.hidden && !Reveal.isOverview()) drawFigsAt(ts); requestAnimationFrame(figLoop); }
+function drawInst(sl) { const k = sl && sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+function drawVisible() { if (ready) drawInst(Reveal.getCurrentSlide()); }
+
+// ---------- barra de navegação ----------
+const tocIdx = slides.findIndex((sl) => sl.id === "s-roteiro" || sl.dataset.sec === "Roteiro");
+function updateNav(sl) {
+  const h = Reveal.getIndices(sl).h, fr = Reveal.availableFragments();
+  const nm = slideNum(sl);
+  $("pg").textContent = nm.length > 1 ? nm.join("") : "";
+  $("bar").style.width = `${(100 * (h + 1)) / slides.length}%`;
+  $("prev").disabled = Reveal.isFirstSlide() && !fr.prev;
+  $("next").disabled = Reveal.isLastSlide() && !fr.next;
+  $("sec").textContent = sl.dataset.sec || "";
 }
-function forward() {
-  const n = nsteps(slides[cur]);
-  if (shown < n) { shown++; paintSteps(); $("next").disabled = cur === slides.length - 1 && shown >= n; $("prev").disabled = false; }
-  else if (cur < slides.length - 1) show(cur + 1);
+function onState() {
+  if (!ready) return;
+  const sl = Reveal.getCurrentSlide(); if (!sl) return;
+  slides.forEach((s) => s.classList.toggle("active", s === sl));   // os laços de animação dos instrumentos olham .active
+  paintSteps(sl, shownOf(sl)); refreshFigs(); scheduleNotes(sl); updateNav(sl);
+  requestAnimationFrame(() => links(sl));
 }
-function backward() {
-  if (shown > 1) { shown--; paintSteps(); $("next").disabled = false; }
-  else show(cur - 1, { allSteps: true });
+// visão geral: pinta todos os slides no estado em que o reveal os deixou
+function paintAll() {
+  slides.forEach((sl) => { paintSteps(sl, shownOf(sl)); drawFig(sl, 2.2); drawInst(sl); links(sl); });
 }
-$("prev").addEventListener("click", backward);
-$("next").addEventListener("click", forward);
-document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
-  const g = a.dataset.go, idx = slides.findIndex((sl) => sl.id === g);
-  if (idx >= 0) show(idx);
-}));
-document.addEventListener("keydown", (e) => {
-  if (narrow()) return;
-  const t = e.target;
-  const field = t && (t.tagName === "SELECT" || (t.tagName === "INPUT" && t.type === "range"));
-  if (field && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " "].includes(e.key)) return;
-  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); forward(); }
-  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); backward(); }
-  else if (e.key === "Home") show(0);
-  else if (e.key === "End") show(slides.length - 1, { allSteps: true });
-  else if (e.key === "f" || e.key === "F") toggleFull();
-  else if (e.key === "r" || e.key === "R") show(slides.findIndex((sl) => sl.id === "s-roteiro"));
-});
 function toggleFull() {
   try {
     if (document.fullscreenElement) document.exitFullscreen();
-    else if (deck.requestFullscreen) deck.requestFullscreen().catch(() => {});
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
   } catch (e) { /* not available in this viewer */ }
 }
+const secsel = $("secsel");
+const navOpts = () => {   // seções deste arquivo (data-nav) e, se o curso estiver separado, as outras partes (↗)
+  const o = [], local = () => slides.forEach((sl, i) => { if (sl.dataset.nav) o.push(`<option value="${i}">${sl.dataset.nav}</option>`); });
+  if (DECKS) DECKS.forEach((d) => d.cur ? local() : o.push(`<option value="url:${d.href}">${d.nav} ↗</option>`)); else local();
+  if (o.length) return o.join("");
+  return slides.map((sl, i) => sl.hasAttribute("data-nonum") && sl.id ? `<option value="${i}">${(sl.querySelector(".divider .num")?.textContent || "") + " " + (sl.querySelector(".divider .ttl")?.textContent || "")}</option>` : "").join("");
+};
+secsel.innerHTML = `<option value="">Seções…</option>` + navOpts();
+secsel.addEventListener("change", () => { const v = secsel.value; if (v.startsWith("url:")) { location.href = v.slice(4); return; } if (v !== "") { if (NARROW) slides[Number(v)].scrollIntoView(); else Reveal.slide(Number(v)); } secsel.value = ""; secsel.blur(); });
+const goToc = () => { if (tocIdx >= 0) Reveal.slide(tocIdx); };
+const openSec = () => { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } };
+const extra = $("extra"), moreBtn = $("more");
+const closeMore = () => { extra.classList.remove("open"); moreBtn.setAttribute("aria-expanded", "false"); };
+moreBtn.addEventListener("click", (e) => { e.stopPropagation(); const o = extra.classList.toggle("open"); moreBtn.setAttribute("aria-expanded", String(o)); });
+extra.addEventListener("click", (e) => { if (e.target.closest("button")) closeMore(); });
+secsel.addEventListener("change", closeMore);
+document.addEventListener("click", (e) => { if (!e.target.closest("#extra, #more")) closeMore(); });
+$("prev").addEventListener("click", () => Reveal.prev());
+$("next").addEventListener("click", () => Reveal.next());
+$("gotoc").addEventListener("click", goToc);
 $("full").addEventListener("click", toggleFull);
-let x0 = null;
-stage.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-stage.addEventListener("touchend", (e) => {
-  if (x0 === null || narrow()) return;
-  const dx = e.changedTouches[0].clientX - x0; x0 = null;
-  if (e.target.closest("input, select, button, canvas")) return;
-  if (Math.abs(dx) > 60) (dx < 0 ? forward : backward)();
-}, { passive: true });
+$("board").addEventListener("click", () => RevealChalkboard.toggleChalkboard());
+$("pen").addEventListener("click", () => RevealChalkboard.toggleNotesCanvas());
+$("ovw").addEventListener("click", () => Reveal.toggleOverview());
+document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
+  const idx = slides.findIndex((sl) => sl.id === a.dataset.go);
+  if (idx >= 0) { if (NARROW) slides[idx].scrollIntoView({ behavior: "smooth" }); else Reveal.slide(idx); }
+}));
 
+// ---------- redesenho após resize, fontes e MathJax ----------
 let pending = false;
-const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; fit(); drawVisible(); refreshFigs(); drawLinks(slides[cur]); }); } };
-new ResizeObserver(schedule).observe(deck);
-window.addEventListener("resize", schedule);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
-window.__mathReady = schedule;
-// deep links: #12 opens slide 12, #12.4 opens slide 12 at step 4
+const schedule = () => {
+  if (PRINT || pending) return;
+  pending = true;
+  requestAnimationFrame(() => {
+    pending = false; if (!ready) return;
+    STAGE_SCALE = Reveal.getScale() || 1;
+    drawVisible(); refreshFigs();
+    const sl = Reveal.getCurrentSlide(); if (sl) links(sl);
+    if (sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), false);
+  });
+};
+
+// ---------- PDF: ?print-pdf, uma página por passo ----------
+function printAll() {
+  STAGE_SCALE = 2;   // canvas com o dobro de pixels no PDF
+  const pages = [...document.querySelectorAll(".reveal .slides .pdf-page > section")];
+  pages.forEach((sl) => paintSteps(sl, shownOf(sl)));
+  pages.forEach((sl) => { drawFig(sl, 2.2); drawInst(sl); });
+  pages.forEach((sl) => { drawNotes(sl, shownOf(sl), false); links(sl); });
+  document.documentElement.dataset.printReady = "1";
+}
+
+// links antigos do motor anterior, #N e #N.k, viram #/N−1/0/k−2
 const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
-fit();
-const hid = (location.hash || "").match(/^#(s-[\w-]+)$/), iid = hid ? slides.findIndex((sl) => sl.id === hid[1]) : -1;
-show(hm ? Number(hm[1]) - 1 : Math.max(0, iid));
-if (hm && hm[2]) { shown = Math.max(1, Math.min(nsteps(slides[cur]), Number(hm[2]))); paintSteps(); }
+// links estáveis por seção: #s-xx abre o slide com esse id (no reveal, #/s-xx)
+const hid = (location.hash || "").match(/^#\/?(s-[\w-]+)$/), iid = hid ? slides.findIndex((sl) => sl.id === hid[1]) : -1;
+
+if (iid >= 0 && !NARROW) { try { history.replaceState(null, "", "#/" + hid[1]); } catch (e) { /* sandboxed viewer */ } }
+if (hm && !NARROW) { const h = Math.max(Number(hm[1]) - 1, 0), k = Number(hm[2] || 1); try { history.replaceState(null, "", "#/" + h + (k > 1 ? "/0/" + (k - 2) : "")); } catch (e) { /* sandboxed viewer */ } }
+
+function start() {
+  Reveal.on("slidechanged", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("fragmentshown", onState);
+  Reveal.on("fragmenthidden", onState);
+  Reveal.on("resize", schedule);
+  Reveal.on("overviewshown", paintAll);
+  Reveal.on("overviewhidden", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("pdf-ready", printAll);
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0.01, minScale: 0.05, maxScale: 4,
+    center: false, controls: false, progress: false,
+    hash: true, fragmentInURL: true, history: false, respondToHashChanges: true,
+    transition: "none", transitionSpeed: "fast", backgroundTransition: "none",
+    slideNumber: slideNum, showSlideNumber: "speaker",
+    pdfSeparateFragments: true, pdfMaxPagesPerSlide: 100, scrollActivationWidth: null,
+    keyboard: { 70: toggleFull },
+    chalkboard: { theme: "whiteboard", storage: "fga0119-maxwell-quadro", toggleChalkboardButton: false, toggleNotesButton: false, colorButtons: true, boardHandle: true, transition: 300 },
+    plugins: [RevealNotes, RevealChalkboard],
+  }).then(() => {
+    Reveal.addKeyBinding({ keyCode: 82, key: "R", description: "Roteiro" }, goToc);
+    Reveal.addKeyBinding({ keyCode: 71, key: "G", description: "Seções" }, openSec);
+    ready = true;
+    STAGE_SCALE = PRINT ? 2 : (Reveal.getScale() || 1);
+    if (PRINT) return;
+    onState(); drawVisible();
+    if (!REDUCED) requestAnimationFrame(figLoop);
+  });
+}
+// ---------- modo coluna (celular em pé) ----------
+function topSlide() { let best = 0; slides.forEach((sl, i) => { if (sl.getBoundingClientRect().top <= 80) best = i; }); return best; }
+const onScreen = new Set();
+function narrowDraw() {
+  STAGE_SCALE = 1;
+  slides.forEach((sl) => { sl.classList.add("active"); paintSteps(sl, shownOf(sl)); drawInst(sl); drawFig(sl, 2.2); });
+  if (typeof narrowFit === "function") try { narrowFit(); } catch (e) { console.error("narrowFit", e); }
+}
+function narrowLoop(ts) { if (!document.hidden) onScreen.forEach((sl) => drawFig(sl, tnow(ts))); requestAnimationFrame(narrowLoop); }
+function startNarrow() {
+  slides.forEach((sl) => sl.classList.add("static"));
+  ready = true;
+  narrowDraw();
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => es.forEach((en) => en.isIntersecting ? onScreen.add(en.target) : onScreen.delete(en.target)));
+    slides.filter((sl) => sl.dataset.fig).forEach((sl) => io.observe(sl));
+  }
+  if (!REDUCED) requestAnimationFrame(narrowLoop);
+  if (hm || iid >= 0) { const i = iid >= 0 ? iid : Math.min(Math.max(Number(hm[1]) - 1, 0), slides.length - 1); requestAnimationFrame(() => slides[i].scrollIntoView()); }
+  let t = 0; const redo = () => { clearTimeout(t); t = setTimeout(narrowDraw, 150); };
+  window.__mathReady = redo;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redo);
+  window.addEventListener("resize", redo);
+}
+// No PDF o reveal clona os slides: a matemática precisa estar pronta antes.
+let started = false;
+const startOnce = () => { if (!started) { started = true; start(); } };
+if (NARROW) {
+  startNarrow();
+} else if (PRINT) {
+  const fontsOk = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  window.__mathReady = () => fontsOk.then(startOnce);
+  setTimeout(startOnce, 20000);   // sem internet, o MathJax não chega
+} else {
+  window.__mathReady = schedule;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  window.addEventListener("resize", schedule);
+  startOnce();
+}
 })();
 </script>
 </body>
