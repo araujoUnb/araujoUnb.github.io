@@ -3,50 +3,74 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FGA0119 — Teoria de Eletromagnetismo</title>
-  <meta name="description" content="Slides por tópico da disciplina FGA0119 — Teoria de Eletromagnetismo (UnB/FCTE), Prof. Daniel Costa Araújo.">
+  <title>FGA0119 — Teoria de Eletromagnetismo · Electromagnetic Theory</title>
+  <meta name="description" content="FGA0119 Teoria de Eletromagnetismo (Electromagnetic Theory), UnB/FCTE, Prof. Daniel Costa Araújo: descrição e slides por tópico, em português e em inglês.">
   <link rel="stylesheet" href="../style.css?v=7">
   <style>
     .course { max-width: 820px; margin: 0 auto; padding: 2rem 16px 3rem; }
     .course ol { padding-left: 1.4rem; }
     .course li { margin: .3rem 0; }
+    .course li ol { margin: .2rem 0 .4rem; }
     .back { font-size: .92rem; }
+    .course .en { font-style: italic; }
+    .course a .en, .course h2 .en { opacity: .8; }
+    .course .sep { opacity: .5; }
+    .course h1 .en { display: block; font-size: .6em; font-weight: 400; margin-top: .3rem; }
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; margin: 1.2rem 0 .5rem; }
+    .about h2 { margin-top: 0; font-size: 1.05rem; }
+    .about p { margin: .4rem 0; }
+    @media (max-width: 680px) { .about { grid-template-columns: 1fr; gap: 1rem; } }
   </style>
 </head>
 <body>
 <main class="course">
   <p class="back"><a href="../#teaching">← Daniel Costa Araújo · Teaching</a></p>
-  <h1 class="page-title">FGA0119 — Teoria de Eletromagnetismo</h1>
-  <p class="muted">Universidade de Brasília, Faculdade de Ciências e Tecnologias em Engenharia (FCTE). Prof. Daniel Costa Araújo.<br>
-  Slides por tópico, em PDF e, quando disponível, em versão interativa no navegador. Disciplina em construção: novos tópicos serão adicionados ao longo do semestre.</p>
+  <h1 class="page-title">FGA0119 — Teoria de Eletromagnetismo <span lang="en" class="en">Electromagnetic Theory</span></h1>
+  <p class="muted">Universidade de Brasília (UnB), Faculdade de Ciências e Tecnologias em Engenharia (FCTE). Prof. Daniel Costa Araújo.</p>
 
-<h2>Introdução</h2>
+  <div class="about">
+    <section>
+      <h2>Sobre a disciplina</h2>
+      <p>Fundamentos da teoria eletromagnética clássica e suas aplicações em engenharia. A disciplina cobre a eletrostática (lei de Coulomb, lei de Gauss, potencial elétrico, capacitância, dielétricos e energia elétrica), a magnetostática (corrente e condutividade, leis de Biot-Savart e de Ampère, forças magnéticas) e os campos variantes no tempo: a lei de Faraday, as equações de Maxwell, as ondas eletromagnéticas e sua propagação em meios materiais, potência, polarização, condições de contorno e reflexão. É a base para as disciplinas de comunicações, antenas e compatibilidade eletromagnética.</p>
+      <p><strong>Pré-requisitos:</strong> Física 1; Cálculo 3.</p>
+      <p class="muted">Slides em português, em PDF e, em alguns tópicos, também no navegador (setas do teclado para avançar). Novos tópicos são publicados ao longo do semestre.</p>
+    </section>
+    <section lang="en">
+      <h2>About the course</h2>
+      <p>Fundamentals of classical electromagnetic theory and its engineering applications. The course covers electrostatics (Coulomb&#x27;s law, Gauss&#x27;s law, electric potential, capacitance, dielectrics and electric energy), magnetostatics (current and conductivity, the Biot–Savart and Ampère laws, magnetic forces) and time-varying fields: Faraday&#x27;s law, Maxwell&#x27;s equations, electromagnetic waves and their propagation in material media, power, polarization, boundary conditions and reflection. It lays the groundwork for later courses on communications, antennas and electromagnetic compatibility.</p>
+      <p><strong>Prerequisites:</strong> Physics 1; Calculus 3.</p>
+      <p class="muted">Slides in Portuguese, as PDF and, for some topics, also in the browser (arrow keys to move forward). New topics are added during the semester.</p>
+    </section>
+  </div>
+  <p class="muted"><strong>Bibliografia · Textbooks:</strong> Sadiku, <i>Elements of Electromagnetics</i>; Hayt &amp; Buck, <i>Engineering Electromagnetics</i>; Cheng, <i>Field and Wave Electromagnetics</i>; Griffiths, <i>Introduction to Electrodynamics</i>.</p>
+
+<h2>Introdução <span class="sep">·</span> <span lang="en" class="en">Introduction</span></h2>
 <ol>
-    <li><a href="introducao/aula_introdutoria.pdf">Aula introdutória</a> <span class="muted">(PDF)</span></li>
+    <li><a href="introducao/aula_introdutoria.pdf">Aula introdutória <span class="sep">·</span> <span lang="en" class="en">Introductory lecture</span></a> <span class="muted">(PDF)</span></li>
 </ol>
-<h2>Eletrostática</h2>
+<h2>Eletrostática <span class="sep">·</span> <span lang="en" class="en">Electrostatics</span></h2>
 <ol>
-    <li><a href="eletrostatica/campos_eletrostaticos.pdf">Campos eletrostáticos</a> <span class="muted">(PDF)</span></li>
-    <li><a href="eletrostatica/campos_eletricos_em_meios_materiais.pdf">Campos elétricos em meios materiais</a> <span class="muted">(PDF)</span></li>
+    <li><a href="eletrostatica/campos_eletrostaticos.pdf">Campos eletrostáticos <span class="sep">·</span> <span lang="en" class="en">Electrostatic fields</span></a> <span class="muted">(PDF)</span></li>
+    <li><a href="eletrostatica/campos_eletricos_em_meios_materiais.pdf">Campos elétricos em meios materiais <span class="sep">·</span> <span lang="en" class="en">Electric fields in material media</span></a> <span class="muted">(PDF)</span></li>
 </ol>
-<h2>Magnetostática</h2>
+<h2>Magnetostática <span class="sep">·</span> <span lang="en" class="en">Magnetostatics</span></h2>
 <ol>
-    <li><a href="magnetostatica/magnetostatica.html">Campos magnetostáticos</a> <span class="muted">(<a href="magnetostatica/magnetostatica.html">aula interativa</a> · <a href="magnetostatica/campos_magnetostaticos.pdf">PDF</a>)</span></li>
-    <li><a href="magnetostatica/forcas_magneticas.pdf">Forças magnéticas</a> <span class="muted">(PDF)</span></li>
+    <li><a href="magnetostatica/magnetostatica.html">Campos magnetostáticos <span class="sep">·</span> <span lang="en" class="en">Magnetostatic fields</span></a> <span class="muted">(<a href="magnetostatica/campos_magnetostaticos.pdf">PDF</a>)</span></li>
+    <li><a href="magnetostatica/forcas_magneticas.pdf">Forças magnéticas <span class="sep">·</span> <span lang="en" class="en">Magnetic forces</span></a> <span class="muted">(PDF)</span></li>
 </ol>
-<h2>Campos variantes no tempo</h2>
+<h2>Campos variantes no tempo <span class="sep">·</span> <span lang="en" class="en">Time-varying fields</span></h2>
 <ol>
-    <li><a href="maxwell/maxwell.html">Equações de Maxwell</a> <span class="muted">(<a href="maxwell/maxwell.html">aula interativa</a> · <a href="maxwell/equacoes_de_maxwell.pdf">PDF</a>)</span>
+    <li><a href="maxwell/maxwell.html">Equações de Maxwell <span class="sep">·</span> <span lang="en" class="en">Maxwell&#x27;s equations</span></a> <span class="muted">(<a href="maxwell/equacoes_de_maxwell.pdf">PDF</a>)</span>
       <ol>
-        <li><a href="maxwell/maxwell-01-estatica.html">Estática e regime variante</a></li>
-        <li><a href="maxwell/maxwell-02-faraday.html">Lei de Faraday</a></li>
-        <li><a href="maxwell/maxwell-03-ampere-maxwell.html">Lei de Ampère–Maxwell</a></li>
-        <li><a href="maxwell/maxwell-04-onda.html">Equação de onda 3D</a></li>
-        <li><a href="maxwell/maxwell-05-perdas.html">Meios com perdas</a></li>
-        <li><a href="maxwell/maxwell-06-poynting.html">Vetor de Poynting</a></li>
-        <li><a href="maxwell/maxwell-07-polarizacao.html">Polarização</a></li>
-        <li><a href="maxwell/maxwell-08-contorno.html">Condições de contorno</a></li>
-        <li><a href="maxwell/maxwell-09-reflexao-normal.html">Reflexão em incidência normal</a></li>
+        <li><a href="maxwell/maxwell-01-estatica.html">Estática e regime variante <span class="sep">·</span> <span lang="en" class="en">Statics and time-varying fields</span></a></li>
+        <li><a href="maxwell/maxwell-02-faraday.html">Lei de Faraday <span class="sep">·</span> <span lang="en" class="en">Faraday&#x27;s law</span></a></li>
+        <li><a href="maxwell/maxwell-03-ampere-maxwell.html">Lei de Ampère–Maxwell <span class="sep">·</span> <span lang="en" class="en">Ampère–Maxwell law</span></a></li>
+        <li><a href="maxwell/maxwell-04-onda.html">Equação de onda 3D <span class="sep">·</span> <span lang="en" class="en">3D wave equation</span></a></li>
+        <li><a href="maxwell/maxwell-05-perdas.html">Meios com perdas <span class="sep">·</span> <span lang="en" class="en">Lossy media</span></a></li>
+        <li><a href="maxwell/maxwell-06-poynting.html">Vetor de Poynting <span class="sep">·</span> <span lang="en" class="en">Poynting vector</span></a></li>
+        <li><a href="maxwell/maxwell-07-polarizacao.html">Polarização <span class="sep">·</span> <span lang="en" class="en">Polarization</span></a></li>
+        <li><a href="maxwell/maxwell-08-contorno.html">Condições de contorno <span class="sep">·</span> <span lang="en" class="en">Boundary conditions</span></a></li>
+        <li><a href="maxwell/maxwell-09-reflexao-normal.html">Reflexão em incidência normal <span class="sep">·</span> <span lang="en" class="en">Reflection at normal incidence</span></a></li>
       </ol>
     </li>
 </ol>

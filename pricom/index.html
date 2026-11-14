@@ -3,55 +3,79 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FGA0092 — Princípios de Comunicação para Engenharia</title>
-  <meta name="description" content="Slides por tópico da disciplina FGA0092 — Princípios de Comunicação para Engenharia (UnB/FCTE), Prof. Daniel Costa Araújo.">
+  <title>FGA0092 — Princípios de Comunicação para Engenharia · Communication Principles for Engineering</title>
+  <meta name="description" content="FGA0092 Princípios de Comunicação para Engenharia (Communication Principles for Engineering), UnB/FCTE, Prof. Daniel Costa Araújo: descrição e slides por tópico, em português e em inglês.">
   <link rel="stylesheet" href="../style.css?v=7">
   <style>
     .course { max-width: 820px; margin: 0 auto; padding: 2rem 16px 3rem; }
     .course ol { padding-left: 1.4rem; }
     .course li { margin: .3rem 0; }
+    .course li ol { margin: .2rem 0 .4rem; }
     .back { font-size: .92rem; }
+    .course .en { font-style: italic; }
+    .course a .en, .course h2 .en { opacity: .8; }
+    .course .sep { opacity: .5; }
+    .course h1 .en { display: block; font-size: .6em; font-weight: 400; margin-top: .3rem; }
+    .about { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; margin: 1.2rem 0 .5rem; }
+    .about h2 { margin-top: 0; font-size: 1.05rem; }
+    .about p { margin: .4rem 0; }
+    @media (max-width: 680px) { .about { grid-template-columns: 1fr; gap: 1rem; } }
   </style>
 </head>
 <body>
 <main class="course">
   <p class="back"><a href="../#teaching">← Daniel Costa Araújo · Teaching</a></p>
-  <h1 class="page-title">FGA0092 — Princípios de Comunicação para Engenharia</h1>
-  <p class="muted">Universidade de Brasília, Faculdade de Ciências e Tecnologias em Engenharia (FCTE). Prof. Daniel Costa Araújo.<br>
-  Aulas interativas, uma por tópico: abrem no navegador; use as setas do teclado para avançar. Versão em inglês disponível em cada aula (botão EN).</p>
+  <h1 class="page-title">FGA0092 — Princípios de Comunicação para Engenharia <span lang="en" class="en">Communication Principles for Engineering</span></h1>
+  <p class="muted">Universidade de Brasília (UnB), Faculdade de Ciências e Tecnologias em Engenharia (FCTE). Prof. Daniel Costa Araújo.</p>
 
-<h2>Módulo 0 — Apresentação</h2>
+  <div class="about">
+    <section>
+      <h2>Sobre a disciplina</h2>
+      <p>Fundamentos dos sistemas de comunicação. A disciplina parte da análise espectral de sinais (série e transformada de Fourier, densidades espectrais de energia e de potência, sinais em banda básica e em banda passante), passa pelas modulações analógicas (AM e suas variantes DSB-SC, SSB e VSB, FM, PM e PLL) e pelo efeito do ruído sobre elas, e chega à conversão analógico-digital (amostragem, quantização, PCM e codificação de fonte) e à comunicação digital em banda básica (interferência entre símbolos e taxa de erro de bit). As aulas teóricas são acompanhadas de oito práticas de laboratório.</p>
+      <p><strong>Pré-requisitos:</strong> Sinais e Sistemas; Teoria de Circuitos Eletrônicos I.</p>
+      <p class="muted">Os slides abrem no navegador; use as setas do teclado para avançar. Cada aula tem versão em português e em inglês.</p>
+    </section>
+    <section lang="en">
+      <h2>About the course</h2>
+      <p>An introduction to communication systems. The course starts from the spectral analysis of signals (Fourier series and transform, energy and power spectral densities, baseband and passband signals), covers analog modulation (AM and its DSB-SC, SSB and VSB variants, FM, PM and the PLL) and the effect of noise on it, and ends with analog-to-digital conversion (sampling, quantization, PCM and source coding) and baseband digital communication (intersymbol interference and bit error rate). Lectures are complemented by eight laboratory sessions.</p>
+      <p><strong>Prerequisites:</strong> Signals and Systems; Electronic Circuit Theory I.</p>
+      <p class="muted">The slides open in the browser; use the arrow keys to move forward. Every lecture is available in Portuguese and in English.</p>
+    </section>
+  </div>
+  <p class="muted"><strong>Bibliografia · Textbooks:</strong> Lathi &amp; Ding, <i>Modern Digital and Analog Communication Systems</i>; Haykin &amp; Moher, <i>Communication Systems</i>; Proakis &amp; Salehi, <i>Fundamentals of Communication Systems</i>.</p>
+
+<h2>Módulo 0 — Apresentação <span class="sep">·</span> <span lang="en" class="en">Module 0 — Introduction</span></h2>
 <ol>
-    <li><a href="modulo0/apresentacao.html">Apresentação da disciplina</a> <span class="muted">(<a href="modulo0/apresentacao.html">aula interativa</a> · <a href="modulo0/apresentacao.en.html">English</a>)</span></li>
+    <li><a href="modulo0/apresentacao.html">Apresentação da disciplina</a> <span class="sep">·</span> <a href="modulo0/apresentacao.en.html" lang="en" class="en">Course introduction</a></li>
 </ol>
-<h2>Módulo 1 — Análise e transmissão de sinais</h2>
+<h2>Módulo 1 — Análise e transmissão de sinais <span class="sep">·</span> <span lang="en" class="en">Module 1 — Signal analysis and transmission</span></h2>
 <ol>
-    <li><a href="modulo1/transformada_fourier.html">Transformada de Fourier</a> <span class="muted">(<a href="modulo1/transformada_fourier.html">aula interativa</a> · <a href="modulo1/transformada_fourier.en.html">English</a>)</span></li>
-    <li><a href="modulo1/transformadas_uteis.html">Transformadas de funções úteis</a> <span class="muted">(<a href="modulo1/transformadas_uteis.html">aula interativa</a> · <a href="modulo1/transformadas_uteis.en.html">English</a>)</span></li>
-    <li><a href="modulo1/propriedades_fourier.html">Propriedades da transformada de Fourier</a> <span class="muted">(<a href="modulo1/propriedades_fourier.html">aula interativa</a> · <a href="modulo1/propriedades_fourier.en.html">English</a>)</span></li>
-    <li><a href="modulo1/sistemas_lti.html">Transmissão através de sistemas LTI</a> <span class="muted">(<a href="modulo1/sistemas_lti.html">aula interativa</a> · <a href="modulo1/sistemas_lti.en.html">English</a>)</span></li>
-    <li><a href="modulo1/energia_potencia.html">Energia, potência e densidades espectrais</a> <span class="muted">(<a href="modulo1/energia_potencia.html">aula interativa</a> · <a href="modulo1/energia_potencia.en.html">English</a>)</span></li>
-    <li><a href="modulo1/dft.html">DFT e FFT</a> <span class="muted">(<a href="modulo1/dft.html">aula interativa</a> · <a href="modulo1/dft.en.html">English</a>)</span></li>
-    <li><a href="modulo1/banda_base_passante.html">Banda básica e banda passante</a> <span class="muted">(<a href="modulo1/banda_base_passante.html">aula interativa</a> · <a href="modulo1/banda_base_passante.en.html">English</a>)</span></li>
+    <li><a href="modulo1/transformada_fourier.html">Transformada de Fourier</a> <span class="sep">·</span> <a href="modulo1/transformada_fourier.en.html" lang="en" class="en">Fourier transform</a></li>
+    <li><a href="modulo1/transformadas_uteis.html">Transformadas de funções úteis</a> <span class="sep">·</span> <a href="modulo1/transformadas_uteis.en.html" lang="en" class="en">Transforms of useful functions</a></li>
+    <li><a href="modulo1/propriedades_fourier.html">Propriedades da transformada de Fourier</a> <span class="sep">·</span> <a href="modulo1/propriedades_fourier.en.html" lang="en" class="en">Properties of the Fourier transform</a></li>
+    <li><a href="modulo1/sistemas_lti.html">Transmissão através de sistemas LTI</a> <span class="sep">·</span> <a href="modulo1/sistemas_lti.en.html" lang="en" class="en">Transmission through LTI systems</a></li>
+    <li><a href="modulo1/energia_potencia.html">Energia, potência e densidades espectrais</a> <span class="sep">·</span> <a href="modulo1/energia_potencia.en.html" lang="en" class="en">Energy, power and spectral densities</a></li>
+    <li><a href="modulo1/dft.html">DFT e FFT</a> <span class="sep">·</span> <a href="modulo1/dft.en.html" lang="en" class="en">DFT and FFT</a></li>
+    <li><a href="modulo1/banda_base_passante.html">Banda básica e banda passante</a> <span class="sep">·</span> <a href="modulo1/banda_base_passante.en.html" lang="en" class="en">Baseband and passband</a></li>
 </ol>
-<h2>Módulo 2 — Modulações analógicas e ruído</h2>
+<h2>Módulo 2 — Modulações analógicas e ruído <span class="sep">·</span> <span lang="en" class="en">Module 2 — Analog modulation and noise</span></h2>
 <ol>
-    <li><a href="modulo2/am_convencional.html">AM convencional</a> <span class="muted">(<a href="modulo2/am_convencional.html">aula interativa</a> · <a href="modulo2/am_convencional.en.html">English</a>)</span></li>
-    <li><a href="modulo2/am_dsbsc.html">AM DSB-SC</a> <span class="muted">(<a href="modulo2/am_dsbsc.html">aula interativa</a> · <a href="modulo2/am_dsbsc.en.html">English</a>)</span></li>
-    <li><a href="modulo2/am_ssb_vsb.html">AM SSB e VSB</a> <span class="muted">(<a href="modulo2/am_ssb_vsb.html">aula interativa</a> · <a href="modulo2/am_ssb_vsb.en.html">English</a>)</span></li>
-    <li><a href="modulo2/modulacao_angular.html">Modulação angular (PM e FM)</a> <span class="muted">(<a href="modulo2/modulacao_angular.html">aula interativa</a> · <a href="modulo2/modulacao_angular.en.html">English</a>)</span></li>
-    <li><a href="modulo2/projeto_transmissor_fm.html">Projeto de um transmissor FM</a> <span class="muted">(<a href="modulo2/projeto_transmissor_fm.html">aula interativa</a> · <a href="modulo2/projeto_transmissor_fm.en.html">English</a>)</span></li>
-    <li><a href="modulo2/figura_de_ruido.html">Figura de ruído</a> <span class="muted">(<a href="modulo2/figura_de_ruido.html">aula interativa</a> · <a href="modulo2/figura_de_ruido.en.html">English</a>)</span></li>
-    <li><a href="modulo2/desempenho_am.html">Desempenho de sistemas analógicos (AM)</a> <span class="muted">(<a href="modulo2/desempenho_am.html">aula interativa</a> · <a href="modulo2/desempenho_am.en.html">English</a>)</span></li>
-    <li><a href="modulo2/desempenho_fm.html">Desempenho de FM e PM</a> <span class="muted">(<a href="modulo2/desempenho_fm.html">aula interativa</a> · <a href="modulo2/desempenho_fm.en.html">English</a>)</span></li>
+    <li><a href="modulo2/am_convencional.html">AM convencional</a> <span class="sep">·</span> <a href="modulo2/am_convencional.en.html" lang="en" class="en">Conventional AM</a></li>
+    <li><a href="modulo2/am_dsbsc.html">AM DSB-SC</a> <span class="sep">·</span> <a href="modulo2/am_dsbsc.en.html" lang="en" class="en">AM DSB-SC</a></li>
+    <li><a href="modulo2/am_ssb_vsb.html">AM SSB e VSB</a> <span class="sep">·</span> <a href="modulo2/am_ssb_vsb.en.html" lang="en" class="en">AM SSB and VSB</a></li>
+    <li><a href="modulo2/modulacao_angular.html">Modulação angular (PM e FM)</a> <span class="sep">·</span> <a href="modulo2/modulacao_angular.en.html" lang="en" class="en">Angle modulation (PM and FM)</a></li>
+    <li><a href="modulo2/projeto_transmissor_fm.html">Projeto de um transmissor FM</a> <span class="sep">·</span> <a href="modulo2/projeto_transmissor_fm.en.html" lang="en" class="en">Design of an FM transmitter</a></li>
+    <li><a href="modulo2/figura_de_ruido.html">Figura de ruído</a> <span class="sep">·</span> <a href="modulo2/figura_de_ruido.en.html" lang="en" class="en">Noise figure</a></li>
+    <li><a href="modulo2/desempenho_am.html">Desempenho de sistemas analógicos (AM)</a> <span class="sep">·</span> <a href="modulo2/desempenho_am.en.html" lang="en" class="en">Performance of analog systems (AM)</a></li>
+    <li><a href="modulo2/desempenho_fm.html">Desempenho de FM e PM</a> <span class="sep">·</span> <a href="modulo2/desempenho_fm.en.html" lang="en" class="en">Performance of FM and PM</a></li>
 </ol>
-<h2>Módulo 3 — Conversão analógico-digital</h2>
+<h2>Módulo 3 — Conversão analógico-digital <span class="sep">·</span> <span lang="en" class="en">Module 3 — Analog-to-digital conversion</span></h2>
 <ol>
-    <li><a href="modulo3/amostragem.html">Amostragem e reconstrução</a> <span class="muted">(<a href="modulo3/amostragem.html">aula interativa</a> · <a href="modulo3/amostragem.en.html">English</a>)</span></li>
-    <li><a href="modulo3/quantizacao.html">Quantização</a> <span class="muted">(<a href="modulo3/quantizacao.html">aula interativa</a> · <a href="modulo3/quantizacao.en.html">English</a>)</span></li>
-    <li><a href="modulo3/forma_de_onda.html">Codificação de forma de onda</a> <span class="muted">(<a href="modulo3/forma_de_onda.html">aula interativa</a> · <a href="modulo3/forma_de_onda.en.html">English</a>)</span></li>
-    <li><a href="modulo3/vocoders.html">Vocoders: análise e síntese</a> <span class="muted">(<a href="modulo3/vocoders.html">aula interativa</a> · <a href="modulo3/vocoders.en.html">English</a>)</span></li>
-    <li><a href="modulo3/video.html">Compressão de vídeo</a> <span class="muted">(<a href="modulo3/video.html">aula interativa</a> · <a href="modulo3/video.en.html">English</a>)</span></li>
+    <li><a href="modulo3/amostragem.html">Amostragem e reconstrução</a> <span class="sep">·</span> <a href="modulo3/amostragem.en.html" lang="en" class="en">Sampling and reconstruction</a></li>
+    <li><a href="modulo3/quantizacao.html">Quantização</a> <span class="sep">·</span> <a href="modulo3/quantizacao.en.html" lang="en" class="en">Quantization</a></li>
+    <li><a href="modulo3/forma_de_onda.html">Codificação de forma de onda</a> <span class="sep">·</span> <a href="modulo3/forma_de_onda.en.html" lang="en" class="en">Waveform coding</a></li>
+    <li><a href="modulo3/vocoders.html">Vocoders: análise e síntese</a> <span class="sep">·</span> <a href="modulo3/vocoders.en.html" lang="en" class="en">Vocoders: analysis and synthesis</a></li>
+    <li><a href="modulo3/video.html">Compressão de vídeo</a> <span class="sep">·</span> <a href="modulo3/video.en.html" lang="en" class="en">Video compression</a></li>
 </ol>
 </main>
 </body>
