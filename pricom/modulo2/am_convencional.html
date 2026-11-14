@@ -839,6 +839,7 @@ table.tab th, table.tab td { padding: 5px 12px; }
   <span id="sec"></span>
   <button id="gotoc" type="button" title="Ir para o roteiro (R)">Roteiro</button>
   <select id="secsel" aria-label="Ir para uma seção (S)"></select>
+  <button id="lang" type="button" title="English version" data-href="am_convencional.en.html">EN</button>
   <button id="full" type="button">Tela cheia</button>
 </nav>
 
@@ -1729,6 +1730,7 @@ const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
 fit();
 show(hm ? Number(hm[1]) - 1 : 0);
 if (hm && hm[2]) { shown = Math.max(1, Math.min(steps(slides[cur]).length, Number(hm[2]))); paintSteps(); }
+document.getElementById("lang").addEventListener("click", e => { const h = "#" + (cur + 1) + (shown > 1 ? "." + shown : ""); location.href = e.currentTarget.dataset.href + h; });
 })();
 </script>
 </body>

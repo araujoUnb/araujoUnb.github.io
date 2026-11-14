@@ -1181,6 +1181,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <span id="sec"></span>
   <button id="gotoc" type="button" title="Ir para o roteiro (R)">Roteiro</button>
   <select id="secsel" aria-label="Ir para uma seção (S)"></select>
+  <button id="lang" type="button" title="English version" data-href="transformadas_uteis.en.html">EN</button>
   <button id="full" type="button">Tela cheia</button>
 </nav>
 
@@ -2140,5 +2141,6 @@ fit();
 show(hm ? Number(hm[1]) - 1 : 0);
 if (hm && hm[2]) { shown = Math.max(1, Math.min(steps(slides[cur]).length, Number(hm[2]))); paintSteps(); }
 })();
+document.getElementById("lang").addEventListener("click", e => { const sl = [...document.querySelectorAll(".slide")], i = sl.findIndex((s) => s.classList.contains("active")), st = i >= 0 ? [...sl[i].querySelectorAll(".step")] : [], k = st.filter((s) => !s.classList.contains("hidden")).length; location.href = e.currentTarget.dataset.href + (i >= 0 ? "#" + (i + 1) + (st.length ? "." + Math.max(k, 1) : "") : location.hash); });
 </script>
 </body>

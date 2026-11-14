@@ -5,7 +5,7 @@ Each topic can have an interactive HTML deck, a PDF (Beamer) or both; paths are
 relative to the course folder under ~/Documentos/UnB/Aulas. Edit COURSES to add,
 rename or reorder topics (modules are (folder, heading, topics)), then run `python3 sync_courses.py` and `python3 build.py`.
 """
-import html, pathlib, shutil
+import html, pathlib, re, shutil, unicodedata
 
 ROOT = pathlib.Path(__file__).parent
 AULAS = pathlib.Path.home() / "Documentos/UnB/Aulas"
@@ -19,7 +19,7 @@ COURSES = {
     "pricom": dict(
         src="curso_pricom",
         title="FGA0092 — Princípios de Comunicação para Engenharia",
-        intro="Aulas interativas, uma por tópico: abrem no navegador; use as setas do teclado para avançar.",
+        intro="Aulas interativas, uma por tópico: abrem no navegador; use as setas do teclado para avançar. Versão em inglês disponível em cada aula (botão EN).",
         modules=[
             ("modulo0", "Módulo 0 — Apresentação", [m("Modulo0", "apresentacao", "Apresentação da disciplina")]),
             ("modulo1", "Módulo 1 — Análise e transmissão de sinais", [
@@ -75,13 +75,32 @@ COURSES = {
     ),
 }
 
-LABEL = {"html": "aula interativa", "pdf": "PDF"}
+LABEL = {"html": "aula interativa", "pdf": "PDF", "en": "English"}
 
 
 def slug(text):
-    import unicodedata, re
     t = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode().lower()
     return re.sub(r"[^a-z0-9]+", "_", t).strip("_")
+
+
+REF = re.compile(r'(?:src|href|data-href)="([^"#:?$]+\.(?:png|jpe?g|gif|svg|webp|mp4|webm|css|js|html))"')
+
+
+def copy_deck(s, d, seen):
+    """Copy an HTML deck plus every local file it references (figs/, the .en.html twin, ...)."""
+    if d in seen:
+        return
+    seen.add(d)
+    d.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(s, d)
+    if s.suffix != ".html":
+        return
+    for ref in set(REF.findall(s.read_text(encoding="utf-8"))):
+        if ref.startswith("/") or ".." in pathlib.PurePosixPath(ref).parts:
+            continue
+        if not (s.parent / ref).exists():
+            raise SystemExit(f"{s}: missing local file {ref}")
+        copy_deck(s.parent / ref, d.parent / ref, seen)
 
 
 for name, c in COURSES.items():
@@ -89,7 +108,7 @@ for name, c in COURSES.items():
     if dst.exists():
         shutil.rmtree(dst)
     src = AULAS / c["src"]
-    sections, n = [], 0
+    sections, n, seen = [], 0, set()
     for mdir, mtitle, topics in c["modules"]:
         rows = []
         for title, files in topics:
@@ -99,10 +118,13 @@ for name, c in COURSES.items():
                     continue
                 s = src / files[kind]
                 rel = f"{mdir}/{s.stem if kind == 'html' and s.stem != 'main' else slug(title)}.{kind}"
-                (dst / rel).parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(s, dst / rel)
+                copy_deck(s, dst / rel, seen)
                 links.append((kind, rel))
                 n += 1
+                en = s.with_name(s.stem + ".en.html")
+                if kind == "html" and en.exists():
+                    copy_deck(en, dst / mdir / en.name, seen)
+                    links.append(("en", f"{mdir}/{en.name}"))
             head = f'<a href="{links[0][1]}">{html.escape(title)}</a>'
             extra = " · ".join(f'<a href="{r}">{LABEL[k]}</a>' for k, r in links) if len(links) > 1 else LABEL[links[0][0]]
             rows.append(f'    <li>{head} <span class="muted">({extra})</span></li>')
@@ -136,4 +158,4 @@ for name, c in COURSES.items():
 </html>
 """
     (dst / "index.html").write_text(page, encoding="utf-8")
-    print(f"wrote {name}/index.html ({n} files)")
+    print(f"wrote {name}/index.html ({n} topic files, {len(seen)} files copied)")

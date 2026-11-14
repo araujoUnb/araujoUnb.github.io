@@ -320,6 +320,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
       <a data-go="s-perdas"><b>5.</b>Ondas em meios com perdas<span class="d">fasores, constante de propagação, atenuação, impedância complexa, tangente de perdas, profundidade pelicular, exemplo</span></a>
       <a data-go="s-poy"><b>6.</b>Vetor de Poynting e potência<span class="d">teorema de Poynting, forma integral, fio com corrente, média temporal, fasores, exemplos</span></a>
       <a data-go="s-pol"><b>7.</b>Polarização<span class="d">linear, elíptica e circular, sentido de rotação, fasores, exemplo</span></a>
+      <a data-go="s-cc"><b>8.</b>Condições de contorno<span class="d">E e H tangenciais, D e B normais, refração das linhas de campo, condutor perfeito, exemplo</span></a>
     </div>
   </div>
 </section>
@@ -1897,6 +1898,226 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   <span class="lk" data-a="#pc-l" data-b="#pc-r" data-s="2-2" data-pa="r" data-pb="l" data-bend="90"></span>
 </section>
 
+<!-- ============ 8. Condições de contorno ============ -->
+<section class="slide" id="s-cc" data-nav="8. Condições de contorno" data-sec="Condições de contorno" data-nonum>
+  <div class="divider"><div class="num">8</div><div class="ttl">Condições de contorno</div><div class="gbar"></div>
+  <div class="what">O que acontece com \(\vE\), \(\vD\), \(\vH\) e \(\vB\) ao cruzar a fronteira entre dois meios. As quatro condições saem das equações de Maxwell na forma integral e são a ferramenta para reflexão e refração.</div></div>
+</section>
+
+<section class="slide" data-sec="Contorno · interface">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Campos numa interface</h2><div class="sub">Componentes tangencial e normal, e as quatro leis na forma integral</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccsetup"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">\(\hat{\mathbf a}_n\): normal à interface, do meio 2 para o meio 1. Cada campo se separa em parte normal e parte tangencial:</div>
+          <div class="m">\[ \vE=\vE_t+\vE_n,\qquad \vE_n=(\vE\cdot\hat{\mathbf a}_n)\,\hat{\mathbf a}_n \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">As condições saem das leis na forma integral, aplicadas a caminhos e volumes que se achatam sobre a interface:</div>
+          <div class="m">\[ \oint_L\vE\cdot\dvl=-\frac{d}{dt}\int_S\vB\cdot\dvS,\qquad \oint_L\vH\cdot\dvl=I_{\mathrm{env}}+\frac{d}{dt}\int_S\vD\cdot\dvS \]</div>
+          <div class="m">\[ \oint_S\vD\cdot\dvS=Q_{\mathrm{env}},\qquad \oint_S\vB\cdot\dvS=0 \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Diferença em relação à estática: aparecem \(\partial\vB/\partial t\) e \(\partial\vD/\partial t\), mas multiplicados por uma área que vai a zero. Por isso as condições são as mesmas.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Contorno · E tangencial">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Componente tangencial de \(\vE\)</h2><div class="sub">Lei de Faraday num retângulo \(\Delta w\times\Delta h\) que atravessa a interface</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccloope"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Lei de Faraday no caminho \(L\):</div>
+          <div class="m">\[ \oint_L\vE\cdot\dvl=-\frac{d}{dt}\int_S\vB\cdot\dvS \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">Lados horizontais no meio 1 e no meio 2; os verticais dão termos proporcionais a \(\Delta h\). \(B_\perp\) é a componente de \(\vB\) normal ao retângulo:</div>
+          <div class="stack">
+            <div class="m" data-s="2-2">\[ E_{1t}\,\Delta w-E_{2t}\,\Delta w+O(\Delta h)=-\frac{\partial B_\perp}{\partial t}\,\Delta w\,\Delta h \]</div>
+            <div class="m" id="ce-e3" data-s="3">\[ E_{1t}\,\Delta w-E_{2t}\,\Delta w+\cancel{O(\Delta h)}=-\cancel{\frac{\partial B_\perp}{\partial t}\,\Delta w\,\Delta h} \]</div>
+          </div></div>
+        <div class="ln" data-s="3"><div class="nt">Achatando o retângulo, \(\Delta h\to0\), com \(\vB\) finito.</div></div>
+        <div class="ln eqbox" data-s="4"><div class="m">\[ \boxed{\,E_{1t}=E_{2t}\,}\qquad\text{ou}\qquad \hat{\mathbf a}_n\times(\vE_1-\vE_2)=0 \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">A componente tangencial de \(\vE\) é contínua através de qualquer interface.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#ce-ldh" data-b="#ce-e3" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · H tangencial">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Componente tangencial de \(\vH\)</h2><div class="sub">Lei de Ampère–Maxwell no mesmo retângulo</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="cclooph"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Lei de Ampère–Maxwell no caminho \(L\):</div>
+          <div class="m">\[ \oint_L\vH\cdot\dvl=I_{\mathrm{env}}+\frac{d}{dt}\int_S\vD\cdot\dvS \]</div></div>
+        <div class="ln" data-s="2"><div class="stack">
+            <div class="m" data-s="2-2">\[ H_{1t}\,\Delta w-H_{2t}\,\Delta w+O(\Delta h)=I_{\mathrm{env}}+\frac{\partial D_\perp}{\partial t}\,\Delta w\,\Delta h \]</div>
+            <div class="m" id="ch-e3" data-s="3">\[ H_{1t}\,\Delta w-H_{2t}\,\Delta w+\cancel{O(\Delta h)}=K\,\Delta w+\cancel{\frac{\partial D_\perp}{\partial t}\,\Delta w\,\Delta h} \]</div>
+          </div></div>
+        <div class="ln" data-s="3"><div class="nt">Com \(\Delta h\to0\), a única corrente que continua envolvida é a que corre na própria superfície: densidade superficial \(K\) [A/m], \(I_{\mathrm{env}}\to K\,\Delta w\).</div></div>
+        <div class="ln eqbox" data-s="4"><div class="m">\[ \boxed{\,H_{1t}-H_{2t}=K\,}\qquad\text{ou}\qquad \hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">Com \(\sigma\) finito não há corrente superficial (seria preciso \(\vE\) infinito): \(K=0\) e \(H_t\) é contínua. \(K\neq0\) só num condutor perfeito.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#ch-ldh" data-b="#ch-e3" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · componentes normais">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Componentes normais de \(\vD\) e \(\vB\)</h2><div class="sub">Lei de Gauss num cilindro achatado de base \(\Delta S\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccpill"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Lei de Gauss no cilindro; a superfície lateral dá termos proporcionais a \(\Delta h\):</div>
+          <div class="stack">
+            <div class="m" data-s="1-1">\[ D_{1n}\,\Delta S-D_{2n}\,\Delta S+O(\Delta h)=\rho_s\,\Delta S \]</div>
+            <div class="m" data-s="2">\[ D_{1n}\,\cancel{\Delta S}-D_{2n}\,\cancel{\Delta S}=\rho_s\,\cancel{\Delta S}\quad(\Delta h\to0) \]</div>
+          </div></div>
+        <div class="ln eqbox" data-s="3"><div class="m" id="cp-e">\[ \boxed{\,D_{1n}-D_{2n}=\rho_s\,}\qquad\text{ou}\qquad \hat{\mathbf a}_n\cdot(\vD_1-\vD_2)=\rho_s \]</div></div>
+        <div class="ln" data-s="4"><div class="nt">O mesmo cilindro com \(\oint\vB\cdot\dvS=0\) (não há "carga magnética"):</div>
+          <div class="m">\[ \boxed{\,B_{1n}=B_{2n}\,} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">Entre dielétricos sem carga livre (\(\rho_s=0\)), \(D_n\) é contínua; logo \(\varepsilon_1E_{1n}=\varepsilon_2E_{2n}\): a componente normal de \(\vE\) salta. Do mesmo modo, \(\mu_1H_{1n}=\mu_2H_{2n}\).</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#cp-lrho" data-b="#cp-e" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · refração das linhas">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Refração das linhas de \(\vE\)</h2><div class="sub">Dois dielétricos, sem cargas nem correntes na interface</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccrefr"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt" id="cr-n">\(\vE_1\) faz \(\theta_1\) com a normal; \(\vE_2\) faz \(\theta_2\). Componente tangencial contínua:</div>
+          <div class="m">\[ E_1\sin\theta_1=E_2\sin\theta_2 \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">Componente normal de \(\vD\) contínua:</div>
+          <div class="m">\[ \varepsilon_1E_1\cos\theta_1=\varepsilon_2E_2\cos\theta_2 \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Dividindo a primeira pela segunda:</div>
+          <div class="stack">
+            <div class="m" data-s="3-3">\[ \frac{\cancel{E_1}\sin\theta_1}{\varepsilon_1\cancel{E_1}\cos\theta_1}=\frac{\cancel{E_2}\sin\theta_2}{\varepsilon_2\cancel{E_2}\cos\theta_2} \]</div>
+            <div class="m" data-s="4">\[ \boxed{\,\frac{\tan\theta_1}{\tan\theta_2}=\frac{\varepsilon_{r1}}{\varepsilon_{r2}}\,} \]</div>
+          </div></div>
+        <div class="ln" data-s="5"><div class="nt">No meio de maior \(\varepsilon\), as linhas se afastam da normal. Para \(\vH\), o mesmo com \(\mu\) no lugar de \(\varepsilon\).</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#cr-l1" data-b="#cr-n" data-s="1-1" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · explorando" data-draw="cc">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Linhas de campo atravessando uma interface</h2><div class="sub">Figura interativa · \(E_t\) e \(D_n\) contínuas</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="inst">
+      <div class="controls">
+        <div class="ctl"><div class="row"><label for="cc-e1">\(\varepsilon_{r1}\)</label><output id="cc-e1-o"></output></div><input id="cc-e1" type="range" min="1" max="10" step="0.5" value="2"></div>
+        <div class="ctl"><div class="row"><label for="cc-e2">\(\varepsilon_{r2}\)</label><output id="cc-e2-o"></output></div><input id="cc-e2" type="range" min="1" max="10" step="0.5" value="5"></div>
+        <div class="ctl"><div class="row"><label for="cc-t">\(\theta_1\)</label><output id="cc-t-o"></output></div><input id="cc-t" type="range" min="0" max="85" step="1" value="45"></div>
+        <div class="readouts" id="cc-read"></div>
+        <p class="try">Com \(\varepsilon_{r1}=\varepsilon_{r2}\) as linhas passam retas. Com \(\theta_1=0\) não há refração, só a mudança de \(|\vE|\).</p>
+      </div>
+      <div class="plots">
+        <div class="plot"><canvas id="cc-cv" height="500" aria-label="Linhas de campo refratadas na interface"></canvas>
+        <div class="cap">Azul: \(\vE_1\); vermelho: \(\vE_2\) (mesma escala). Verde tracejado: \(\vD\), contínuo na direção normal. Linhas finas: linhas de \(\vE\).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Contorno · condutor perfeito">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Interface com um condutor perfeito</h2><div class="sub">\(\sigma\to\infty\): os campos variáveis não penetram</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccpec"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Da seção 5, \(\delta=1/\sqrt{\pi f\mu\sigma}\to0\) quando \(\sigma\to\infty\). Dentro do condutor (meio 2):</div>
+          <div class="m">\[ \vE_2=0,\qquad \vH_2=0 \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">As quatro condições, com o meio 2 zerado:</div>
+          <div class="m">\[ \boxed{\,E_{1t}=0\,},\qquad \boxed{\,B_{1n}=0\,},\qquad \boxed{\,D_{1n}=\rho_s\,},\qquad \boxed{\,\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\,} \]</div></div>
+        <div class="ln" data-s="3"><div class="nt" id="pc-n">Junto ao condutor, \(\vE\) é normal e \(\vH\) é tangente à superfície. A corrente superficial \(\vec{\mathbf K}\) e a carga \(\rho_s\) se ajustam ao campo de fora.</div></div>
+        <div class="ln" data-s="4"><div class="nt">Bons condutores reais (cobre, \(\delta\approx66\ \mu\)m em 1 MHz) se aproximam bem disso. É o caso da reflexão total na próxima seção.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#pc-lK" data-b="#pc-n" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · resumo">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Resumo das condições de contorno</h2><div class="sub">\(\hat{\mathbf a}_n\) aponta do meio 2 para o meio 1</div><div class="bar"></div></div>
+  <div class="body">
+    <table class="cmp mx">
+      <tr><th></th><th>caso geral</th><th>dois dielétricos (\(\rho_s=0\), \(K=0\))</th><th>meio 2 condutor perfeito</th></tr>
+      <tr><td>\(\vE\) tangencial</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=0\)</td></tr>
+      <tr data-s="2"><td>\(\vH\) tangencial</td><td>\(\hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K}\)</td><td>\(H_{1t}=H_{2t}\)</td><td>\(\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\)</td></tr>
+      <tr data-s="3"><td>\(\vD\) normal</td><td>\(D_{1n}-D_{2n}=\rho_s\)</td><td>\(\varepsilon_1E_{1n}=\varepsilon_2E_{2n}\)</td><td>\(D_{1n}=\rho_s\)</td></tr>
+      <tr data-s="4"><td>\(\vB\) normal</td><td>\(B_{1n}=B_{2n}\)</td><td>\(\mu_1H_{1n}=\mu_2H_{2n}\)</td><td>\(B_{1n}=0\)</td></tr>
+    </table>
+    <p class="ctxt" data-s="5" style="margin-top:14px">Só duas são independentes para ondas: \(E_t\) e \(H_t\). As normais saem delas pelas equações de Maxwell (com \(\nabla\cdot\vD=\rho_v\) e \(\nabla\cdot\vB=0\)). Na reflexão, basta impor a continuidade de \(E_t\) e \(H_t\).</p>
+  </div>
+</section>
+
+<section class="slide" data-sec="Contorno · exemplo">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: campos dos dois lados de uma interface</h2><div class="bar"></div></div>
+  <div class="body" style="gap:14px">
+    <p style="font-size:25px;margin:0">O plano \(z=0\) separa o meio 1 (\(z>0\): \(\varepsilon_{r1}=2\), \(\mu_{r1}=1\)) do meio 2 (\(z<0\): \(\varepsilon_{r2}=5\), \(\mu_{r2}=3\)). Não há cargas nem correntes na interface. Junto a ela, no meio 1,</p>
+    <div class="m" style="font-size:27px">\[ \vE_1=(3\,\ax-4\,\ay+5\,\az)\cos\omega t\ \ \mathrm{V/m},\qquad \vH_1=(2\,\ax+6\,\az)\cos\omega t\ \ \mathrm{A/m}. \]</div>
+    <p style="font-size:25px;margin:0">Determine, junto à interface:</p>
+    <ul class="sq f23" style="list-style:none;padding-left:10px">
+      <li>(a) \(\vE_2\);</li>
+      <li>(b) os ângulos que \(\vE_1\) e \(\vE_2\) fazem com a normal;</li>
+      <li>(c) \(\vD_2\);</li>
+      <li>(d) \(\vH_2\) e \(\vB_2\).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide" data-sec="Contorno · exemplo (a) e (b)">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: \(\vE_2\) e os ângulos</h2><div class="sub">(a) \(\vE_2\); (b) os ângulos de \(\vE_1\) e \(\vE_2\) com a normal</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccex"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">\(\hat{\mathbf a}_n=\az\) (do meio 2 para o 1). Separando \(\vE_1\):</div>
+          <div class="m">\[ \vE_{1t}=(3\,\ax-4\,\ay)\cos\omega t,\qquad \vE_{1n}=5\,\az\cos\omega t \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">\(E_t\) contínua; \(D_n\) contínua (\(\rho_s=0\)):</div>
+          <div class="m">\[ \vE_{2t}=\vE_{1t},\qquad E_{2n}=\frac{\varepsilon_{r1}}{\varepsilon_{r2}}\,E_{1n}=\frac25\,(5)=2 \]</div></div>
+        <div class="ln eqbox" data-s="3"><div class="m">\[ \boxed{\,\vE_2=(3\,\ax-4\,\ay+2\,\az)\cos\omega t\ \ \mathrm{V/m}\,} \]</div></div>
+        <div class="ln" data-s="4"><div class="nt">(b) Com \(|\vE_t|=\sqrt{3^2+4^2}=5\): \(\tan\theta_1=5/5\), \(\tan\theta_2=5/2\).</div>
+          <div class="m">\[ \boxed{\,\theta_1=45^\circ,\qquad \theta_2\approx68{,}2^\circ\,} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">Conferência: \(\tan\theta_1/\tan\theta_2=0{,}4=\varepsilon_{r1}/\varepsilon_{r2}\).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Contorno · exemplo (c) e (d)">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: \(\vD_2\), \(\vH_2\) e \(\vB_2\)</h2><div class="sub">(c) \(\vD_2\); (d) \(\vH_2\) e \(\vB_2\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dv" style="max-width:1300px">
+      <div class="ln"><div class="nt">(c) \(\vD_2=\varepsilon_0\varepsilon_{r2}\vE_2\), com \(5\varepsilon_0=4{,}427\times10^{-11}\) F/m:</div>
+        <div class="m">\[ \vD_2=5\varepsilon_0\,(3\,\ax-4\,\ay+2\,\az)\cos\omega t \]</div></div>
+      <div class="ln eqbox" data-s="2"><div class="m">\[ \boxed{\,\vD_2\approx(132{,}8\,\ax-177{,}1\,\ay+88{,}5\,\az)\cos\omega t\ \ \mathrm{pC/m^2}\,} \]</div></div>
+      <div class="ln" data-s="3"><div class="nt">(d) \(H_t\) contínua (\(K=0\)); \(B_n\) contínua, \(\mu_{r1}H_{1n}=\mu_{r2}H_{2n}\):</div>
+        <div class="m">\[ \vH_{2t}=2\,\ax\cos\omega t,\qquad H_{2n}=\frac{\mu_{r1}}{\mu_{r2}}\,H_{1n}=\frac13\,(6)=2 \]</div></div>
+      <div class="ln eqbox" data-s="4"><div class="m">\[ \boxed{\,\vH_2=(2\,\ax+2\,\az)\cos\omega t\ \ \mathrm{A/m}\,},\qquad \boxed{\,\vB_2=3\mu_0\vH_2\approx(7{,}54\,\ax+7{,}54\,\az)\cos\omega t\ \ \mu\mathrm{T}\,} \]</div></div>
+      <div class="ln" data-s="5"><div class="nt">Conferência: \(B_{1n}=\mu_0(6)=7{,}54\ \mu\)T \(=B_{2n}\).</div></div>
+    </div>
+  </div>
+</section>
+
 </div>
 </div>
 
@@ -2765,11 +2986,87 @@ function boardPolExC() {
   const labels = A.labels + lb(cx + 3 * k + 16, cy + 22, "3", "sm") + lb(cx + 16, cy - 4 * k + 18, "4", "sm") + lbt(cx, 420, "(c) elíptica, y → x", "", `id="pc-l"`);
   return board(480, 440, svg, labels);
 }
+// ---------- quadros: condições de contorno ----------
+// dois meios: 1 em cima, 2 embaixo, interface em y = yI
+function ccBase(w, h, yI, l1 = "meio 1", l2 = "meio 2", fill2 = "rgba(192,120,40,.10)") {
+  const svg = `<rect x="0" y="0" width="${w}" height="${yI}" style="fill:rgba(0,59,92,.06)"/><rect x="0" y="${yI}" width="${w}" height="${h - yI}" style="fill:${fill2}"/>` + G.ln(0, yI, w, yI, "K", 2.4);
+  return { svg, labels: lbt(20 + 4.6 * l1.length, 24, l1) + lbt(20 + 4.6 * l2.length, h - 22, l2) };
+}
+function boardCcSetup() {
+  const yI = 230, B = ccBase(560, 440, yI, "meio 1 (ε₁, μ₁, σ₁)", "meio 2 (ε₂, μ₂, σ₂)"), P1 = [300, yI - 8];
+  let svg = B.svg + G.ar(470, yI, 470, yI - 90, "K", 3);
+  const e1 = [P1[0] - 150, P1[1] - 140];
+  svg += G.ar(e1[0], e1[1], P1[0], P1[1], "P", 3.6);
+  svg += G.g(S("1"), G.ln(e1[0], e1[1], P1[0], e1[1], "P", 1.4, "", "5 4") + G.ln(P1[0], e1[1], P1[0], P1[1], "P", 1.4, "", "5 4"));
+  svg += G.ar(P1[0], yI + 8, P1[0] + 150, yI + 70, "R", 3.6);
+  const labels = B.labels + lb(495, yI - 70, Rw`\hat{\mathbf a}_n`) + lb(e1[0] + 40, e1[1] + 80, Rw`\vE_1`, "P") + lb((e1[0] + P1[0]) / 2, e1[1] - 20, Rw`E_{1t}`, "P sm") + lb(P1[0] + 34, (e1[1] + P1[1]) / 2, Rw`E_{1n}`, "P sm") +
+    lb(P1[0] + 90, yI + 70, Rw`\vE_2`, "R");
+  return board(560, 440, svg, labels);
+}
+function boardCcLoop(isH) {
+  const yI = 220, B = ccBase(560, 440, yI), x0 = 140, x1 = 420, hh = 46;
+  let svg = B.svg + `<rect x="${x0}" y="${yI - hh}" width="${x1 - x0}" height="${2 * hh}" ${sty("M", 2.4)}/>`;
+  svg += G.ar(x0 + 40, yI - hh, x0 + 160, yI - hh, "M", 2.4) + G.ar(x1 - 40, yI + hh, x1 - 160, yI + hh, "M", 2.4);
+  const c = isH ? "G" : "P";
+  svg += G.ar(x0 - 10, yI - hh - 60, x1 - 20, yI - hh - 60, c, 3.4) + G.ar(x0 - 10, yI + hh + 100, x1 - 120, yI + hh + 100, c, 3.4);
+  svg += G.brace(x0, yI + hh + 14, x1, yI + hh + 14, 10, "M") + G.ln(x1 + 18, yI - hh, x1 + 18, yI + hh, "M", 1.6) + G.ln(x1 + 12, yI - hh, x1 + 24, yI - hh, "M", 1.6) + G.ln(x1 + 12, yI + hh, x1 + 24, yI + hh, "M", 1.6);
+  if (isH) for (const x of [200, 280, 360]) svg += G.sym(x, yI, 10, true, "R");
+  else svg += G.sym(280, yI - 22, 11, false, "G") + G.sym(280, yI + 22, 11, false, "G");
+  const labels = B.labels + lb(x1 + 6, yI - hh - 82, isH ? Rw`H_{1t}` : Rw`E_{1t}`, c) + lb(x1 - 92, yI + hh + 100, isH ? Rw`H_{2t}` : Rw`E_{2t}`, c) +
+    lb((x0 + x1) / 2, yI + hh + 52, Rw`\Delta w`, "sm") + lb(x1 + 48, yI, Rw`\Delta h`, "sm", `id="${isH ? "ch" : "ce"}-ldh"`) + lb(x0 - 22, yI - hh - 6, "L", "sm") +
+    (isH ? lb(200, yI - 30, Rw`\vec{\mathbf K}`, "R sm") : lb(330, yI, Rw`\vB`, "G sm"));
+  return board(560, 440, svg, labels);
+}
+function boardCcPill() {
+  const yI = 220, B = ccBase(560, 440, yI), cx = 280, rx = 120, ry = 30, hh = 50;
+  let svg = B.svg;
+  svg += G.ell(cx, yI + hh, rx, ry, "rgba(255,255,255,.5)", "M", 2) + G.ln(cx - rx, yI - hh, cx - rx, yI + hh, "M", 2) + G.ln(cx + rx, yI - hh, cx + rx, yI + hh, "M", 2) + G.ell(cx, yI - hh, rx, ry, "rgba(255,255,255,.7)", "M", 2.2);
+  for (const x of [190, 240, 290, 340]) svg += `<text x="${x}" y="${yI + 7}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
+  svg += G.ar(cx, yI - hh, cx, yI - hh - 110, "P", 3.4) + G.ar(cx, yI + hh + 110, cx, yI + hh, "P", 3.4);
+  svg += G.ar(cx + 70, yI - hh, cx + 70, yI - hh - 60, "K", 2) + G.ar(cx + 70, yI + hh, cx + 70, yI + hh + 60, "K", 2);
+  const labels = B.labels + lb(cx + 40, yI - hh - 100, Rw`D_{1n}`, "P") + lb(cx + 40, yI + hh + 100, Rw`D_{2n}`, "P") + lb(cx + 110, yI - hh - 50, Rw`\Delta S`, "sm") +
+    lb(cx + rx + 40, yI - 20, Rw`\rho_s`, "R", `id="cp-lrho"`) + lb(cx - rx - 44, yI, Rw`\Delta h`, "sm");
+  return board(560, 440, svg, labels);
+}
+function boardCcRefr() {
+  const yI = 220, B = ccBase(560, 440, yI, "meio 1 (ε₁)", "meio 2 (ε₂ > ε₁)"), O = [280, yI], t1 = 35 * DEG, t2 = Math.atan(Math.tan(t1) * 5 / 2), L = 170;
+  let svg = B.svg + G.ln(O[0], 40, O[0], 400, "M", 1.4, "", "6 5");
+  svg += G.ar(O[0] - L * Math.sin(t1), O[1] - L * Math.cos(t1), O[0] - 4 * Math.sin(t1), O[1] - 4 * Math.cos(t1), "P", 3.6);
+  svg += G.ar(O[0], O[1], O[0] + L * 0.75 * Math.sin(t2), O[1] + L * 0.75 * Math.cos(t2), "R", 3.6);
+  svg += G.arc(O[0], O[1], 70, -90, -90 - t1 / DEG, "M", 2) + G.arc(O[0], O[1], 70, 90, 90 - t2 / DEG, "M", 2);
+  const [a1x, a1y] = pol(O[0], O[1], 92, -90 - t1 / DEG / 2), [a2x, a2y] = pol(O[0], O[1], 92, 90 - t2 / DEG / 2);
+  const labels = B.labels + lb(O[0] - L * Math.sin(t1) - 34, O[1] - L * Math.cos(t1) + 6, Rw`\vE_1`, "P") + lb(O[0] + L * 0.75 * Math.sin(t2) + 30, O[1] + L * 0.75 * Math.cos(t2), Rw`\vE_2`, "R") +
+    lb(a1x, a1y, Rw`\theta_1`, "M", `id="cr-l1"`) + lb(a2x + 6, a2y, Rw`\theta_2`, "M") + lb(O[0] + 24, 50, Rw`\hat{\mathbf a}_n`, "sm");
+  return board(560, 440, svg, labels);
+}
+function boardCcPec() {
+  const yI = 250, B = ccBase(560, 440, yI, "meio 1", "condutor perfeito: E = 0, H = 0", "rgba(120,120,120,.28)");
+  let svg = B.svg;
+  for (const x of [110, 220, 330, 440]) svg += G.ar(x, yI - 6, x, yI - 120, "P", 3.2) + `<text x="${x}" y="${yI + 24}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
+  svg += G.ar(150, yI - 34, 400, yI - 34, "G", 3.2);
+  for (const x of [165, 275, 385]) svg += G.sym(x, yI + 50, 10, true, "R");
+  const labels = B.labels + lb(110 + 30, yI - 120, Rw`\vE_1`, "P") + lb(420, yI - 54, Rw`\vH_1`, "G") + lb(470, yI + 30, Rw`\rho_s`, "R sm") + lb(470, yI + 52, Rw`\vec{\mathbf K}`, "R sm", `id="pc-lK"`);
+  return board(560, 440, svg, labels);
+}
+function boardCcEx() {
+  const yI = 240, B = ccBase(560, 440, yI, "meio 1: εr = 2", "meio 2: εr = 5"), O = [300, yI], k = 30;
+  let svg = B.svg + G.ln(O[0], 40, O[0], 420, "M", 1.4, "", "6 5");
+  // E1 = (5 tangencial, 5 normal), aponta para fora (para cima) na figura
+  svg += G.ar(O[0], O[1], O[0] - 5 * k, O[1] - 5 * k, "P", 3.6);
+  svg += G.g(S("3"), G.ar(O[0] + 5 * k, O[1] + 2 * k, O[0] + 3, O[1] + 2, "R", 3.6) + G.ln(O[0] + 5 * k, O[1] + 2 * k, O[0] + 5 * k, O[1], "R", 1.2, "", "4 4"));
+  svg += G.ln(O[0] - 5 * k, O[1] - 5 * k, O[0] - 5 * k, O[1], "P", 1.2, "", "4 4");
+  svg += G.arc(O[0], O[1], 60, -90, -135, "P", 2) + G.g(S("4"), G.arc(O[0], O[1], 60, 90, 90 - 68.2, "R", 2));
+  const labels = B.labels + lb(O[0] - 5 * k - 30, O[1] - 5 * k, Rw`\vE_1`, "P") + lb(O[0] - 2.5 * k, O[1] + 22, Rw`5`, "P sm") + lb(O[0] - 5 * k - 18, O[1] - 2.5 * k, "5", "P sm") + lb(O[0] - 34, O[1] - 84, Rw`\theta_1`, "P sm", `id="cx-l1"`) +
+    `<div ${S("3")}>` + lb(O[0] + 5 * k + 34, O[1] + 2 * k + 8, Rw`\vE_2`, "R") + lb(O[0] + 5 * k + 20, O[1] + k, "2", "R sm") + lb(O[0] + 2.5 * k, O[1] - 20, "5", "R sm") + `</div>` +
+    lb(O[0] + 52, O[1] + 80, Rw`\theta_2`, "R sm", S("4")) + lb(O[0] + 30, 52, Rw`\az`, "sm");
+  return board(560, 440, svg, labels);
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, capjd: boardCapJd, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
   pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
-  poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC };
+  poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
+  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx };
 document.querySelectorAll("[data-mount]").forEach((el) => { const f = BOARDS[el.dataset.mount]; if (f) el.outerHTML = f(); });
 
 // ---------- overlays e setas curvas ----------
@@ -3233,8 +3530,40 @@ function startPol() { drawPol(); if (!PO.run) { PO.run = true; PO.last = null; r
 bind(["po-r", "po-dp"], { "po-r": (v) => fmtc(v, 2), "po-dp": (v) => fmtc(v, 0) + "°" }, drawPol);
 $("po-play").addEventListener("click", () => { PO.play = !PO.play; $("po-play").textContent = PO.play ? "Pausar" : "Animar"; });
 
+// ---------- instrumento: refração das linhas de E numa interface entre dielétricos ----------
+function drawCc() {
+  const cv = $("cc-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C();
+  const e1 = val("cc-e1"), e2 = val("cc-e2"), t1 = val("cc-t") * DEG;
+  const Et = Math.sin(t1), E2n = e1 / e2 * Math.cos(t1), t2 = Math.atan2(Et, E2n), E2 = Math.hypot(Et, E2n);
+  const yI = h * 0.5, cx = w * 0.5;
+  ctx.clearRect(0, 0, w, h);
+  ctx.save(); ctx.fillStyle = "rgba(0,59,92,.06)"; ctx.fillRect(0, 0, w, yI); ctx.fillStyle = "rgba(192,120,40,.10)"; ctx.fillRect(0, yI, w, h - yI); ctx.restore();
+  line(ctx, 0, yI, w, yI, c.K, 2.4); line(ctx, cx, 10, cx, h - 10, c.M, 1.2, [6, 5]);
+  txt(ctx, `meio 1: εr = ${fmtc(e1, 1)}`, 16, 22, { size: 17, c: c.M }); txt(ctx, `meio 2: εr = ${fmtc(e2, 1)}`, 16, h - 18, { size: 17, c: c.M });
+  // linhas de campo: descem pelo meio 1 com θ1 e seguem no meio 2 com θ2
+  const s1 = [Math.sin(t1), Math.cos(t1)], s2 = [Math.sin(t2), Math.cos(t2)], gap = 70 / Math.max(0.25, Math.cos(t1));
+  for (let k = -12; k <= 12; k++) {
+    const xi = cx + k * gap, a1 = yI / s1[1], a2 = (h - yI) / s2[1];
+    ctx.save(); ctx.strokeStyle = c.P; ctx.globalAlpha = 0.35; ctx.lineWidth = 1.6; ctx.beginPath();
+    ctx.moveTo(xi - s1[0] * a1, 0); ctx.lineTo(xi, yI); ctx.lineTo(xi + s2[0] * a2, h); ctx.stroke(); ctx.restore();
+  }
+  // vetores E (azul) e D (verde tracejado) junto ao ponto central
+  const L = Math.min(w, h) * 0.34, Dm = Math.max(e1, e2 * E2);
+  arrowTo(ctx, cx - s1[0] * L, yI - s1[1] * L, cx - 3, yI - 3, c.P, 4, 16); txt(ctx, "E₁", cx - s1[0] * L - 34, yI - s1[1] * L, { size: 20, c: c.P, bold: true });
+  arrowTo(ctx, cx, yI, cx + s2[0] * L * E2, yI + s2[1] * L * E2, c.R, 4, 16); txt(ctx, "E₂", cx + s2[0] * L * E2 + 10, yI + s2[1] * L * E2 + 16, { size: 20, c: c.R, bold: true });
+  ctx.save(); ctx.setLineDash([8, 5]);
+  const D1 = e1 / Dm * L, D2 = e2 * E2 / Dm * L;
+  arrowTo(ctx, cx - s1[0] * D1 - 26, yI - s1[1] * D1, cx - 26, yI, c.G, 2.4, 12); arrowTo(ctx, cx + 26, yI, cx + 26 + s2[0] * D2, yI + s2[1] * D2, c.G, 2.4, 12); ctx.restore();
+  ctx.save(); ctx.strokeStyle = c.M; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, yI, 56, -Math.PI / 2 - t1, -Math.PI / 2); ctx.stroke(); ctx.beginPath(); ctx.arc(cx, yI, 56, Math.PI / 2 - t2, Math.PI / 2); ctx.stroke(); ctx.restore();
+  txt(ctx, "θ₁", cx - 30, yI - 76, { size: 18, c: c.M }); txt(ctx, "θ₂", cx + 18, yI + 80, { size: 18, c: c.M });
+  setRead("cc-read", `<span>\\(\\theta_2\\): <b>${fmtc(t2 / DEG, 1)}°</b></span><span>\\(\\tan\\theta_1/\\tan\\theta_2\\): <b>${t1 > 1e-3 ? fmtc(Math.tan(t1) / Math.tan(t2), 3) : "—"}</b> \\((\\varepsilon_{r1}/\\varepsilon_{r2}=${fmtc(e1 / e2, 3)})\\)</span>` +
+    `<span>\\(|\\vE_2|/|\\vE_1|\\): <b>${fmtc(E2, 3)}</b></span><span>\\(|\\vD_2|/|\\vD_1|\\): <b>${fmtc(e2 * E2 / e1, 3)}</b></span>`);
+}
+bind(["cc-e1", "cc-e2", "cc-t"], { "cc-e1": (v) => fmtc(v, 1), "cc-e2": (v) => fmtc(v, 1), "cc-t": (v) => fmtc(v, 0) + "°" }, drawCc);
+
 const FIGS = {};
-const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol };
+const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc };
 
 // ---------- navegação: menu de seções, atalho R e link no rodapé ----------
 // ---------- navegação: menu de seções, atalho R e link no rodapé ----------

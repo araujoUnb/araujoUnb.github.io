@@ -32,6 +32,7 @@ python3 -m http.server 8000
 
 `pricom/` (FGA0092) and `eletromagnetismo/` (FGA0119) hold the lecture slides
 (interactive HTML decks and/or PDFs, one entry per topic) and an index page,
+The script also copies every local file a deck references (`figs/`, the `.en.html` English twin).
 linked from Teaching. They are copied from `~/Documentos/UnB/Aulas/curso_*`:
 edit the `COURSES` list in `sync_courses.py` if needed, run `python3 sync_courses.py`
 and `python3 build.py`, then commit.

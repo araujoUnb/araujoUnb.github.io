@@ -776,6 +776,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
   <span id="sec"></span>
   <button id="gotoc" type="button" title="Ir para o roteiro (R)">Roteiro</button>
   <select id="secsel" aria-label="Ir para uma seção (S)"></select>
+  <button id="lang" type="button" title="English version" data-href="amostragem.en.html">EN</button>
   <button id="full" type="button">Tela cheia</button>
 </nav>
 
@@ -1662,6 +1663,11 @@ fit();
 show(hm ? Number(hm[1]) - 1 : 0);
 if (hm && hm[2]) { shown = Math.max(1, Math.min(steps(slides[cur]).length, Number(hm[2]))); paintSteps(); }
 })();
+document.getElementById("lang").addEventListener("click", e => {
+  const ss = [...document.querySelectorAll(".slide")], i = ss.findIndex(s => s.classList.contains("active"));
+  const k = i >= 0 ? ss[i].querySelectorAll(".step:not(.hidden)").length : 0;
+  location.href = e.currentTarget.dataset.href + (i >= 0 ? "#" + (i + 1) + (k > 1 ? "." + k : "") : location.hash);
+});
 </script>
 </body>
 </html>

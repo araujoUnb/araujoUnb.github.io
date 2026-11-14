@@ -950,6 +950,7 @@ print('OK')"</pre></div>
   <span id="sec"></span>
   <button id="gotoc" type="button" title="Ir para o roteiro (R)">Roteiro</button>
   <select id="secsel" aria-label="Ir para uma seção (S)"></select>
+  <button id="lang" type="button" title="English version" data-href="apresentacao.en.html">EN</button>
   <button id="full" type="button">Tela cheia</button>
 </nav>
 
@@ -1877,5 +1878,6 @@ bind(["m3-n"], {}, refreshFigs);
 bind(["nt-1", "nt-2", "nt-3", "nt-l"], { "nt-1": (v) => fmtc(v, 1), "nt-2": (v) => fmtc(v, 1), "nt-3": (v) => fmtc(v, 1), "nt-l": (v) => fmtc(v, 1) }, drawNota);
 
 })();
+document.getElementById("lang").addEventListener("click", e => { const sl = [...document.querySelectorAll(".slide")], i = sl.findIndex((s) => s.classList.contains("active")), st = i >= 0 ? [...sl[i].querySelectorAll(".step")] : [], k = st.filter((s) => !s.classList.contains("hidden")).length; location.href = e.currentTarget.dataset.href + (i >= 0 ? "#" + (i + 1) + (st.length ? "." + Math.max(k, 1) : "") : location.hash); });
 </script>
 </body>
