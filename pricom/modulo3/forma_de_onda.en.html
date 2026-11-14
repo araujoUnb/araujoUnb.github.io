@@ -278,6 +278,55 @@ html.receiver nav.ctrl { display: none; }
 .boardhandle .fa-chevron-up::before { content: "▲"; color: #fff; font-style: normal; }
 .boardhandle .fa-chevron-down::before { content: "▼"; color: #fff; font-style: normal; }
 .boardhandle a { text-decoration: none; }
+/* ---------- barra compacta: telas de toque e janelas estreitas ---------- */
+nav.ctrl #pg { white-space: nowrap; }
+nav.ctrl #more { display: none; }
+nav.ctrl #extra { display: contents; }
+@media (max-width: 1279px), (pointer: coarse) {
+  nav.ctrl { gap: 10px; }
+  nav.ctrl button { min-height: 38px; min-width: 44px; padding: 6px 12px; }
+  nav.ctrl #more { display: inline-block; font-size: 20px; line-height: 1; }
+  nav.ctrl #extra { display: none; position: absolute; right: 10px; bottom: calc(100% + 8px); flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; min-width: 220px; background: #fff; border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 28px rgba(0, 30, 50, .22); }
+  nav.ctrl #extra.open { display: flex; }
+  nav.ctrl #extra button, nav.ctrl #extra select { min-height: 42px; text-align: left; max-width: none; font-size: 16px; }
+}
+@media (max-width: 560px) { nav.ctrl #sec { display: none; } }
+
+/* ---------- modo coluna: celular em pé (até 760 px), sem o reveal ---------- */
+html.narrow, html.narrow body { height: auto; overflow: auto; background: #fff; }
+html.narrow .reveal { position: static; width: auto; height: auto; overflow: visible; padding-inline: 16px; touch-action: auto; }
+html.narrow .reveal .slides { position: static; width: auto; height: auto; inset: auto; margin: 0; transform: none !important; pointer-events: auto; perspective: none; }
+html.narrow .reveal .slides > section.slide { position: relative; display: block !important; inset: auto; width: auto; height: auto; padding: 28px 0 20px; font-size: 17px; box-shadow: none; border-bottom: 2px solid var(--unb-secondary); transform: none !important; }
+html.narrow .slide .logo-head, html.narrow .foot, html.narrow .stepinfo, html.narrow aside.notes, html.narrow .note, html.narrow svg.notelayer { display: none; }
+html.narrow .frametitle, html.narrow .body, html.narrow .titlepage, html.narrow .divider { position: static; inset: auto; }
+html.narrow .frametitle { margin-bottom: 18px; } html.narrow .frametitle h2 { font-size: 26px; } html.narrow .frametitle .sub { font-size: 17px; }
+html.narrow .body { gap: 14px; }
+html.narrow .titlepage h1 { font-size: 40px; } html.narrow .titlepage .subtitle { font-size: 20px; } html.narrow .titlepage .logos { gap: 12px; } html.narrow .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
+html.narrow .titlepage .author { font-size: 20px; } html.narrow .titlepage .inst, html.narrow .titlepage .date { font-size: 16px; } html.narrow .titlepage .mid { margin: 28px 0; }
+html.narrow .divider .num { font-size: 56px; } html.narrow .divider .ttl { font-size: 30px; } html.narrow .divider .what { font-size: 17px; }
+html.narrow .cols, html.narrow .inst, html.narrow .plots.two, html.narrow .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .toc { font-size: 19px; } html.narrow .toc .d { font-size: 15px; }
+html.narrow .step, html.narrow .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } html.narrow .step .why, html.narrow .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
+html.narrow .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .dlayout .step .m { font-size: 17px; }
+html.narrow dl.syms, html.narrow .figcap, html.narrow .symline { font-size: 15px; } html.narrow dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
+html.narrow .block, html.narrow .block .bt, html.narrow .painel, html.narrow .readouts, html.narrow .legend, html.narrow .cap, html.narrow .try { font-size: 15px; }
+html.narrow .eqn > .tag, html.narrow .step .tag { font-size: 14px; }
+html.narrow table { font-size: 15px; min-width: 540px; }
+html.narrow code { overflow-wrap: anywhere; }
+html.narrow .refs { columns: 1; font-size: 14px; }
+html.narrow .slide svg:not(.notelayer) { max-width: 100%; height: auto; }
+html.narrow .deriv > *, html.narrow .step, html.narrow .step > * { min-width: 0; }
+html.narrow .step .m, html.narrow .eqn { overflow-x: auto; overflow-y: hidden; }
+html.narrow mjx-container[display="true"] { min-width: 0 !important; }
+html.narrow .trow.th { grid-template-columns: minmax(0, 1fr) auto; }
+html.narrow .srow { flex-direction: column; align-items: stretch; }
+html.narrow .srow > .step { flex: 1 1 auto; }
+/* no modo coluna a barra fica só com a troca de língua, no canto */
+html.narrow nav.ctrl { position: fixed; left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: auto; padding: 0; gap: 0; background: none; border: 0; }
+html.narrow nav.ctrl > :not(#extra), html.narrow nav.ctrl #extra > :not(#lang) { display: none !important; }
+html.narrow nav.ctrl #extra { display: contents !important; }
+html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30, 50, .2); }
 </style>
 </head>
 <body>
@@ -1178,13 +1227,16 @@ html.receiver nav.ctrl { display: none; }
   <button id="next" type="button" aria-label="Next">→</button>
   <span id="pg"></span>
   <span id="sec"></span>
-  <button id="gotoc" type="button" title="Go to the outline (R)">Outline</button>
-  <select id="secsel" aria-label="Go to a section (G)" title="Sections (G)"></select>
-  <button id="ovw" type="button" title="Overview (Esc)">Overview</button>
-  <button id="pen" type="button" title="Pen on the slide (C)">Pen</button>
-  <button id="board" type="button" title="Blank whiteboard (B)">Board</button>
-  <button id="lang" type="button" title="Versão em português" data-href="forma_de_onda.html">PT</button>
-  <button id="full" type="button" title="Full screen (F)">Full screen</button>
+  <button id="more" type="button" aria-expanded="false" aria-controls="extra" title="More options">⋯</button>
+  <div id="extra">
+    <button id="gotoc" type="button" title="Go to the outline (R)">Outline</button>
+    <select id="secsel" aria-label="Go to a section (G)" title="Sections (G)"></select>
+    <button id="ovw" type="button" title="Overview (Esc)">Overview</button>
+    <button id="pen" type="button" title="Pen on the slide (C)">Pen</button>
+    <button id="board" type="button" title="Blank whiteboard (B)">Board</button>
+    <button id="lang" type="button" title="Versão em português" data-href="forma_de_onda.html">PT</button>
+    <button id="full" type="button" title="Full screen (F)">Full screen</button>
+  </div>
 </nav>
 
 <script src="lib/reveal/dist/reveal.js"></script>
@@ -2053,6 +2105,11 @@ bind(["ad-k", "ad-m", "ad-f"], { "ad-k": (v) => fmtc(v, 2), "ad-m": (v) => fmtc(
 // Registre cada instrumento: chave do data-draw -> função de desenho.
 const DRAW = { muinst: drawMuInst, dminst: drawDmInst, adminst: drawAdmInst };
 const PRINT = /print-pdf/i.test(location.search);
+// celular em pé: coluna rolável com todos os passos, sem o reveal (como no motor antigo)
+const NARROW_MQ = window.matchMedia("(max-width: 760px)");
+const NARROW = NARROW_MQ.matches && !PRINT && !/receiver/i.test(location.search);
+if (NARROW) document.documentElement.classList.add("narrow");
+try { NARROW_MQ.addEventListener("change", () => location.reload()); } catch (e) { /* navegador antigo */ }
 if (/receiver/i.test(location.search)) document.documentElement.classList.add("receiver");
 const slides = [...document.querySelectorAll(".reveal .slides > section")];
 const numbered = slides.filter((sl) => !sl.hasAttribute("data-nonum"));
@@ -2071,7 +2128,7 @@ const steps = (sl) => [...sl.querySelectorAll(".step")];
 // passos -> fragmentos do reveal
 slides.forEach((sl) => steps(sl).forEach((e, k) => { if (k > 0) { e.classList.add("fragment"); e.dataset.fragmentIndex = k - 1; } }));
 // passo atual: 1 + fragmentos visíveis; 0 em slide sem passos
-const shownOf = (sl) => { const n = sl.querySelectorAll(".step").length; return n ? 1 + sl.querySelectorAll(".step.fragment.visible").length : 0; };
+const shownOf = (sl) => { const n = sl.querySelectorAll(".step").length; return NARROW ? n : n ? 1 + sl.querySelectorAll(".step.fragment.visible").length : 0; };
 // arrastar o dedo sobre controles e figuras não troca de slide
 document.querySelectorAll(".painel, canvas, select, input, nav.ctrl").forEach((e) => e.setAttribute("data-prevent-swipe", ""));
 const slideNum = (sl) => { const k = numbered.indexOf(sl); return k >= 0 ? [k + 1, " / ", numbered.length] : [""]; };
@@ -2220,6 +2277,12 @@ secsel.innerHTML = `<option value="">Sections…</option>` + slides.map((sl, i) 
 secsel.addEventListener("change", () => { const v = secsel.value; if (v !== "") Reveal.slide(Number(v)); secsel.value = ""; secsel.blur(); });
 const goToc = () => { if (tocIdx >= 0) Reveal.slide(tocIdx); };
 const openSec = () => { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } };
+const extra = $("extra"), moreBtn = $("more");
+const closeMore = () => { extra.classList.remove("open"); moreBtn.setAttribute("aria-expanded", "false"); };
+moreBtn.addEventListener("click", (e) => { e.stopPropagation(); const o = extra.classList.toggle("open"); moreBtn.setAttribute("aria-expanded", String(o)); });
+extra.addEventListener("click", (e) => { if (e.target.closest("button")) closeMore(); });
+secsel.addEventListener("change", closeMore);
+document.addEventListener("click", (e) => { if (!e.target.closest("#extra, #more")) closeMore(); });
 $("prev").addEventListener("click", () => Reveal.prev());
 $("next").addEventListener("click", () => Reveal.next());
 $("gotoc").addEventListener("click", goToc);
@@ -2229,10 +2292,11 @@ $("pen").addEventListener("click", () => RevealChalkboard.toggleNotesCanvas());
 $("ovw").addEventListener("click", () => Reveal.toggleOverview());
 document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
   const idx = slides.findIndex((sl) => sl.id === a.dataset.go);
-  if (idx >= 0) Reveal.slide(idx);
+  if (idx >= 0) { if (NARROW) slides[idx].scrollIntoView({ behavior: "smooth" }); else Reveal.slide(idx); }
 }));
 // versão inglesa, ainda no motor antigo: #N.k com N contado a partir de 1 e k o passo
 $("lang").addEventListener("click", (e) => {
+  if (NARROW) { const i = topSlide(); location.href = e.currentTarget.dataset.href + "#" + (i + 1); return; }
   const sl = Reveal.getCurrentSlide(), h = Reveal.getIndices().h, k = shownOf(sl);
   location.href = e.currentTarget.dataset.href + "#" + (h + 1) + (k > 1 ? "." + k : "");
 });
@@ -2263,7 +2327,7 @@ function printAll() {
 
 // links antigos do motor anterior, #N e #N.k, viram #/N−1/0/k−2
 const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
-if (hm) { const h = Math.max(Number(hm[1]) - 1, 0), k = Number(hm[2] || 1); try { history.replaceState(null, "", "#/" + h + (k > 1 ? "/0/" + (k - 2) : "")); } catch (e) { /* sandboxed viewer */ } }
+if (hm && !NARROW) { const h = Math.max(Number(hm[1]) - 1, 0), k = Number(hm[2] || 1); try { history.replaceState(null, "", "#/" + h + (k > 1 ? "/0/" + (k - 2) : "")); } catch (e) { /* sandboxed viewer */ } }
 
 function start() {
   Reveal.on("slidechanged", () => { onState(); requestAnimationFrame(drawVisible); });
@@ -2279,7 +2343,7 @@ function start() {
     hash: true, fragmentInURL: true, history: false, respondToHashChanges: true,
     transition: "none", transitionSpeed: "fast", backgroundTransition: "none",
     slideNumber: slideNum, showSlideNumber: "speaker",
-    pdfSeparateFragments: true, pdfMaxPagesPerSlide: 100,
+    pdfSeparateFragments: true, pdfMaxPagesPerSlide: 100, scrollActivationWidth: null,
     keyboard: { 70: toggleFull },
     chalkboard: { theme: "whiteboard", storage: "pricom-forma_de_onda-quadro", toggleChalkboardButton: false, toggleNotesButton: false, colorButtons: true, boardHandle: true, transition: 300 },
     plugins: [RevealNotes, RevealChalkboard],
@@ -2293,10 +2357,35 @@ function start() {
     if (!REDUCED) requestAnimationFrame(figLoop);
   });
 }
+// ---------- modo coluna (celular em pé) ----------
+function topSlide() { let best = 0; slides.forEach((sl, i) => { if (sl.getBoundingClientRect().top <= 80) best = i; }); return best; }
+const onScreen = new Set();
+function narrowDraw() {
+  STAGE_SCALE = 1;
+  slides.forEach((sl) => { paintSteps(sl, shownOf(sl)); drawInst(sl); drawFig(sl, 2.2); });
+}
+function narrowLoop(ts) { if (!document.hidden) onScreen.forEach((sl) => drawFig(sl, tnow(ts))); requestAnimationFrame(narrowLoop); }
+function startNarrow() {
+  slides.forEach((sl) => sl.classList.add("static"));
+  ready = true;
+  narrowDraw();
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => es.forEach((en) => en.isIntersecting ? onScreen.add(en.target) : onScreen.delete(en.target)));
+    slides.filter((sl) => sl.dataset.fig).forEach((sl) => io.observe(sl));
+  }
+  if (!REDUCED) requestAnimationFrame(narrowLoop);
+  if (hm) { const i = Math.min(Math.max(Number(hm[1]) - 1, 0), slides.length - 1); requestAnimationFrame(() => slides[i].scrollIntoView()); }
+  let t = 0; const redo = () => { clearTimeout(t); t = setTimeout(narrowDraw, 150); };
+  window.__mathReady = redo;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redo);
+  window.addEventListener("resize", redo);
+}
 // No PDF o reveal clona os slides: a matemática precisa estar pronta antes.
 let started = false;
 const startOnce = () => { if (!started) { started = true; start(); } };
-if (PRINT) {
+if (NARROW) {
+  startNarrow();
+} else if (PRINT) {
   const fontsOk = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
   window.__mathReady = () => fontsOk.then(startOnce);
   setTimeout(startOnce, 20000);   // sem internet, o MathJax não chega
