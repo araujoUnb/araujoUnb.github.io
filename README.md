@@ -27,3 +27,9 @@ Layout inspired by the [Academic Pages](https://academicpages.github.io/) templa
 python3 -m http.server 8000
 # open http://localhost:8000
 ```
+
+## PriCom lecture slides
+
+`pricom/` holds the FGA0092 HTML lecture decks (one per topic) and an index page,
+linked from Teaching. They are copied from `~/Documentos/UnB/Aulas/curso_pricom/Modulo*/html/`:
+edit the `TOPICS` list in `sync_pricom.py` if needed, run `python3 sync_pricom.py`, then commit.
