@@ -435,6 +435,11 @@ p.dmt { margin: 0; }
   .dmcap { font-size: 15px; }
 }
 
+
+/* ---- exemplos do banco de questões (code_e.js, prefixo fx) ---- */
+/* rótulos de texto com matemática no quadro: o SVG do MathJax volta ao fluxo normal (ver armadilhas no LEIAME) */
+.board .lb.fxm mjx-container svg { position: static; }
+
 </style>
 </head>
 <body>
@@ -480,12 +485,12 @@ p.dmt { margin: 0; }
   <div class="frametitle"><h2>Roteiro</h2><div class="bar"></div></div>
   <div class="body">
     <div class="toc">
-      <a href="forca-01-carga.html#s-fq"><b>1.</b>Força sobre uma partícula carregada<span class="d">força magnética medida na bancada, força de Lorentz, seletor de velocidades, equação do movimento, órbita circular e hélice, espectrômetro de massa</span></a>
-      <a href="forca-02-corrente.html#s-fi"><b>2.</b>Força sobre um elemento de corrente<span class="d">elemento de corrente, força sobre um circuito, distribuições superficial e volumétrica, exemplo do fio retilíneo</span></a>
-      <a href="forca-03-entre-correntes.html#s-fii"><b>3.</b>Força entre dois elementos de corrente<span class="d">interação pelo campo, fios paralelos, atração e repulsão, barramentos em curto-circuito</span></a>
-      <a href="forca-04-torque-momento.html#s-tq"><b>4.</b>Torque e momento magnético<span class="d">torque sobre uma espira, momento magnético, equilíbrio, exemplo da bobina, galvanômetro de bobina móvel</span></a>
-      <a data-go="s-dm"><b>5.</b>Dipolo magnético<span class="d">potencial vetor de uma espira pequena, campo do dipolo, linhas de campo, dipolo elétrico, torque entre dipolos, campo magnético da Terra</span></a>
-      <a href="forca-06-circuitos-magneticos.html#s-cmag"><b>6.</b>Circuitos magnéticos<span class="d">força magnetomotriz, relutância, analogia com circuitos elétricos, núcleos com entreferro, força de tração, eletroímã</span></a>
+      <a href="forca-01-carga.html#s-fq"><b>1.</b>Força sobre uma partícula carregada<span class="d">força magnética medida na bancada, força de Lorentz, seletor de velocidades, equação do movimento, órbita circular e hélice, espectrômetro de massa, campo elétrico compensador</span></a>
+      <a href="forca-02-corrente.html#s-fi"><b>2.</b>Força sobre um elemento de corrente<span class="d">elemento de corrente, força sobre um circuito, distribuições superficial e volumétrica, exemplo do fio retilíneo, condutor em campo radial</span></a>
+      <a href="forca-03-entre-correntes.html#s-fii"><b>3.</b>Força entre dois elementos de corrente<span class="d">interação pelo campo, fios paralelos, atração e repulsão, barramentos em curto-circuito, filamento diante de uma lâmina de corrente</span></a>
+      <a href="forca-04-torque-momento.html#s-tq"><b>4.</b>Torque e momento magnético<span class="d">torque sobre uma espira, momento magnético, equilíbrio, exemplo da bobina, galvanômetro de bobina móvel, bobina girante</span></a>
+      <a data-go="s-dm"><b>5.</b>Dipolo magnético<span class="d">potencial vetor de uma espira pequena, campo do dipolo, linhas de campo, dipolo elétrico, torque entre dipolos, campo magnético da Terra, oscilações de uma agulha imantada</span></a>
+      <a href="forca-06-circuitos-magneticos.html#s-cmag"><b>6.</b>Circuitos magnéticos<span class="d">força magnetomotriz, relutância, analogia com circuitos elétricos, núcleos com entreferro, força de tração, eletroímãs</span></a>
     </div>
   </div>
 </section>
@@ -1083,11 +1088,112 @@ p.dmt { margin: 0; }
   </div>
 </section>
 
+<!-- ============ exemplo do banco de questões: oscilações de uma agulha imantada (code_e.js, fx5) ============ -->
+<section class="slide" data-sec="Dipolo magnético · exemplo da agulha imantada">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: agulha imantada</h2><div class="sub">Oscilações de um dipolo magnético em campo uniforme</div><div class="bar"></div></div>
+  <div class="body" style="gap:10px">
+    <p class="enun">Uma bússola tende a oscilar antes de se alinhar com o campo magnético da Terra. Considere uma agulha imantada de momento de dipolo magnético \(\vm\) e momento de inércia \(J\), suspensa de forma a poder oscilar livremente em torno de um eixo vertical, num campo magnético horizontal uniforme \(\vB_0\). Inicialmente, as direções de \(\vm\) e de \(\vB_0\) formam um ângulo pequeno \(\theta_0\), e a agulha é solta do repouso. Despreze o amortecimento.</p>
+    <ol class="it">
+      <li>(a) Obtenha a frequência angular de oscilação da agulha.</li>
+      <li>(b) Mostre que a medida dessa frequência permite determinar o produto \(|\vm|\,|\vB_0|\).</li>
+      <li>(c) Uma agulha com \(J=10\times10^{-7}\ \mathrm{kg\cdot m^2}\), solta a \(4^\circ\) do campo, oscila com período de \(3{,}14\ \mathrm s\). Calcule \(|\vm|\,|\vB_0|\).</li>
+    </ol>
+    <div class="enfig"><div data-mount="fx5Enun"></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dipolo magnético · agulha imantada (a)">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Agulha imantada: dinâmica</h2><div class="sub">Item (a): vista de cima, eixo de rotação vertical</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="fx5Eq"></div>
+      <div class="dv" style="gap:8px">
+        <div class="ln"><div class="nt">Torque sobre o dipolo; a componente vertical tende a diminuir \(\theta\):</div>
+          <div class="m" id="fx5-eT">\[ \vT=\vm\times\vB_0,\qquad |\vT|=mB_0\sen\theta \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Rotação em torno do eixo vertical (o sinal indica torque restaurador):</div></div>
+        <div class="stack" data-s="3">
+          <div class="m" data-s="3-3">\[ J\,\frac{d^2\theta}{dt^2}=-mB_0\sen\theta \]</div>
+          <div class="m" data-s="4-4">\[ J\,\frac{d^2\theta}{dt^2}=-mB_0\underbrace{\sen\theta}_{\approx\,\theta\ (\theta\ \mathrm{pequeno})} \]</div>
+          <div class="m" data-s="5">\[ \frac{d^2\theta}{dt^2}+\frac{mB_0}{J}\,\theta=0 \]</div>
+        </div>
+        <div class="ln" data-s="6"><div class="nt">Oscilador harmônico, solto do repouso em \(\theta_0\):</div>
+          <div class="m">\[ \theta(t)=\theta_0\cos(\omega t),\qquad \boxed{\,\omega=\sqrt{\frac{mB_0}{J}}\,} \]</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#fx5-lT" data-b="#fx5-eT" data-s="2" data-pa="t" data-pb="l" data-bend="100"></span>
+</section>
+
+<section class="slide" data-sec="Dipolo magnético · agulha imantada (b)">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Agulha imantada: medindo \(mB_0\)</h2><div class="sub">Item (b): o período dá o produto, não cada fator</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="fx5Th"></div>
+      <div class="dv" style="gap:8px">
+        <div class="ln"><div class="nt">Invertendo \(\omega=\sqrt{mB_0/J}\), com \(\omega=2\pi/T\):</div>
+          <div class="m" id="fx5-emB">\[ mB_0=J\omega^2=\frac{4\pi^2J}{T^2} \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">\(J\) é calculado pela massa e pelas dimensões da agulha; \(T\) é medido com um cronômetro.</div></div>
+        <div class="ln" data-s="3"><div class="nt hl2">A experiência fornece o produto \(|\vm|\,|\vB_0|\), mas não cada fator separadamente.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#fx5-lPer" data-b="#fx5-emB" data-pa="r" data-pb="l" data-bend="120"></span>
+</section>
+
+<section class="slide" data-sec="Dipolo magnético · agulha imantada (c)">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Agulha imantada: valores numéricos</h2><div class="sub">Item (c): \(J=10\times10^{-7}\ \mathrm{kg\cdot m^2}\), \(T=3{,}14\ \mathrm s\), \(\theta_0=4^\circ\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="fx5Th"></div>
+      <div class="dv" style="gap:8px">
+        <div class="ln"><div class="m">\[ mB_0=\frac{4\pi^2\,(10\times10^{-7})}{(3{,}14)^2} \]</div></div>
+        <div class="ln eqbox" data-s="2"><div class="nt">Com \(\mathrm{A\cdot m^2\cdot T}=\mathrm{N\cdot m}\):</div><div class="m">\[ \boxed{\,mB_0\approx4\times10^{-6}\ \mathrm{N\cdot m}\,} \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Frequência angular \(\omega=2\pi/T\approx2\ \mathrm{rad/s}\); forma temporal:</div>
+          <div class="m">\[ \theta(t)=4^\circ\cos(2t)\qquad (t\ \mathrm{em\ s}) \]</div></div>
+        <div class="ln" data-s="4"><div class="nt cM">O ângulo inicial só fixa a amplitude: a correção ao período do pêndulo é da ordem de \(\theta_0^2/16\approx0{,}03\,\%\).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dipolo magnético · agulha imantada, a oscilação" data-fig="fx5Osc">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Agulha imantada: a oscilação</h2><div class="sub">\(\theta(t)=4^\circ\cos(2t)\) em tempo real, com período de \(3{,}14\ \mathrm s\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:880px minmax(0,1fr);gap:40px">
+      <div class="figcol"><div class="fig"><canvas data-figcanvas height="460" aria-label="Agulha imantada oscilando em torno da direção do campo"></canvas><div class="figcap"></div></div></div>
+      <div class="col">
+        <ul class="sq f21">
+          <li>A agulha está desenhada com o ângulo real de \(4^\circ\); a régua abaixo amplia o ângulo.</li>
+          <li>Violeta: torque restaurador \(mB_0\sen\theta\), maior nos extremos e nulo em \(\theta=0\).</li>
+          <li>Gráfico: \(\theta(t)\) ao longo de dois períodos.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Dipolo magnético · agulha imantada, interpretação">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Agulha imantada: interpretação</h2><div class="sub">O dipolo magnético como um pêndulo</div><div class="bar"></div></div>
+  <div class="body">
+    <ul class="sq f23">
+      <li data-s="1">O torque \(\vm\times\vB_0\) faz o papel da gravidade no pêndulo: é restaurador e proporcional a \(\sen\theta\).</li>
+      <li data-s="2">Para \(\theta\) pequeno o movimento é harmônico, com período \(T=2\pi\sqrt{J/(mB_0)}\), independente da amplitude.</li>
+      <li data-s="3">Agulha mais imantada ou campo mais intenso: oscilação mais rápida. Para separar \(m\) de \(B_0\) é preciso uma segunda medida (método de Gauss).</li>
+    </ul>
+  </div>
+</section>
+
 <!-- ============ próximo tópico (gerado por montar.py) ============ -->
 <section class="slide slide-proximo" data-sec="Próximo tópico" data-nonum>
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Próximo tópico</h2><div class="bar"></div></div>
-  <div class="body" style="justify-content:center"><div class="toc" style="grid-template-columns:minmax(0,1fr);max-width:1150px;gap:56px;font-size:36px"><a href="forca-06-circuitos-magneticos.html#s-cmag"><b>→</b>6. Circuitos magnéticos<span class="d" style="font-size:22px">força magnetomotriz, relutância, analogia com circuitos elétricos, núcleos com entreferro, força de tração, eletroímã</span></a><a data-go="s-roteiro"><b>↩</b>Roteiro<span class="d">todas as partes deste tópico</span></a></div></div>
+  <div class="body" style="justify-content:center"><div class="toc" style="grid-template-columns:minmax(0,1fr);max-width:1150px;gap:56px;font-size:36px"><a href="forca-06-circuitos-magneticos.html#s-cmag"><b>→</b>6. Circuitos magnéticos<span class="d" style="font-size:22px">força magnetomotriz, relutância, analogia com circuitos elétricos, núcleos com entreferro, força de tração, eletroímãs</span></a><a data-go="s-roteiro"><b>↩</b>Roteiro<span class="d">todas as partes deste tópico</span></a></div></div>
 </section>
 
 </div>
@@ -3288,6 +3394,611 @@ bindIf(["cmt-B", "cmt-la", "cmt-mu"], { "cmt-B": (v) => fmtc(v, 2) + " T", "cmt-
 $("cmt-ex")?.addEventListener("click", () => { $("cmt-B").value = 1.5; $("cmt-la").value = 10; $("cmt-mu").value = 50; ["cmt-B", "cmt-la", "cmt-mu"].forEach((id) => $(id).dispatchEvent(new Event("input"))); });
 
 Object.assign(DRAW, { cmgap: drawCmGap, cmtri: drawCmTri });
+
+
+// =====================================================================
+//  code_e.js — Forças Magnéticas: exemplos resolvidos tirados do banco de questões
+//  (valores de Slides/html_comum/exemplo_banco.py; prefixo fx). Um exemplo por parte:
+//    fx1 carga em B e campo E compensador (parte 1)    fx2 condutor girando em campo radial (parte 2)
+//    fx3 filamento diante de uma lâmina de corrente (3) fx4 bobina girante (parte 4)
+//    fx5 agulha imantada oscilando (parte 5)           fx6 eletroímã de três polos (parte 6)
+//  Reaproveita de code_a.js: fqT, fqA, fqL, fqLb, fqPath, fmCharge, fmChargeC; de code_d.js: CM_FE, cmE, cmW.
+//  Quadros (BOARDS) estáticos com overlays; animações em FIGS (data-fig), que leem os sliders do slide.
+// =====================================================================
+const fxG = (v, s) => v === undefined || v === null ? "" : v === "" ? s : G.g(S(v), s);       // grupo SVG com overlay opcional
+const fxD = (v, s) => v === undefined || v === null ? "" : v === "" ? s : `<div ${S(v)}>${s}</div>`; // rótulos com overlay opcional
+const fxAt = (p, dx = 0, dy = 0) => [p[0] + dx, p[1] + dy];
+function fxFit(ctx, w, h, W, H) { const k = Math.min(w / W, h / H); ctx.translate((w - W * k) / 2, (h - H * k) / 2); ctx.scale(k, k); return k; }
+const fxSmooth = (u) => { const v = Math.min(1, Math.max(0, u)); return 0.5 - 0.5 * Math.cos(Math.PI * v); };
+// eixos de gráfico em SVG: o = {x, y, w, h, xmin, xmax, ymin, ymax, xt: [[v, tex]], yt: [[v, tex]], xl, yl}
+function fxAx(o) {
+  const X = (v) => o.x + (v - o.xmin) / (o.xmax - o.xmin) * o.w, Y = (v) => o.y + o.h - (v - o.ymin) / (o.ymax - o.ymin) * o.h;
+  const y0 = o.ymin < 0 && o.ymax > 0 ? Y(0) : o.y + o.h;
+  let s = G.ar(o.x, y0, o.x + o.w + 24, y0, "K", 1.5) + G.ar(o.x, o.y + o.h, o.x, o.y - 22, "K", 1.5), l = "";
+  for (const [v, t] of o.xt || []) { s += G.ln(X(v), y0 - 5, X(v), y0 + 5, "K", 1.2); if (t) l += lb(X(v), y0 + (o.xtd || 24), t, "sm"); }
+  for (const [v, t] of o.yt || []) { s += G.ln(o.x - 5, Y(v), o.x + 5, Y(v), "K", 1.2) + G.ln(o.x, Y(v), o.x + o.w, Y(v), "M", 1, `opacity=".35"`, "4 5"); if (t) l += cmE(o.x - 10, Y(v), t, "sm"); }
+  if (o.xl) l += lb(o.x + o.w + 30, y0 + (o.xld ?? -20), o.xl, "sm");
+  if (o.yl) l += cmW(o.x + 12, o.y - 22, o.yl, "sm");
+  return { s, l, X, Y };
+}
+const fxCurve = (f, a, b, X, Y, n = 160) => fqPath(Array.from({ length: n + 1 }, (_, i) => { const x = a + (b - a) * i / n; return [X(x), Y(f(x))]; }));
+// eixos de gráfico em canvas (coordenadas lógicas): devolve {X, Y}
+function fxAxC(ctx, x0, y0, pw, ph, o) {
+  const c = C(), X = (x) => x0 + (x - o.xmin) / (o.xmax - o.xmin) * pw, Y = (y) => y0 + ph - (y - o.ymin) / (o.ymax - o.ymin) * ph;
+  ctx.save(); ctx.strokeStyle = c.GR; ctx.lineWidth = 1;
+  for (const [v] of o.yt || []) { ctx.beginPath(); ctx.moveTo(x0, Y(v)); ctx.lineTo(x0 + pw, Y(v)); ctx.stroke(); }
+  for (const [v] of o.xt || []) { ctx.beginPath(); ctx.moveTo(X(v), y0); ctx.lineTo(X(v), y0 + ph); ctx.stroke(); }
+  ctx.restore();
+  const ya = o.ymin < 0 && o.ymax > 0 ? Y(0) : y0 + ph;
+  line(ctx, x0, ya, x0 + pw, ya, c.K, 1.4); line(ctx, x0, y0, x0, y0 + ph, c.K, 1.4);
+  for (const [v, t] of o.xt || []) txt(ctx, t, X(v), y0 + ph + 18, { c: c.M, size: 15, align: "center" });
+  for (const [v, t] of o.yt || []) txt(ctx, t, x0 - 8, Y(v), { c: c.M, size: 15, align: "right" });
+  if (o.xl) txt(ctx, o.xl, x0 + pw, y0 + ph + 40, { c: c.K, size: 16, align: "right" });
+  if (o.yl) txt(ctx, o.yl, x0, y0 - 16, { c: c.K, size: 16 });
+  return { X, Y };
+}
+// curva em canvas
+function fxPathC(ctx, pts, col, lw = 2.4, alpha = 1, dash = null) {
+  if (pts.length < 2) return;
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.globalAlpha = alpha; ctx.setLineDash(dash || []); ctx.lineJoin = "round";
+  ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+}
+
+// =====================================================================
+//  EXEMPLO 1 — carga em B uniforme e campo elétrico compensador
+//  Q = 5 mC, u = −2ax − 6ay − 6az m/s, B = −2ay Wb/m²; u×B = −12ax + 4az; F = (−60ax + 20az) mN; E = 12ax − 4az V/m
+// =====================================================================
+// projeção oblíqua: x para a direita, y para dentro da tela (desenhado para cima e para a direita), z para cima
+const fx1P = (ox, oy, k) => (x, y, z) => [+(ox + k * (x + 0.5 * y)).toFixed(1), +(oy - k * (z + 0.4 * y)).toFixed(1)];
+function fx1Vet(o = {}) {
+  const W = o.W || 560, H = o.H || 460, k = o.k || 40, P = fx1P(o.ox || 300, o.oy || 230, k), O = P(0, 0, 0), sm = k < 32 ? "sm" : "";
+  const AX = [3.4, 4.4, 3.4], U = [-1, -3, -3], B = [0, -4, 0], F = [-3, 0, 1], E = [3, 0, -1];
+  let s = G.ar(...O, ...P(AX[0], 0, 0), "K", 1.6) + G.ar(...O, ...P(0, AX[1], 0), "K", 1.6) + G.ar(...O, ...P(0, 0, AX[2]), "K", 1.6);
+  let l = lb(...fxAt(P(AX[0], 0, 0), 14, 8), "x", "sm") + lb(...fxAt(P(0, AX[1], 0), 12, -8), "y", "sm") + lb(...fxAt(P(0, 0, AX[2]), -14, -4), "z", "sm");
+  // componentes de u (caixa tracejada até a ponta)
+  if (o.comp !== undefined) {
+    const a = P(-1, 0, 0), b = P(-1, -3, 0), d = P(...U);
+    s += fxG(o.comp, G.ln(...O, ...a, "O", 1.2, "", "4 4") + G.ln(...a, ...b, "O", 1.2, "", "4 4") + G.ln(...b, ...d, "O", 1.2, "", "4 4"));
+  }
+  s += fxG(o.uv ?? "", G.ar(...O, ...P(...U), "O", 3.2) + G.ar(...O, ...P(...B), "G", 3.2));
+  l += fxD(o.uv ?? "", lb(...fxAt(P(...U), -22, 14), Rw`\vu`, `O ${sm}`, `id="fx1-lu"`) + lb(...fxAt(P(...B), -24, -8), Rw`\vB`, `G ${sm}`, `id="fx1-lB"`));
+  s += fxG(o.ub, G.ar(...O, ...P(...F), "M", 2.6, "", "8 5"));
+  l += fxD(o.ub, lb(...fxAt(P(...F), -6, -28), Rw`\vu\times\vB`, "", `id="fx1-lub"`));
+  s += fxG(o.F, G.ar(...O, ...P(...F), "V", 3.6));
+  l += fxD(o.F, lb(...fxAt(P(...F), -20, -18), Rw`\vF`, "V", `id="fx1-lF"`));
+  s += fxG(o.Fe, G.ar(...O, ...P(...E), "R", 3.6));
+  l += fxD(o.Fe, lb(...fxAt(P(...E), 30, 14), Rw`Q\vE`, "R", `id="fx1-lFe"`) + lbt(O[0] + 60, O[1] + 112, "soma nula:&nbsp;\\(Q\\vE+Q\\vu\\times\\vB=\\mathbf 0\\)", "fxm"));
+  s += fmCharge(...O, 1, k < 32 ? 9 : 11);
+  if (!sm) l += lbt(110, H - 18, "vetores fora de escala");
+  return board(W, H, s, l);
+}
+// trajetórias pré-calculadas (q/m escolhido só para a figura: ω = |Q|B/m = π rad/s)
+const FX1 = (() => {
+  const u0 = [-2, -6, -6], B = [0, -2, 0], qm = Math.PI / 2, dt = 0.002, pts = [];
+  const cr = (v) => [v[1] * B[2] - v[2] * B[1], v[2] * B[0] - v[0] * B[2], v[0] * B[1] - v[1] * B[0]];
+  let r = [0, 0, 0], v = u0.slice();
+  for (let i = 0; i <= 1100; i++) {
+    if (i % 10 === 0) pts.push({ r: r.slice(), v: v.slice() });
+    const a1 = cr(v).map((x) => qm * x), vm = v.map((x, j) => x + a1[j] * dt / 2), a2 = cr(vm).map((x) => qm * x);
+    r = r.map((x, j) => x + vm[j] * dt); v = v.map((x, j) => x + a2[j] * dt);
+  }
+  return { pts, u0, cr };
+})();
+function figFx1(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 860, 480);
+  const k = 45, P = fx1P(640, 165, k), Dv = (d) => { const x = d[0] + 0.5 * d[1], y = -(d[2] + 0.4 * d[1]), n = Math.hypot(x, y) || 1; return [x / n, y / n]; };
+  const per = 13.5, tt = t % per, ph = tt < 7 ? 1 : 2;
+  const ts = ph === 1 ? Math.min(2.2, tt / 2.6) : Math.min(1.2, (tt - 7) / 2.6);
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, 860, 480); ctx.clip();
+  // campo B ao longo de −y (verde) e, na fase 2, campo E (azul)
+  const dB = Dv([0, -1, 0]), dE = Dv([3, 0, -1]);
+  ctx.save(); ctx.globalAlpha = 0.25;
+  for (let gx = 60; gx < 860; gx += 150) for (let gy = 40; gy < 480; gy += 115) arrowTo(ctx, gx, gy, gx + 64 * dB[0], gy + 64 * dB[1], c.G, 2, 10);
+  if (ph === 2) for (let gx = 130; gx < 860; gx += 150) for (let gy = 95; gy < 480; gy += 115) arrowTo(ctx, gx, gy, gx + 60 * dE[0], gy + 60 * dE[1], c.P, 2, 10);
+  ctx.restore();
+  // tríade de eixos
+  const tx = 70, ty = 420; [[[1, 0, 0], "x"], [[0, 1, 0], "y"], [[0, 0, 1], "z"]].forEach(([d, n]) => { const u = Dv(d); arrowTo(ctx, tx, ty, tx + 46 * u[0], ty + 46 * u[1], c.K, 1.6, 9); txt(ctx, n, tx + 58 * u[0], ty + 58 * u[1], { c: c.K, size: 16, align: "center", italic: true }); });
+  // hélice (só B) e reta (com E)
+  const H = FX1.pts.map((p) => P(...p.r)), i = Math.min(H.length - 1, Math.floor(ts / 0.02));
+  fxPathC(ctx, ph === 1 ? H.slice(0, i + 1) : H, c.R, 3, ph === 1 ? 1 : 0.22);
+  dot(ctx, ...P(0, 0, 0), 4, c.K); txt(ctx, "entrada", P(0, 0, 0)[0] + 12, P(0, 0, 0)[1] - 14, { c: c.M, size: 15 });
+  if (ph === 1) {
+    const p = FX1.pts[i], [x, y] = P(...p.r), dv = Dv(p.v), df = Dv(FX1.cr(p.v));
+    arrowTo(ctx, x, y, x + 58 * dv[0], y + 58 * dv[1], O, 3, 12); txt(ctx, "u", x + 70 * dv[0], y + 70 * dv[1], { c: O, size: 18, bold: true, align: "center" });
+    arrowTo(ctx, x, y, x + 64 * df[0], y + 64 * df[1], V, 3.4, 12); txt(ctx, "F", x + 78 * df[0], y + 78 * df[1], { c: V, size: 18, bold: true, align: "center" });
+    fmChargeC(ctx, x, y, 1, 10);
+    txt(ctx, "só campo magnético: hélice em torno da direção de B", 20, 24, { c: c.R, size: 17, bold: true });
+  } else {
+    const r = FX1.u0.map((u) => u * ts), [x, y] = P(...r), [x0, y0] = P(0, 0, 0), dv = Dv(FX1.u0), df = Dv(FX1.cr(FX1.u0));
+    line(ctx, x0, y0, x, y, c.P, 3);
+    arrowTo(ctx, x, y, x + 58 * dv[0], y + 58 * dv[1], O, 3, 12); txt(ctx, "u", x + 70 * dv[0] - 10, y + 70 * dv[1], { c: O, size: 18, bold: true, align: "center" });
+    arrowTo(ctx, x, y, x + 64 * df[0], y + 64 * df[1], V, 3.4, 12); txt(ctx, "Qu×B", x + 80 * df[0], y + 80 * df[1] - 8, { c: V, size: 17, bold: true, align: "center" });
+    arrowTo(ctx, x, y, x - 64 * df[0], y - 64 * df[1], c.R, 3.4, 12); txt(ctx, "QE", x - 80 * df[0], y - 80 * df[1] + 6, { c: c.R, size: 17, bold: true, align: "center" });
+    fmChargeC(ctx, x, y, 1, 10);
+    txt(ctx, "campo magnético + campo elétrico compensador: linha reta", 20, 24, { c: c.P, size: 17, bold: true });
+  }
+  ctx.restore();
+  return ph === 1 ? "Só B: |F| = 63,25 mN, sempre perpendicular a u; a componente −6a_y da velocidade não muda e a perpendicular gira (massa ilustrativa)."
+    : "Com E = 12a_x − 4a_z V/m: QE cancela Qu×B em todo instante e a carga atravessa a região com velocidade constante.";
+}
+
+// =====================================================================
+//  EXEMPLO 2 — condutor girando num campo radial
+//  L = 0,5 m, I = 5 A (+az), ρ0 = 0,25 m, B = cos φ aρ; F = (5/2) cos φ aφ N; W(0→7π/6) = 5/16 J; volta completa: 0
+// =====================================================================
+function fx2Enun() {
+  const k = 42, P = fqT(100, 232, k);   // coordenadas do TikZ do enunciado
+  let s = G.ell(...P(0, 0), 1.6 * k, 0.45 * k, "none", "M", 1.4, "", "6 5") + G.ell(...P(0, 3.2), 1.6 * k, 0.45 * k, "none", "M", 1.4, "", "6 5");
+  s += fqL(P, [-1.6, 0], [-1.6, 3.2], "M", 1.4, "", "6 5") + fqL(P, [1.6, 0], [1.6, 3.2], "M", 1.4, "", "6 5");
+  s += fqA(P, [0, 0], [0, 4.3], "K", 1.8) + fqA(P, [0, 0], [3.2, 0], "K", 1.8) + fqA(P, [0, 0], [-1.4, -1.3], "K", 1.8);
+  s += fqL(P, [0, 0], [-0.75, -0.4], "K", 1.6) + fqA(P, [-0.75, -0.4], [-0.75, 2.8], "R", 4);
+  const l = fqLb(P, 0, 4.3, "z", "sm", "", 0, -14) + fqLb(P, 3.2, 0, "y", "sm", "", 14, 0) + fqLb(P, -1.4, -1.3, "x", "sm", "", -12, 10) +
+    fqLb(P, -0.75, 1.8, "I", "R", "", -18, 0) + fqLb(P, -0.25, -0.25, Rw`\rho_0`, "sm", "", 2, 16);
+  return board(280, 300, s, l);
+}
+// vista de cima (z saindo da tela); o: phi (graus), campo, cond, rho, unit, B, F, arc, dl, forcas
+function fx2Topo(o = {}) {
+  const W = 540, H = 480, cx = 260, cy = 240, R = 150, ph = o.phi ?? 35;
+  const p = (r, a) => [+(cx + r * Math.cos(a * DEG)).toFixed(1), +(cy - r * Math.sin(a * DEG)).toFixed(1)];
+  const tg = (a, L) => [-Math.sin(a * DEG) * L, -Math.cos(a * DEG) * L];   // L·aφ (tela)
+  const rd = (a, L) => [Math.cos(a * DEG) * L, -Math.sin(a * DEG) * L];    // L·aρ (tela)
+  let s = G.ar(cx - R - 40, cy, cx + R + 60, cy, "K", 1.5) + G.ar(cx, cy + R + 40, cx, cy - R - 45, "K", 1.5);
+  s += `<circle cx="${cx}" cy="${cy}" r="${R}" style="fill:none;stroke:var(--cM);stroke-width:1.6;stroke-dasharray:7 6"/>` + G.sym(cx, cy, 8, false, "K");
+  let l = lb(cx + R + 72, cy, "x", "sm") + lb(cx + 14, cy - R - 52, "y", "sm") + lb(cx - 20, cy + 20, "z", "sm");
+  if (o.campo !== undefined) {
+    let g = "";
+    for (let a = 0; a < 360; a += 30) { const L = 48 * Math.cos(a * DEG); if (Math.abs(L) < 4) continue; const a1 = p(R, a), d = rd(a, L); g += G.ar(...a1, a1[0] + d[0], a1[1] + d[1], "G", 2.2, `opacity=".6"`); }
+    s += fxG(o.campo, g);
+    l += fxD(o.campo, lbt(W - 95, H - 16, "\\(\\vB=\\cos\\phi\\,\\arho\\) em \\(\\rho=\\rho_0\\)", "fxm"));
+  }
+  if (o.arc !== undefined) {   // caminho de 0 a 210°: verde onde F favorece o giro, vermelho onde se opõe
+    s += fxG(o.arc, `<path d="${arcD(cx, cy, R, 0, -90)}" ${sty("G", 5)} opacity=".75"/>` + `<path d="${arcD(cx, cy, R, -90, -210)}" ${sty("R", 5)} opacity=".75" marker-end="url(#mR)"/>` + G.dot(...p(R, 0), 6, "K"));
+    l += fxD(o.arc, lb(...fxAt(p(R, 0), 34, 16), Rw`\phi=0`, "sm") + lb(...p(R - 58, 222), Rw`\phi_1=\tfrac{7\pi}{6}`, "R sm") +
+      lbt(170, H - 16, "<span class='cG'>verde</span>: \\(\\vF\\) a favor do giro · <span class='cR'>vermelho</span>: contra", "fxm"));
+  }
+  const pc = p(R, ph);
+  if (o.rho !== undefined) {
+    s += fxG(o.rho, G.ln(cx, cy, ...pc, "M", 1.4, "", "5 4") + `<path d="${arcD(cx, cy, 46, 0, -ph)}" ${sty("O", 2)}/>`);
+    l += fxD(o.rho, lb(...p(64, ph / 2), Rw`\phi`, "O sm") + lb(...fxAt(p(R * 0.55, ph), -10, -16), Rw`\rho_0`, "sm"));
+  }
+  if (o.unit !== undefined) {
+    const a = rd(ph, 52), b = tg(ph, 52);
+    s += fxG(o.unit, G.ar(...pc, pc[0] + a[0], pc[1] + a[1], "M", 2.2) + G.ar(...pc, pc[0] + b[0], pc[1] + b[1], "M", 2.2));
+    l += fxD(o.unit, lb(pc[0] + a[0] * 1.45, pc[1] + a[1] * 1.45, Rw`\arho`, "sm") + lb(pc[0] + b[0] * 1.5, pc[1] + b[1] * 1.5, Rw`\aphi`, "sm"));
+  }
+  if (o.B !== undefined) {
+    const a = rd(ph, 80 * Math.cos(ph * DEG));
+    s += fxG(o.B, G.ar(...pc, pc[0] + a[0], pc[1] + a[1], "G", 3.6));
+    l += fxD(o.B, lb(pc[0] + a[0] * 1.32, pc[1] + a[1] * 1.32, Rw`\vB`, "G", `id="fx2-lB"`));
+  }
+  if (o.F !== undefined) {
+    const b = tg(ph, 90 * Math.cos(ph * DEG));
+    s += fxG(o.F, G.ar(...pc, pc[0] + b[0], pc[1] + b[1], "V", 3.8));
+    l += fxD(o.F, lb(pc[0] + b[0] * 1.25 - 8, pc[1] + b[1] * 1.25, Rw`\vF`, "V", `id="fx2-lF"`));
+  }
+  if (o.dl !== undefined) {
+    const a1 = p(R, 120), d = tg(120, 60);
+    s += fxG(o.dl, G.ar(...a1, a1[0] + d[0], a1[1] + d[1], "O", 3));
+    l += fxD(o.dl, lb(a1[0] + d[0] - 4, a1[1] + d[1] - 22, Rw`\dvl`, "O", `id="fx2-ldl"`));
+  }
+  if (o.forcas !== undefined) {   // no ponto final φ1 = 210°: F (violeta) contra o giro e −F do agente (vermelha)
+    const q = p(R, 210), f = tg(210, 75 * Math.cos(210 * DEG));
+    s += fxG(o.forcas, G.ar(...q, q[0] + f[0], q[1] + f[1], "V", 3.6) + G.ar(...q, q[0] - f[0], q[1] - f[1], "R", 3.6));
+    l += fxD(o.forcas, lb(q[0] + f[0] - 20, q[1] + f[1] - 4, Rw`\vF`, "V") + lb(q[0] - f[0] + 4, q[1] - f[1] + 22, Rw`-\vF`, "R", `id="fx2-lmF"`));
+  }
+  const at = o.arc !== undefined ? p(R, 210) : pc;
+  s += G.sym(...at, 13, false, "R");
+  l += lb(...fxAt(at, o.arc !== undefined ? 26 : 24, o.arc !== undefined ? -2 : -22), "I", "R");
+  return board(W, H, s, l);
+}
+// trabalho do agente W(φ) = −(5/8) sen φ
+function fx2W(o = {}) {
+  const A = fxAx({ x: 80, y: 60, w: 420, h: 300, xmin: 0, xmax: 360, ymin: -0.75, ymax: 0.75,
+    xt: [[90, Rw`90^\circ`], [180, ""], [270, Rw`270^\circ`], [360, Rw`360^\circ`]], xtd: 24,
+    yt: [[0.625, Rw`\tfrac58`], [0.3125, Rw`\tfrac5{16}`], [-0.625, Rw`-\tfrac58`]], xl: Rw`\phi`, yl: Rw`W\ (\mathrm J)` });
+  const { X, Y } = A;
+  let s = `<rect x="${X(90)}" y="${Y(0.75)}" width="${X(270) - X(90)}" height="${Y(-0.75) - Y(0.75)}" style="fill:var(--cR);opacity:.07"/>` + A.s;
+  s += G.pa(fxCurve((f) => -0.625 * Math.sin(f * DEG), 0, 360, X, Y), "P", 3.2);
+  let l = A.l + lb(X(180), Y(-0.62), Rw`\cos\phi<0`, "R sm") + lb(X(318), Y(-0.45), Rw`W=-\tfrac58\,\sen\phi`, "P", `id="fx2-lW"`);
+  s += fxG(o.p1 ?? "", G.ln(X(210), Y(0), X(210), Y(0.3125), "M", 1.4, "", "5 4") + G.ln(X(0), Y(0.3125), X(210), Y(0.3125), "M", 1.4, "", "5 4") + G.dot(X(210), Y(0.3125), 7, "R"));
+  l += fxD(o.p1 ?? "", lb(X(210), Y(0) + 24, Rw`210^\circ`, "sm") + lb(X(210) + 40, Y(0.3125) + 22, Rw`\tfrac5{16}\ \mathrm J`, "R sm"));
+  s += fxG(o.p2, G.dot(X(360), Y(0), 8, "V"));
+  l += fxD(o.p2, lb(X(335), Y(0) + 56, Rw`W=0`, "V", `id="fx2-l360"`));
+  return board(560, 420, s, l);
+}
+function figFx2(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 900, 470);
+  const tt = t % 16;
+  const ph = tt < 7 ? 210 * tt / 7 : tt < 9 ? 210 : tt < 13 ? 210 + 150 * (tt - 9) / 4 : 360;
+  const cx = 230, cy = 240, R = 150, P = (r, a) => [cx + r * Math.cos(a * DEG), cy - r * Math.sin(a * DEG)];
+  // eixos, trajetória e campo radial cos φ
+  line(ctx, cx - R - 40, cy, cx + R + 40, cy, c.M, 1); line(ctx, cx, cy - R - 40, cx, cy + R + 40, c.M, 1);
+  ctx.save(); ctx.strokeStyle = c.M; ctx.setLineDash([7, 6]); ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU); ctx.stroke(); ctx.restore();
+  for (let a = 0; a < 360; a += 20) { const L = 46 * Math.cos(a * DEG); if (Math.abs(L) < 4) continue; const [x, y] = P(R, a), [x2, y2] = P(R + L, a); ctx.save(); ctx.globalAlpha = 0.5; arrowTo(ctx, x, y, x2, y2, c.G, 2, 9); ctx.restore(); }
+  // arco já percorrido
+  ctx.save(); ctx.lineWidth = 4; ctx.globalAlpha = 0.7;
+  for (let a = 0; a < ph; a += 2) { const b = Math.min(ph, a + 2); ctx.strokeStyle = Math.cos((a + 1) * DEG) >= 0 ? c.G : c.R; ctx.beginPath(); ctx.arc(cx, cy, R, -a * DEG, -b * DEG, true); ctx.stroke(); }
+  ctx.restore();
+  // condutor, F e −F
+  const [x, y] = P(R, ph), F = 2.5 * Math.cos(ph * DEG), tdir = [-Math.sin(ph * DEG), -Math.cos(ph * DEG)], L = 34 * F;
+  if (Math.abs(L) > 3) {
+    arrowTo(ctx, x, y, x + tdir[0] * L, y + tdir[1] * L, V, 3.4, 12); txt(ctx, "F", x + tdir[0] * L * 1.25, y + tdir[1] * L * 1.25 - 6, { c: V, size: 18, bold: true, align: "center" });
+    arrowTo(ctx, x, y, x - tdir[0] * L, y - tdir[1] * L, c.R, 3.4, 12); txt(ctx, "−F", x - tdir[0] * L * 1.3, y - tdir[1] * L * 1.3 + 6, { c: c.R, size: 18, bold: true, align: "center" });
+  }
+  symC(ctx, x, y, 12, false, c.R, 2.2);
+  txt(ctx, "vista de cima: I saindo da tela", 16, 22, { c: c.M, size: 15 });
+  txt(ctx, "φ = " + fmtc(ph, 0) + "°", 16, 450, { c: O, size: 18, bold: true });
+  txt(ctx, "F = 2,5 cos φ = " + fmtc(F, 2) + " N", 150, 450, { c: V, size: 18 });
+  // gráfico do trabalho do agente
+  const { X, Y } = fxAxC(ctx, 520, 60, 340, 320, { xmin: 0, xmax: 360, ymin: -0.75, ymax: 0.75,
+    xt: [[0, "0"], [90, "90°"], [180, "180°"], [210, "210°"], [270, "270°"], [360, "360°"]], yt: [[-0.625, "−5/8"], [0, "0"], [0.3125, "5/16"], [0.625, "5/8"]], xl: "φ", yl: "trabalho do agente W (J)" });
+  const xs = range(0, 360, 181);
+  fxPathC(ctx, xs.map((f) => [X(f), Y(-0.625 * Math.sin(f * DEG))]), c.P, 2, 0.25);
+  const xd = range(0, ph, Math.max(2, Math.round(ph / 2)));
+  fxPathC(ctx, xd.map((f) => [X(f), Y(-0.625 * Math.sin(f * DEG))]), c.P, 3.2);
+  const Wv = -0.625 * Math.sin(ph * DEG); dot(ctx, X(ph), Y(Wv), 6, c.R);
+  txt(ctx, "W = " + fmtc(Wv, 3) + " J", X(ph) + (ph > 300 ? -12 : 12), Y(Wv) - 16, { c: c.R, size: 16, bold: true, align: ph > 300 ? "right" : "left" });
+  return `φ = ${fmtc(ph, 0)}°: F = ${fmtc(F, 2)} N, ${Math.abs(F) < 0.05 ? "praticamente nula" : F > 0 ? "a favor do giro (o campo realiza trabalho)" : "contra o giro (o agente realiza trabalho)"}; trabalho do agente desde φ = 0: W = ${fmtc(Wv, 3)} J.`;
+}
+
+// =====================================================================
+//  EXEMPLO 3 — filamento diante de uma lâmina de corrente
+//  K = 5ax A/m em z = 2 m; I = 2 A (+ax) no eixo x; B = (5μ0/2) ay; F/L = 2π az μN/m (atração)
+// =====================================================================
+// vista lateral: y para a direita, z para cima, x saindo da tela; kk em px/m
+function fx3Lado(o = {}) {
+  const kk = o.k || 105, W = o.W || 600, H = o.H || 420, P = fqT(o.ox || 300, o.oy || 350, kk), sm = kk < 80 ? "sm" : "", dy = o.dimY ?? -1.25;
+  const [sx1, sy] = P(-2.5, 2), [sx2] = P(2.5, 2);
+  let s = `<rect x="${sx1}" y="${sy - 6}" width="${sx2 - sx1}" height="12" style="fill:rgba(0,59,92,.13);stroke:var(--cP);stroke-width:1.4"/>`;
+  for (let y = -2.25; y <= 2.26; y += 0.5) s += G.sym(...P(y, 2), kk < 80 ? 6 : 7, false, "P");
+  let l = lb(...P(-1.3, 1.62), Rw`\vK=5\,\ax\ \mathrm{A/m}`, `P ${sm}`) + lb(...fxAt(P(-2.05, 2), 0, -24), Rw`z=2\ \mathrm m`, "sm");
+  // tríade
+  const T0 = P(-2.2, 0.05);
+  s += G.ar(...T0, T0[0] + 0.6 * kk, T0[1], "K", 1.6) + G.ar(...T0, T0[0], T0[1] - 0.6 * kk, "K", 1.6) + G.sym(...T0, 7, false, "K");
+  l += lb(T0[0] + 0.6 * kk + 12, T0[1], "y", "sm") + lb(T0[0], T0[1] - 0.6 * kk - 12, "z", "sm") + lb(T0[0] - 14, T0[1] + 14, "x", "sm");
+  // dimensão z0
+  s += G.ln(...P(dy, 0.06), ...P(dy, 1.92), "M", 1.4, `marker-start="url(#mM)" marker-end="url(#mM)"`) + G.ln(...P(dy - 0.1, 0), ...P(dy < 0 ? -0.2 : 0.2, 0), "M", 1, "", "4 4");
+  l += lb(...fxAt(P(dy, 0.5), dy < 0 ? 28 : -28, 0), Rw`2\ \mathrm m`, "sm");
+  if (o.an !== undefined) {
+    s += fxG(o.an, fqA(P, [1.2, 1.93], [1.2, 1.35], "M", 2.6));
+    l += fxD(o.an, lb(...fxAt(P(1.2, 1.62), 56, 0), Rw`\an=-\az`, "", `id="fx3-lan"`));
+  }
+  if (o.B !== undefined) {
+    let g = "";
+    for (const y of [-2.45, -0.95, 0.35, 1.5]) g += fqA(P, [y, 1.0], [y + 0.7, 1.0], "G", 3);
+    for (const y of [-0.6, 0.9]) g += fqA(P, [y + 0.7, 2.5], [y, 2.5], "G", 2.6, `opacity=".6"`);
+    s += fxG(o.B, g);
+    l += fxD(o.B, lb(...fxAt(P(2.2, 1.0), 22, 0), Rw`\vB`, "G", `id="fx3-lB"`) + lb(...fxAt(P(-1.4, 2.5), 0, 0), Rw`\vB\ \mathrm{(acima)}`, "G sm"));
+  }
+  if (o.F !== undefined) {
+    s += fxG(o.F, fqA(P, [0, 0.14], [0, 0.82], "V", 4));
+    l += fxD(o.F, lb(...fxAt(P(0, 0.5), 40, 0), Rw`\vF/L`, "V", `id="fx3-lF"`));
+  }
+  s += G.sym(...P(0, 0), kk < 80 ? 10 : 13, false, "R");
+  l += lb(...fxAt(P(0, 0), 52, 18), Rw`I=2\ \mathrm A`, `R ${sm}`);
+  return board(W, H, s, l);
+}
+function figFx3(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 900, 470);
+  const d = 1.25 + 0.85 * Math.sin(0.55 * t), ys = 90, kk = 160, yw = ys + kk * d, cx = 235;
+  // campo uniforme, fluindo para +y abaixo da lâmina e para −y acima
+  const flow = (y, dir, a) => {
+    ctx.save(); ctx.globalAlpha = a; line(ctx, 15, y, 455, y, c.G, 1.4);
+    for (let j = 0; j < 6; j++) { const x = 15 + frac(j / 6 + dir * t * 0.09) * 440; head(ctx, x, y, dir, 0, c.G, 12); }
+    ctx.restore();
+  };
+  flow(40, -1, 0.45); for (const y of [150, 230, 310, 390]) flow(y, 1, 0.55);
+  ctx.save(); ctx.fillStyle = "rgba(0,59,92,.13)"; ctx.strokeStyle = c.P; ctx.fillRect(15, ys - 6, 440, 12); ctx.strokeRect(15, ys - 6, 440, 12); ctx.restore();
+  for (let x = 37; x < 455; x += 44) symC(ctx, x, ys, 7, false, c.P, 1.6);
+  txt(ctx, "K = 5 aₓ A/m (lâmina em z = 2 m)", 20, 66, { c: c.P, size: 15 });
+  txt(ctx, "B uniforme (+a_y)", 300, 196, { c: c.G, size: 15 });
+  // distância e fio
+  line(ctx, cx + 70, ys + 6, cx + 70, yw, c.M, 1.2, [5, 4]); txt(ctx, "d = " + fmtc(d, 2) + " m", cx + 80, (ys + yw) / 2, { c: c.M, size: 16 });
+  arrowTo(ctx, cx, yw - 14, cx, yw - 84, V, 3.6, 13); txt(ctx, "F/L", cx - 14, yw - 60, { c: V, size: 17, bold: true, align: "right" });
+  symC(ctx, cx, yw, 12, false, c.R, 2.2); txt(ctx, "I = 2 A", cx + 18, yw + 20, { c: c.R, size: 15 });
+  // gráfico F/L × d
+  const { X, Y } = fxAxC(ctx, 540, 60, 320, 320, { xmin: 0, xmax: 2.4, ymin: 0, ymax: 12, xt: [[0, "0"], [0.5, "0,5"], [1, "1"], [1.5, "1,5"], [2, "2"]], yt: [[0, "0"], [2 * Math.PI, "2π"], [12, "12"]], xl: "d (m)", yl: "força por metro (μN/m)" });
+  const xs = range(0.17, 2.4, 120);
+  fxPathC(ctx, xs.map((x) => [X(x), Y(2 / x)]), c.M, 2, 0.8, [6, 5]);
+  txt(ctx, "fio com 5 A no lugar da lâmina", X(0.6), Y(2 / 0.6) - 18, { c: c.M, size: 14 });
+  fxPathC(ctx, [[X(0), Y(2 * Math.PI)], [X(2.4), Y(2 * Math.PI)]], V, 3);
+  txt(ctx, "lâmina: μ₀IK/2", X(1.5), Y(2 * Math.PI) - 16, { c: V, size: 15, bold: true });
+  dot(ctx, X(d), Y(2 * Math.PI), 7, c.R);
+  return `d = ${fmtc(d, 2)} m: F/L = 2π μN/m ≈ 6,283 μN/m, de atração, qualquer que seja a distância. Tracejado: um fio com 5 A daria μ₀(2)(5)/(2πd), que cai com d.`;
+}
+
+// =====================================================================
+//  EXEMPLO 4 — torque sobre uma bobina girante
+//  N = 100, S = 8 cm², I = 3 A, B = 20 mWb/m²: m = 0,24 A·m², Tmax = 0,0048 N·m, T(60°) ≈ 0,004157 N·m, W = 0,0048 J
+// =====================================================================
+function fx4Enun() {
+  const cx = 220, cy = 150, a = 110, be = 40 * DEG, ca = a * Math.cos(be), dz = a * Math.sin(be) * 0.2;
+  let s = "";
+  for (const y of [45, 100, 155, 210, 265]) s += G.ar(20, y, 420, y, "G", 2, `opacity=".45"`);
+  const A = [cx - ca, 80 + dz], B = [cx + ca, 80 - dz], Cc = [cx + ca, 220 - dz], D = [cx - ca, 220 + dz];
+  s += G.poly([A, B, Cc, D], "rgba(196,106,0,.10)", "R", 3.2);
+  s += G.ar(D[0], D[1] - 20, A[0], A[1] + 30, "R", 3);
+  s += G.ln(cx, 18, cx, 290, "K", 1.6, "", "8 5") + ellArc(cx, 34, 44, 11, 200, 340, "O", 2.4);
+  const l = lb(404, 30, Rw`\vB`, "G") + lb(A[0] - 18, 150, "I", "R") + lbt(cx + 80, 22, "giro", "O") + lbt(cx + 52, 284, "eixo de rotação") +
+    lb(cx + 12, 150, Rw`N,\ S`, "sm");
+  return board(440, 300, s, l);
+}
+// vista de cima (eixo de rotação saindo da tela); al = ângulo entre o plano da bobina e B (graus)
+function fx4Topo(o = {}) {
+  const W = 560, H = 460, cx = 270, cy = 230, h = 120, al = o.al ?? 0, th = 90 - al;
+  const ua = (180 - al) * DEG, u = [Math.cos(ua), -Math.sin(ua)], n = [Math.sin(al * DEG), -Math.cos(al * DEG)];
+  const Pp = [cx + h * u[0], cy + h * u[1]], Pm = [cx - h * u[0], cy - h * u[1]];
+  let s = "";
+  for (let k = -3; k <= 3; k++) s += G.ar(24, cy + 62 * k, 536, cy + 62 * k, "G", 1.8, `opacity=".32"`);
+  s += G.ln(cx, cy, cx + 200, cy, "G", 1.6, "", "6 5");
+  s += G.ln(...Pp, ...Pm, "M", 9, `opacity=".5" stroke-linecap="round"`) + G.dot(cx, cy, 5, "K");
+  let l = lb(530, cy + 3 * 62 + 22, Rw`\vB`, "G");
+  s += fxG(o.m ?? "", G.ar(cx, cy, cx + 140 * n[0], cy + 140 * n[1], "O", 3.4) + `<path d="${arcD(cx, cy, 56, 0, -th)}" ${sty("O", 2)}/>`);
+  l += fxD(o.m ?? "", lb(cx + 160 * n[0] + 4, cy + 160 * n[1], Rw`\vm`, "O", `id="fx4-lm"`) + lb(cx + 78 * Math.cos(th / 2 * DEG), cy - 78 * Math.sin(th / 2 * DEG), Rw`\theta`, "O sm"));
+  if (al > 0) {
+    s += fxG(o.ang ?? "", `<path d="${arcD(cx, cy, 100, al, 0)}" ${sty("K", 1.8)}/>`);
+    l += fxD(o.ang ?? "", lb(cx + 122 * Math.cos(al / 2 * DEG), cy + 122 * Math.sin(al / 2 * DEG), Rw`${al}^\circ`, "sm", `id="fx4-lal"`) + lbt(cx + 160, cy + 112, "plano da bobina"));
+  }
+  if (o.F !== undefined) {
+    s += fxG(o.F, G.ar(Pp[0], Pp[1] - 16, Pp[0], Pp[1] - 92, "V", 3.4) + G.ar(Pm[0], Pm[1] + 16, Pm[0], Pm[1] + 92, "V", 3.4) +
+      G.ln(Pp[0], Pp[1], Pp[0], cy, "M", 1.2, "", "4 4") + G.ln(Pm[0], Pm[1], Pm[0], cy, "M", 1.2, "", "4 4"));
+    l += fxD(o.F, lb(Pp[0] - 24, Pp[1] - 76, Rw`\vF`, "V") + lb(Pm[0] + 24, Pm[1] + 76, Rw`\vF`, "V"));
+  }
+  if (o.T !== undefined) {
+    s += fxG(o.T, ellArc(cx, cy, 34, 34, -160, -20, "V", 2.8));
+    l += fxD(o.T, lb(cx - 52, cy - 46, Rw`\vT`, "V", `id="fx4-lT"`) + lbt(170, H - 14, "\\(\\vT=\\vm\\times\\vB\\) entra na tela: giro horário", "fxm"));
+  }
+  s += G.sym(...Pp, 12, false, "R") + G.sym(...Pm, 12, true, "R");
+  if (al === 0) l += lbt(cx + 10, cy + 34, "plano da bobina ∥ \\(\\vB\\)", "fxm");
+  return board(W, H, s, l);
+}
+// torque em função do ângulo e trabalho como área
+function fx4TW(o = {}) {
+  const A = fxAx({ x: 80, y: 60, w: 420, h: 280, xmin: 0, xmax: 180, ymin: 0, ymax: 5.6,
+    xt: [[60, Rw`60^\circ`], [90, Rw`90^\circ`], [180, Rw`180^\circ`]], yt: [[4.8, Rw`4{,}8`], [4.157, ""]], xl: Rw`\theta`, yl: Rw`|\vT|\ (\mathrm{mN\cdot m})` });
+  const { X, Y } = A;
+  const area = fqPath([[X(0), Y(0)], ...Array.from({ length: 61 }, (_, i) => { const t = 90 * i / 60; return [X(t), Y(4.8 * Math.sin(t * DEG))]; }), [X(90), Y(0)]]) + " Z";
+  let s = fxG(o.area ?? "", `<path d="${area}" style="fill:var(--cV);opacity:.16;stroke:none"/>`) + A.s;
+  s += G.pa(fxCurve((t) => 4.8 * Math.sin(t * DEG), 0, 180, X, Y), "P", 3.2);
+  s += G.dot(X(90), Y(4.8), 7, "R") + G.ln(X(60), Y(0), X(60), Y(4.157), "M", 1.3, "", "4 4") + G.dot(X(60), Y(4.157), 6, "O");
+  s += fxG(o.area ?? "", G.ar(X(84), Y(0.5), X(12), Y(0.5), "O", 2.4));
+  let l = A.l + lb(X(90) + 52, Y(4.8) - 6, Rw`T_{\max}`, "R sm") + cmW(X(60) + 10, Y(4.157) + 24, Rw`\mathrm{item\ (b)}`, "O sm") + lb(X(150), Y(1.7), Rw`mB\sen\theta`, "P sm");
+  l += fxD(o.area ?? "", lb(X(55), Y(1.6), Rw`W=mB`, "V", `id="fx4-lW"`) + lbt(X(48), Y(0.5) - 18, "giro de 90° até 0"));
+  return board(560, 400, s, l);
+}
+function figFx4(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 900, 470);
+  const tt = t % 10, th = tt < 1.2 ? 90 : tt < 6.2 ? 90 * (1 - fxSmooth((tt - 1.2) / 5)) : 0, al = 90 - th;
+  const cx = 230, cy = 235, hh = 120, ua = (180 - al) * DEG, u = [Math.cos(ua), -Math.sin(ua)], n = [Math.sin(al * DEG), -Math.cos(al * DEG)];
+  for (let k = -3; k <= 3; k++) { ctx.save(); ctx.globalAlpha = 0.3; arrowTo(ctx, 20, cy + 60 * k, 440, cy + 60 * k, c.G, 1.8, 10); ctx.restore(); }
+  txt(ctx, "B = 20 mWb/m²", 440, cy - 3 * 60 - 20, { c: c.G, size: 16, bold: true, align: "right" });
+  const Pp = [cx + hh * u[0], cy + hh * u[1]], Pm = [cx - hh * u[0], cy - hh * u[1]];
+  ctx.save(); ctx.strokeStyle = "#9aa5ad"; ctx.lineWidth = 10; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(...Pp); ctx.lineTo(...Pm); ctx.stroke(); ctx.restore();
+  dot(ctx, cx, cy, 5, c.K);
+  arrowTo(ctx, cx, cy, cx + 130 * n[0], cy + 130 * n[1], O, 3.2, 13); txt(ctx, "m", cx + 148 * n[0], cy + 148 * n[1], { c: O, size: 19, bold: true, align: "center" });
+  const Tn = Math.sin(th * DEG);
+  if (Tn > 0.02) {
+    const L = 90 * Tn;
+    arrowTo(ctx, Pp[0], Pp[1] - 15, Pp[0], Pp[1] - 15 - L, V, 3.2, 12); arrowTo(ctx, Pm[0], Pm[1] + 15, Pm[0], Pm[1] + 15 + L, V, 3.2, 12);
+    ctx.save(); ctx.strokeStyle = V; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.arc(cx, cy, 34, -160 * DEG, -20 * DEG); ctx.stroke(); ctx.restore();
+    head(ctx, cx + 34 * Math.cos(-20 * DEG), cy + 34 * Math.sin(-20 * DEG), Math.sin(20 * DEG), Math.cos(20 * DEG), V, 12);
+  }
+  symC(ctx, ...Pp, 11, false, c.R, 2.2); symC(ctx, ...Pm, 11, true, c.R, 2.2);
+  txt(ctx, "vista de cima; eixo de rotação perpendicular à tela", 16, 455, { c: c.M, size: 15 });
+  txt(ctx, "θ = " + fmtc(th, 0) + "°", 16, 24, { c: O, size: 18, bold: true });
+  // gráfico T(θ) e área = trabalho do campo
+  const { X, Y } = fxAxC(ctx, 520, 60, 340, 320, { xmin: 0, xmax: 180, ymin: 0, ymax: 5.6, xt: [[0, "0"], [60, "60°"], [90, "90°"], [180, "180°"]], yt: [[0, "0"], [4.157, "4,16"], [4.8, "4,8"]], xl: "θ", yl: "torque |T| (mN·m)" });
+  ctx.save(); ctx.fillStyle = V; ctx.globalAlpha = 0.18; ctx.beginPath(); ctx.moveTo(X(th), Y(0));
+  for (let k = 0; k <= 40; k++) { const a = th + (90 - th) * k / 40; ctx.lineTo(X(a), Y(4.8 * Math.sin(a * DEG))); }
+  ctx.lineTo(X(90), Y(0)); ctx.closePath(); ctx.fill(); ctx.restore();
+  const xs = range(0, 180, 121); fxPathC(ctx, xs.map((a) => [X(a), Y(4.8 * Math.sin(a * DEG))]), c.P, 3);
+  dot(ctx, X(th), Y(4.8 * Tn), 7, c.R);
+  const Wm = 4.8 * Math.cos(th * DEG);
+  txt(ctx, "W = mB cos θ = " + fmtc(Wm, 2) + " mJ", X(100), Y(1.2), { c: V, size: 16, bold: true });
+  return `θ = ${fmtc(th, 0)}°: |T| = mB sen θ = ${fmtc(4.8 * Tn, 2)} mN·m; trabalho do campo desde 90°: ${fmtc(Wm, 2)} mJ (área sombreada). No equilíbrio, W = mB = 4,8 mJ.`;
+}
+
+// =====================================================================
+//  EXEMPLO 5 — oscilações de uma agulha imantada
+//  J = 10×10⁻⁷ kg·m², θ0 = 4°, T = 3,14 s: ω ≈ 2 rad/s, mB0 ≈ 4×10⁻⁶ N·m, θ(t) = 4° cos(2t)
+// =====================================================================
+function fx5Needle(cx, cy, Lh, th) {   // agulha (vista de cima): metade norte vermelha no sentido de θ
+  const u = [Math.cos(th * DEG), -Math.sin(th * DEG)], pe = [-u[1], u[0]], w = Lh * 0.09;
+  const N = [cx + Lh * u[0], cy + Lh * u[1]], Sx = [cx - Lh * u[0], cy - Lh * u[1]], a = [cx + w * pe[0], cy + w * pe[1]], b = [cx - w * pe[0], cy - w * pe[1]];
+  return `<polygon points="${[N, a, b].map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ")}" style="fill:var(--cR)"/>` +
+    `<polygon points="${[Sx, a, b].map((p) => p.map((v) => v.toFixed(1)).join(",")).join(" ")}" style="fill:#9aa5ad"/>`;
+}
+function fx5Ag(o = {}) {
+  const W = o.W || 520, H = o.H || 400, cx = o.cx || 210, cy = H / 2, Lh = o.Lh || 150, th = o.th ?? 25, sm = Lh < 120 ? "sm" : "";
+  let s = "";
+  for (let k = -3; k <= 3; k++) { const y = cy + k * (H / 7.4); s += G.ar(18, y, W - 18, y, "G", 1.8, `opacity=".32"`); }
+  s += G.ln(cx, cy, cx + Lh * 1.45, cy, "G", 1.6, "", "6 5");
+  s += fx5Needle(cx, cy, Lh, th) + `<circle cx="${cx}" cy="${cy}" r="6" style="fill:#fff;stroke:var(--cK);stroke-width:2"/>`;
+  let l = lb(W - 30, cy - 3 * (H / 7.4) - 18, Rw`\vB_0`, `G ${sm}`);
+  const r1 = Lh * 0.5;
+  s += `<path d="${arcD(cx, cy, r1, 0, -th)}" ${sty("O", 2.2)}/>`;
+  l += lb(cx + (r1 + 22) * Math.cos(th / 2 * DEG), cy - (r1 + 22) * Math.sin(th / 2 * DEG), o.enun ? Rw`\theta_0` : Rw`\theta`, `O ${sm}`);
+  if (o.m !== undefined) {
+    const e = [cx + Lh * 1.32 * Math.cos(th * DEG), cy - Lh * 1.32 * Math.sin(th * DEG)];
+    s += fxG(o.m, G.ar(cx, cy, ...e, "O", 2.8));
+    l += fxD(o.m, lb(e[0] + 10, e[1] - 18, Rw`\vm`, `O ${sm}`, `id="fx5-lm"`));
+  }
+  if (o.T !== undefined) {
+    const R2 = Lh * 1.12;
+    s += fxG(o.T, `<path d="${arcD(cx, cy, R2, -th + 3, -4)}" ${sty("V", 3)} marker-end="url(#mV)"/>`);
+    l += fxD(o.T, lb(cx + (R2 + 28) * Math.cos(th * 0.45 * DEG), cy - (R2 + 28) * Math.sin(th * 0.45 * DEG), Rw`\vT`, "V", `id="fx5-lT"`) +
+      lbt(cx + 40, H - 16, "\\(|\\vT|=mB_0\\sen\\theta\\), de volta para \\(\\vB_0\\)", "fxm"));
+  }
+  if (o.enun) l += lbt(cx, cy + 34, "eixo vertical");
+  return board(W, H, s, l);
+}
+function fx5Th() {
+  const A = fxAx({ x: 80, y: 70, w: 420, h: 260, xmin: 0, xmax: 7, ymin: -5.2, ymax: 5.2,
+    xt: [[Math.PI / 2, Rw`\tfrac{T}{2}`], [Math.PI, "T"], [3 * Math.PI / 2, Rw`\tfrac{3T}{2}`], [2 * Math.PI, "2T"]], xtd: 26,
+    yt: [[4, Rw`4^\circ`], [-4, Rw`-4^\circ`]], xl: Rw`t`, yl: Rw`\theta(t)` });
+  const { X, Y } = A;
+  let s = A.s + G.pa(fxCurve((t) => 4 * Math.cos(2 * t), 0, 7, X, Y), "P", 3.2);
+  s += G.brace(X(0), Y(4) - 12, X(Math.PI), Y(4) - 12, -9, "M");
+  const l = A.l + lb(X(Math.PI / 2), Y(4) - 48, Rw`T=3{,}14\ \mathrm s`, "sm", `id="fx5-lPer"`) + lb(X(5.4), Y(-4.6), Rw`\theta=4^\circ\cos(2t)`, "P sm");
+  return board(560, 390, s, l);
+}
+function figFx5(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 900, 470);
+  const th = 4 * Math.cos(2 * t), cx = 210, cy = 210, Lh = 160, u = [Math.cos(th * DEG), -Math.sin(th * DEG)], pe = [-u[1], u[0]], wd = 14;
+  for (let k = -3; k <= 3; k++) { ctx.save(); ctx.globalAlpha = 0.3; arrowTo(ctx, 20, cy + 55 * k, 440, cy + 55 * k, c.G, 1.8, 10); ctx.restore(); }
+  txt(ctx, "B₀", 440, cy - 3 * 55 - 18, { c: c.G, size: 18, bold: true, align: "right" });
+  ctx.save(); ctx.fillStyle = c.R; ctx.beginPath(); ctx.moveTo(cx + Lh * u[0], cy + Lh * u[1]); ctx.lineTo(cx + wd * pe[0], cy + wd * pe[1]); ctx.lineTo(cx - wd * pe[0], cy - wd * pe[1]); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = "#9aa5ad"; ctx.beginPath(); ctx.moveTo(cx - Lh * u[0], cy - Lh * u[1]); ctx.lineTo(cx + wd * pe[0], cy + wd * pe[1]); ctx.lineTo(cx - wd * pe[0], cy - wd * pe[1]); ctx.closePath(); ctx.fill(); ctx.restore();
+  ctx.save(); ctx.fillStyle = "#fff"; ctx.strokeStyle = c.K; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, 6, 0, TAU); ctx.fill(); ctx.stroke(); ctx.restore();
+  // torque restaurador: arco proporcional a |θ|
+  if (Math.abs(th) > 0.25) {
+    const R2 = Lh + 22, a0 = -th * DEG, a1 = a0 + Math.sign(th) * (0.08 + 0.32 * Math.abs(th) / 4);
+    ctx.save(); ctx.strokeStyle = V; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, R2, a0, a1, th < 0); ctx.stroke(); ctx.restore();
+    head(ctx, cx + R2 * Math.cos(a1), cy + R2 * Math.sin(a1), -Math.sin(a1) * Math.sign(th), Math.cos(a1) * Math.sign(th), V, 13);
+    txt(ctx, "T", cx + (R2 + 22) * Math.cos(a1), cy + (R2 + 22) * Math.sin(a1), { c: V, size: 18, bold: true, align: "center" });
+  }
+  // escala ampliada do ângulo
+  const gx0 = 60, gx1 = 380, gy = 420, G2 = (a) => gx0 + (a + 5) / 10 * (gx1 - gx0);
+  line(ctx, gx0, gy, gx1, gy, c.K, 1.6);
+  for (let a = -5; a <= 5; a++) { line(ctx, G2(a), gy - (a % 5 ? 5 : 9), G2(a), gy + (a % 5 ? 5 : 9), c.K, 1.2); if (a % 2 === 0) txt(ctx, (a < 0 ? "−" : "") + Math.abs(a) + "°", G2(a), gy + 22, { c: c.M, size: 14, align: "center" }); }
+  ctx.save(); ctx.fillStyle = O; ctx.beginPath(); ctx.moveTo(G2(th), gy - 4); ctx.lineTo(G2(th) - 8, gy - 20); ctx.lineTo(G2(th) + 8, gy - 20); ctx.closePath(); ctx.fill(); ctx.restore();
+  txt(ctx, "θ (escala ampliada)", gx1 + 14, gy, { c: O, size: 15 });
+  // θ(t) num intervalo de dois períodos
+  const per = 2 * Math.PI, tt = t % per;
+  const { X, Y } = fxAxC(ctx, 520, 70, 340, 300, { xmin: 0, xmax: per, ymin: -5, ymax: 5, xt: [[0, "0"], [Math.PI / 2, "T/2"], [Math.PI, "T = 3,14 s"], [3 * Math.PI / 2, "3T/2"], [per, "2T"]], yt: [[-4, "−4°"], [0, "0"], [4, "4°"]], xl: "t", yl: "θ(t) = 4° cos(2t)" });
+  const xs = range(0, per, 161); fxPathC(ctx, xs.map((x) => [X(x), Y(4 * Math.cos(2 * x))]), c.P, 2, 0.25);
+  const xd = range(0, tt, Math.max(2, Math.round(tt * 25))); fxPathC(ctx, xd.map((x) => [X(x), Y(4 * Math.cos(2 * x))]), c.P, 3.2);
+  dot(ctx, X(tt), Y(th), 6, c.R);
+  return `θ(t) = 4° cos(2t): a agulha passa por θ = 0 com velocidade máxima e para nos extremos ±4°, onde o torque restaurador mB₀ sen θ é máximo. Período T = 2π/ω ≈ 3,14 s.`;
+}
+
+// =====================================================================
+//  EXEMPLO 6 — eletroímã de três polos
+//  S = 150 cm², N = 400, I = 1,5 A, ℓa = 0,5 mm: Ra ≈ 26 526, RT ≈ 39 789 A·e/Wb, Ψ ≈ 0,01508 Wb,
+//  Bc ≈ 1,005 T, Bℓ ≈ 0,5027 T, Fc ≈ 6032 N, Fℓ ≈ 1508 N, F ≈ 9048 N, m ≈ 923,2 kg
+// =====================================================================
+const FX6_CORE = [[0, 1], [0, 4.2], [6, 4.2], [6, 1], [5.2, 1], [5.2, 3.6], [3.4, 3.6], [3.4, 1], [2.6, 1], [2.6, 3.6], [0.8, 3.6], [0.8, 1]];
+function fx6Core(P, o = {}) {
+  const k = P.k, sm = k < 60 ? "sm" : "";
+  let s = G.poly(FX6_CORE.map((p) => P(...p)), CM_FE, "K", 1.6);
+  const [a, b] = P(-0.3, 0.7), [c2, d] = P(6.3, 0.2);
+  s += `<rect x="${a}" y="${b}" width="${(c2 - a).toFixed(1)}" height="${(d - b).toFixed(1)}" style="fill:#b9bfc5;stroke:var(--cK);stroke-width:1.5"/>`;
+  if (o.gaps !== undefined) { let g = ""; for (const x of [0, 2.6, 5.2]) { const [g1, g2] = P(x, 1), [g3, g4] = P(x + 0.8, 0.7); g += `<rect x="${g1}" y="${g2}" width="${(g3 - g1).toFixed(1)}" height="${(g4 - g2).toFixed(1)}" style="fill:var(--cO);opacity:.55"/>`; } s += fxG(o.gaps, g); }
+  for (let y = 1.9; y <= 3.31; y += 0.15) s += fqL(P, [2.5, y], [3.5, y + 0.06], "O", 2.4);
+  let l = "";
+  if (o.labels !== false) {
+    s += fqA(P, [1.5, 2.2], [2.45, 2.2], "R", 2.4);
+    l += cmE(P(1.45, 2.2)[0], P(1.45, 2.2)[1], "I", `R ${sm}`) + cmE(P(2.42, 3.0)[0], P(2.42, 3.0)[1], "N", sm);
+  }
+  if (o.dim !== undefined) {
+    s += fxG(o.dim, fqA(P, [6.6, 1.55], [6.6, 1.0], "M", 1.6) + fqA(P, [6.6, 0.15], [6.6, 0.7], "M", 1.6) + fqL(P, [6.05, 1.0], [6.75, 1.0], "M", 1) + fqL(P, [6.35, 0.7], [6.75, 0.7], "M", 1));
+    l += fxD(o.dim, cmW(P(6.75, 0.85)[0], P(6.75, 0.85)[1], Rw`\ell_a`, sm));
+  }
+  if (o.load !== undefined) {
+    s += fxG(o.load, fqA(P, [3, 0.2], [3, -0.6], "K", 3));
+    l += fxD(o.load, lbt(P(3, -0.6)[0], P(3, -0.6)[1] + 14, "carga"));
+  }
+  if (o.flux !== undefined) {
+    const loop = (xs) => fqPath([P(3, 3.9), P(3, 0.45), P(xs, 0.45), P(xs, 3.9), P(3, 3.9)]);
+    let g = G.pa(loop(0.4), "G", 2.4, "", "7 5") + G.pa(loop(5.6), "G", 2.4, "", "7 5");
+    g += fqA(P, [3, 1.75], [3, 1.15], "G", 3) + fqA(P, [0.4, 1.4], [0.4, 2.2], "G", 3) + fqA(P, [5.6, 1.4], [5.6, 2.2], "G", 3) + fqA(P, [2.2, 0.45], [1.3, 0.45], "G", 3) + fqA(P, [3.8, 0.45], [4.7, 0.45], "G", 3);
+    s += fxG(o.flux, g);
+    l += fxD(o.flux, cmW(P(3.12, 1.45)[0], P(3.12, 1.45)[1], Rw`\Psi`, `G ${sm}`, `id="fx6-lPsi"`) + cmW(P(0.95, 2.4)[0], P(0.95, 2.4)[1], Rw`\Psi/2`, `G ${sm}`) + cmE(P(5.05, 2.4)[0], P(5.05, 2.4)[1], Rw`\Psi/2`, `G ${sm}`));
+  }
+  return { s, l };
+}
+function fx6Enun() { const P = fqT(30, 250, 52); const c = fx6Core(P, { dim: "", load: "" }); return board(420, 300, c.s, c.l); }
+// núcleo com o fluxo e circuito magnético equivalente
+function fx6Circ(o = {}) {
+  const P = fqT(80, 236, 48), c = fx6Core(P, { flux: o.flux ?? "", gaps: o.gaps ?? "", labels: false });
+  let s = c.s, l = c.l;
+  const xl = 90, xr1 = 360, xr2 = 470, yt = 320, yb = 540, ym = 430;
+  const res = (x, y, hor) => hor ? `<rect x="${x - 45}" y="${y - 16}" width="90" height="32" style="fill:#fff;stroke:var(--cK);stroke-width:2"/>` : `<rect x="${x - 16}" y="${y - 40}" width="32" height="80" style="fill:#fff;stroke:var(--cK);stroke-width:2"/>`;
+  let g = G.ln(xl, yt, xr2, yt, "K", 2) + G.ln(xl, yb, xr2, yb, "K", 2) + G.ln(xl, yt, xl, yb, "K", 2) + G.ln(xr1, yt, xr1, yb, "K", 2) + G.ln(xr2, yt, xr2, yb, "K", 2);
+  g += `<circle cx="${xl}" cy="${ym}" r="28" style="fill:#fff;stroke:var(--cK);stroke-width:2"/>` + G.ar(xl, ym + 16, xl, ym - 16, "K", 2);
+  g += res(215, yt, true) + res(xr1, ym, false) + res(xr2, ym, false) + G.dot(xr1, yt, 5, "K") + G.dot(xr1, yb, 5, "K");
+  g += G.ar(260, yt - 22, 320, yt - 22, "G", 2.6) + G.ar(xr1 - 30, ym + 60, xr1 - 30, ym + 96, "G", 2.6) + G.ar(xr2 + 30, ym + 60, xr2 + 30, ym + 96, "G", 2.6);
+  s += fxG(o.circ ?? "", g);
+  l += fxD(o.circ ?? "", lb(xl, ym + 52, Rw`\fmm=NI`, "", `id="fx6-lfmm"`) + lb(215, yt - 38, Rw`\Rel_a`, "", `id="fx6-lRc"`) + lb(xr1 + 40, ym, Rw`\Rel_a`, "sm") + lb(xr2 + 40, ym, Rw`\Rel_a`, "sm") +
+    lb(290, yt - 46, Rw`\Psi`, "G sm") + lb(xr1 - 56, ym + 78, Rw`\tfrac{\Psi}{2}`, "G sm") + lb(xr2 + 56, ym + 78, Rw`\tfrac{\Psi}{2}`, "G sm") +
+    lbt(215, yt + 34, "polo central") + lbt((xr1 + xr2) / 2, yb + 22, "polos laterais em paralelo"));
+  return board(560, 580, s, l);
+}
+// diagrama de forças sobre a placa (com a carga)
+function fx6For(o = {}) {
+  const X = (x) => 40 + 80 * x, yt = 200, yb = 236;
+  let s = `<rect x="${X(0)}" y="${yt}" width="${X(6) - X(0)}" height="${yb - yt}" style="fill:#b9bfc5;stroke:var(--cK);stroke-width:1.5"/>`;
+  let l = lbt(X(1.6), (yt + yb) / 2, "placa + carga");
+  s += fxG(o.F ?? "", G.ar(X(0.4), yt, X(0.4), yt - 35, "V", 3.4) + G.ar(X(3), yt, X(3), yt - 140, "V", 4) + G.ar(X(5.6), yt, X(5.6), yt - 35, "V", 3.4));
+  l += fxD(o.F ?? "", lb(X(0.4) + 74, yt - 54, Rw`F_\ell\approx1508\ \mathrm N`, "V sm") + lb(X(3) + 90, yt - 140, Rw`F_c\approx6032\ \mathrm N`, "V sm", `id="fx6-lFc"`) + lb(X(5.6) - 26, yt - 58, Rw`F_\ell`, "V sm"));
+  s += fxG(o.P, G.ar(X(3), yb, X(3), yb + 210, "R", 4));
+  l += fxD(o.P, lb(X(3) + 34, yb + 150, Rw`m\,g`, "R", `id="fx6-lP"`) + lbt(X(4.6), yb + 60, "no limite:&nbsp;\\(mg=F_c+2F_\\ell\\)", "fxm"));
+  return board(560, 470, s, l);
+}
+const FX6 = { drop: 0, v: 0, last: null };
+function figFx6(ctx, w, h, s0, t) {
+  const c = C(), V = css("--cV"), O = css("--cO"); fxFit(ctx, w, h, 860, 520);
+  const I = val("fx6-I"), la = val("fx6-la") * 1e-3, mass = val("fx6-m"), N = 400, Sp = 0.015, g = 9.8;
+  const Bc = 2 * MU0 * N * I / (3 * la), Fc = Bc * Bc * Sp / (2 * MU0), Ft = 1.5 * Fc, mmax = Ft / g, Psi = Bc * Sp, Ra = la / (MU0 * Sp);
+  const over = mass * g > Ft;
+  const dt = FX6.last === null ? 0 : Math.min(0.05, Math.max(0, t - FX6.last)); FX6.last = t;
+  if (over) { FX6.v += 900 * dt; FX6.drop = Math.min(FX6.drop + FX6.v * dt, 260); } else { FX6.v = 0; FX6.drop = Math.max(0, FX6.drop - 260 * dt); }
+  const X = (x) => 50 + 70 * x, Y = (y) => 30 + 70 * (4.2 - y), dp = FX6.drop;
+  // núcleo
+  ctx.save(); ctx.fillStyle = CM_FE; ctx.strokeStyle = c.K; ctx.lineWidth = 1.6; ctx.beginPath(); FX6_CORE.forEach(([x, y], i) => i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y))); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+  for (let y = 1.9; y <= 3.31; y += 0.15) line(ctx, X(2.5), Y(y), X(3.5), Y(y + 0.06), O, 2.4);
+  // placa e carga
+  ctx.save(); ctx.fillStyle = "#b9bfc5"; ctx.strokeStyle = c.K; ctx.lineWidth = 1.5; ctx.fillRect(X(-0.3), Y(0.7) + dp, X(6.3) - X(-0.3), Y(0.2) - Y(0.7)); ctx.strokeRect(X(-0.3), Y(0.7) + dp, X(6.3) - X(-0.3), Y(0.2) - Y(0.7)); ctx.restore();
+  line(ctx, X(3), Y(0.2) + dp, X(3), 390 + dp, c.K, 2);
+  ctx.save(); ctx.fillStyle = "#6b7680"; ctx.fillRect(X(3) - 60, 390 + dp, 120, 56); ctx.restore();
+  txt(ctx, fmtc(mass, 0) + " kg", X(3), 418 + dp, { c: "#fff", size: 17, bold: true, align: "center" });
+  // fluxo (tracejado em movimento; espessura ∝ B; some quando a placa se afasta)
+  const fa = Math.max(0.12, 1 - dp / 50), lw = 1 + 3.5 * Math.min(1.6, Bc) / 1.6;
+  for (const xs of [0.4, 5.6]) {
+    ctx.save(); ctx.strokeStyle = c.G; ctx.globalAlpha = fa; ctx.lineWidth = lw; ctx.setLineDash([12, 9]); ctx.lineDashOffset = -t * 60;
+    ctx.beginPath(); ctx.moveTo(X(3), Y(3.9)); ctx.lineTo(X(3), Y(0.45) + dp); ctx.lineTo(X(xs), Y(0.45) + dp); ctx.lineTo(X(xs), Y(3.9)); ctx.closePath(); ctx.stroke(); ctx.restore();
+  }
+  txt(ctx, "N = 400 espiras", X(3.55), Y(3.35), { c: O, size: 15 });
+  txt(ctx, over ? "peso maior que a tração: a placa se solta" : "a placa se mantém presa", 30, 500, { c: over ? c.R : c.G, size: 18, bold: true });
+  // diagrama de forças (escala: força central nominal = 100 px)
+  const ox = 590, sc = 100 / 6032, cap = (v) => Math.min(190, v * sc);
+  txt(ctx, "forças sobre placa + carga", 720, 40, { c: c.M, size: 15, align: "center" });
+  ctx.save(); ctx.fillStyle = "#b9bfc5"; ctx.fillRect(ox, 250, 260, 16); ctx.restore();
+  for (const [x, F] of [[ox + 17, Fc / 4], [ox + 130, Fc], [ox + 243, Fc / 4]]) if (cap(F) > 3) arrowTo(ctx, x, 250, x, 250 - cap(F), V, 3.4, 12);
+  if (cap(mass * g) > 3) arrowTo(ctx, ox + 130, 266, ox + 130, 266 + cap(mass * g), c.R, 3.4, 12);
+  txt(ctx, "F = " + fmtc(Ft, 0) + " N", ox + 150, 250 - cap(Fc) / 2, { c: V, size: 16, bold: true });
+  txt(ctx, "mg = " + fmtc(mass * g, 0) + " N", ox + 150, 266 + cap(mass * g) / 2, { c: c.R, size: 16, bold: true });
+  setRead("fx6-read", `<span>ℛ<sub>a</sub>: <b>${thou(Ra)} A·e/Wb</b></span><span>Ψ: <b>${fmtc(Psi * 1e3, 2)} mWb</b></span><span>B<sub>c</sub> = 2μ₀NI/(3ℓ<sub>a</sub>): <b>${fmtc(Bc, 3)} T</b></span>` +
+    `<span>F = F<sub>c</sub> + 2F<sub>ℓ</sub>: <b>${thou(Ft)} N</b></span><span>massa máxima F/g: <b>${fmtc(mmax, 1)} kg</b></span>`);
+  return `I = ${fmtc(I, 1)} A, ℓa = ${fmtc(la * 1e3, 2)} mm: Bc = ${fmtc(Bc, 3)} T e massa máxima ${fmtc(mmax, 1)} kg. Com os dados do exemplo (1,5 A; 0,5 mm), 923,2 kg.`;
+}
+bindIf(["fx6-I", "fx6-la", "fx6-m"], { "fx6-I": (v) => fmtc(v, 1) + " A", "fx6-la": (v) => fmtc(v, 2) + " mm", "fx6-m": (v) => fmtc(v, 0) + " kg" }, () => refreshFigs());
+
+Object.assign(BOARDS, {
+  fx1Enun: () => fx1Vet({ W: 420, H: 290, k: 27, ox: 250, oy: 140 }),
+  fx1Prod: () => fx1Vet({ comp: "2", ub: "5" }),
+  fx1F: () => fx1Vet({ F: "2" }),
+  fx1E: () => fx1Vet({ F: "", Fe: "2" }),
+  fx2Enun,
+  fx2Fa: () => fx2Topo({ phi: 35, campo: "", rho: "", unit: "2-4", B: "3", F: "5" }),
+  fx2Tb: () => fx2Topo({ campo: "", arc: "", dl: "", forcas: "6" }),
+  fx2Wc: () => fx2W({ p2: "2" }),
+  fx3Enun: () => fx3Lado({ k: 62, W: 380, H: 250, ox: 190, oy: 205, dimY: 2.3 }),
+  fx3B: () => fx3Lado({ an: "2", B: "5" }),
+  fx3F: () => fx3Lado({ B: "", F: "2" }),
+  fx4Enun,
+  fx4Max: () => fx4Topo({ al: 0, F: "3", T: "4" }),
+  fx4Trinta: () => fx4Topo({ al: 30, ang: "", F: "4" }),
+  fx4W: () => fx4TW({ area: "" }),
+  fx5Enun: () => fx5Ag({ W: 380, H: 200, cx: 140, Lh: 90, th: 18, enun: true }),
+  fx5Eq: () => fx5Ag({ m: "", T: "2" }),
+  fx5Th,
+  fx6Enun,
+  fx6Circ: () => fx6Circ({ flux: "3", gaps: "", circ: "3" }),
+  fx6For: () => fx6For({ F: "3" }),
+  fx6Peso: () => fx6For({ F: "", P: "" }),
+});
+Object.assign(FIGS, { fx1Traj: figFx1, fx2Giro: figFx2, fx3Dist: figFx3, fx4Gira: figFx4, fx5Osc: figFx5, fx6Ima: figFx6 });
 
 
 // code_z.js — monta os quadros (BOARDS) e desenha as setas curvas; vem depois de todos os code_*.js

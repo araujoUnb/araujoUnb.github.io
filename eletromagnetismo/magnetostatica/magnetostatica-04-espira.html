@@ -407,6 +407,32 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
 .cmp.mb td, .cmp.mb th { font-size: 22px; padding: 10px 14px; }
 .cmp.mb td:first-child { width: 210px; }
 
+
+/* ---- magnetostática: exemplos do banco, partes 2 a 5 (prefixo xa) ---- */
+.xa-enun { gap: 18px; }
+.xa-enun > p { font-size: 26px; line-height: 1.4; margin: 0; }
+.xa-fig { display: flex; justify-content: center; }
+.board.xa-bd .lb mjx-container svg { position: static; }
+
+
+/* ---- exemplos do banco de questões, partes 6–8 (code_ex_b.js): prefixo xb ---- */
+.xb-enun { gap: 14px; font-size: 25px; line-height: 1.42; }
+.xb-enun p { margin: 0; }
+.xb-enun .m { font-size: 27px; }
+.xb-enun ol.xb-it { list-style: none; margin: 0; padding-left: 14px; display: flex; flex-direction: column; gap: 8px; }
+.xb-enun ol.xb-it > li > b:first-child { color: var(--unb-primary); margin-right: 6px; }
+.xb-fig { align-self: center; margin-top: 4px; }
+.xb-tag { display: inline-block; font-size: 17px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: var(--unb-secondary); }
+.xb-int { gap: 22px; font-size: 25px; }
+.xb-int ul.sq { font-size: 24px; gap: 16px; }
+.xb-ok { color: var(--unb-secondary); font-weight: 700; }
+.xb-no { color: var(--unb-alert); font-weight: 700; }
+.xb-crit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 60px; flex: none; }
+.xb-col { display: flex; flex-direction: column; gap: 6px; }
+.xb-col .m { font-size: 24px; }
+.xb-col .nt { font-size: 20px; }
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1100px) { .xb-crit { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+
 </style>
 </head>
 <body>
@@ -604,6 +630,100 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
         <div class="cap">\(H_z(h)\): par em \(h\); máximo \(I/2\rho\) no centro. Pontos: \(\pm h\).</div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ---- exemplo do banco (biot_sadiku_7_15): setor de espira circular ---- -->
+<section class="slide" data-sec="Espira · exemplo: enunciado">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: setor de espira circular</h2><div class="bar"></div></div>
+  <div class="body xa-enun">
+    <p>A figura mostra uma espira no plano \(z=0\) formada por dois arcos de circunferência centrados na origem, de raios \(\rho_1=2\ \mathrm{cm}\) e \(\rho_2=5\ \mathrm{cm}\), e por dois trechos radiais, sobre \(\phi=0\) e \(\phi=\phi_0=30^\circ\). A espira conduz uma corrente \(I=5\ \mathrm{A}\) no sentido indicado. Determine \(\vH\) na origem.</p>
+    <div class="xa-fig"><div style="transform:scale(.9);transform-origin:top center;height:342px"><div data-mount="xaSet0"></div></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Espira · exemplo: trechos radiais">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Setor de espira: os trechos radiais</h2><div class="sub">Plano \(xy\); \(\az\) sai da tela</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="xaSet1"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">O campo em \(O\) é a soma das contribuições dos quatro trechos, cada uma dada por Biot–Savart:</div>
+          <div class="m">\[ d\vH=\frac{I\,d\vec{\mathbf l}\times\hat{\mathbf a}_R}{4\pi|\vec{\mathbf R}|^2} \]</div></div>
+        <div class="ln" data-s="2"><div class="nt" id="xa41-t2">Nos trechos radiais, \(d\vec{\mathbf l}\) tem a direção de \(\pm\arho\), e \(\hat{\mathbf a}_R\), do elemento até \(O\), é \(-\arho\):</div>
+          <div class="stack">
+            <div class="m" data-s="2-2">\[ d\vec{\mathbf l}\times\hat{\mathbf a}_R=(\pm dl\,\arho)\times(-\arho) \]</div>
+            <div class="m" data-s="3">\[ d\vec{\mathbf l}\times\hat{\mathbf a}_R=\mp dl\,\cancel{(\arho\times\arho)}=\vec{\mathbf 0} \]</div>
+          </div></div>
+        <div class="ln" data-s="4"><div class="nt">Os dois trechos radiais não contribuem, para dentro ou para fora: só os arcos produzem campo em \(O\).</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#xa41-t2" data-b="#xa41-lpar" data-s="2" data-pa="l" data-pb="r" data-bend="120"></span>
+</section>
+
+<section class="slide" data-sec="Espira · exemplo: arcos">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Setor de espira: a contribuição de um arco</h2><div class="sub">Arco de raio \(\rho\) e abertura \(\phi_0\), centrado em \(O\)</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="xaSet2"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Arco externo, percorrido no sentido de \(+\aphi\) (anti-horário):</div>
+          <div class="m" id="xa42-e1">\[ d\vec{\mathbf l}=\rho\,d\phi\,\aphi,\qquad\hat{\mathbf a}_R=-\arho,\qquad|\vec{\mathbf R}|=\rho \]</div></div>
+        <div class="ln" data-s="2"><div class="m">\[ d\vec{\mathbf l}\times\hat{\mathbf a}_R=\rho\,d\phi\,\aphi\times(-\arho)=\rho\,d\phi\,\underbrace{(\arho\times\aphi)}_{\az}=\rho\,d\phi\,\az \]</div></div>
+        <div class="ln" data-s="3"><div class="m">\[ \vH=\int_0^{\phi_0}\frac{I\rho\,d\phi}{4\pi\rho^2}\,\az=\frac{I\phi_0}{4\pi\rho}\,\az \]</div>
+          <div class="nt muted">\(d\vec{\mathbf l}\perp\vec{\mathbf R}\) e \(|\vec{\mathbf R}|=\rho\) em todo o arco: o integrando não depende de \(\phi\).</div></div>
+        <div class="ln" data-s="4"><div class="nt" id="xa42-t4">Arco interno, percorrido no sentido horário: \(d\vec{\mathbf l}=-\rho\,d\phi\,\aphi\), e o sinal se inverte:</div>
+          <div class="m">\[ \vH_{\rm int}=-\frac{I\phi_0}{4\pi\rho_1}\,\az,\qquad\vH_{\rm ext}=+\frac{I\phi_0}{4\pi\rho_2}\,\az \]</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#xa42-e1" data-b="#xa42-lR2" data-s="1-3" data-pa="l" data-pb="r" data-bend="150"></span>
+  <span class="lk" data-a="#xa42-t4" data-b="#xa42-ldl1" data-s="4" data-pa="l" data-pb="r" data-bend="120"></span>
+</section>
+
+<section class="slide" data-sec="Espira · exemplo: resultado">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Setor de espira: os valores</h2><div class="sub">\(\phi_0=30^\circ=\pi/6\) rad, \(I=5\) A, \(\rho_1=0{,}02\) m, \(\rho_2=0{,}05\) m</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="xaSet3"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Arco externo (anti-horário):</div>
+          <div class="m">\[ H_{\rm ext}=\frac{5\cdot\pi/6}{4\pi\,(0{,}05)}=\frac{25}{6}\approx4{,}17\ \mathrm{A/m}\quad(+\az) \]</div></div>
+        <div class="ln" data-s="2"><div class="nt">Arco interno (horário):</div>
+          <div class="m">\[ H_{\rm int}=\frac{5\cdot\pi/6}{4\pi\,(0{,}02)}=\frac{125}{12}\approx10{,}42\ \mathrm{A/m}\quad(-\az) \]</div></div>
+        <div class="ln" data-s="3"><div class="nt">Soma:</div>
+          <div class="m">\[ \vH=\frac{I\phi_0}{4\pi}\left(\frac{1}{\rho_2}-\frac{1}{\rho_1}\right)\az=\left(\frac{25}{6}-\frac{125}{12}\right)\az \]</div></div>
+        <div class="ln eqbox" data-s="4"><div class="m" id="xa43-res">\[ \boxed{\,\vH=-\frac{25}{4}\,\az=-6{,}25\,\az\ \ \mathrm{A/m}\,} \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">O arco interno, mais perto de \(O\), domina: em \(O\), \(\vH\) entra na tela.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#xa43-res" data-b="#xa43-lH" data-s="4" data-pa="l" data-pb="b" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Espira · exemplo: animação" data-fig="xaSet">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Setor de espira: percorrendo o circuito</h2><div class="sub">Um elemento \(I\,d\vec{\mathbf l}\) dá a volta; à direita, \(H_z\) em \(O\) acumulado trecho a trecho</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="figcol"><div class="fig"><canvas data-figcanvas height="450" aria-label="Elemento percorrendo o setor de espira e o campo acumulado na origem"></canvas></div><div class="figcap"></div></div>
+  </div>
+</section>
+
+<section class="slide" data-sec="Espira · exemplo: interpretação">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Setor de espira: o que o resultado mostra</h2><div class="bar"></div></div>
+  <div class="body" style="gap:20px">
+    <ul class="sq f23">
+      <li>Trechos que apontam para o ponto de campo não contribuem: \(d\vec{\mathbf l}\parallel\vec{\mathbf R}\), qualquer que seja o comprimento.</li>
+      <li data-s="2">Um arco de abertura \(\phi_0\) dá \(\dfrac{I\phi_0}{4\pi\rho}\), a fração \(\phi_0/2\pi\) do campo no centro de uma espira circular completa, \(\dfrac{I}{2\rho}\) (a espira circular com \(h=0\)).</li>
+      <li data-s="3">O arco interno está \(2{,}5\) vezes mais perto de \(O\) e contribui \(2{,}5\) vezes mais: \(125/12\) contra \(25/6\) A/m.</li>
+      <li data-s="4">O circuito é percorrido no sentido anti-horário, mas \(O\) fica fora da região que ele envolve: no plano da espira, fora dela, o campo tem o sentido oposto ao do interior, \(-\az\).</li>
+    </ul>
   </div>
 </section>
 
@@ -2608,6 +2728,887 @@ if ($("mb-az-cv")) draggable($("mb-az-cv"), () => { const cv = $("mb-az-cv"), X 
   (id, x, y) => { const cv = $("mb-az-cv"), px = mbClamp((x - cv.clientWidth / 2) / mbAzSc, -20, 20), py = mbClamp((cv.clientHeight / 2 - y) / mbAzSc, -10, 10), o = id[0] === "w" ? MBAZ.w[+id[1]] : MBAZ.p[+id[1]]; o.x = px; o.y = py; mbDrawAz(); });
 
 Object.assign(DRAW, { mbAmp: mbDrawAmp, mbSf: mbDrawSf, mbTo: mbDrawTo, mbCd: mbDrawCd, mbFl: mbDrawFl, mbGs: mbDrawGs, mbVm: mbDrawVm, mbAz: mbDrawAz });
+
+
+// =====================================================================
+//  code_ex_a.js — Campos Magnetostáticos, exemplos do banco de questões
+//  das partes 2 a 5 (Biot–Savart, fio finito, espira, distribuições).
+//  Valores: python3 Slides/html_comum/exemplo_banco.py <id> (semente dos slides)
+//    parte 2: biot_sadiku_7_04   dois elementos de corrente
+//    parte 3: biot_sadiku_7_06   trecho retilíneo entre os eixos
+//    parte 4: biot_sadiku_7_15   setor de espira circular
+//    parte 5: biot_sadiku_7_17   solenoide finito (corrente superficial K = nI)
+//  Nomes de topo com prefixo xa; usa primitivas de code_0.js e maStep/maFit/maAx/maCurve de code_a.js.
+// =====================================================================
+
+const xaf = (v) => (+v).toFixed(1);
+const xaAr = (a, b, c, w = 2.5, e = "") => G.ar(xaf(a[0]), xaf(a[1]), xaf(b[0]), xaf(b[1]), c, w, e);
+const xaLn = (a, b, c, w = 1.6, dash = "", e = "") => G.ln(xaf(a[0]), xaf(a[1]), xaf(b[0]), xaf(b[1]), c, w, e, dash);
+// quadro com rótulos MathJax centrados no ponto dado (a regra .board svg pegaria o SVG do MathJax)
+const xaBoard = (w, h, svg, labels) => board(w, h, svg, labels).replace('class="board"', 'class="board xa-bd"');
+const xaCfg = (cfg) => ({ has: (k) => k in cfg, ex: (k) => S(cfg[k]) });
+// progresso (0..1) de uma animação desde a última troca de passo da figura; desenho estático (t = 2,2) mostra tudo
+const xaT0 = {};
+function xaGrow(key, s, t, dur = 1.1) {
+  if (t === 2.2) return 1;
+  const r = xaT0[key];
+  if (!r || r.s !== s || t < r.t0) { xaT0[key] = { s, t0: t }; return 0; }
+  return Math.min(1, (t - r.t0) / dur);
+}
+const xaEase = (u) => u * u * (3 - 2 * u);
+const xaClamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+// =====================================================================
+//  PARTE 2 — dois elementos de corrente (plano xz; y entra na tela)
+// =====================================================================
+// cfg: R1, H1, R2, H2 (overlays); omitir = ausente
+function xaBoardEl(cfg, pre) {
+  const { has, ex } = xaCfg(cfg), X = (x) => 150 + 125 * x, Y = (z) => 95 - 125 * z, p = (x, z) => [X(x), Y(z)];
+  const O = p(0, 0), Q = p(0, -1), P = p(2, -3);
+  let svg = G.ar(60, O[1], 528, O[1], "M", 1.4) + G.ar(O[0], 560, O[0], 16, "M", 1.4) +
+    xaLn(P, [P[0], O[1]], "M", 1.2, "4 5") + xaLn(P, [O[0], P[1]], "M", 1.2, "4 5");
+  for (const x of [1, 2]) svg += G.ln(X(x), O[1] - 6, X(x), O[1] + 6, "M", 1.4);
+  for (const z of [-2, -3]) svg += G.ln(O[0] - 6, Y(z), O[0] + 6, Y(z), "M", 1.4);
+  let labels = lb(532, O[1] + 22, "x", "M sm") + lb(O[0] + 20, 20, "z", "M sm") + lb(X(1), O[1] - 20, "1", "M sm") + lb(X(2), O[1] - 20, "2", "M sm") +
+    lb(O[0] - 26, Y(-2), "-2", "M sm") + lb(O[0] - 26, Y(-3), "-3", "M sm") + lb(O[0] - 30, Y(-1) - 26, "-1", "M sm");
+  // elementos
+  svg += G.ar(O[0], O[1], X(0.72), O[1], "P", 5) + G.dot(O[0], O[1], 5, "P") + G.sym(Q[0], Q[1], 15, false, "P");
+  labels += lb(205, 62, Rw`I_1\,d\vec{\mathbf l}_1`, "P", `id="${pre}-ldl1"`) + lb(70, Q[1] + 30, Rw`I_2\,d\vec{\mathbf l}_2`, "P", `id="${pre}-ldl2"`) +
+    lb(P[0] - 40, P[1] + 34, Rw`P\,(2,0,-3)`, "sm");
+  if (has("R1")) { svg += xaAr(O, [P[0] - 9, P[1] - 13], "R", 2.5, ex("R1")); labels += lb(320, 266, Rw`\vec{\mathbf R}_1`, "R", `id="${pre}-lR1" ${ex("R1")}`); }
+  if (has("R2")) { svg += xaAr([Q[0] + 11, Q[1] + 11], [P[0] - 11, P[1] - 11], "R", 2.5, ex("R2")); labels += lb(250, 366, Rw`\vec{\mathbf R}_2`, "R", `id="${pre}-lR2" ${ex("R2")}`); }
+  svg += G.dot(P[0], P[1], 6, "K");
+  if (has("H1")) { svg += G.sym(P[0], P[1], 15, true, "G", ex("H1")); labels += lb(P[0] + 46, P[1] + 12, Rw`\vec{\mathbf H}_1`, "G", `id="${pre}-lH1" ${ex("H1")}`); }
+  if (has("H2")) { svg += xaAr([P[0] + 12, P[1] - 12], [P[0] + 85, P[1] - 85], "G", 3, ex("H2")); labels += lb(P[0] + 112, P[1] - 92, Rw`\vec{\mathbf H}_2`, "G", `id="${pre}-lH2" ${ex("H2")}`); }
+  svg += G.sym(296, 556, 11, true, "M");
+  labels += lb(390, 556, Rw`\hat{\mathbf a}_y\ \text{entra na tela}`, "M sm");
+  return xaBoard(560, 580, svg, labels);
+}
+
+// figura animada: vista 3D girando; passos 1 geometria, 2 elemento 1, 3 elemento 2, 4 soma
+function xaFigEl(ctx, w, h, s0, t) {
+  const s = maStep(ctx, s0), c = C(); maFit(ctx, w, h, 640, 470);
+  const a = (-60 + 24 * Math.sin(0.4 * t)) * DEG, e = 20 * DEG, sc = 84, cx = 200, cy = 110;
+  const r = [-Math.sin(a), Math.cos(a), 0], u = [-Math.cos(a) * Math.sin(e), -Math.sin(a) * Math.sin(e), Math.cos(e)];
+  const d3 = (p, q) => p[0] * q[0] + p[1] * q[1] + p[2] * q[2], add = (p, q, k = 1) => [p[0] + k * q[0], p[1] + k * q[1], p[2] + k * q[2]];
+  const pj = (p) => [cx + sc * d3(p, r), cy - sc * d3(p, u)];
+  const L3 = (p, q, col, lw = 1.5, dash = null) => { const A = pj(p), B = pj(q); line(ctx, A[0], A[1], B[0], B[1], col, lw, dash); };
+  const A3 = (p, q, col, lw = 2.5, hd = 12) => { const A = pj(p), B = pj(q); arrowTo(ctx, A[0], A[1], B[0], B[1], col, lw, hd); };
+  const F3 = (pts, fill) => { ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); pts.map(pj).forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath(); ctx.fill(); ctx.restore(); };
+  const T3 = (p, str, o) => { const [x, y] = pj(p); txt(ctx, str, x + (o.dx || 0), y + (o.dy || 0), o); };
+  const g = xaGrow("xaEl", s, t), pr = (k) => s > k ? 1 : s === k ? xaEase(g) : 0;
+  const O = [0, 0, 0], Q = [0, 0, -1], P = [2, 0, -3], kH = 1 / 400;   // 1 unidade = 400 nA/m
+  const H1 = [0, 407.5 * kH, 0], H2 = [422 * kH, 0, 422 * kH], Ht = add(H1, H2);
+  // plano xz (contém os dois pontos-fonte, P, dl1, R1 e R2)
+  F3([[-0.4, 0, 0.7], [3, 0, 0.7], [3, 0, -3.7], [-0.4, 0, -3.7]], "rgba(0,59,92,.06)");
+  T3([3, 0, 0.7], "plano xz", { size: 14, c: c.M, dx: -4, dy: 14, align: "right" });
+  A3([-0.3, 0, 0], [3.1, 0, 0], c.M, 1.3, 10); A3([0, -0.6, 0], [0, 2.1, 0], c.M, 1.3, 10); A3([0, 0, -3.8], [0, 0, 1.1], c.M, 1.3, 10);
+  T3([3.25, 0, 0], "x", { size: 17, c: c.M, italic: true, align: "center" }); T3([0, 2.25, 0], "y", { size: 17, c: c.M, italic: true, align: "center" }); T3([0, 0, 1.25], "z", { size: 17, c: c.M, italic: true, align: "center" });
+  L3(P, [2, 0, 0], c.M, 1, [3, 4]); L3(P, [0, 0, -3], c.M, 1, [3, 4]);
+  // elementos de corrente e P
+  A3(O, [0.85, 0, 0], c.P, 5, 15); A3(Q, [0, -0.75, -1], c.P, 5, 15);
+  T3([0.45, 0, 0], "I_1 dl_1 = 8 a_x ×10^{-5}", { size: 15, c: c.P, bold: true, dy: -18, align: "center" });
+  T3([0, -0.6, -1], "I_2 dl_2 = −6 a_y ×10^{-5}", { size: 15, c: c.P, bold: true, dx: -10, dy: 4, align: "right" });
+  if (pr(3) > 0) {   // plano de dl2 e R2
+    const k = pr(3), y0 = 0.8;
+    F3([add(Q, [0, -y0, 0]), add(Q, [0, y0, 0]), add(add(Q, [0, y0, 0]), [2 * k, 0, -2 * k]), add(add(Q, [0, -y0, 0]), [2 * k, 0, -2 * k])], "rgba(200,60,40,.10)");
+  }
+  if (pr(2) > 0) A3(O, add(O, [2, 0, -3], pr(2) * 0.96), c.R, 2.4);
+  if (pr(3) > 0) A3(Q, add(Q, [2, 0, -2], pr(3) * 0.95), c.R, 2.4);
+  if (pr(2) === 1) T3([1, 0, -1.5], "R_1", { size: 17, c: c.R, bold: true, dx: 12 });
+  if (pr(3) === 1) T3([1, 0, -2], "R_2", { size: 17, c: c.R, bold: true, dx: -30, dy: 10 });
+  const Pp = pj(P); dot(ctx, Pp[0], Pp[1], 6, c.K); txt(ctx, "P", Pp[0] - 22, Pp[1] + 6, { size: 18, bold: true });
+  // campos em P
+  if (pr(2) > 0 && s < 4) { A3(P, add(P, H1, pr(2)), c.G, 3.4, 14); if (pr(2) === 1) T3(add(P, H1), "H_1 = 407,5 nA/m", { size: 15, c: c.G, bold: true, dx: 8, dy: -10 }); }
+  if (pr(3) > 0 && s < 4) { A3(P, add(P, H2, pr(3)), c.G, 3.4, 14); if (pr(3) === 1) T3(add(P, H2), "H_2 = 597 nA/m", { size: 15, c: c.G, bold: true, dx: 8, dy: -4 }); }
+  if (s >= 4) {
+    const k = xaEase(g);
+    A3(P, add(P, H1), tint(c.G, 0.55), 2.4, 12); A3(P, add(P, H2), tint(c.G, 0.55), 2.4, 12);
+    L3(add(P, H1), add(P, Ht), c.G, 1.2, [5, 4]); L3(add(P, H2), add(P, Ht), c.G, 1.2, [5, 4]);
+    A3(P, add(P, Ht, k), c.G, 4.2, 16);
+    T3(add(P, H1), "H_1", { size: 15, c: c.G, dx: 6, dy: -8 }); T3(add(P, H2), "H_2", { size: 15, c: c.G, dx: 8, dy: 2 });
+    if (k === 1) T3(add(P, Ht), "H  (|H| ≈ 723 nA/m)", { size: 16, c: c.G, bold: true, dx: 8, dy: -12 });
+  }
+  return ["Os dois pontos-fonte e P estão no plano xz; o elemento 2 aponta para −y, fora desse plano.",
+    "Elemento 1: H₁ é perpendicular ao plano de dl₁ e R₁ (o plano xz), portanto paralelo a y.",
+    "Elemento 2: H₂ é perpendicular ao plano de dl₂ e R₂ (sombreado), na direção de a_x + a_z.",
+    "Superposição: H = H₁ + H₂, soma vetorial das duas contribuições."][Math.min(s, 4) - 1];
+}
+
+// =====================================================================
+//  PARTE 3 — trecho retilíneo AB entre os eixos (corrente de B para A)
+// =====================================================================
+const xaSG = { I: 3, rho: 3 / Math.sqrt(10), z1: -9 / Math.sqrt(10), z2: 1 / Math.sqrt(10), F: [0.3, 0.9], al: [-3 / Math.sqrt(10), 1 / Math.sqrt(10)] };
+// cfg: rho, z, dist, ang, H
+function xaBoardSeg(cfg, pre) {
+  const { has, ex } = xaCfg(cfg), X = (x) => 80 + 160 * x, Y = (y) => 470 - 160 * y, p = (x, y) => [X(x), Y(y)];
+  const O = p(0, 0), A = p(0, 1), B = p(3, 0), F = p(0.3, 0.9), uB = [0.949, 0.316], dO = [-0.316, 0.949];
+  let svg = G.ar(40, O[1], 622, O[1], "M", 1.4) + G.ar(O[0], 505, O[0], 150, "M", 1.4);
+  let labels = lb(626, O[1] + 20, "x", "M sm") + lb(O[0] + 18, 150, "y", "M sm") + lb(O[0] - 16, O[1] + 20, "O", "sm");
+  if (has("dist")) {
+    svg += G.g(ex("dist"), xaLn(O, A, "G", 9, "", `opacity=".35"`) + xaLn(O, B, "R", 9, "", `opacity=".3"`));
+    labels += lb(56, 392, "1", "G", `id="${pre}-lOA" ${ex("dist")}`) + lb(320, O[1] + 24, "3", "R", `id="${pre}-lOB" ${ex("dist")}`);
+  }
+  svg += xaLn(B, A, "K", 5) + G.dot(A[0], A[1], 6, "K") + G.dot(B[0], B[1], 6, "K") +
+    G.ar(335, 395, 300, 383.3, "K", 3);
+  labels += lb(56, 300, "A") + lb(B[0] + 4, B[1] - 26, "B") + lb(300, 428, Rw`3\ \mathrm{A}`, "sm");
+  if (has("rho")) {
+    const c1 = [F[0] + 12 * uB[0], F[1] + 12 * uB[1]], c2 = [c1[0] + 12 * dO[0], c1[1] + 12 * dO[1]], c3 = [F[0] + 12 * dO[0], F[1] + 12 * dO[1]];
+    svg += G.g(ex("rho"), xaLn(O, F, "P", 2, "6 5") + G.pa(`M${xaf(c1[0])},${xaf(c1[1])} L${xaf(c2[0])},${xaf(c2[1])} L${xaf(c3[0])},${xaf(c3[1])}`, "P", 1.4) + G.dot(F[0], F[1], 4.5, "P"));
+    labels += lb(127, 408, Rw`\rho`, "P", `id="${pre}-lrho" ${ex("rho")}`) + lb(150, 344, "F", "P sm", ex("rho"));
+  }
+  if (has("z")) {
+    svg += G.g(ex("z"), G.brace(B[0], B[1], F[0], F[1], 10, "M") + G.brace(F[0], F[1], A[0], A[1], 10, "M"));
+    labels += lb(356, 362, "z_1", "", `id="${pre}-lz1" ${ex("z")}`) + lb(118, 280, "z_2", "", `id="${pre}-lz2" ${ex("z")}`);
+  }
+  if (has("ang")) {
+    const t0 = Math.atan2(-0.316, -0.949) / DEG, [x1, y1] = pol(O[0], O[1], 92, -22), [x2, y2] = pol(O[0], O[1], 52, -114);
+    svg += G.g(ex("ang"), xaAr(O, [O[0] + 70 * Math.cos(t0 * DEG), O[1] + 70 * Math.sin(t0 * DEG)], "M", 1.6, "", "6 5") +
+      G.arc(O[0], O[1], 64, t0, 0, "G", 2.4) + G.arc(O[0], O[1], 36, t0, -90, "R", 2.4));
+    labels += lb(x1, y1, Rw`\alpha_1`, "G", `id="${pre}-la1" ${ex("ang")}`) + lb(x2, y2, Rw`\alpha_2`, "R", `id="${pre}-la2" ${ex("ang")}`) +
+      lb(20, 476, Rw`\hat{\mathbf a}_\ell`, "M sm", ex("ang"));
+  }
+  if (has("H")) { svg += G.sym(O[0], O[1], 14, false, "G", ex("H")); labels += lb(O[0] + 36, O[1] + 28, Rw`\vec{\mathbf H}`, "G", `id="${pre}-lH" ${ex("H")}`); }
+  return xaBoard(640, 520, svg, labels);
+}
+
+// figura animada: o elemento percorre o trecho de B a A; à direita, a integral sendo acumulada
+function xaFigSeg(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1240, 440);
+  const { I, rho, z1, z2, F, al } = xaSG, sc = 165, Ox = 60, Oy = 390, X = (x) => Ox + sc * x, Y = (y) => Oy - sc * y;
+  const W = (z) => [F[0] + z * al[0], F[1] + z * al[1]], g = (z) => I * rho / (4 * Math.PI * (rho * rho + z * z) ** 1.5);
+  const Hacc = (z) => I / (4 * Math.PI * rho) * (z / Math.hypot(rho, z) - z1 / Math.hypot(rho, z1));
+  const T = 9, u = (t % T) / T, f = xaEase(Math.min(1, u / 0.8)), zc = z1 + f * (z2 - z1), E = W(zc);
+  // eixos e trecho
+  arrowTo(ctx, 25, Oy, 590, Oy, c.M, 1.3, 10); arrowTo(ctx, Ox, 425, Ox, 150, c.M, 1.3, 10);
+  txt(ctx, "x", 594, Oy + 16, { size: 16, c: c.M, italic: true }); txt(ctx, "y", Ox + 10, 150, { size: 16, c: c.M, italic: true });
+  line(ctx, X(3), Y(0), X(0), Y(1), c.K, 5);
+  for (let j = 0; j < 9; j++) { const q = (j / 9 + t * 0.12) % 1, P = W(z1 + q * (z2 - z1)); dot(ctx, X(P[0]), Y(P[1]), 3.2, c.Y); }
+  txt(ctx, "B", X(3) + 4, Y(0) - 18, { size: 18, bold: true }); txt(ctx, "A", X(0) - 22, Y(1) - 8, { size: 18, bold: true });
+  line(ctx, Ox, Oy, X(F[0]), Y(F[1]), c.P, 1.4, [5, 4]); dot(ctx, X(F[0]), Y(F[1]), 4, c.P); txt(ctx, "F", X(F[0]) + 8, Y(F[1]) + 14, { size: 15, c: c.P, bold: true });
+  // elemento, R e dH em O
+  const ex = X(E[0]), ey = Y(E[1]), dx = al[0] * 26, dy = -al[1] * 26;
+  arrowTo(ctx, ex - dx, ey - dy, ex + dx, ey + dy, c.P, 5, 15);
+  arrowTo(ctx, ex, ey, Ox + (ex - Ox) * 0.08, Oy + (ey - Oy) * 0.08, c.R, 2.2, 11);
+  txt(ctx, "R", (ex + Ox) / 2 + 8, (ey + Oy) / 2 + 14, { size: 17, c: c.R, bold: true });
+  txt(ctx, "I dl", ex + 6, ey - 24, { size: 16, c: c.P, bold: true });
+  const k = g(zc) / g(0); symC(ctx, Ox, Oy, 7 + 10 * k, false, c.G, 2.4); txt(ctx, "dH", Ox + 24, Oy - 22, { size: 16, c: c.G, bold: true });
+  // integrando e área acumulada
+  const x0 = 640, y0 = 50, pw = 560, ph = 290;
+  const { X: PX, Y: PY } = maAx(ctx, x0, y0, pw, ph, { xmin: -3, xmax: 0.5, ymin: 0, ymax: 0.3, xt: [-3, -2, -1, 0], yt: [0, 0.1, 0.2, 0.3], xf: (v) => fmtc(v, 0), yf: (v) => fmtc(v, 1), xl: "z (m)", yl: "integrando (A/m²)" });
+  ctx.save(); ctx.fillStyle = "rgba(0,120,90,.18)"; ctx.beginPath(); ctx.moveTo(PX(z1), PY(0));
+  for (let i = 0; i <= 80; i++) { const z = z1 + (zc - z1) * i / 80; ctx.lineTo(PX(z), PY(g(z))); }
+  ctx.lineTo(PX(zc), PY(0)); ctx.closePath(); ctx.fill(); ctx.restore();
+  maCurve(ctx, g, z1, z2, PX, PY, c.G, 2.6);
+  line(ctx, PX(z1), PY(0), PX(z1), PY(0.3), c.M, 1, [3, 4]); line(ctx, PX(z2), PY(0), PX(z2), PY(0.3), c.M, 1, [3, 4]);
+  txt(ctx, "B (z_1)", PX(z1) + 6, PY(0.29), { size: 15, c: c.M }); txt(ctx, "A (z_2)", PX(z2) + 6, PY(0.29), { size: 15, c: c.M });
+  line(ctx, PX(zc), PY(0), PX(zc), PY(g(zc)), c.P, 2); dot(ctx, PX(zc), PY(g(zc)), 6, c.P);
+  txt(ctx, u >= 0.8 ? "H = 0,318 A/m = 1/π A/m" : `H acumulado = ${fmtc(Hacc(zc), 3)} A/m`, x0 + pw / 2, 420, { size: 21, c: c.G, bold: true, align: "center" });
+  return u < 0.8 ? "O elemento percorre o trecho de B para A; a área sob o integrando é o campo acumulado em O."
+    : "Trecho inteiro: H = 0,318 A/m em +a_z. A maior parte vem dos elementos próximos de F, o pé da perpendicular.";
+}
+
+// =====================================================================
+//  PARTE 4 — setor de espira circular (ρ1 = 2 cm, ρ2 = 5 cm, φ0 = 30°, I = 5 A)
+// =====================================================================
+// cfg: rad, arc2 (externo), arc1 (interno), Ht, vals
+function xaBoardSet(cfg, pre) {
+  const { has, ex } = xaCfg(cfg), O = [60, 330], k = 76, p = (r, ph) => [O[0] + k * r * Math.cos(ph * DEG), O[1] - k * r * Math.sin(ph * DEG)];
+  let svg = G.ar(30, O[1], 515, O[1], "M", 1.3) + G.ar(O[0], 362, O[0], 40, "M", 1.3);
+  let labels = lb(518, O[1] + 20, "x", "M sm") + lb(O[0] + 16, 40, "y", "M sm") + lb(O[0] - 14, O[1] + 20, "O", "sm");
+  if (has("rad")) svg += G.g(ex("rad"), xaLn(p(2, 0), p(5, 0), "R", 14, "", `opacity=".25"`) + xaLn(p(2, 30), p(5, 30), "R", 14, "", `opacity=".25"`));
+  // espira
+  svg += xaLn(p(2, 0), p(5, 0), "K", 4) + xaLn(p(5, 30), p(2, 30), "K", 4) + G.pa(arcD(O[0], O[1], 5 * k, 0, -30), "K", 4) + G.pa(arcD(O[0], O[1], 2 * k, -30, 0), "K", 4);
+  svg += xaAr(p(3.2, 0), p(3.75, 0), "K", 3) + xaAr(p(3.8, 30), p(3.25, 30), "K", 3) +
+    G.pa(arcD(O[0], O[1], 5 * k, -9, -19), "K", 3, `marker-end="url(#mK)"`) + G.pa(arcD(O[0], O[1], 2 * k, -21, -11), "K", 3, `marker-end="url(#mK)"`);
+  svg += xaLn(O, p(2, 30), "M", 1.2, "5 5") + G.arc(O[0], O[1], 34, 0, -30, "K", 1.6);
+  labels += lb(...p(2, -4.3), Rw`\rho_1`, "sm") + lb(...p(5, -4.3), Rw`\rho_2`, "sm") + lb(...pol(O[0], O[1], 52, -13), Rw`\phi_0`, "sm") + lb(...pol(O[0], O[1], 418, -8), "I", "", `id="${pre}-lI"`);
+  if (has("rad")) {
+    const E = p(4.1, 0);
+    svg += G.g(ex("rad"), xaAr([E[0] - 2, E[1] + 16], [O[0] + 14, E[1] + 16], "R", 2, "", "") + xaAr([313, 168], [79, 303], "R", 2));
+    labels += lb(250, O[1] + 34, Rw`\vec{\mathbf R}`, "R sm", ex("rad")) + lb(240, 158, Rw`d\vec{\mathbf l}\parallel\vec{\mathbf R}`, "R", `id="${pre}-lpar" ${ex("rad")}`);
+  }
+  const elem = (key, r, ph, sgn, lab) => {
+    const E = p(r, ph), tx = -Math.sin(ph * DEG) * sgn, ty = -Math.cos(ph * DEG) * sgn, d = [O[0] - E[0], O[1] - E[1]], L = Math.hypot(...d), ud = [d[0] / L, d[1] / L];
+    const c1 = [E[0] + 12 * ud[0], E[1] + 12 * ud[1]], c2 = [c1[0] + 12 * tx, c1[1] + 12 * ty], c3 = [E[0] + 12 * tx, E[1] + 12 * ty];
+    svg += G.g(ex(key), xaAr([E[0] - 12 * tx, E[1] - 12 * ty], [E[0] + 34 * tx, E[1] + 34 * ty], "P", 5) + xaAr(E, [O[0] - 12 * ud[0], O[1] - 12 * ud[1]], "R", 2.2) +
+      G.pa(`M${xaf(c1[0])},${xaf(c1[1])} L${xaf(c2[0])},${xaf(c2[1])} L${xaf(c3[0])},${xaf(c3[1])}`, "M", 1.3));
+    const m = [(E[0] + O[0]) / 2, (E[1] + O[1]) / 2];
+    labels += lb(E[0] + 36 * tx + 26, E[1] + 36 * ty - 8, Rw`d\vec{\mathbf l}`, "P sm", `id="${pre}-ldl${lab}" ${ex(key)}`) +
+      lb(m[0] + (lab === "2" ? 10 : 6), m[1] + (lab === "2" ? -22 : 20), Rw`\vec{\mathbf R}`, "R sm", `id="${pre}-lR${lab}" ${ex(key)}`);
+  };
+  if (has("arc2")) elem("arc2", 5, 20, 1, "2");
+  if (has("arc1")) elem("arc1", 2, 13, -1, "1");
+  if (has("vals")) labels += lb(462, 150, Rw`+\tfrac{25}{6}\,\hat{\mathbf a}_z`, "G", `id="${pre}-lv2" ${ex("vals")}`) + lb(196, 196, Rw`-\tfrac{125}{12}\,\hat{\mathbf a}_z`, "R", `id="${pre}-lv1" ${ex("vals")}`);
+  if (has("Ht")) { svg += G.sym(O[0], O[1], 14, true, "G", ex("Ht")); labels += lb(O[0] + 30, O[1] + 30, Rw`\vec{\mathbf H}`, "G", `id="${pre}-lH" ${ex("Ht")}`); }
+  return xaBoard(540, 380, svg, labels);
+}
+
+// figura animada: um elemento percorre a espira; à direita, H_z(O) acumulado
+function xaFigSet(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1240, 440);
+  const O = [40, 395], k = 104, H1 = 125 / 12, H2 = 25 / 6, ph0 = Math.PI / 6, p = (r, ph) => [O[0] + k * r * Math.cos(ph), O[1] - k * r * Math.sin(ph)];
+  const T = 11, u = (t % T) / T, sp = Math.min(4, u / 0.82 * 4), seg = Math.min(3, Math.floor(sp)), f = sp >= 4 ? 1 : sp - seg;
+  const Hz = (q) => q <= 1 ? 0 : q <= 2 ? H2 * (q - 1) : q <= 3 ? H2 : H2 - H1 * (q - 3);
+  // espira
+  arrowTo(ctx, 15, O[1], 600, O[1], c.M, 1.2, 10); arrowTo(ctx, O[0], 425, O[0], 80, c.M, 1.2, 10);
+  ctx.save(); ctx.strokeStyle = c.K; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(...p(2, 0)); ctx.lineTo(...p(5, 0));
+  ctx.arc(O[0], O[1], 5 * k, 0, -ph0, true); ctx.lineTo(...p(2, ph0)); ctx.arc(O[0], O[1], 2 * k, -ph0, 0, false); ctx.stroke(); ctx.restore();
+  txt(ctx, "ρ_1", ...p(2, -0.1), { size: 15, c: c.M, align: "center" }); txt(ctx, "ρ_2", ...p(5, -0.1), { size: 15, c: c.M, align: "center" });
+  const segCol = [c.M, c.G, c.M, c.R];
+  // elemento
+  let E, dir;
+  if (seg === 0) { E = p(2 + 3 * f, 0); dir = [1, 0]; }
+  else if (seg === 1) { const a = f * ph0; E = p(5, a); dir = [-Math.sin(a), -Math.cos(a)]; }
+  else if (seg === 2) { E = p(5 - 3 * f, ph0); dir = [-Math.cos(ph0), Math.sin(ph0)]; }
+  else { const a = ph0 * (1 - f); E = p(2, a); dir = [Math.sin(a), Math.cos(a)]; }
+  arrowTo(ctx, E[0] - dir[0] * 14, E[1] - dir[1] * 14, E[0] + dir[0] * 22, E[1] + dir[1] * 22, c.P, 5, 14);
+  const off = seg === 0 ? [0, 14] : seg === 2 ? [-7, -12] : [0, 0];
+  arrowTo(ctx, E[0] + off[0], E[1] + off[1], O[0] + (E[0] - O[0]) * 0.07 + off[0], O[1] + (E[1] - O[1]) * 0.07 + off[1], c.R, 2, 10);
+  txt(ctx, "I dl", E[0] + 10, E[1] - 22, { size: 15, c: c.P, bold: true });
+  if (seg === 0 || seg === 2) { maZero(ctx, O[0], O[1], 12); txt(ctx, "dl × R = 0", 110, 432, { size: 17, c: c.M, bold: true }); }
+  else symC(ctx, O[0], O[1], 12, seg === 3, segCol[seg], 2.4);
+  txt(ctx, seg === 1 ? "anti-horário: +a_z" : seg === 3 ? "horário: −a_z" : "", 260, 432, { size: 17, c: segCol[seg], bold: true });
+  // gráfico do campo acumulado
+  const x0 = 660, y0 = 40, pw = 540, ph = 300;
+  const { X: PX, Y: PY } = maAx(ctx, x0, y0, pw, ph, { xmin: 0, xmax: 4, ymin: -12, ymax: 6, xt: [0, 1, 2, 3, 4], yt: [-10, -5, 0, 5], xf: () => "", yf: (v) => fmtc(v, 0), yl: "H_z(O) acumulado (A/m)" });
+  line(ctx, PX(0), PY(0), PX(4), PY(0), c.M, 1.2);
+  ["radial", "arco externo", "radial", "arco interno"].forEach((nm, i) => txt(ctx, nm, PX(i + 0.5), y0 + ph + 22, { size: 15, c: segCol[i] === c.M ? c.M : segCol[i], align: "center", bold: true }));
+  ctx.save(); ctx.strokeStyle = c.P; ctx.lineWidth = 3; ctx.beginPath();
+  for (let i = 0; i <= 100; i++) { const q = sp * i / 100; i ? ctx.lineTo(PX(q), PY(Hz(q))) : ctx.moveTo(PX(q), PY(Hz(q))); }
+  ctx.stroke(); ctx.restore();
+  dot(ctx, PX(sp), PY(Hz(sp)), 6, c.P);
+  if (sp >= 2) txt(ctx, "+25/6", PX(2) + 6, PY(H2) - 14, { size: 15, c: c.G, bold: true });
+  if (sp >= 4) txt(ctx, "−25/4 = −6,25", PX(4) - 8, PY(H2 - H1) + 22, { size: 16, c: c.R, bold: true, align: "right" });
+  txt(ctx, `H_z(O) = ${fmtc(Hz(sp), 2)} A/m`, x0 + pw / 2, 420, { size: 21, c: c.P, bold: true, align: "center" });
+  return ["Trecho radial: dl e R têm a mesma direção; a contribuição é nula.", "Arco externo, anti-horário: soma +I φ₀/(4π ρ₂) = +25/6 A/m em a_z.",
+    "Trecho radial de volta: de novo dl ∥ R, nada muda.", "Arco interno, horário e mais perto de O: subtrai I φ₀/(4π ρ₁) = 125/12 A/m."][seg];
+}
+
+// =====================================================================
+//  PARTE 5 — solenoide finito (a = 3 mm, L = 4 cm, n = 1500 esp/m, I = 200 mA)
+// =====================================================================
+const xaSL = { a: 3, L: 40, nI: 300 };   // mm, mm, A/m
+const xaHsol = (z) => { const { a, L, nI } = xaSL; return nI / 2 * ((L - z) / Math.hypot(a, L - z) + z / Math.hypot(a, z)); };
+// corte do solenoide no plano xz (eixo z na horizontal); cfg: dims, K, P, H, pts
+function xaBoardSol(cfg, pre) {
+  const { has, ex } = xaCfg(cfg), Z = (z) => 80 + 12 * z, yA = 170, yT = 90, yB = 250, zs = 12, zP = 30;
+  let svg = G.ar(30, yA, 640, yA, "M", 1.4) + G.ln(Z(0), yT, Z(40), yT, "M", 1, "", "3 4") + G.ln(Z(0), yB, Z(40), yB, "M", 1, "", "3 4");
+  let labels = lb(644, yA + 20, "z", "M sm") + lb(Z(0) - 6, yA + 18, "0", "M sm") + lb(Z(40) + 8, yA + 18, "L", "M sm");
+  for (let k = 0; k < 20; k++) { const x = Z((k + 0.5) * 2); svg += G.sym(x, yT, 8, false, "R") + G.sym(x, yB, 8, true, "R"); }
+  labels += lbt(Z(40) + 46, yT, "⊙ I", "R") + lbt(Z(40) + 46, yB, "⊗ I", "R");
+  if (has("dims")) {
+    svg += G.g(ex("dims"), G.brace(Z(0), yB + 18, Z(40), yB + 18, 10, "M") + G.brace(Z(0) - 18, yA, Z(0) - 18, yT, -10, "M"));
+    labels += lb(Z(20), yB + 58, Rw`L=4\ \mathrm{cm}`, "sm", ex("dims")) + lb(Z(0) - 48, (yA + yT) / 2, "a", "", ex("dims"));
+  }
+  if (has("K")) {
+    svg += G.g(ex("K"), G.ell(Z(zs), yA, 11, yA - yT, "rgba(0,59,92,.10)", "P", 2.6) + G.brace(Z(zs) - 12, yT - 14, Z(zs) + 12, yT - 14, -8, "P"));
+    labels += lb(Z(zs) + 10, yT - 52, Rw`dI=nI\,dz'`, "P sm", `id="${pre}-ldI" ${ex("K")}`) + lb(Z(zs), yA + 26, "z'", "P sm", `id="${pre}-lzs" ${ex("K")}`);
+  }
+  if (has("P")) {
+    svg += G.g(ex("P"), G.dot(Z(zP), yA, 6, "K") + G.brace(Z(zs), yA - 10, Z(zP), yA - 10, -10, "M"));
+    labels += lb(Z(zP) + 4, yA + 24, "P", "", ex("P")) + lb((Z(zs) + Z(zP)) / 2, yA - 44, Rw`h=z-z'`, "sm", `id="${pre}-lh" ${ex("P")}`);
+  }
+  if (has("H")) { svg += G.ar(Z(zP) + 8, yA, Z(zP) + 78, yA, "G", 4, ex("H")); labels += lb(Z(zP) + 60, yA + 26, Rw`\vec{\mathbf H}`, "G", `id="${pre}-lH" ${ex("H")}`); }
+  if (has("pts")) {
+    svg += G.g(ex("pts"), G.dot(Z(20), yA, 7, "G") + G.dot(Z(0), yA, 7, "R") + G.dot(Z(40), yA, 7, "R"));
+    labels += lbt(Z(20), yA + 30, "centro", "", `id="${pre}-lc" ${ex("pts")}`) + lbt(Z(0) + 4, yA - 26, "extremidade", "", `id="${pre}-le" ${ex("pts")}`);
+  }
+  return xaBoard(660, 340, svg, labels);
+}
+
+// figura animada: P percorre o eixo; as espiras mais próximas de P (mais escuras) pesam mais
+function xaFigSol(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1240, 470);
+  const { a, L, nI } = xaSL, X = (z) => 90 + (z + 10) / 60 * 1060, yA = 112, ra = a / 60 * 1060;
+  const zP = 20 + 28 * Math.sin(TAU * t / 12), H = xaHsol(zP);
+  const wgt = (d) => a ** 3 / (a * a + d * d) ** 1.5;   // peso de uma espira (1 no próprio plano)
+  arrowTo(ctx, 70, yA, 1170, yA, c.M, 1.3, 10); txt(ctx, "z", 1172, yA + 18, { size: 16, c: c.M, italic: true });
+  line(ctx, X(0), yA - ra, X(L), yA - ra, c.M, 1, [3, 4]); line(ctx, X(0), yA + ra, X(L), yA + ra, c.M, 1, [3, 4]);
+  for (let k = 0; k < 60; k++) {
+    const zk = (k + 0.5) * L / 60, x = X(zk), q = wgt(zP - zk);
+    ctx.save(); ctx.globalAlpha = 0.18 + 0.82 * q;
+    for (const [y, into] of [[yA - ra, false], [yA + ra, true]]) symC(ctx, x, y, 5, into, c.R, 1.6);
+    ctx.restore();
+  }
+  const Hl = H / nI * 90;
+  dot(ctx, X(zP), yA, 6, c.K); if (Hl > 3) arrowTo(ctx, X(zP), yA, X(zP) + Hl, yA, c.G, 4, 14);
+  txt(ctx, "P", X(zP) - 4, yA + 22, { size: 18, bold: true });
+  txt(ctx, "60 espiras, a = 3 mm, L = 40 mm (em escala); espira mais escura = contribui mais em P", 90, 20, { size: 15, c: c.M });
+  const { X: PX, Y: PY } = maAx(ctx, 90, 230, 1060, 170, { xmin: -10, xmax: 50, ymin: 0, ymax: 330, xt: [-10, 0, 10, 20, 30, 40, 50], yt: [0, 100, 200, 300], yf: (v) => fmtc(v, 0), xl: "z (mm)", yl: "H (A/m)" });
+  line(ctx, PX(-10), PY(nI), PX(50), PY(nI), c.M, 1.2, [6, 5]); line(ctx, PX(-10), PY(nI / 2), PX(50), PY(nI / 2), c.M, 1.2, [6, 5]);
+  txt(ctx, "nI = 300", PX(50) - 4, PY(nI) - 10, { size: 14, c: c.M, align: "right" }); txt(ctx, "nI/2 = 150", PX(50) - 4, PY(nI / 2) - 10, { size: 14, c: c.M, align: "right" });
+  maCurve(ctx, xaHsol, -10, 50, PX, PY, c.G, 2.8, null, 300);
+  dot(ctx, PX(20), PY(xaHsol(20)), 6, c.G); txt(ctx, "296,7", PX(20), PY(xaHsol(20)) + 20, { size: 15, c: c.G, bold: true, align: "center" });
+  for (const z of [0, 40]) { dot(ctx, PX(z), PY(xaHsol(z)), 6, c.R); txt(ctx, "149,6", PX(z) + (z ? 14 : -14), PY(xaHsol(z)) - 12, { size: 15, c: c.R, bold: true, align: z ? "left" : "right" }); }
+  line(ctx, X(zP), yA + 8, PX(zP), PY(H), c.P, 1.2, [4, 4]); dot(ctx, PX(zP), PY(H), 7, c.P);
+  txt(ctx, `H(P) = ${fmtc(H, 1)} A/m  (z = ${fmtc(zP, 1)} mm)`, 640, 455, { size: 20, c: c.P, bold: true, align: "center" });
+  return zP < 0 || zP > L ? "Fora do solenoide, sobre o eixo, o campo cai rapidamente: quase todas as espiras ficam de um só lado de P."
+    : "Dentro do solenoide, as espiras dos dois lados de P contribuem; perto das extremidades, falta a metade de um dos lados.";
+}
+
+Object.assign(BOARDS, {
+  xaEl0: () => xaBoardEl({}, "xa20"),
+  xaEl1: () => xaBoardEl({ R1: "2", H1: "6" }, "xa21"),
+  xaEl2: () => xaBoardEl({ R1: "", H1: "", R2: "", H2: "6" }, "xa22"),
+  xaEl3: () => xaBoardEl({ R1: "", H1: "", R2: "", H2: "" }, "xa23"),
+  xaSeg0: () => xaBoardSeg({}, "xa30"),
+  xaSeg1: () => xaBoardSeg({ rho: "3" }, "xa31"),
+  xaSeg2: () => xaBoardSeg({ rho: "", z: "2", dist: "" }, "xa32"),
+  xaSeg3: () => xaBoardSeg({ rho: "", ang: "", H: "5" }, "xa33"),
+  xaSet0: () => xaBoardSet({}, "xa40"),
+  xaSet1: () => xaBoardSet({ rad: "2" }, "xa41"),
+  xaSet2: () => xaBoardSet({ arc2: "1", arc1: "4" }, "xa42"),
+  xaSet3: () => xaBoardSet({ vals: "2", Ht: "4" }, "xa43"),
+  xaSol0: () => xaBoardSol({ dims: "" }, "xa50"),
+  xaSol1: () => xaBoardSol({ dims: "", K: "3" }, "xa51"),
+  xaSol2: () => xaBoardSol({ K: "", P: "", H: "4" }, "xa52"),
+  xaSol3: () => xaBoardSol({ pts: "" }, "xa53"),
+});
+Object.assign(FIGS, { xaEl: xaFigEl, xaSeg: xaFigSeg, xaSet: xaFigSet, xaSol: xaFigSol });
+
+
+// =====================================================================
+//  code_ex_b.js — Campos Magnetostáticos, exemplos resolvidos tirados do banco de questões,
+//  partes 6 (Ampère), 7 (densidade de fluxo, Gauss do magnetismo) e 8 (potenciais).
+//  Valores: python3 Slides/html_comum/exemplo_banco.py <id> (semente fixa dos slides).
+//  Prefixo xb em tudo o que é de topo; reaproveita utilidades de code_b.js (mb*) e code_a.js (maStep, maFit, maAx, maCurve).
+// =====================================================================
+
+// ---------- utilidades ----------
+const xbAnchor = (id, x, y) => `<div class="lb" id="${id}" style="left:${mbF(x)}px;top:${mbF(y)}px;width:6px;height:6px"></div>`;
+const xbVal = (id, d) => { const e = $(id); return e ? Number(e.value) : d; };
+const xbChk = (id, d = true) => { const e = $(id); return e ? e.checked : d; };
+const xbOut = (id, s) => { const e = $(id); if (e && e.textContent !== s) e.textContent = s; };
+// controle "automático": se marcado, o slider acompanha a animação
+function xbAuto(chk, id, v, fmt) { if (!xbChk(chk)) return xbVal(id, v); const e = $(id); if (e) { e.value = v; xbOut(id + "-o", fmt(v)); } return v; }
+const xbDbl = (x1, y1, x2, y2, c = "K", w = 1.6) => `<line x1="${mbF(x1)}" y1="${mbF(y1)}" x2="${mbF(x2)}" y2="${mbF(y2)}" ${sty(c, w)} marker-start="url(#m${c})" marker-end="url(#m${c})"/>`;
+// coroa circular (parede do condutor oco), preenchida
+const xbAnel = (cx, cy, ra, rb, fill, stroke = "R", w = 2.4, ex = "") => {
+  const ring = (r) => `M${mbF(cx - r)},${mbF(cy)} a${mbF(r)},${mbF(r)} 0 1,0 ${mbF(2 * r)},0 a${mbF(r)},${mbF(r)} 0 1,0 ${mbF(-2 * r)},0 Z`;
+  return `<path d="${ring(rb)} ${ra > 0 ? ring(ra) : ""}" fill-rule="evenodd" style="fill:${fill};stroke:${stroke ? `var(--c${stroke})` : "none"};stroke-width:${w}" ${ex}/>`;
+};
+// setor de coroa em ângulos matemáticos (graus), raios r1 < r2
+function xbSetorPath(cx, cy, r1, r2, a1, a2) {
+  const [x1, y1] = mbPt(cx, cy, r2, a1), [x2, y2] = mbPt(cx, cy, r2, a2), big = Math.abs(a2 - a1) > 180 ? 1 : 0;
+  if (r1 <= 0) return `M${mbF(cx)},${mbF(cy)} L${mbF(x1)},${mbF(y1)} A${mbF(r2)},${mbF(r2)} 0 ${big} 0 ${mbF(x2)},${mbF(y2)} Z`;
+  const [x3, y3] = mbPt(cx, cy, r1, a2), [x4, y4] = mbPt(cx, cy, r1, a1);
+  return `M${mbF(x1)},${mbF(y1)} A${mbF(r2)},${mbF(r2)} 0 ${big} 0 ${mbF(x2)},${mbF(y2)} L${mbF(x3)},${mbF(y3)} A${mbF(r1)},${mbF(r1)} 0 ${big} 1 ${mbF(x4)},${mbF(y4)} Z`;
+}
+// canvas: coroa, setor, roda de pás
+function xbCAnel(ctx, cx, cy, r1, r2, fill) { ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(cx, cy, r2, 0, TAU); if (r1 > 0) ctx.arc(cx, cy, r1, TAU, 0, true); ctx.fill("evenodd"); ctx.restore(); }
+function xbCSetor(ctx, cx, cy, r1, r2, a1, a2, fill, stroke, lw = 2) {   // ângulos matemáticos em rad
+  ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, r2, -a1, -a2, true); if (r1 > 0) ctx.arc(cx, cy, r1, -a2, -a1, false); else ctx.lineTo(cx, cy); ctx.closePath();
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); } ctx.restore();
+}
+function xbWheel(ctx, x, y, r, ang, col) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(ang); ctx.strokeStyle = col; ctx.lineWidth = 2.4;
+  ctx.beginPath(); ctx.arc(0, 0, r * 0.28, 0, TAU); ctx.stroke();
+  for (let k = 0; k < 4; k++) { const t = k * Math.PI / 2; ctx.beginPath(); ctx.moveTo(Math.cos(t) * r * 0.28, Math.sin(t) * r * 0.28); ctx.lineTo(Math.cos(t) * r, Math.sin(t) * r); ctx.stroke(); }
+  ctx.fillStyle = col; ctx.beginPath(); ctx.arc(0, 0, 3, 0, TAU); ctx.fill(); ctx.restore();
+}
+const xbTri = (p) => p < 0.5 ? 2 * p : 2 - 2 * p;   // vai e volta, p em [0, 1)
+const xbEase = (p) => 0.5 - 0.5 * Math.cos(Math.PI * p);
+
+// =====================================================================
+//  6A. CONDUTOR CILÍNDRICO OCO (ampere_sadiku_7_19): a = 1 cm, b = 2 cm, I = 10 A
+// =====================================================================
+const XBO = { a: 1, b: 2, I: 10 };
+const xbOcoH = (r, I = XBO.I) => r <= XBO.a ? 0 : r < XBO.b ? I / (TAU * r / 100) * (r * r - 1) / 3 : I / (TAU * r / 100);   // r em cm, H em A/m
+// seção reta: o = { u, W, H, rows, Lg, L1, L2, L3, sh2, sh3, small, J }
+function xbOcoFig(o = {}) {
+  const u = o.u || 70, W = o.W || 500, H = o.H || 500, cx = W / 2, cy = H / 2;
+  let svg = xbAnel(cx, cy, u, 2 * u, "rgba(176,58,46,.12)"), labels = "";
+  if (o.sh2 !== undefined) svg += xbAnel(cx, cy, u, 1.5 * u, "rgba(106,44,142,.28)", "", 0, S(o.sh2));
+  if (o.sh3 !== undefined) svg += xbAnel(cx, cy, u, 2 * u, "rgba(106,44,142,.28)", "", 0, S(o.sh3));
+  for (const r of o.rows || [1.25, 1.5, 1.75]) { const n = Math.round(TAU * r * u / (o.small ? 26 : 38)); for (let k = 0; k < n; k++) { const [x, y] = mbPt(cx, cy, r * u, 360 * k / n + 17 * r); svg += G.sym(+mbF(x), +mbF(y), o.small ? 4 : 6, false, "R"); } }
+  svg += G.ln(cx, cy, ...mbPt(cx, cy, u, 200).map(mbF), "K", 1.4) + G.ln(cx, cy, ...mbPt(cx, cy, 2 * u, -35).map(mbF), "K", 1.4) + G.dot(cx, cy, 2.5, "K");
+  labels += lb(...mbPt(cx, cy, u * 0.55, 212), "a", "sm") + lb(...mbPt(cx, cy, 2 * u + 16, -35), "b", "sm");
+  const amp = (r, s, lab, hl, la, lr) => {
+    if (s === undefined) return;
+    svg += G.g(S(s), mbRing(cx, cy, r * u, "mbV", 3, [la + 35]) + (hl ? mbTan(cx, cy, r * u, 60, hl) + mbTan(cx, cy, r * u, 240, hl) : ""));
+    labels += lb(...mbPt(cx, cy, lr, la), lab, "mbV", S(s));
+  };
+  amp(0.5, o.L1, "L_1", 0, 95, 0.5 * u + 20); amp(1.5, o.L2, "L_2", 40, 150, 2 * u + 20); amp(2.6, o.L3, "L_3", 46, 125, 2.6 * u + 24);
+  if (o.Lg !== undefined) {
+    amp(1.5, o.Lg, "L", 40, 150, 2 * u + 20);
+    svg += G.g(S(o.Lg), G.ln(cx, cy, ...mbPt(cx, cy, 1.5 * u, 75).map(mbF), "mbV", 1.6, "", "5 4"));
+    labels += `<div ${S(o.Lg)}>` + lb(...mbPt(cx, cy, 0.95 * u, 88), Rw`\rho`, "sm mbV") + lb(...mbPt(cx, cy, 1.5 * u + 30, 245), Rw`\vH`, "G") + xbAnchor("xb-oc-L", ...mbPt(cx, cy, 1.5 * u, 150)) + `</div>`;
+  }
+  if (o.L1 !== undefined) labels += `<div ${S(o.L1)}>` + xbAnchor("xb-oc-L1", ...mbPt(cx, cy, 0.5 * u, 0)) + `</div>`;
+  if (o.L2 !== undefined) labels += `<div ${S(o.L2)}>` + xbAnchor("xb-oc-L2", ...mbPt(cx, cy, 1.5 * u, 10)) + `</div>`;
+  if (o.L3 !== undefined) labels += `<div ${S(o.L3)}>` + xbAnchor("xb-oc-L3", ...mbPt(cx, cy, 2.6 * u, 15)) + `</div>`;
+  if (o.J !== undefined) labels += xbAnchor("xb-oc-w", ...mbPt(cx, cy, 1.75 * u, -80));
+  if (o.small) labels += lbt(cx, H - 12, `corrente <i>I</i> saindo da tela (+<i>z</i>)`);
+  return board(W, H, svg, labels);
+}
+// H(ρ) com os três pontos do item b
+function xbOcoPlot() {
+  const pl = mbPlotSVG({ x0: 90, y0: 50, pw: 400, ph: 280, xmin: 0, xmax: 6, ymin: 0, ymax: 90, xt: [0, 1, 2, 3, 4, 5, 6], yt: [0, 20, 40, 60, 80], xl: Rw`\rho\ (\mathrm{cm})`, yl: Rw`H_\phi\ (\mathrm{A/m})` });
+  let svg = `<rect x="${mbF(pl.X(1))}" y="${mbF(pl.Y(90))}" width="${mbF(pl.X(2) - pl.X(1))}" height="${mbF(pl.Y(0) - pl.Y(90))}" style="fill:rgba(176,58,46,.10)"/>` + pl.svg;
+  svg += G.ln(pl.X(0), pl.Y(0), pl.X(1), pl.Y(0), "G", 3.4) + G.pa(mbCurve(pl.X, pl.Y, (r) => xbOcoH(r), 1, 5.95, 200), "G", 3.4);
+  let labels = pl.labels + lbt(pl.X(1.5), pl.Y(86), `<span style="color:var(--unb-alert)">parede</span>`);
+  const pts = [[0.5, "1"], [1.5, "2"], [5, "3"]];
+  pts.forEach(([r, s], i) => {
+    const x = pl.X(r), y = pl.Y(xbOcoH(r));
+    svg += G.g(S(s), G.ln(mbF(x), mbF(pl.Y(0)), mbF(x), mbF(y), "mbV", 1.4, "", "4 4") + G.dot(mbF(x), mbF(y), 7, "mbV"));
+    labels += `<div ${S(s)}>` + xbAnchor("xb-op-" + (i + 1), x, y - 8) + `</div>`;
+  });
+  return board(540, 420, svg, labels);
+}
+
+// animação: caminho amperiano de raio variável
+function xbFigOco(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1040, 500);
+  const I = xbVal("xb-oa-I", 10), rho = xbAuto("xb-oa-auto", "xb-oa-r", +(3 - 2.9 * Math.cos(TAU * t / 16)).toFixed(2), (v) => fmtc(v, 1) + " cm");
+  const u = 38, cx = 250, cy = 250, Hr = xbOcoH(rho, I), Hmax = I / (TAU * 0.02);
+  xbCAnel(ctx, cx, cy, u, 2 * u, "rgba(176,58,46,.12)"); ring(ctx, cx, cy, u, c.R, 2); ring(ctx, cx, cy, 2 * u, c.R, 2);
+  if (rho > 1) xbCAnel(ctx, cx, cy, u, Math.min(rho, 2) * u, "rgba(106,44,142,.30)");
+  for (const r of [1.3, 1.7]) { const n = Math.round(TAU * r * u / 24); for (let k = 0; k < n; k++) { const a = TAU * k / n + r; symC(ctx, cx + r * u * Math.cos(a), cy - r * u * Math.sin(a), 4.5, false, c.R, 1.2); } }
+  ctx.save(); ctx.strokeStyle = mbCOL.V; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(cx, cy, rho * u, 0, TAU); ctx.stroke(); ctx.restore();
+  // marcadores que circulam com velocidade proporcional a H (a circulação)
+  const ph = (t * 1.6 * Hr / Hmax) % TAU;
+  for (let k = 0; k < 10; k++) { const a = ph + TAU * k / 10; dot(ctx, cx + rho * u * Math.cos(a), cy - rho * u * Math.sin(a), 4, mbCOL.V); }
+  if (Hr > 0.5) for (const a0 of [0.5, 0.5 + 2.094, 0.5 + 4.189]) { const a = a0 + ph, x = cx + rho * u * Math.cos(a), y = cy - rho * u * Math.sin(a), L = 14 + 60 * Hr / Hmax; arrowTo(ctx, x, y, x - Math.sin(a) * L, y - Math.cos(a) * L, c.G, 3, 12); }
+  txt(ctx, "a", cx - u * 0.62, cy + 10, { size: 16, italic: true, c: c.M }); txt(ctx, "b", cx + 2 * u * 0.72 + 4, cy - 2 * u * 0.72 - 4, { size: 16, italic: true, c: c.M });
+  txt(ctx, `ρ = ${fmtc(rho, 2)} cm`, 20, 22, { size: 18, c: mbCOL.V, bold: true });
+  txt(ctx, `I_{env} = ${fmtc(I * (rho <= 1 ? 0 : rho < 2 ? (rho * rho - 1) / 3 : 1), 2)} A`, 20, 48, { size: 18 });
+  txt(ctx, `H_φ = I_{env}/(2πρ) = ${fmtc(Hr, 2)} A/m`, 20, 74, { size: 18, c: c.G });
+  txt(ctx, rho <= 1 ? "ρ < a: o caminho não envolve corrente" : rho < 2 ? "a < ρ < b: envolve parte da parede" : "ρ > b: envolve toda a corrente", 20, 482, { size: 17, c: c.M });
+  // gráficos: fração envolvida e H(ρ)
+  const g1 = maAx(ctx, 560, 40, 440, 150, { xmin: 0, xmax: 6, ymin: 0, ymax: 1.1, xt: [0, 1, 2, 3, 4, 5, 6], yt: [0, 0.5, 1], yf: (v) => fmtc(v, 1), yl: "I_{env} / I" });
+  ctx.save(); ctx.fillStyle = "rgba(176,58,46,.10)"; ctx.fillRect(g1.X(1), g1.Y(1.1), g1.X(2) - g1.X(1), g1.Y(0) - g1.Y(1.1)); ctx.restore();
+  maCurve(ctx, (r) => r <= 1 ? 0 : r < 2 ? (r * r - 1) / 3 : 1, 0, 6, g1.X, g1.Y, mbCOL.V, 3, null, 240);
+  dot(ctx, g1.X(rho), g1.Y(rho <= 1 ? 0 : rho < 2 ? (rho * rho - 1) / 3 : 1), 7, mbCOL.V);
+  const Hm = Math.max(90, Hmax * 1.12), g2 = maAx(ctx, 560, 280, 440, 170, { xmin: 0, xmax: 6, ymin: 0, ymax: Hm, xt: [0, 1, 2, 3, 4, 5, 6], yt: niceTicks(Hm), yf: (v) => fmtc(v, 0), xl: "ρ (cm)", yl: "H_φ (A/m)" });
+  ctx.save(); ctx.fillStyle = "rgba(176,58,46,.10)"; ctx.fillRect(g2.X(1), g2.Y(Hm), g2.X(2) - g2.X(1), g2.Y(0) - g2.Y(Hm)); ctx.restore();
+  maCurve(ctx, (r) => xbOcoH(r, I), 0.02, 6, g2.X, g2.Y, c.G, 3, null, 300);
+  for (const r of [0.5, 1.5, 5]) ring(ctx, g2.X(r), g2.Y(xbOcoH(r, I)), 6, c.K, 1.6);
+  dot(ctx, g2.X(rho), g2.Y(Hr), 7, mbCOL.V); line(ctx, g2.X(rho), g2.Y(0), g2.X(rho), g2.Y(Hr), mbCOL.V, 1.2, [4, 4]);
+  return null;
+}
+
+// =====================================================================
+//  6B. H = 50 ρ² aφ (ampere_sadiku_7_27): J = 150 ρ az; corrente no setor 0 < ρ < 2, 0 < φ < π/3
+// =====================================================================
+function xbSetorE() {
+  const ox = 50, oy = 200, k = 75, X = (x) => ox + k * x, Y = (y) => oy - k * y;
+  let svg = G.ar(X(-0.2), Y(0), X(2.6), Y(0), "K", 1.4) + G.ar(X(0), Y(-0.2), X(0), Y(2.3), "K", 1.4);
+  svg += `<path d="${xbSetorPath(ox, oy, 0, 2 * k, 0, 60)}" style="fill:rgba(0,59,92,.12);stroke:var(--cP);stroke-width:2.2"/>` + mbArc(ox, oy, 34, 0, 60, "mbO", 1.6);
+  const labels = lb(X(2.6) + 12, Y(0), "x", "sm") + lb(X(0) - 14, Y(2.3), "y", "sm") + lb(X(2), Y(0) + 18, "2", "sm") + lb(...mbPt(ox, oy, 52, 30), Rw`\tfrac{\pi}{3}`, "sm mbO") + lbt(X(1.95), Y(1.55), "\\(z=0\\)");
+  return board(280, 230, svg, labels);
+}
+// vista de cima com H circulando (setas ∝ ρ²) e J (⊙ ∝ ρ)
+function xbHrot(sJ) {
+  const cx = 235, cy = 240, k = 95;
+  let svg = G.ar(cx - 225, cy, cx + 228, cy, "M", 1.2) + G.ar(cx, cy + 225, cx, cy - 228, "M", 1.2), labels = lb(cx + 236, cy + 14, "x", "sm") + lb(cx + 14, cy - 232, "y", "sm");
+  for (const r of [0.5, 1, 1.5, 2]) {
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r * k}" ${sty("M", 1, "3 5")}/>`;
+    const L = 20 * r * r;
+    if (L > 6) for (let j = 0; j < 6; j++) svg += mbTan(cx, cy, r * k, 60 * j + 15 * r, L, "G", 2.6);
+  }
+  labels += lb(...mbPt(cx, cy, 2 * k + 30, 52), Rw`\vH`, "G") + xbAnchor("xb-hr-H", ...mbPt(cx, cy, 2 * k + 8, 35));
+  if (sJ !== undefined) {
+    let g = "";
+    for (const r of [0.5, 1, 1.5]) for (let j = 0; j < 6; j++) { const [x, y] = mbPt(cx, cy, r * k, 60 * j + 45); g += G.sym(+mbF(x), +mbF(y), 3 + 4 * r, false, "R"); }
+    svg += G.g(S(sJ), g);
+    labels += `<div ${S(sJ)}>` + xbAnchor("xb-hr-J", ...mbPt(cx, cy, 1.5 * k, 45)) + lb(...mbPt(cx, cy, 1.5 * k + 32, 45), Rw`\vJ`, "R") + `</div>`;
+  }
+  return board(480, 480, svg, labels);
+}
+// setor com elemento de área e faixa de raio ρ
+function xbSetorFig(sEl, sBand) {
+  const ox = 70, oy = 430, k = 165, P = (r, a) => mbPt(ox, oy, r * k, a);
+  let svg = G.ar(ox - 20, oy, ox + 2.25 * k, oy, "K", 1.4) + `<path d="${xbSetorPath(ox, oy, 0, 2 * k, 0, 60)}" style="fill:rgba(0,59,92,.08);stroke:var(--cP);stroke-width:2.2"/>`;
+  let labels = lb(ox + 2.25 * k + 14, oy, "x", "sm") + lb(...P(2, -6), "2", "sm") + lb(...P(0.38, 30), Rw`\tfrac{\pi}{3}`, "sm mbO");
+  svg += mbArc(ox, oy, 0.25 * k, 0, 60, "mbO", 1.6);
+  for (const r of [0.6, 1.0, 1.4, 1.8]) for (const a of [12, 30, 48]) { const [x, y] = P(r, a); svg += G.sym(+mbF(x), +mbF(y), 2.5 + 3.2 * r, false, "R"); }
+  if (sBand !== undefined) {
+    svg += G.g(S(sBand), `<path d="${xbSetorPath(ox, oy, 1.18 * k, 1.3 * k, 0, 60)}" style="fill:rgba(194,90,0,.30);stroke:var(--cmbO);stroke-width:1.4"/>`);
+    labels += `<div ${S(sBand)}>` + xbAnchor("xb-st-band", ...P(1.3, 57)) + `</div>`;
+  }
+  if (sEl !== undefined) {
+    svg += G.g(S(sEl), `<path d="${xbSetorPath(ox, oy, 1.18 * k, 1.3 * k, 34, 41)}" style="fill:rgba(194,90,0,.75);stroke:var(--cmbO);stroke-width:1.6"/>` + G.ln(ox, oy, ...P(1.18, 34).map(mbF), "mbO", 1.2, "", "4 4"));
+    labels += `<div ${S(sEl)}>` + lb(...P(0.8, 39), Rw`\rho`, "sm mbO") + lb(...P(1.42, 37.5), Rw`d\rho`, "sm mbO") + xbAnchor("xb-st-dS", ...P(1.3, 37.5)) + `</div>`;
+  }
+  return board(460, 470, svg, labels);
+}
+// contorno do setor para a verificação pela lei de Ampère
+function xbSetorC() {
+  const ox = 70, oy = 430, k = 165, P = (r, a) => mbPt(ox, oy, r * k, a);
+  let svg = `<path d="${xbSetorPath(ox, oy, 0, 2 * k, 0, 60)}" style="fill:rgba(0,59,92,.06)"/>`, labels = "";
+  svg += G.g(S("2"), G.ln(ox, oy, ...P(2, 0).map(mbF), "mbO", 4) + G.ln(ox, oy, ...P(2, 60).map(mbF), "mbO", 4));
+  svg += G.ln(ox, oy, ...P(2, 0).map(mbF), "mbV", 3) + G.ln(ox, oy, ...P(2, 60).map(mbF), "mbV", 3) + mbArc(ox, oy, 2 * k, 0, 60, "mbV", 3);
+  svg += G.ar(...P(0.9, 0).map(mbF), ...P(1.1, 0).map(mbF), "mbV", 3) + mbArc(ox, oy, 2 * k, 26, 34, "mbV", 3, "", true) + G.ar(...P(1.1, 60).map(mbF), ...P(0.9, 60).map(mbF), "mbV", 3);
+  // H ⊥ aos raios e tangente ao arco
+  for (const r of [0.7, 1.4]) { svg += G.g(S("2"), mbTan(ox, oy, r * k, 0, 18 * r * r + 8, "G", 2.4) + mbTan(ox, oy, r * k, 60, 18 * r * r + 8, "G", 2.4)); }
+  svg += G.g(S("3"), [12, 30, 48].map((a) => mbTan(ox, oy, 2 * k, a, 70, "G", 2.8)).join(""));
+  labels += lb(...P(1.0, -7), "C_1", "sm mbV") + lb(...P(2.15, 30), "C_2", "sm mbV") + lb(...P(1.05, 75), "C_3", "sm mbV") + lb(...P(2, -6), "2", "sm") + lb(ox - 14, oy + 10, "O", "sm");
+  labels += `<div ${S("2")}>` + xbAnchor("xb-sc-r", ...P(1.6, 0)) + `</div><div ${S("3")}>` + xbAnchor("xb-sc-arc", ...P(2, 14)) + lb(...P(2.33, 40), Rw`\vH`, "G") + `</div>`;
+  return board(460, 470, svg, labels);
+}
+// animação: fluxo de J preenchendo o setor e circulação de H no contorno
+function xbFigSetor(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1040, 500);
+  const dphD = xbVal("xb-sa-f", 60), R = xbVal("xb-sa-R", 2), dph = dphD * DEG, Itot = 50 * R ** 3 * dph;
+  const [cx, cy, k] = dphD <= 90 ? [80, 430, 150] : dphD <= 180 ? [250, 430, 95] : [250, 250, 88], p = frac(t / 12);
+  xbCSetor(ctx, cx, cy, 0, R * k, 0, dph, "rgba(0,59,92,.07)", c.P, 1.6);
+  const ax = R * k + 22; line(ctx, Math.max(4, cx - ax), cy, cx + ax, cy, c.GR, 1); line(ctx, cx, cy - ax, cx, Math.min(cy + ax, 455), c.GR, 1);
+  // fase 1: a faixa de raio ρs varre o setor
+  const rs = p < 0.42 ? R * xbEase(p / 0.42) : R;
+  if (rs > 0) xbCSetor(ctx, cx, cy, 0, rs * k, 0, dph, "rgba(194,90,0,.28)", null);
+  if (p < 0.42) xbCSetor(ctx, cx, cy, Math.max(0, rs - 0.06) * k, rs * k, 0, dph, "rgba(194,90,0,.75)", null);
+  for (let i = 1; i <= 5; i++) { const r = R * (i - 0.5) / 5, n = Math.max(1, Math.round(dph * r * k / 34)); for (let j = 0; j < n; j++) { const a = dph * (j + 0.5) / n; symC(ctx, cx + r * k * Math.cos(a), cy - r * k * Math.sin(a), 2 + 3 * r, false, c.R, 1.2); } }
+  const IJ = 50 * rs ** 3 * dph;
+  // fase 2: o caminhante percorre o contorno C1 → C2 → C3
+  const Ltot = 2 * R + R * dph, q = p < 0.5 ? 0 : p < 0.94 ? (p - 0.5) / 0.44 : 1, sw = q * Ltot;
+  let wx, wy, phw = 0;
+  if (sw <= R) { wx = cx + sw * k; wy = cy; }
+  else if (sw <= R + R * dph) { phw = (sw - R) / R; wx = cx + R * k * Math.cos(phw); wy = cy - R * k * Math.sin(phw); }
+  else { phw = dph; const r = R - (sw - R - R * dph); wx = cx + r * k * Math.cos(dph); wy = cy - r * k * Math.sin(dph); }
+  const Gam = 50 * R ** 3 * phw;
+  ctx.save(); ctx.strokeStyle = mbCOL.V; ctx.lineWidth = 4; ctx.beginPath();
+  if (q > 0) { ctx.moveTo(cx, cy); if (sw <= R) ctx.lineTo(wx, wy); else { ctx.lineTo(cx + R * k, cy); ctx.arc(cx, cy, R * k, 0, -phw, true); if (sw > R + R * dph) ctx.lineTo(wx, wy); } ctx.stroke(); }
+  ctx.restore();
+  if (q > 0 && q < 1) { dot(ctx, wx, wy, 8, mbCOL.V); }
+  for (let j = 0; j < 4; j++) { const a = dph * (j + 0.5) / 4, x = cx + R * k * Math.cos(a), y = cy - R * k * Math.sin(a), L = Math.min(70, 9 * R * R); arrowTo(ctx, x, y, x - Math.sin(a) * L, y - Math.cos(a) * L, c.G, 2.6, 11); }
+  txt(ctx, `Δφ = ${fmtc(dphD, 0)}°   R = ${fmtc(R, 1)} m`, 20, 24, { size: 18, bold: true });
+  txt(ctx, p < 0.5 ? "1) soma de J·dS, faixa por faixa" : "2) circulação de H ao longo de C_1, C_2, C_3", 20, 482, { size: 17, c: p < 0.5 ? mbCOL.O : mbCOL.V });
+  // barras
+  const bx = 600, by = 420, bh = 300, sc = bh / Itot;
+  line(ctx, bx - 20, by, bx + 400, by, c.K, 1.4);
+  ctx.save(); ctx.fillStyle = "rgba(194,90,0,.75)"; ctx.fillRect(bx + 30, by - IJ * sc, 120, IJ * sc); ctx.fillStyle = "rgba(106,44,142,.75)"; ctx.fillRect(bx + 230, by - Gam * sc, 120, Gam * sc); ctx.restore();
+  line(ctx, bx - 20, by - bh, bx + 400, by - bh, c.M, 1.2, [6, 5]);
+  txt(ctx, `50R³Δφ = ${fmtc(Itot, 1)} A`, bx + 400, by - bh - 16, { size: 17, align: "right", c: c.M });
+  txt(ctx, "∫J·dS", bx + 90, by + 24, { size: 19, align: "center", c: mbCOL.O, bold: true }); txt(ctx, "∮H·dl", bx + 290, by + 24, { size: 19, align: "center", c: mbCOL.V, bold: true });
+  txt(ctx, `${fmtc(IJ, 1)} A`, bx + 90, by - IJ * sc - 16, { size: 18, align: "center" }); txt(ctx, `${fmtc(Gam, 1)} A`, bx + 290, by - Gam * sc - 16, { size: 18, align: "center" });
+  return null;
+}
+
+// =====================================================================
+//  7A. ANEL DE SEÇÃO TRIANGULAR (campo_sadiku_7_35): a = 30 cm, b = 20 cm, h = 2 cm, I = 20 A
+// =====================================================================
+function xbTriE() {
+  const X = (x) => 270 + 54 * x, Y = (y) => 150 - 54 * y, P = (x, y) => [mbF(X(x)), mbF(Y(y))];
+  let svg = G.ln(...P(0, -1.2), ...P(0, 2.4), "K", 4) + G.ar(...P(0, 1.3), ...P(0, 2.0), "K", 4);
+  svg += G.poly([P(-4, 0), P(-4, 1.6), P(-2.5, 0)], "#2f4f86", "K", 0) + G.poly([P(4, 0), P(4, 1.6), P(2.5, 0)], "#2f4f86", "K", 0);
+  svg += G.ln(...P(-4, 1.6), ...P(4, 1.6), "K", 1.2, "", "5 4") + G.ln(...P(-2.5, 0), ...P(2.5, 0), "K", 1.2, "", "5 4");
+  svg += xbDbl(...P(-4.4, 0), ...P(-4.4, 1.6)) + xbDbl(...P(-4, -0.4), ...P(-2.5, -0.4)) + xbDbl(...P(-2.5, -0.4), ...P(0, -0.4)) + G.ln(...P(3.7, 0.9), ...P(4.6, 1.4), "K", 1.2);
+  const labels = lb(X(0) + 16, Y(1.9), "I", "sm") + lb(X(-4.4) - 16, Y(0.8), "h", "sm") + lb(X(-3.25), Y(-0.4) + 16, "b", "sm") + lb(X(-1.25), Y(-0.4) + 16, "a", "sm") + lbt(X(4.6) + 26, Y(1.4), "anel");
+  return board(560, 230, svg, labels);
+}
+// seção do anel (metade direita), com escala vertical exagerada
+const xbTX = (r) => 50 + 900 * r, xbTY = (z) => 400 - z / 0.02 * 240;
+function xbTriSec(sStrip, sZ) {
+  const X = xbTX, Y = xbTY, a = 0.3, b = 0.2, hh = 0.02;
+  let svg = G.ar(X(0) - 10, Y(0), X(0.53), Y(0), "K", 1.4) + G.ln(X(0), Y(-0.004), X(0), Y(0.026), "R", 4) + G.ar(X(0), Y(0.012), X(0), Y(0.02), "R", 4);
+  svg += G.poly([[X(a), Y(0)], [X(a + b), Y(0)], [X(a + b), Y(hh)]].map((p) => p.map(mbF)), "rgba(47,79,134,.18)", "P", 2.4);
+  for (let r = 0.32; r < 0.5; r += 0.035) for (let z = 0.002; z < hh * (r - a) / b - 0.0015; z += 0.0045) svg += G.sym(+mbF(X(r)), +mbF(Y(z)), 2.2 + 0.85 / r, true, "G");
+  let labels = lb(X(0) + 16, Y(0.019), "I", "R") + lb(X(0.53) + 12, Y(0) + 14, Rw`\rho`, "sm") + lbt(X(0.2), Y(0.024), "escala vertical ampliada");
+  svg += G.brace(X(0), Y(0) + 34, X(a), Y(0) + 34, 8) + G.brace(X(a), Y(0) + 34, X(a + b), Y(0) + 34, 8) + G.brace(X(a + b) + 16, Y(0), X(a + b) + 16, Y(hh), 8);
+  labels += lb(X(a / 2), Y(0) + 72, "a") + lb(X(a + b / 2), Y(0) + 72, "b") + lb(X(a + b) + 56, Y(hh / 2), "h");
+  labels += xbAnchor("xb-ts-B", X(0.465), Y(0.004));
+  if (sStrip !== undefined) {
+    const r = 0.41, z = hh * (r - a) / b;
+    svg += G.g(S(sStrip), `<rect x="${mbF(X(r))}" y="${mbF(Y(z))}" width="14" height="${mbF(Y(0) - Y(z))}" style="fill:rgba(194,90,0,.45);stroke:var(--cmbO);stroke-width:1.6"/>` + G.ln(X(r), Y(0), X(r), Y(0) + 14, "mbO", 1.4));
+    labels += `<div ${S(sStrip)}>` + lb(X(r) + 7, Y(0) + 16, Rw`\rho`, "sm mbO") + lb(X(r) + 7, Y(z) - 18, Rw`d\rho`, "sm mbO") + xbAnchor("xb-ts-strip", X(r) + 14, Y(z / 2)) + `</div>`;
+    if (sZ !== undefined) {
+      svg += G.g(S(sZ), G.brace(X(r) - 6, Y(0), X(r) - 6, Y(z), -8, "mbO"));
+      labels += `<div ${S(sZ)}>` + lb(X(r) - 80, Y(z / 2), Rw`z_{\max}`, "sm mbO") + `</div>`;
+    }
+  }
+  return board(560, 500, svg, labels);
+}
+// ∫(1 − a/ρ)dρ: retângulo de área b menos a área sob a/ρ
+function xbTriInt() {
+  const pl = mbPlotSVG({ x0: 80, y0: 50, pw: 400, ph: 260, xmin: 0.2, xmax: 0.56, ymin: 0, ymax: 1.6, xt: [0.2, 0.3, 0.4, 0.5], yt: [0, 0.5, 1, 1.5], xl: Rw`\rho\ (\mathrm m)`, yl: "" });
+  const a = 0.3, b = 0.2, X = pl.X, Y = pl.Y;
+  const under = (f, x0, x1) => { let d = `M${mbF(X(x0))},${mbF(Y(0))}`; for (let i = 0; i <= 60; i++) { const x = x0 + (x1 - x0) * i / 60; d += ` L${mbF(X(x))},${mbF(Y(f(x)))}`; } return d + ` L${mbF(X(x1))},${mbF(Y(0))} Z`; };
+  let between = `M${mbF(X(a))},${mbF(Y(1))}`; for (let i = 0; i <= 60; i++) { const x = a + b * i / 60; between += ` L${mbF(X(x))},${mbF(Y(a / x))}`; } between += ` L${mbF(X(a + b))},${mbF(Y(1))} Z`;
+  let svg = G.g(S("2"), `<rect x="${mbF(X(a))}" y="${mbF(Y(1))}" width="${mbF(X(a + b) - X(a))}" height="${mbF(Y(0) - Y(1))}" style="fill:rgba(0,59,92,.10)"/>`);
+  svg += G.g(S("3"), `<path d="${under((x) => a / x, a, a + b)}" style="fill:rgba(106,44,142,.22)"/>`);
+  svg += G.g(S("1"), `<path d="${between}" style="fill:rgba(194,90,0,.55)"/>`);
+  svg += pl.svg + G.ln(X(0.2), Y(1), X(0.55), Y(1), "G", 3) + G.pa(mbCurve(X, Y, (x) => a / x, 0.2, 0.55), "mbV", 3) + G.ln(X(a), Y(0), X(a), Y(1.5), "M", 1.2, "", "4 4") + G.ln(X(a + b), Y(0), X(a + b), Y(1.5), "M", 1.2, "", "4 4");
+  let labels = pl.labels + lb(X(0.55) + 4, Y(1) - 18, "1", "G") + lb(X(0.24), Y(1.45), Rw`\dfrac{a}{\rho}`, "mbV") + lb(X(a), Y(1.5) - 16, "a", "sm") + lb(X(a + b), Y(1.5) - 16, "a+b", "sm");
+  labels += `<div ${S("1")}>` + xbAnchor("xb-ti-area", X(0.47), Y(0.82)) + `</div>`;
+  svg += G.g(S("2"), G.brace(X(a + b), Y(1) - 6, X(a), Y(1) - 6, 9, "P")); labels += lbt(X(a + b / 2), Y(1) - 44, `<span style="color:var(--unb-primary)">área <i>b</i></span>`, "", S("2"));
+  labels += lb(X(0.4), Y(0.3), Rw`a\ln\tfrac{a+b}{a}`, "sm mbV", S("3"));
+  return board(540, 400, svg, labels);
+}
+// balanço numérico: b − a ln((a+b)/a)
+function xbTriNum() {
+  const x0 = 40, k = 1200, Y1 = 70, Y2 = 160, Y3 = 250;
+  let svg = `<rect x="${x0}" y="${Y1 - 18}" width="${0.2 * k}" height="36" style="fill:rgba(0,59,92,.22);stroke:var(--cP);stroke-width:1.6"/>`;
+  svg += G.g(S("3"), `<rect x="${x0}" y="${Y2 - 18}" width="${mbF(0.15325 * k)}" height="36" style="fill:rgba(106,44,142,.25);stroke:var(--cmbV);stroke-width:1.6"/>`);
+  svg += G.g(S("3"), `<rect x="${mbF(x0 + 0.15325 * k)}" y="${Y3 - 18}" width="${mbF(0.04675 * k)}" height="36" style="fill:rgba(194,90,0,.6);stroke:var(--cmbO);stroke-width:1.6"/>` + G.ln(mbF(x0 + 0.15325 * k), Y2 + 18, mbF(x0 + 0.15325 * k), Y3 + 18, "M", 1.2, "", "4 4") + G.ln(x0 + 0.2 * k, Y1 + 18, x0 + 0.2 * k, Y3 + 18, "M", 1.2, "", "4 4"));
+  let labels = lb(x0 + 0.2 * k + 50, Y1, Rw`b=0{,}2`, "sm") + lb(x0 + 0.15325 * k + 95, Y2, Rw`a\ln\tfrac{5}{3}\approx0{,}15325`, "sm", S("3")) + lb(x0 + 0.2 * k + 55, Y3, Rw`0{,}04675`, "sm mbO", S("3"));
+  labels += `<div ${S("3")}>` + xbAnchor("xb-tn-d", x0 + 0.2 * k + 150, Y3) + `</div>` + lbt(x0 + 160, Y3 + 52, "diferença pequena entre dois números próximos", "", S("3"));
+  return board(460, 320, svg, labels);
+}
+// animação: faixa que varre a seção, B ∝ 1/ρ e fluxo acumulado
+function xbFigTri(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1040, 500);
+  const a = xbVal("xb-ta-a", 0.3), b = 0.2, hh = 0.02, I = 20, p = frac(t / 10), q = p < 0.8 ? xbEase(p / 0.8) : 1, rs = a + b * q;
+  const X = (r) => 40 + 520 * r, Y = (z) => 360 - z / 0.02 * 200;
+  line(ctx, X(0), Y(-0.002), X(0), Y(0.026), c.R, 4); arrowTo(ctx, X(0), Y(0.012), X(0), Y(0.022), c.R, 4, 14); txt(ctx, "I", X(0) + 12, Y(0.021), { size: 18, bold: true, c: c.R });
+  arrowTo(ctx, X(0) - 6, Y(0), X(0.84), Y(0), c.K, 1.4, 10); txt(ctx, "ρ (m)", X(0.84), Y(0) + 20, { size: 15, c: c.M, align: "right" });
+  for (let r = 0; r <= 0.81; r += 0.1) { line(ctx, X(r), Y(0), X(r), Y(0) + 6, c.K, 1); txt(ctx, fmtc(r, 1), X(r), Y(0) + 34, { size: 13, c: c.M, align: "center" }); }
+  for (let r = 0.05; r < 0.82; r += 0.05) for (let z = 0.003; z < 0.025; z += 0.005) { ctx.save(); ctx.globalAlpha = 0.28; symC(ctx, X(r), Y(z), Math.min(9, 0.6 + 0.9 / r), true, c.G, 1); ctx.restore(); }
+  ctx.save(); ctx.fillStyle = "rgba(47,79,134,.18)"; ctx.strokeStyle = c.P; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(X(a), Y(0)); ctx.lineTo(X(a + b), Y(0)); ctx.lineTo(X(a + b), Y(hh)); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "rgba(194,90,0,.40)"; ctx.beginPath(); ctx.moveTo(X(a), Y(0)); ctx.lineTo(X(rs), Y(0)); ctx.lineTo(X(rs), Y(hh * (rs - a) / b)); ctx.closePath(); ctx.fill(); ctx.restore();
+  if (q < 1) { const z = hh * (rs - a) / b; ctx.save(); ctx.fillStyle = "rgba(194,90,0,.85)"; ctx.fillRect(X(rs) - 3, Y(z), 6, Y(0) - Y(z)); ctx.restore(); }
+  txt(ctx, "B ∝ 1/ρ (⊗), mais fraco longe do fio; a faixa fica mais alta para fora", 20, 470, { size: 16, c: c.M });
+  const dP = (r) => MU0 * I * hh * (r - a) / (TAU * b * r), Phi = (r) => MU0 * I * hh / (TAU * b) * ((r - a) - a * Math.log(r / a)), Pt = Phi(a + b);
+  const ym = dP(a + b) * 1e7 * 1.15, g = maAx(ctx, 600, 50, 400, 300, { xmin: 0, xmax: 0.82, ymin: 0, ymax: ym, xt: [0, 0.2, 0.4, 0.6, 0.8], yt: niceTicks(ym), xf: (v) => fmtc(v, 1), yf: (v) => fmtc(v, 2), xl: "ρ (m)", yl: "dΦ/dρ (10^{−7} Wb/m)" });
+  ctx.save(); ctx.fillStyle = "rgba(194,90,0,.40)"; ctx.beginPath(); ctx.moveTo(g.X(a), g.Y(0)); for (let i = 0; i <= 60; i++) { const r = a + (rs - a) * i / 60; ctx.lineTo(g.X(r), g.Y(dP(r) * 1e7)); } ctx.lineTo(g.X(rs), g.Y(0)); ctx.closePath(); ctx.fill(); ctx.restore();
+  maCurve(ctx, (r) => dP(r) * 1e7, a, a + b, g.X, g.Y, c.P, 3);
+  txt(ctx, `Φ(ρ) = ${fmtc(Phi(rs) * 1e8, 3)} × 10^{−8} Wb`, 600, 420, { size: 19, c: mbCOL.O, bold: true });
+  txt(ctx, `total (a = ${fmtc(a * 100, 0)} cm): ${fmtc(Pt * 1e8, 3)} × 10^{−8} Wb`, 600, 452, { size: 17 });
+  txt(ctx, `a = ${fmtc(a * 100, 0)} cm, b = 20 cm, h = 2 cm, I = 20 A`, 20, 24, { size: 18, bold: true });
+  return null;
+}
+
+// =====================================================================
+//  7B. CAMPOS ELETROSTÁTICOS E MAGNETOSTÁTICOS POSSÍVEIS (campo_sadiku_7_41)
+//  cortes: (a) plano x = 0 (u = y, v = z); (b) plano z = 0 (u = x, v = y); (c) plano y = 0 (u = x, v = z)
+// =====================================================================
+const XBDV = { u: 0.8, v: 0.9, P: [] };
+function xbField3(m, x, y, z) {   // campo cartesiano 3D
+  if (m === "a") return [3 * y * y * z, 2 * (x + 1) * y * z, -(x + 1) * z * z];
+  if (m === "b") { const r = Math.hypot(x, y), cp = x / r, sp = y / r, Er = 2 * (z + 1) * cp / r; return [Er * cp, Er * sp, sp / r]; }
+  const r = Math.hypot(x, y, z), ct = z / r, st = Math.hypot(x, y) / r, rh = Math.hypot(x, y) || 1e-12, cp = x / rh, sp = y / rh, Fr = 2 * ct / (r * r), Ft = st / (r * r);
+  return [Fr * st * cp + Ft * ct * cp, Fr * st * sp + Ft * ct * sp, Fr * ct - Ft * st];
+}
+const xbTo3 = (m, u, v) => m === "a" ? [0, u, v] : m === "b" ? [u, v, 0] : [u, 0, v];
+const xbUV = (m, F) => m === "a" ? [F[1], F[2]] : m === "b" ? [F[0], F[1]] : [F[0], F[2]];
+const xbF2 = (m, u, v) => xbUV(m, xbField3(m, ...xbTo3(m, u, v)));
+function xbDivNum(m, p, d) {   // fluxo líquido por uma caixa cúbica de lado 2d / volume (quadratura de Gauss 2×2 nas faces)
+  const g = [-1 / Math.sqrt(3), 1 / Math.sqrt(3)]; let fl = 0;
+  for (let ax = 0; ax < 3; ax++) for (const sg of [1, -1]) for (const s1 of g) for (const s2 of g) {
+    const q = [...p], o = [0, 1, 2].filter((i) => i !== ax); q[ax] += sg * d; q[o[0]] += s1 * d; q[o[1]] += s2 * d;
+    fl += sg * xbField3(m, ...q)[ax] * d * d;
+  }
+  return fl / (8 * d ** 3);
+}
+function xbCurlNum(m, u, v, d) {   // circulação no quadrado de lado 2d (anti-horário na tela) / área
+  let c = 0; const n = 8;
+  for (let i = 0; i < n; i++) { const s = -d + 2 * d * (i + 0.5) / n, w = 2 * d / n;
+    c += xbF2(m, u + s, v - d)[0] * w + xbF2(m, u + d, v + s)[1] * w - xbF2(m, u + s, v + d)[0] * w - xbF2(m, u - d, v + s)[1] * w; }
+  return c / (4 * d * d);
+}
+function xbDivAna(m, u, v) {   // [divergente, rotacional normal à tela (saindo)]
+  const [x, y, z] = xbTo3(m, u, v);
+  if (m === "a") return [0, -2 * (x + 1) * y];
+  if (m === "b") { const r = Math.hypot(x, y); return [0, 2 * (z + 1) * (y / r) / (r * r)]; }
+  const r = Math.hypot(x, z), st = Math.abs(x) / r, ct = z / r;
+  return [2 * ct / r ** 3, -(st / r ** 3) * Math.sign(x || 1)];
+}
+const XBDVR = { a: 2.2, b: 3, c: 3 };   // meia largura da janela (m)
+function xbFigDiv(ctx, w, h, s0, t) {
+  const c = C(), m = ($("xb-dv-m") || {}).value || "a", L = XBDVR[m], d = xbVal("xb-dv-d", 0.3);
+  const W = w, H = h, sc = Math.min(W, H) / 2 / L, X = (u) => W / 2 + u * sc, Y = (v) => H / 2 - v * sc;
+  // eixos e setas do campo (comprimento comprimido)
+  line(ctx, 0, Y(0), W, Y(0), c.GR, 1.2); line(ctx, X(0), 0, X(0), H, c.GR, 1.2);
+  const lab = { a: ["y", "z"], b: ["x", "y"], c: ["x", "z"] }[m];
+  txt(ctx, lab[0], W - 14, Y(0) - 14, { size: 16, italic: true, c: c.M }); txt(ctx, lab[1], X(0) + 10, 14, { size: 16, italic: true, c: c.M });
+  const nG = 15;
+  for (let i = 0; i <= nG; i++) for (let j = 0; j <= nG; j++) {
+    const u = -L + 2 * L * (i + 0.5) / (nG + 1), v = -L + 2 * L * (j + 0.5) / (nG + 1); if (m !== "a" && Math.hypot(u, v) < 0.35) continue;
+    const F = xbF2(m, u, v), n = Math.hypot(F[0], F[1]); if (!(n > 1e-9)) continue;
+    const len = 6 + 16 * Math.tanh(n / { a: 6, b: 1.5, c: 0.8 }[m]), x = X(u), y = Y(v), dx = F[0] / n * len, dy = -F[1] / n * len;
+    ctx.save(); ctx.globalAlpha = 0.45; arrowTo(ctx, x - dx / 2, y - dy / 2, x + dx / 2, y + dy / 2, c.P, 1.6, 8); ctx.restore();
+  }
+  // partículas traçadoras
+  const P = XBDV.P, last = XBDV.t || t, dt = Math.min(0.05, Math.max(0, t - last)); XBDV.t = t;
+  if (XBDV.m !== m) { XBDV.m = m; P.length = 0; }
+  while (P.length < 140) P.push({ u: (Math.random() * 2 - 1) * L, v: (Math.random() * 2 - 1) * L, age: Math.random() * 4 });
+  for (const q of P) {
+    const F = xbF2(m, q.u, q.v), n = Math.hypot(F[0], F[1]);
+    if (n > 1e-9) { const sp = 0.55 * L * Math.tanh(n / { a: 6, b: 1.5, c: 0.8 }[m]); q.u += F[0] / n * sp * dt; q.v += F[1] / n * sp * dt; }
+    q.age += dt;
+    if (Math.abs(q.u) > L || Math.abs(q.v) > L || q.age > 4 || (m !== "a" && Math.hypot(q.u, q.v) < 0.25)) { q.u = (Math.random() * 2 - 1) * L; q.v = (Math.random() * 2 - 1) * L; q.age = 0; }
+    ctx.save(); ctx.globalAlpha = Math.min(1, q.age * 2) * Math.min(1, (4 - q.age) * 2); dot(ctx, X(q.u), Y(q.v), 2.6, mbCOL.C); ctx.restore();
+  }
+  if (m !== "a") { dot(ctx, X(0), Y(0), 5, c.K); txt(ctx, m === "b" ? "eixo z (singular)" : "origem (singular)", X(0) + 10, Y(0) + 16, { size: 14, c: c.M }); }
+  // caixa: arestas coloridas pelo sinal do fluxo que sai
+  const { u, v } = XBDV, x0 = X(u - d), x1 = X(u + d), y0 = Y(v + d), y1 = Y(v - d);
+  ctx.save(); ctx.fillStyle = "rgba(255,255,255,.55)"; ctx.fillRect(x0, y0, x1 - x0, y1 - y0); ctx.restore();
+  const seg = (ua, va, ub, vb, nu, nv) => { const n = 10; for (let i = 0; i < n; i++) { const s = (i + 0.5) / n, uu = ua + (ub - ua) * s, vv = va + (vb - va) * s, F = xbF2(m, uu, vv), fo = F[0] * nu + F[1] * nv;
+    line(ctx, X(ua + (ub - ua) * i / n), Y(va + (vb - va) * i / n), X(ua + (ub - ua) * (i + 1) / n), Y(va + (vb - va) * (i + 1) / n), fo >= 0 ? c.G : c.R, 4); } };
+  seg(u - d, v - d, u + d, v - d, 0, -1); seg(u + d, v - d, u + d, v + d, 1, 0); seg(u + d, v + d, u - d, v + d, 0, 1); seg(u - d, v + d, u - d, v - d, -1, 0);
+  dot(ctx, X(u), Y(v), 6, c.K);
+  const p3 = xbTo3(m, u, v), dn = xbDivNum(m, p3, d), cn = xbCurlNum(m, u, v, d), [da, ca] = xbDivAna(m, u, v);
+  const nm = { a: "D", b: "E", c: "F" }[m];
+  setRead("xb-dv-read", `<span>centro: \\((${p3.map((q) => fmtc(q, 2)).join(";\\ ")})\\)</span>` +
+    `<span>\\(\\oint\\vec{\\mathbf ${nm}}\\cdot d\\vec{\\mathbf S}/\\Delta v\\): <b>${fmtc(dn, 3)}</b></span><span>\\(\\nabla\\cdot\\vec{\\mathbf ${nm}}\\) (exato): <b>${fmtc(da, 3)}</b></span>` +
+    `<span>\\(\\oint\\vec{\\mathbf ${nm}}\\cdot d\\vec{\\mathbf l}/\\Delta S\\): <b>${fmtc(cn, 3)}</b></span><span>\\((\\nabla\\times\\vec{\\mathbf ${nm}})_n\\) (exato): <b>${fmtc(ca, 3)}</b></span>`);
+  return null;
+}
+if ($("xb-dv-cv")) draggable($("xb-dv-cv"), () => { const cv = $("xb-dv-cv"), m = ($("xb-dv-m") || {}).value || "a", L = XBDVR[m], sc = Math.min(cv.clientWidth, Number(cv.dataset.h || cv.getAttribute("height"))) / 2 / L; return [{ id: "c", x: cv.clientWidth / 2 + XBDV.u * sc, y: Number(cv.dataset.h || cv.getAttribute("height")) / 2 - XBDV.v * sc }]; },
+  (id, x, y) => { const cv = $("xb-dv-cv"), m = ($("xb-dv-m") || {}).value || "a", L = XBDVR[m], H = Number(cv.dataset.h || cv.getAttribute("height")), sc = Math.min(cv.clientWidth, H) / 2 / L, d = xbVal("xb-dv-d", 0.3);
+    let u = mbClamp((x - cv.clientWidth / 2) / sc, -L + d, L - d), v = mbClamp((H / 2 - y) / sc, -L + d, L - d);
+    const r = Math.hypot(u, v), rm = 1.5 * d + 0.25;   // a caixa não engloba a singularidade de (b) e (c)
+    if (m !== "a" && r < rm) { const f = rm / (r || 1e-6); u = (r ? u : rm) * (r ? f : 1); v *= r ? f : 0; }
+    XBDV.u = u; XBDV.v = v; refreshFigs(); });
+if ($("xb-dv-m")) $("xb-dv-m").addEventListener("change", () => { const m = $("xb-dv-m").value; XBDV.u = m === "a" ? 0.8 : 1.2; XBDV.v = m === "a" ? 0.9 : 1.0; refreshFigs(); });
+
+// =====================================================================
+//  8A. POTENCIAL ESCALAR NO EIXO DE UMA ESPIRA (campo_sadiku_7_54): a = 12 cm, z = 5 cm, I = 20 A
+// =====================================================================
+function xbEspE() {
+  const cx = 150, cy = 190, rx = 110, ry = 30;
+  let svg = G.ell(cx, cy, rx, ry, "rgba(0,59,92,.06)", "R", 3) + G.ar(cx - 8, cy + ry, cx + 10, cy + ry, "R", 3);
+  svg += G.ln(cx, cy + 50, cx, cy, "K", 1.2, "", "4 4") + G.ar(cx, cy, cx, 20, "K", 1.6) + G.ln(cx, cy, cx + rx, cy, "K", 1.2) + G.dot(cx, 80, 5, "P");
+  const labels = lb(cx + 14, 22, "z", "sm") + lb(cx + 55, cy - 12, "a", "sm") + lb(cx + 2, cy + ry + 22, "I", "R") + lb(cx + 62, 80, "(0,0,z)", "sm P");
+  return board(300, 250, svg, labels);
+}
+// espira em perspectiva, P no eixo e caminho de integração até o infinito
+function xbEspPath() {
+  const cx = 220, cy = 410, rx = 180, ry = 46, zP = 250;
+  let svg = `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="fill:rgba(176,58,46,.08)"/>` + G.ell(cx, cy, rx, ry, "none", "R", 3) + G.ar(cx - 10, cy + ry, cx + 12, cy + ry, "R", 3);
+  svg += G.ln(cx, cy + 70, cx, cy, "K", 1.2, "", "4 4") + G.ln(cx, cy, cx, zP, "K", 1.4) + G.ln(cx, cy, cx + rx, cy, "K", 1.2) + G.dot(cx, cy, 3, "K");
+  svg += G.g(S("1"), G.ar(cx, zP, cx, zP - 92, "G", 4) + G.ar(cx, 150, cx, 100, "G", 3) + G.ar(cx, 70, cx, 44, "G", 2.4));
+  svg += G.g(S("3"), `<path d="M${cx + 14},${zP} C${cx + 60},${zP - 60} ${cx + 30},${80} ${cx + 22},${24}" ${sty("mbV", 3.4)} marker-end="url(#mmbV)"/>`);
+  svg += G.dot(cx, zP, 7, "P");
+  let labels = lb(cx - 26, 30, "z", "sm") + lb(cx + 90, cy - 14, "a", "sm") + lb(cx + 2, cy + ry + 24, "I", "R") + lb(cx - 36, zP, "P", "P") + lb(cx - 64, zP + 4 + 28, "(0,0,z)", "sm P");
+  labels += `<div ${S("1")}>` + lb(cx - 34, zP - 60, Rw`\vH`, "G") + xbAnchor("xb-ep-H", cx - 6, zP - 70) + `</div>`;
+  labels += `<div ${S("3")}>` + lb(cx + 88, 70, Rw`z'\to\infty`, "sm mbV") + xbAnchor("xb-ep-path", cx + 50, 150) + `</div>`;
+  labels += `<div ${S("4")}>` + lbt(cx + 4, cy - 5, "disco da espira") + xbAnchor("xb-ep-disk", cx + 120, cy - 20) + `</div>`;
+  return board(460, 520, svg, labels);
+}
+// triângulo da substituição z' = a tg α
+function xbEspTri() {
+  const A = [50, 260], B = [330, 260], Cc = [330, 60];
+  let svg = G.poly([A, B, Cc], "rgba(0,59,92,.07)", "P", 2.4) + `<path d="M${B[0] - 18},${B[1]} L${B[0] - 18},${B[1] - 18} L${B[0]},${B[1] - 18}" ${sty("K", 1.2)}/>` + mbArc(A[0], A[1], 60, 0, 35.5, "mbO", 2);
+  const labels = lb((A[0] + B[0]) / 2, B[1] + 22, "a") + lb(B[0] + 22, (B[1] + Cc[1]) / 2, "z'") + lb(170, 130, Rw`\sqrt{a^2+z'^2}`, "sm") + lb(A[0] + 80, A[1] - 20, Rw`\alpha`, "mbO") + xbAnchor("xb-et-tri", B[0] + 40, (B[1] + Cc[1]) / 2);
+  return board(400, 300, svg, labels);
+}
+// valores: espira de lado (corte), triângulo 5–12–13
+function xbEsp513() {
+  const k = 18, cx = 250, cy = 250, X = (x) => cx + k * x, Y = (z) => cy - k * z;
+  let svg = G.ln(X(-12), Y(0), X(12), Y(0), "R", 1.4, "", "6 5") + G.ln(cx, Y(-2.5), cx, Y(11), "K", 1.2) + G.ar(cx, Y(10), cx, Y(11.5), "K", 1.2);
+  svg += G.sym(X(-12), Y(0), 11, false, "R") + G.sym(X(12), Y(0), 11, true, "R");
+  svg += G.g(S("1"), G.ln(cx, Y(5), X(12), Y(0), "mbO", 2.4) + G.ln(cx, Y(5), X(-12), Y(0), "mbO", 1.2, "", "4 4") + G.brace(cx, Y(0) + 18, X(12), Y(0) + 18, 8) + G.brace(cx - 16, Y(0), cx - 16, Y(5), -8));
+  svg += G.dot(cx, Y(5), 7, "P") + G.g(S("3"), G.ar(cx, Y(5), cx, Y(5) - 90, "G", 4));
+  let labels = lb(cx + 14, Y(11.5), "z", "sm") + lb(cx + 24, Y(5) + 4, "P", "P");
+  labels += `<div ${S("1")}>` + lb(X(6), Y(0) + 56, Rw`12\ \mathrm{cm}`, "sm") + lb(cx - 70, Y(2.5), Rw`5\ \mathrm{cm}`, "sm") + lb(X(6) + 34, Y(2.5) - 14, Rw`13\ \mathrm{cm}`, "sm mbO") + xbAnchor("xb-e5-h", X(6) + 10, Y(2.5)) + `</div>`;
+  labels += `<div ${S("3")}>` + lb(cx + 30, Y(5) - 70, Rw`\vH`, "G") + xbAnchor("xb-e5-H", cx + 8, Y(5) - 60) + `</div>`;
+  return board(500, 330, svg, labels);
+}
+// animação: P percorre o eixo; cone do ângulo sólido, V_m(z) e H_z(z)
+function xbFigVmE(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1040, 500);
+  const a = xbVal("xb-ve-a", 12), I = 20, z = xbAuto("xb-ve-auto", "xb-ve-z", Math.round(40 * Math.sin(TAU * t / 18)), (v) => fmtc(v, 0) + " cm");
+  const Vm = (zz) => I / 2 * (1 - zz / Math.hypot(zz, a)), Hz = (zz) => I * (a / 100) ** 2 / (2 * Math.hypot(zz / 100, a / 100) ** 3);
+  const k = 5.4, cx = 250, cy = 250, X = (x) => cx + k * x, Y = (zz) => cy - k * zz;
+  line(ctx, cx, Y(-44), cx, Y(44), c.K, 1.2); arrowTo(ctx, cx, Y(42), cx, Y(46), c.K, 1.2, 10); txt(ctx, "z", cx + 10, Y(45), { size: 16, italic: true });
+  ctx.save(); ctx.fillStyle = "rgba(194,90,0,.18)"; ctx.beginPath(); ctx.moveTo(cx, Y(z)); ctx.lineTo(X(a), Y(0)); ctx.lineTo(X(-a), Y(0)); ctx.closePath(); ctx.fill(); ctx.restore();
+  line(ctx, cx, Y(z), X(a), Y(0), mbCOL.O, 1.6); line(ctx, cx, Y(z), X(-a), Y(0), mbCOL.O, 1.6);
+  ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 3; ctx.beginPath(); ctx.ellipse(cx, cy, a * k, a * k * 0.18, 0, 0, TAU); ctx.stroke(); ctx.restore();
+  for (let j = 0; j < 8; j++) { const ang = TAU * j / 8 + t * 1.2; dot(ctx, cx + a * k * Math.cos(ang), cy + a * k * 0.18 * Math.sin(ang), 3.5, c.R); }
+  const HL = Math.min(110, 0.75 * Hz(z) / Hz(0) * 110 + 8); arrowTo(ctx, cx, Y(z), cx, Y(z) - HL, c.G, 3.4, 13);
+  dot(ctx, cx, Y(z), 7, c.P); txt(ctx, "P", cx - 22, Y(z), { size: 18, bold: true, c: c.P });
+  txt(ctx, `z = ${fmtc(z, 0)} cm`, 20, 24, { size: 18, bold: true, c: c.P }); txt(ctx, `V_m = ${fmtc(Vm(z), 3)} A`, 20, 50, { size: 18, c: mbCOL.O }); txt(ctx, `H_z = ${fmtc(Hz(z), 2)} A/m`, 20, 76, { size: 18, c: c.G });
+  txt(ctx, `Ω/4π = V_m/I = ${fmtc(Vm(z) / I, 3)}`, 20, 476, { size: 17, c: c.M });
+  const g1 = maAx(ctx, 590, 40, 410, 170, { xmin: -40, xmax: 40, ymin: 0, ymax: 22, xt: [-40, -20, 0, 20, 40], yt: [0, 10, 20], yf: (v) => fmtc(v, 0), yl: "V_m (A)" });
+  line(ctx, g1.X(-40), g1.Y(20), g1.X(40), g1.Y(20), c.M, 1, [5, 4]); txt(ctx, "I", g1.X(-40) + 6, g1.Y(20) - 10, { size: 15, c: c.M });
+  maCurve(ctx, Vm, -40, 40, g1.X, g1.Y, mbCOL.O, 3, null, 240); ring(ctx, g1.X(5), g1.Y(Vm(5)), 6, c.K, 1.6); dot(ctx, g1.X(z), g1.Y(Vm(z)), 7, c.P);
+  const hm = Hz(0) * 1.15, g2 = maAx(ctx, 590, 280, 410, 170, { xmin: -40, xmax: 40, ymin: 0, ymax: hm, xt: [-40, -20, 0, 20, 40], yt: niceTicks(hm), yf: (v) => fmtc(v, 0), xl: "z (cm)", yl: "H_z (A/m)" });
+  maCurve(ctx, Hz, -40, 40, g2.X, g2.Y, c.G, 3, null, 240); ring(ctx, g2.X(5), g2.Y(Hz(5)), 6, c.K, 1.6); dot(ctx, g2.X(z), g2.Y(Hz(z)), 7, c.P);
+  return null;
+}
+
+// =====================================================================
+//  8B. POTENCIAL VETOR NO INTERIOR DE UM CONDUTOR CILÍNDRICO (campo_sadiku_7_49): a = 10 mm, J0 = 5×10⁶ A/m²
+// =====================================================================
+function xbAcE() {
+  const cx = 130, rx = 70, ry = 18, yt = 50, yb = 220;
+  let svg = `<path d="M${cx - rx},${yt} L${cx - rx},${yb} A${rx},${ry} 0 0 0 ${cx + rx},${yb} L${cx + rx},${yt}" style="fill:rgba(176,58,46,.10);stroke:var(--cR);stroke-width:2.2"/>` + G.ell(cx, yt, rx, ry, "rgba(176,58,46,.16)", "R", 2.2);
+  svg += G.ln(cx, yb + 30, cx, 20, "K", 1.2, "", "5 4") + G.ln(cx, yt, cx + rx, yt, "K", 1.4) + G.ar(cx - 30, 180, cx - 30, 100, "R", 3) + G.ar(cx + 30, 180, cx + 30, 100, "R", 3);
+  const labels = lb(cx + 14, 18, "z", "sm") + lb(cx + 35, yt - 14, "a", "sm") + lb(cx, 140, Rw`\vJ`, "R");
+  return board(260, 260, svg, labels);
+}
+// vista lateral: J subindo, A_z descendo com |A| ∝ ρ², B ⊗/⊙
+function xbAcSide(sA, sB) {
+  const cx = 250, k = 170, top = 40, bot = 460, X = (r) => cx + k * r;
+  let svg = `<rect x="${X(-1)}" y="${top}" width="${2 * k}" height="${bot - top}" style="fill:rgba(176,58,46,.08);stroke:var(--cR);stroke-width:2"/>` + G.ln(cx, top - 20, cx, bot + 10, "K", 1.2, "", "5 4");
+  for (const r of [-0.8, -0.3, 0.3, 0.8]) svg += G.ar(X(r), 430, X(r), 360, "R", 2.6);
+  let labels = lb(X(-0.55), 400, Rw`\vJ`, "R") + lb(cx + 14, top - 14, "z", "sm") + lb(X(1) + 14, bot - 10, "a", "sm") + lb(X(-1) - 14, bot - 10, "-a", "sm");
+  if (sA !== undefined) {
+    let g = G.dot(cx, 200, 5, "mbC");
+    for (const r of [-1, -0.7, -0.4, 0.4, 0.7, 1]) { const L = 120 * r * r; g += G.ar(X(r), 140, X(r), mbF(140 + L), "mbC", 3); }
+    svg += G.g(S(sA), g);
+    labels += `<div ${S(sA)}>` + lb(cx + 44, 200, Rw`\vec{\mathbf A}=\vec{\mathbf 0}`, "sm mbC") + lb(X(0.7) + 30, 190, Rw`\vec{\mathbf A}`, "mbC") + xbAnchor("xb-as-A", X(1) - 8, 200) + `</div>`;
+  }
+  if (sB !== undefined) {
+    let g = ""; for (const r of [0.35, 0.7, 1]) g += G.sym(+mbF(X(r)), 300, 4 + 7 * r, true, "G") + G.sym(+mbF(X(-r)), 300, 4 + 7 * r, false, "G");
+    svg += G.g(S(sB), g);
+    labels += `<div ${S(sB)}>` + lb(X(0.52), 330, Rw`\vB`, "G") + xbAnchor("xb-as-B", X(1) + 12, 300) + `</div>`;
+  }
+  return board(500, 490, svg, labels);
+}
+// A_z(ρ) = −μ0 J0 ρ²/4, com os valores do item c
+function xbAcPlot() {
+  const x0 = 90, y0 = 60, pw = 380, ph = 260, X = (r) => x0 + r / 12 * pw, Y = (A) => y0 + (0.2 - A) / 2.0 * ph;   // A em 10⁻⁴ Wb/m, de 0,2 a −1,8
+  let svg = G.ar(x0, Y(0), x0 + pw + 16, Y(0), "K", 1.5) + G.ar(x0, y0 + ph, x0, y0 - 16, "K", 1.5), labels = "";
+  for (const r of [0, 2, 4, 6, 8, 10]) { svg += G.ln(mbF(X(r)), mbF(Y(0)), mbF(X(r)), mbF(Y(0) - 6), "K", 1.2); labels += lb(X(r), Y(0) - 18, String(r), "sm"); }
+  for (const A of [-0.5, -1, -1.5]) { svg += G.ln(x0 - 6, mbF(Y(A)), x0, mbF(Y(A)), "K", 1.2) + G.ln(x0, mbF(Y(A)), x0 + pw, mbF(Y(A)), "M", 0.6, "", "3 5"); labels += lb(x0 - 34, Y(A), String(A).replace(".", "{,}"), "sm"); }
+  labels += lb(x0 + pw + 4, Y(0) - 40, Rw`\rho\ (\mathrm{mm})`, "sm") + lb(x0 + 70, y0 + ph + 26, Rw`A_z\ (10^{-4}\ \mathrm{Wb/m})`, "sm");
+  svg += G.pa(mbCurve(X, Y, (r) => -1.5708 * (r / 10) ** 2, 0, 10), "mbC", 3.4) + G.ln(X(10), Y(0.15), X(10), Y(-1.8), "R", 1.2, "", "4 4");
+  labels += lbt(X(10) + 34, Y(-1.75), `<span style="color:var(--unb-alert)">superfície</span>`);
+  svg += G.g(S("2"), G.ln(mbF(X(5)), mbF(Y(0)), mbF(X(5)), mbF(Y(-0.3927)), "mbV", 1.4, "", "4 4") + G.dot(mbF(X(5)), mbF(Y(-0.3927)), 7, "mbV"));
+  svg += G.g(S("3"), G.dot(mbF(X(10)), mbF(Y(-1.5708)), 7, "mbV"));
+  labels += `<div ${S("2")}>` + xbAnchor("xb-ap-1", X(5) + 8, Y(-0.3927)) + `</div><div ${S("3")}>` + xbAnchor("xb-ap-2", X(10) - 8, Y(-1.5708)) + `</div>`;
+  return board(540, 380, svg, labels);
+}
+// animação: J subindo, setas de A (com a constante C) e rodas de pás girando com B
+function xbFigAc(ctx, w, h, s0, t) {
+  const c = C(); maFit(ctx, w, h, 1040, 500);
+  const Cc = xbVal("xb-ac-C", 0), A = (r) => -1.5708 * r * r + Cc;   // r = ρ/a com sinal (x/a); A em 10⁻⁴ Wb/m
+  const cx = 250, k = 190, X = (r) => cx + k * r, top = 30, bot = 470;
+  ctx.save(); ctx.fillStyle = "rgba(176,58,46,.08)"; ctx.fillRect(X(-1), top, 2 * k, bot - top); ctx.strokeStyle = c.R; ctx.lineWidth = 2; ctx.strokeRect(X(-1), top, 2 * k, bot - top); ctx.restore();
+  line(ctx, cx, top - 10, cx, bot + 10, c.K, 1, [5, 4]);
+  // corrente: marcas que sobem
+  for (const r of [-0.85, -0.45, 0, 0.45, 0.85]) for (let j = 0; j < 4; j++) { const y = bot - frac(t / 3 + j / 4) * (bot - top); arrowTo(ctx, X(r), y + 12, X(r), y - 6, "rgba(176,58,46,.55)", 2.4, 9); }
+  // setas de A (ciano), em y = 140
+  for (const r of [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1]) { const L = 55 * A(r); if (Math.abs(L) < 2) { dot(ctx, X(r), 140, 4, mbCOL.C); continue; } arrowTo(ctx, X(r), 140, X(r), 140 - L, mbCOL.C, 3.2, 12); }
+  txt(ctx, "A_z", X(1) + 14, 140, { size: 18, bold: true, c: mbCOL.C });
+  // rodas: giram com velocidade ∝ B = −dA/dρ (o mesmo para qualquer C)
+  for (const r of [-0.85, -0.45, 0.45, 0.85]) xbWheel(ctx, X(r), 395, 30, r * t * 2.2, c.G);
+  txt(ctx, "rodas de pás: giram com |B| ∝ ρ, horário à direita (B entrando), anti-horário à esquerda", 20, 490, { size: 15, c: c.M });
+  txt(ctx, `C = ${fmtc(Cc, 1)} × 10^{−4} Wb/m`, 20, 18, { size: 17, bold: true, c: mbCOL.C });
+  const g1 = maAx(ctx, 590, 40, 410, 180, { xmin: -1, xmax: 1, ymin: -3.8, ymax: 2.2, xt: [-1, -0.5, 0, 0.5, 1], yt: [-3, -2, -1, 0, 1, 2], xf: (v) => fmtc(v, 1), yf: (v) => fmtc(v, 0), yl: "A_z (10^{−4} Wb/m)" });
+  line(ctx, g1.X(-1), g1.Y(0), g1.X(1), g1.Y(0), c.K, 1);
+  maCurve(ctx, (r) => -1.5708 * r * r, -1, 1, g1.X, g1.Y, c.M, 1.6, [5, 4]); maCurve(ctx, A, -1, 1, g1.X, g1.Y, mbCOL.C, 3);
+  const g2 = maAx(ctx, 590, 290, 410, 160, { xmin: -1, xmax: 1, ymin: -0.04, ymax: 0.04, xt: [-1, -0.5, 0, 0.5, 1], yt: [-0.03, 0, 0.03], xf: (v) => fmtc(v, 1), yf: (v) => fmtc(v, 2), xl: "x / a", yl: "B_y (T)" });
+  line(ctx, g2.X(-1), g2.Y(0), g2.X(1), g2.Y(0), c.K, 1);
+  maCurve(ctx, (r) => 0.0314159 * r, -1, 1, g2.X, g2.Y, c.G, 3);
+  txt(ctx, "B não muda com C", 1000, 300, { size: 16, align: "right", c: c.G, bold: true });
+  return null;
+}
+
+// =====================================================================
+//  REGISTRO
+// =====================================================================
+Object.assign(BOARDS, {
+  xbOcoE: () => xbOcoFig({ u: 40, W: 330, H: 240, rows: [1.33, 1.67], small: true }),
+  xbOco1: () => xbOcoFig({ Lg: "2", J: "" }), xbOco2: () => xbOcoFig({ L1: "1", L2: "2", L3: "3", sh2: "2-2", sh3: "3-3" }), xbOcoPlot,
+  xbSetorE, xbHrot: () => xbHrot("4"), xbSetor: () => xbSetorFig("1", "3"), xbSetorC,
+  xbTriE, xbTri1: () => xbTriSec("2", "3"), xbTriInt, xbTriNum,
+  xbEspE, xbEspPath, xbEspTri, xbEsp513,
+  xbAcE, xbAcAmp: () => mbCondFig(""), xbAcSide: () => xbAcSide("5", "2"), xbAcPlot,
+});
+Object.assign(FIGS, { xbOco: xbFigOco, xbSetor: xbFigSetor, xbTri: xbFigTri, xbDiv: xbFigDiv, xbVmE: xbFigVmE, xbAc: xbFigAc });
+// controles das animações (a figura é redesenhada a cada quadro; refreshFigs cobre o modo sem animação)
+const xbRf = () => { if (typeof refreshFigs === "function") refreshFigs(); };
+bindIf(["xb-oa-I", "xb-oa-r"], { "xb-oa-I": (v) => fmtc(v, 0) + " A", "xb-oa-r": (v) => fmtc(v, 1) + " cm" }, xbRf);
+if ($("xb-oa-r")) $("xb-oa-r").addEventListener("input", () => { const e = $("xb-oa-auto"); if (e) e.checked = false; });
+bindIf(["xb-sa-f", "xb-sa-R"], { "xb-sa-f": (v) => fmtc(v, 0) + "°", "xb-sa-R": (v) => fmtc(v, 1) + " m" }, xbRf);
+bindIf(["xb-ta-a"], { "xb-ta-a": (v) => fmtc(v * 100, 0) + " cm" }, xbRf);
+bindIf(["xb-dv-d"], { "xb-dv-d": (v) => fmtc(v, 2) + " m" }, xbRf);
+bindIf(["xb-ve-a", "xb-ve-z"], { "xb-ve-a": (v) => fmtc(v, 0) + " cm", "xb-ve-z": (v) => fmtc(v, 0) + " cm" }, xbRf);
+if ($("xb-ve-z")) $("xb-ve-z").addEventListener("input", () => { const e = $("xb-ve-auto"); if (e) e.checked = false; });
+bindIf(["xb-ac-C"], { "xb-ac-C": (v) => fmtc(v, 1) }, xbRf);
 
 
 // code_z.js — monta os quadros (BOARDS) e desenha as setas curvas; vem depois de todos os code_*.js
