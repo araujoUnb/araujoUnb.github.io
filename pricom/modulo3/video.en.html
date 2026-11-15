@@ -384,6 +384,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <a data-go="sec2"><b>2.</b>Motion<span class="d">redundancy between frames, the MPEG encoder and motion estimation</span></a>
       <a data-go="sec3"><b>3.</b>Transform and quantization<span class="d">DCT of an 8 × 8 block, quantization with a matrix, zigzag scan and reconstruction</span></a>
       <a data-go="sec4"><b>4.</b>Frames and standards<span class="d">I, P and B frames and the MPEG and H.26x family</span></a>
+      <a data-go="sec5"><b>5.</b>Exercises<span class="d">rate of a 4K video in the three color formats and average rate of an IBBP group</span></a>
     </div>
     <div class="block" style="margin-top:auto"><span class="bt">Source and numbering</span>
       <p>B. P. Lathi and Z. Ding, Modern Digital and Analog Communication Systems, section 5.7.2. Tables, figures and equations carry the book numbering; the 8 × 8 block is the one in Tables 5.2 to 5.7.</p></div>
@@ -729,6 +730,119 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     </ul>
     <div class="block example step"><span class="bt">Speech and video, the same lesson</span><p>Modeling the source and the perception compresses much more than copying the waveform.</p></div>
   </div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ seção 5 ============ -->
+<section class="slide" id="sec5" data-sec="5 Exercises" data-nonum>
+  <div class="divider"><div class="num">5</div><div class="ttl">Exercises</div><div class="gbar"></div>
+  <div class="what">Two calculations worked out on the board: the rate of a 4K video in the three color formats and the average rate of an IBBP group of frames.</div></div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercise 1a: samples per pixel ============ -->
+<section class="slide" id="examos" data-sec="5 Exercises · samples per pixel" data-fig="examos">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 1: uncompressed 4K video</h2><div class="sub">Samples per pixel in 4:4:4, 4:2:2 and 4:2:0 · press →</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step txt">A 4K video has \(3840\times2160\)-pixel frames, \(30\) frames per second and \(10\) bits per sample, in Y′CbCr. How much does it take uncompressed in each color format? First, we count the samples in a group of \(8\) pixels.</div>
+        <div class="step"><div class="why">4:4:4: chroma at every pixel</div><div class="m">\[ \frac{8+\cssId{ea-c4}{8+8}}{8}=3\ \text{samples per pixel} \]</div></div>
+        <div class="step"><div class="why">4:2:2: chroma every two pixels in a row</div><div class="m">\[ \frac{8+\cssId{ea-c2}{4+4}}{8}=2\ \text{samples per pixel} \]</div></div>
+        <div class="step"><div class="why">4:2:0: chroma once per 2 × 2 block</div><div class="m">\[ \frac{8+\cssId{ea-c0}{2+2}}{8}=\cssId{ea-r0}{1.5}\ \text{samples per pixel} \]</div></div>
+        <div class="step txt">Luma alone would give \(1\) sample per pixel. 4:2:0 has half the samples of 4:4:4 and only \(50\) % more than black-and-white video.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="430" aria-label="Eight pixels with the luma and chroma samples in each format and bars with the count"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="ea-c4">8 Cb and 8 Cr</div>
+  <div class="note" data-on="3" data-to="ea-c2">one Cb and one Cr per pair</div>
+  <div class="note" data-on="4" data-to="ea-c0">one Cb and one Cr per 2 × 2 block</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 1b: taxa, armazenamento e compressão ============ -->
+<section class="slide" id="extx" data-sec="5 Exercises · rate of the 4K video" data-fig="extx">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 1: rate, storage and channel</h2><div class="sub">3840 × 2160, 30 frames/s, 10 bits · press →</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step"><div class="why">Pixels per frame</div><div class="m">\[ 3840\times2160=\cssId{eb-px}{8\,294\,400}\ \text{pixels} \]</div></div>
+        <div class="step"><div class="why">Bits per frame in 4:2:0</div><div class="m">\[ 8\,294\,400\times\cssId{eb-am}{1.5}\times\cssId{eb-b}{10}=124\,416\,000\ \text{bit} \]</div></div>
+        <div class="step"><div class="why">30 frames per second</div><div class="m">\[ 124\,416\,000\times30\approx\cssId{eb-r}{3.73\ \text{Gbit/s}} \]</div></div>
+        <div class="step"><div class="why">Same calculation with 3 and 2 samples</div><div class="m">\[ R_{4:4:4}\approx\cssId{eb-444}{7.46},\quad R_{4:2:2}\approx4.98\ \text{Gbit/s} \]</div></div>
+        <div class="step"><div class="why">A 45-min episode</div><div class="m">\[ \frac{3.73\times10^{9}\times2700}{\cssId{eb-8}{8}}\approx1.26\ \text{TB} \]</div></div>
+        <div class="step"><div class="why">4K streaming at 25 Mbit/s</div><div class="m">\[ C=\frac{3732.5\ \text{Mbit/s}}{25\ \text{Mbit/s}}\approx\cssId{eb-c}{149} \]</div></div>
+        <div class="step txt">No waveform coder comes close to 149. The factor comes from the DCT quantized according to perception, from the zigzag scan with variable-length codes and from motion compensation.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="4K frame, bits per pixel, stack of frames and bars with the rates"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="1" data-to="eb-px">8.3 million pixels</div>
+  <div class="note" data-on="2" data-to="eb-am">4:2:0, from the previous slide</div>
+  <div class="note" data-on="2" data-to="eb-b">bits per sample</div>
+  <div class="note" data-on="4" data-to="eb-444">twice 4:2:0</div>
+  <div class="note" data-on="5" data-to="eb-8">8 bits per byte</div>
+  <div class="note" data-on="6" data-to="eb-c">required compression ratio</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 2a: taxa média do GOP ============ -->
+<section class="slide" id="exgopa" data-sec="5 Exercises · average rate of the GOP" data-fig="exgopa">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 2: IBBP group of frames</h2><div class="sub">Average bit rate · press →</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step txt">Video of \(1920\times1080\) in 4:2:0, \(8\) bits and \(60\) frames per second. The group has \(12\) frames, IBBPBBPBBPBB. On average, an I takes \(900\) kbit, a P \(300\) kbit and a B \(90\) kbit. What is the average rate?</div>
+        <div class="step"><div class="why">Count the types in the group</div><div class="m">\[ \cssId{ga-n}{1\ \text{I}+3\ \text{P}+8\ \text{B}}=12\ \text{frames} \]</div></div>
+        <div class="step"><div class="why">Bits of each type</div><div class="m">\[ 1\times900+3\times300+8\times\cssId{ga-b}{90} \]</div></div>
+        <div class="step"><div class="why">Group total</div><div class="m">\[ =900+900+720=\cssId{ga-tot}{2520\ \text{kbit}} \]</div></div>
+        <div class="step"><div class="why">Group duration</div><div class="m">\[ \frac{12\ \text{frames}}{60\ \text{frames/s}}=\cssId{ga-t}{0.2\ \text{s}} \]</div></div>
+        <div class="step"><div class="why">Average rate</div><div class="m">\[ R=\frac{2520\ \text{kbit}}{0.2\ \text{s}}=\cssId{ga-r}{12.6\ \text{Mbit/s}} \]</div></div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="520" aria-label="Twelve I, P and B frames, bars proportional to the bits of each frame and group total"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="ga-n">one anchor every 3 frames</div>
+  <div class="note" data-on="3" data-to="ga-b">8 B cost less than one I</div>
+  <div class="note" data-on="6" data-to="ga-r">kbit per second: ÷ 0.2</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 2b: compressão e ordem de transmissão ============ -->
+<section class="slide" id="exgopb" data-sec="5 Exercises · compression and transmission order" data-fig="exgopb">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 2: compression and transmission order</h2><div class="sub">1920 × 1080, 4:2:0, 8 bits, 60 frames/s · press →</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step"><div class="why">Uncompressed rate</div><div class="m">\[ 1920\times1080\times1.5\times8\times60\approx\cssId{gb-cru}{1493\ \text{Mbit/s}} \]</div></div>
+        <div class="step"><div class="why">Compression ratio of the group</div><div class="m">\[ C=\frac{1493}{\cssId{gb-r}{12.6}}\approx118 \]</div></div>
+        <div class="step"><div class="why">If all were I</div><div class="m">\[ R_I=900\ \text{kbit}\times60\ \text{s}^{-1}=54\ \text{Mbit/s} \]</div></div>
+        <div class="step"><div class="why">Ratio with I only</div><div class="m">\[ C_I=\frac{1493}{54}\approx27.6 \]</div></div>
+        <div class="step"><div class="why">Prediction gain</div><div class="m">\[ \frac{R_I}{R}=\frac{54}{12.6}\approx\cssId{gb-g}{4.3} \]</div></div>
+        <div class="step"><div class="why">Display of the first 7</div><div class="m">\[ I_1\ B_2\ B_3\ \cssId{gb-p4}{P_4}\ B_5\ B_6\ P_7 \]</div></div>
+        <div class="step"><div class="why">Transmission</div><div class="m">\[ \cssId{gb-tx}{I_1\ P_4\ B_2\ B_3\ P_7\ B_5\ B_6} \]</div></div>
+        <div class="step txt">The decoder keeps two anchors in memory, decodes the B frames in between and only then displays them in the right order. The price is a delay of a few frames.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="520" aria-label="Rate bars and reordering of the frames from display to transmission"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="gb-r">average rate from the previous slide</div>
+  <div class="note" data-on="5" data-to="gb-g">P and B send vectors and residual</div>
+  <div class="note" data-on="6" data-to="gb-p4">B₂ and B₃ need P₄</div>
+  <div class="note" data-on="7" data-to="gb-tx">each anchor before its B frames</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1435,7 +1549,216 @@ function figGop(ctx, w, h, s, t) {
     txt(ctx, "I0 P4 B1 B2 B3 P8 B5 B6 B7", xr, yy + 3 * (sh + 14) - 10, { size: 14, c: c.M, mono: true });
   }
 }
-const FIGS = { taxa: figTaxa, croma: figCroma, redund: figRedund, mpeg: figMpeg, movim: figMovim, dct1d: figDct1d, bloco: figBloco, coef: figCoef, quant: figQuant, zigue: figZigue, recon: figRecon, gop: figGop };
+// ---------- exercícios ----------
+const EXEN = document.documentElement.lang === "en";
+const XL = (pt, en) => EXEN ? en : pt;
+const tipoCor = (ch) => { const c = C(); return ch === "I" ? tint(c.P, 0.25) : ch === "P" ? tint(c.G, 0.25) : tint("#d97a00", 0.2); };
+const tipoTraco = (ch) => { const c = C(); return ch === "I" ? c.P : ch === "P" ? c.G : "#a35a00"; };
+
+function figExAmos(ctx, w, h, s) {
+  const c = C(), cs = 78, x0 = 20, y0 = 62, fmt = s <= 2 ? "444" : s === 3 ? "422" : "420";
+  const smp = (x, y, lab, col) => { ctx.save(); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, 13, 0, TAU); ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke(); ctx.restore(); txt(ctx, lab, x, y + 1, { size: 12, c: col, align: "center", bold: true }); };
+  txt(ctx, s === 1 ? XL("um grupo de 8 pixels", "a group of 8 pixels") : { "444": "4:4:4", "422": "4:2:2", "420": "4:2:0" }[fmt], x0, 30, { size: 22, bold: true, c: s === 1 ? c.K : c.R });
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 4; j++) {
+    const x = x0 + j * cs, y = y0 + i * cs;
+    ctx.fillStyle = "#fafbfc"; ctx.fillRect(x, y, cs, cs); ctx.strokeStyle = c.M; ctx.lineWidth = 1; ctx.strokeRect(x, y, cs, cs);
+    smp(x + 22, y + 22, "Y", c.K);
+    if (fmt === "444") { smp(x + 22, y + 56, "Cb", c.P); smp(x + 56, y + 56, "Cr", c.R); }
+  }
+  if (fmt === "422") for (let i = 0; i < 2; i++) for (let g = 0; g < 2; g++) {
+    const gx = x0 + 2 * g * cs, gy = y0 + i * cs;
+    rrect(ctx, gx + 4, gy + 4, 2 * cs - 8, cs - 8, 8, c.P, null, 2.5);
+    smp(gx + cs - 18, gy + 56, "Cb", c.P); smp(gx + cs + 18, gy + 56, "Cr", c.R);
+  }
+  if (fmt === "420") for (let g = 0; g < 2; g++) {
+    const gx = x0 + 2 * g * cs;
+    rrect(ctx, gx + 4, y0 + 4, 2 * cs - 8, 2 * cs - 8, 10, c.P, null, 3);
+    smp(gx + cs - 20, y0 + cs - 20, "Cb", c.P); smp(gx + cs + 20, y0 + cs - 20, "Cr", c.R);
+  }
+  const nc = fmt === "444" ? 8 : fmt === "422" ? 4 : 2, tot = 8 + 2 * nc;
+  const yt = y0 + 2 * cs + 30;
+  txt(ctx, `8 Y + ${nc} Cb + ${nc} Cr = ${tot}`, x0, yt, { size: 19, c: c.K });
+  if (s >= 2) txt(ctx, `${tot} ÷ 8 = ${fmtc(tot / 8, tot % 8 ? 1 : 0)} ${XL("por pixel", "per pixel")}`, x0, yt + 30, { size: 19, c: c.R, bold: true });
+  // barras com a contagem
+  const bars = [["4:4:4", 24, 2], ["4:2:2", 16, 3], ["4:2:0", 12, 4], [XL("só Y", "Y only"), 8, 5]];
+  const bx0 = x0 + 4 * cs + 44, bw = Math.min(58, (w - bx0 - 10) / 4 - 12), base = h - 42, k = 11;
+  line(ctx, bx0 - 8, base, w - 8, base, c.M, 1.2);
+  txt(ctx, XL("amostras em 8 pixels", "samples in 8 pixels"), bx0 - 8, 30, { size: 16, c: c.M });
+  bars.forEach(([lab, v, from], q) => {
+    if (s < from) return;
+    const x = bx0 + q * (bw + 12), hh = v * k, cur = s === from;
+    ctx.fillStyle = cur ? tint(c.R, 0.75) : tint(c.P, 0.55); ctx.fillRect(x, base - hh, bw, hh);
+    txt(ctx, String(v), x + bw / 2, base - hh - 12, { size: 17, align: "center", mono: true });
+    txt(ctx, fmtc(v / 8, v % 8 ? 1 : 0), x + bw / 2, base - hh / 2, { size: 16, align: "center", bold: true, c: "#fff" });
+    txt(ctx, lab, x + bw / 2, base + 16, { size: 15, align: "center" });
+  });
+  return [XL("Oito pixels: cada um tem luma Y e duas crominâncias, Cb e Cr.", "Eight pixels: each has a luma Y and two chroma samples, Cb and Cr."),
+    XL("4:4:4: as três componentes em todos os pixels, 24 amostras.", "4:4:4: all three components in every pixel, 24 samples."),
+    XL("4:2:2: Cb e Cr divididos por cada par de pixels da linha, 16 amostras.", "4:2:2: Cb and Cr shared by each pair of pixels in a row, 16 samples."),
+    XL("4:2:0: Cb e Cr divididos por cada bloco 2 × 2, 12 amostras.", "4:2:0: Cb and Cr shared by each 2 × 2 block, 12 samples."),
+    XL("O número branco em cada barra é a média de amostras por pixel.", "The white number in each bar is the average number of samples per pixel.")][s - 1];
+}
+
+function figExTx(ctx, w, h, s) {
+  const c = C(), fw = 224, fh = 126, x0 = 20, y0 = 74, n = s >= 3 ? 7 : 1;
+  for (let k = n - 1; k >= 0; k--) {
+    const x = x0 + k * 9, y = y0 - k * 6;
+    ctx.fillStyle = k ? "#eef3f7" : "#eaf1f7"; ctx.fillRect(x, y, fw, fh); ctx.strokeStyle = c.P; ctx.lineWidth = 1.5; ctx.strokeRect(x, y, fw, fh);
+  }
+  const fy = y0;
+  ctx.save(); ctx.strokeStyle = "rgba(0,0,0,.10)"; ctx.lineWidth = 1; ctx.beginPath();
+  for (let k = 1; k < 16; k++) { ctx.moveTo(x0 + k * fw / 16, fy); ctx.lineTo(x0 + k * fw / 16, fy + fh); }
+  for (let k = 1; k < 9; k++) { ctx.moveTo(x0, fy + k * fh / 9); ctx.lineTo(x0 + fw, fy + k * fh / 9); }
+  ctx.stroke(); ctx.restore();
+  txt(ctx, "3840 × 2160 = 8 294 400 pixels", x0, fy + fh + 22, { size: 18, c: c.P });
+  const zx = x0 + fw + 90, zy = 30, zs = 86;
+  if (s >= 2) {
+    const px = x0 + fw - 30, py = fy + 18;
+    ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 2; ctx.strokeRect(px, py, 10, 10); ctx.restore();
+    line(ctx, px + 10, py, zx, zy, c.R, 1, [4, 3]); line(ctx, px + 10, py + 10, zx, zy + zs, c.R, 1, [4, 3]);
+    ctx.fillStyle = "#fff"; ctx.fillRect(zx, zy, zs, zs); ctx.strokeStyle = c.R; ctx.lineWidth = 2; ctx.strokeRect(zx, zy, zs, zs);
+    txt(ctx, "Y", zx + 18, zy + 28, { size: 24, bold: true });
+    txt(ctx, "¼ Cb", zx + 38, zy + 54, { size: 15, c: c.P }); txt(ctx, "¼ Cr", zx + 38, zy + 72, { size: 15, c: c.R });
+    txt(ctx, XL("1,5 × 10 bits", "1.5 × 10 bits"), zx + zs + 10, zy + 26, { size: 16 });
+    txt(ctx, XL("= 15 bits por pixel", "= 15 bits per pixel"), zx + zs + 10, zy + 50, { size: 16, c: c.P });
+    txt(ctx, XL("124,4 Mbit por quadro", "124.4 Mbit per frame"), zx, zy + zs + 22, { size: 17, c: c.K });
+  }
+  if (s >= 3) txt(ctx, XL("× 30 quadros/s = 3,73 Gbit/s", "× 30 frames/s = 3.73 Gbit/s"), zx, zy + zs + 52, { size: 18, bold: true, c: c.R });
+  // barras das taxas
+  const bx = 92, bwid = w - bx - 90, Rm = 7.46496, k0 = bwid / Rm, yb = 270, row = (q) => yb + q * 40;
+  if (s >= 3) {
+    const bars = [["4:4:4", 7.46496, 4], ["4:2:2", 4.97664, 4], ["4:2:0", 3.73248, 3]];
+    txt(ctx, XL("taxa sem compressão, Gbit/s", "uncompressed rate, Gbit/s"), bx, yb - 16, { size: 15, c: c.M });
+    bars.forEach(([lab, v, from], q) => {
+      if (s < from) return;
+      const y = row(q), cur = lab === "4:2:0";
+      ctx.save(); ctx.globalAlpha = cur ? 0.7 : 0.45; ctx.fillStyle = cur ? c.P : c.M; ctx.fillRect(bx, y, v * k0, 28); ctx.restore();
+      txt(ctx, lab, bx - 10, y + 14, { size: 16, align: "right" });
+      txt(ctx, fmtc(v, 2), bx + v * k0 + 8, y + 14, { size: 17 });
+    });
+  }
+  if (s >= 6) {
+    const y = row(3), xe = bx + 3.73248 * k0;
+    ctx.fillStyle = c.G; ctx.fillRect(bx, y, Math.max(3, 0.025 * k0), 28);
+    txt(ctx, XL("canal", "channel"), bx - 10, y + 14, { size: 16, align: "right" });
+    txt(ctx, "25 Mbit/s", bx + 12, y + 14, { size: 17, c: c.G, bold: true });
+    ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 2.2; ctx.setLineDash([6, 4]); ctx.beginPath(); ctx.moveTo(xe, row(2) + 28); ctx.quadraticCurveTo(xe, y + 14, bx + 112, y + 14); ctx.stroke(); ctx.restore();
+    arrowTo(ctx, bx + 124, y + 14, bx + 104, y + 14, c.R, 2.2, 11);
+    txt(ctx, "÷ 149", xe + 14, row(3) + 8, { size: 22, bold: true, c: c.R });
+  }
+  if (s >= 5) {
+    const y = row(4) + 12; rrect(ctx, bx, y, 270, 44, 8, c.K, "#f4f4f4", 1.5);
+    txt(ctx, XL("45 min em 4:2:0 → 1,26 TB", "45 min in 4:2:0 → 1.26 TB"), bx + 135, y + 22, { size: 17, align: "center", bold: true });
+    txt(ctx, XL("quase um disco inteiro", "almost a whole drive"), bx + 285, y + 22, { size: 15, c: c.M });
+  }
+  return [XL("Um quadro 4K: 3840 colunas por 2160 linhas.", "A 4K frame: 3840 columns by 2160 rows."),
+    XL("Cada pixel em 4:2:0: luma inteira e um quarto de cada croma, 10 bits por amostra.", "Each pixel in 4:2:0: full luma and a quarter of each chroma, 10 bits per sample."),
+    XL("30 quadros por segundo empilhados.", "30 frames per second stacked."),
+    XL("As barras guardam a proporção 3 : 2 : 1,5 das amostras por pixel.", "The bars keep the 3 : 2 : 1.5 ratio of samples per pixel."),
+    XL("Armazenar sem compressão não é viável.", "Storing it uncompressed is not viable."),
+    XL("O canal de streaming é quase invisível na escala do vídeo cru.", "The streaming channel is almost invisible on the raw-video scale."),
+    XL("O fator 149 vem da percepção visual e do movimento.", "The factor 149 comes from visual perception and motion.")][s - 1];
+}
+
+function figExGopA(ctx, w, h, s) {
+  const c = C(), tp = "IBBPBBPBBPBB", n = tp.length, gap = 6, x0 = 16, fw = (w - 2 * x0 - (n - 1) * gap) / n, fh = 56, y0 = 52;
+  const fx = (k) => x0 + k * (fw + gap), bits = { I: 900, P: 300, B: 90 };
+  [...tp].forEach((ch, k) => {
+    const hl = s === 2;
+    ctx.fillStyle = tipoCor(ch); ctx.fillRect(fx(k), y0, fw, fh); ctx.strokeStyle = hl ? tipoTraco(ch) : c.K; ctx.lineWidth = hl ? 3 : 1.6; ctx.strokeRect(fx(k), y0, fw, fh);
+    txt(ctx, ch, fx(k) + fw / 2, y0 + fh / 2, { size: 24, bold: true, align: "center", c: tipoTraco(ch) });
+    txt(ctx, String(k + 1), fx(k) + fw / 2, y0 + fh + 12, { size: 13, align: "center", c: c.M });
+  });
+  if (s >= 5) {
+    const y = 26; line(ctx, fx(0), y, fx(n - 1) + fw, y, c.R, 2); line(ctx, fx(0), y - 7, fx(0), y + 7, c.R, 2); line(ctx, fx(n - 1) + fw, y - 7, fx(n - 1) + fw, y + 7, c.R, 2);
+    const lab = XL("12 quadros ÷ 60 quadros/s = 200 ms", "12 frames ÷ 60 frames/s = 200 ms");
+    ctx.save(); ctx.font = "17px " + css("--font-sans"); const lw = ctx.measureText(lab).width + 16; ctx.restore();
+    ctx.fillStyle = "#fff"; ctx.fillRect(w / 2 - lw / 2, y - 12, lw, 24); txt(ctx, lab, w / 2, y, { size: 17, align: "center", c: c.R });
+  }
+  if (s >= 2) {
+    const yc = 150, cnt = [["I", 1], ["P", 3], ["B", 8]];
+    cnt.forEach(([ch, v], q) => { const x = x0 + q * 150; rrect(ctx, x, yc - 16, 134, 32, 6, tipoTraco(ch), tipoCor(ch), 1.6); txt(ctx, EXEN ? `${v} ${ch} frame${v > 1 ? "s" : ""}` : `${v} quadro${v > 1 ? "s" : ""} ${ch}`, x + 67, yc, { size: 16, align: "center", bold: true, c: tipoTraco(ch) }); });
+    txt(ctx, "= 12", x0 + 455, yc, { size: 18, bold: true });
+  }
+  if (s >= 3) {
+    const base = 410, k = 0.22;
+    txt(ctx, XL("kbit de cada quadro", "kbit of each frame"), w - x0, 192, { size: 15, c: c.M, align: "right" });
+    line(ctx, x0, base, w - x0, base, c.M, 1.2);
+    [...tp].forEach((ch, q) => {
+      const hh = bits[ch] * k; ctx.fillStyle = tipoTraco(ch); ctx.globalAlpha = 0.7; ctx.fillRect(fx(q) + 4, base - hh, fw - 8, hh); ctx.globalAlpha = 1;
+      txt(ctx, String(bits[ch]), fx(q) + fw / 2, base - hh - 10, { size: 14, align: "center", mono: true });
+    });
+  }
+  if (s >= 4) {
+    const y = 438, bh = 34, tot = 2520, kk = (w - 2 * x0) / tot;
+    const seg = [["I", 900, "900"], ["P", 900, "3 × 300"], ["B", 720, "8 × 90"]];
+    let x = x0;
+    seg.forEach(([ch, v, lab]) => { ctx.fillStyle = tipoCor(ch); ctx.fillRect(x, y, v * kk, bh); ctx.strokeStyle = tipoTraco(ch); ctx.lineWidth = 2; ctx.strokeRect(x, y, v * kk, bh); txt(ctx, `${lab} = ${v}`, x + v * kk / 2, y + bh / 2, { size: 15, align: "center", bold: true, c: tipoTraco(ch) }); x += v * kk; });
+    txt(ctx, XL("2520 kbit por grupo", "2520 kbit per group"), w - x0, y + bh + 16, { size: 16, align: "right", c: c.K });
+  }
+  if (s >= 6) txt(ctx, XL("2520 kbit a cada 0,2 s → 12,6 Mbit/s", "2520 kbit every 0.2 s → 12.6 Mbit/s"), x0, h - 14, { size: 19, bold: true, c: c.R });
+  return [XL("Ordem de exibição do grupo: uma âncora, I ou P, a cada 3 quadros.", "Display order of the group: one anchor, I or P, every 3 frames."),
+    XL("Contamos os quadros de cada tipo.", "We count the frames of each type."),
+    XL("Altura proporcional aos bits: o I é 10 vezes um B.", "Height proportional to the bits: an I is 10 times a B."),
+    XL("Na soma, os 8 quadros B custam menos que o único I.", "In the sum, the 8 B frames cost less than the single I."),
+    XL("O grupo inteiro passa em 200 ms.", "The whole group goes by in 200 ms."),
+    XL("Taxa média: bits do grupo divididos pela duração do grupo.", "Average rate: group bits divided by group duration.")][s - 1];
+}
+
+function figExGopB(ctx, w, h, s) {
+  const c = C(), bx = 120, bwid = w - bx - 130, Rm = 1493, k0 = bwid / Rm, yb = 40;
+  txt(ctx, "Mbit/s", bx, 18, { size: 15, c: c.M });
+  const bars = [[XL("sem compr.", "uncompr."), 1493, 1, c.M], [XL("só I", "I only"), 54, 3, c.P], ["IBBP", 12.6, 2, c.G]];
+  bars.forEach(([lab, v, from, col], q) => {
+    if (s < from) return;
+    const y = yb + q * 42; ctx.save(); ctx.globalAlpha = 0.7; ctx.fillStyle = col; ctx.fillRect(bx, y, Math.max(3, v * k0), 28); ctx.restore();
+    txt(ctx, lab, bx - 10, y + 14, { size: 16, align: "right" });
+    txt(ctx, fmtc(v, v < 20 ? 1 : 0), bx + Math.max(3, v * k0) + 8, y + 14, { size: 17 });
+  });
+  if (s >= 2) txt(ctx, "÷ 118", bx + 300, yb + 2 * 42 + 14, { size: 20, bold: true, c: c.G });
+  if (s >= 4) txt(ctx, "÷ 27,6".replace(",", EXEN ? "." : ","), bx + 300, yb + 42 + 14, { size: 18, bold: true, c: c.P });
+  if (s >= 5) {
+    const xa = bx + 200, ya = yb + 42 + 14, yb2 = yb + 84 + 14;
+    ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(xa - 100, ya); ctx.quadraticCurveTo(xa - 60, (ya + yb2) / 2, xa - 100, yb2); ctx.stroke(); ctx.restore();
+    txt(ctx, XL("× 4,3 da previsão", "× 4.3 from prediction"), xa - 68, (ya + yb2) / 2, { size: 16, c: c.R, bold: true, align: "left" });
+  }
+  // reordenação
+  const tp = ["I", "B", "B", "P", "B", "B", "P"], tx = [0, 3, 1, 2, 6, 4, 5], m = 7, gap = 10, x0 = 30, fw = (w - 2 * x0 - (m - 1) * gap) / m, fh = 50;
+  const fx = (k) => x0 + k * (fw + gap), yd = 270, yt = 440;
+  const quadro = (x, y, k, a = 1) => { ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = tipoCor(tp[k]); ctx.fillRect(x, y, fw, fh); ctx.strokeStyle = tipoTraco(tp[k]); ctx.lineWidth = 2; ctx.strokeRect(x, y, fw, fh); ctx.restore(); txt(ctx, tp[k] + "_" + (k + 1), x + fw / 2, y + fh / 2, { size: 20, bold: true, align: "center", c: tipoTraco(tp[k]) }); };
+  const arc = (a, b, up, col) => {
+    const xa = fx(a) + fw / 2, xb = fx(b) + fw / 2 + (a < b ? -6 : 6), y = up ? yd : yd + fh, hg = up ? -26 : 26;
+    ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(xa, y); ctx.quadraticCurveTo((xa + xb) / 2, y + 2 * hg, xb, y); ctx.stroke(); ctx.restore();
+    arrowTo(ctx, xb + ((xa + xb) / 2 - xb) * 0.15, y + 2 * hg * 0.15, xb, y, col, 2, 10);
+  };
+  if (s >= 6) {
+    txt(ctx, XL("exibição", "display"), x0, yd - 50, { size: 16, c: c.M });
+    tp.forEach((_, k) => quadro(fx(k), yd, k));
+    arc(0, 3, true, c.G); arc(3, 6, true, c.G);
+    for (const b of [1, 2]) { arc(0, b, false, "#d97a00"); arc(3, b, false, "#d97a00"); }
+    for (const b of [4, 5]) { arc(3, b, false, "#d97a00"); arc(6, b, false, "#d97a00"); }
+  }
+  if (s >= 7) {
+    txt(ctx, XL("transmissão", "transmission"), x0, yt + fh + 20, { size: 16, c: c.M });
+    tx.forEach((k, q) => {
+      const xs = fx(k) + fw / 2, xe = fx(q) + fw / 2, mov = k !== q;
+      ctx.save(); ctx.strokeStyle = mov ? tipoTraco(tp[k]) : c.M; ctx.lineWidth = mov ? 2.4 : 1.4; ctx.setLineDash(mov ? [] : [4, 4]);
+      ctx.beginPath(); ctx.moveTo(xs, yd + fh + 52); ctx.bezierCurveTo(xs, yt - 40, xe, yd + fh + 80, xe, yt - 14); ctx.stroke(); ctx.restore();
+      arrowTo(ctx, xe, yt - 24, xe, yt - 4, mov ? tipoTraco(tp[k]) : c.M, 2, 10);
+      quadro(fx(q), yt, k);
+    });
+  }
+  return [XL("Vídeo cru em 4:2:0: quase 1,5 Gbit/s.", "Raw 4:2:0 video: almost 1.5 Gbit/s."),
+    XL("O grupo IBBP cabe em 12,6 Mbit/s.", "The IBBP group fits in 12.6 Mbit/s."),
+    XL("Só com quadros I, cada quadro vira uma foto: 54 Mbit/s.", "With I frames only, each frame becomes a still picture: 54 Mbit/s."),
+    XL("Sem previsão, a razão cai para 27,6.", "Without prediction, the ratio drops to 27.6."),
+    XL("A previsão entre quadros divide a taxa por 4,3.", "Prediction between frames divides the rate by 4.3."),
+    XL("Setas verdes: P vem da âncora anterior. Laranja: B vem das duas âncoras vizinhas.", "Green arrows: P comes from the previous anchor. Orange: B comes from both neighboring anchors."),
+    XL("Cada âncora sobe na fila e vai antes dos B que dependem dela.", "Each anchor moves up the queue and goes before the B frames that depend on it."),
+    XL("Memória de duas âncoras e atraso de alguns quadros.", "Memory for two anchors and a delay of a few frames.")][s - 1];
+}
+
+const FIGS = { taxa: figTaxa, croma: figCroma, redund: figRedund, mpeg: figMpeg, movim: figMovim, dct1d: figDct1d, bloco: figBloco, coef: figCoef, quant: figQuant, zigue: figZigue, recon: figRecon, gop: figGop, examos: figExAmos, extx: figExTx, exgopa: figExGopA, exgopb: figExGopB };
 
 // ---------- (d) instrumentos ----------
 function mapCanvas(id, title, cell, o = {}) {

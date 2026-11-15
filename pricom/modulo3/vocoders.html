@@ -250,6 +250,7 @@ svg.notelayer text.lk { font-size: 15px; fill: var(--unb-alert); paint-order: st
 .solo { min-height: 64px; }
 .solo .step.txt { font-size: 23px; }
 .cols > .col.solo { display: block; }
+.exv .step .m { font-size: 21px; }
 
 /* ---------- reveal.js: palco 1600x900, barra embaixo, passos como fragmentos ---------- */
 body.reveal-viewport { background: var(--letterbox); line-height: normal; }
@@ -370,7 +371,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <a data-go="sec2"><b>2.</b>Modelo fonte-filtro<span class="d">excitação, filtro só de polos, espectro e instrumento</span></a>
       <a data-go="sec3"><b>3.</b>Predição linear<span class="d">Yule-Walker, erro mínimo, exemplo de ordem 2 e análise LPC</span></a>
       <a data-go="sec4"><b>4.</b>Vocoders na prática<span class="d">analisador e sintetizador, reflexão, LPC-10 e CELP</span></a>
-      <a data-go="fim"><b>5.</b>Resumo<span class="d">o que levar desta aula</span></a>
+      <a data-go="sec5"><b>5.</b>Exercícios<span class="d">taxa de um CELP e canais num tronco de 64 kbit/s; dos coeficientes de reflexão ao formante</span></a>
+      <a data-go="fim"><b>6.</b>Resumo<span class="d">o que levar desta aula</span></a>
     </div>
     <div class="block alert" style="margin-top:auto"><span class="bt">Fontes</span>
       <p>Lathi e Ding, seção 5.7.1, e Proakis e Salehi, seção 7.5, de onde vêm as Eqs. 7.5.1 a 7.5.8 e as Figs. 7.17 e 7.18. A voz das figuras é sintética, com dois formantes, gerada por <code>Modulo3/Code/cap7/vocoder_video.py</code> e recalculada aqui no navegador.</p></div>
@@ -843,6 +845,116 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ divisor 5 ============ -->
+<section class="slide" id="sec5" data-sec="5 Exercícios" data-nonum>
+  <div class="divider"><div class="num">5</div><div class="ttl">Exercícios</div><div class="gbar"></div>
+  <div class="what">A taxa de um CELP somando os campos do quadro e a comparação com PCM, ADPCM e LPC-10 num tronco de \(64\) kbit/s. Depois, um sintetizador montado a partir dos coeficientes de reflexão: erro, ganho, estabilidade e formante.</div></div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 1: taxa do CELP ============ -->
+<section class="slide" id="vx1" data-sec="5 Exercícios · taxa de um CELP" data-fig="vx1">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 1: taxa de um CELP</h2><div class="sub">Voz a \(8\) kHz, quadros de \(20\) ms com \(4\) subquadros · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
+      <div class="col deriv narrowwhy exv" style="gap:4px">
+        <div class="step txt" style="font-size:21px">A cada quadro o CELP manda \(27\) bits de coeficientes LSP e \(5\) de sincronismo e proteção. A cada subquadro manda índice e ganho do dicionário adaptativo, com \(9\) e \(3\) bits, e do dicionário fixo, com \(14\) e \(6\) bits. Qual é a taxa e quantos bits vão por amostra?</div>
+        <div class="step"><div class="why">Soma os campos de um subquadro</div><div class="m">\[ b_{\text{sub}}=\cssId{v1-ad}{9+3}+\cssId{v1-fx}{14+6}=32\ \text{bits} \tag{5.1}\]</div></div>
+        <div class="step"><div class="why">Quadro: LSP, \(4\) subquadros e sincronismo</div><div class="m">\[ b_{\text{q}}=\cssId{v1-lsp}{27}+\cssId{v1-4s}{4\times 32}+5=160\ \text{bits} \tag{5.2}\]</div></div>
+        <div class="step"><div class="why">Amostras dentro de um quadro</div><div class="m">\[ N=20\ \text{ms}\times 8\ \tfrac{\text{amostras}}{\text{ms}}=160 \tag{5.3}\]</div></div>
+        <div class="step"><div class="why">Bits do quadro sobre a duração</div><div class="m">\[ R_{\text{CELP}}=\frac{160\ \text{bits}}{\cssId{v1-T}{20\times10^{-3}\ \text{s}}}=\boxed{8000\ \text{bit/s}} \tag{5.4}\]</div></div>
+        <div class="step"><div class="why">Bits do quadro sobre as amostras</div><div class="m">\[ \frac{160\ \text{bits}}{\cssId{v1-N}{160\ \text{amostras}}}=\boxed{1\ \text{bit por amostra}} \tag{5.5}\]</div></div>
+      </div>
+      <div class="col" style="gap:6px">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Quadro do CELP: subquadros, campos de bits e amostras"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="v1-ad">adaptativo: repete o passado, dá o pitch</div>
+  <div class="note" data-on="2" data-to="v1-fx">fixo: a parte nova da excitação</div>
+  <div class="note" data-on="3" data-to="v1-lsp">envelope do trato vocal, uma vez por quadro</div>
+  <div class="note" data-on="3" data-to="v1-4s">excitação nova a cada \(5\) ms</div>
+  <div class="note" data-on="5" data-to="v1-T">\(50\) quadros por segundo</div>
+  <div class="note" data-on="6" data-to="v1-N">Eq. 5.3</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 1: comparação ============ -->
+<section class="slide" id="vx2" data-sec="5 Exercícios · tronco de 64 kbit/s" data-fig="vx2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 1: quantos canais cabem</h2><div class="sub">Tronco de \(64\) kbit/s · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
+      <div class="col deriv narrowwhy exv" style="gap:4px">
+        <div class="step txt" style="font-size:21px">A mesma voz vai em PCM com \(8\) bits por amostra, em ADPCM com \(4\) bits por amostra, no CELP da Eq. 5.4 ou no LPC-10 da Eq. 4.3. Quantos canais de cada um cabem em um tronco de \(64\) kbit/s?</div>
+        <div class="step"><div class="why">Forma de onda: bits por amostra vezes \(f_s\)</div><div class="m">\[ R_{\text{PCM}}=8\times 8000=64\,000\ \text{bit/s} \tag{5.6}\]</div></div>
+        <div class="step"><div class="why">O ADPCM manda metade dos bits</div><div class="m">\[ R_{\text{ADPCM}}=4\times 8000=32\,000\ \text{bit/s} \tag{5.7}\]</div></div>
+        <div class="step"><div class="why">Compressão do CELP</div><div class="m">\[ \begin{aligned}\frac{R_{\text{PCM}}}{\cssId{v2-c}{R_{\text{CELP}}}}&=\frac{64\,000}{8000}=8\\ \frac{R_{\text{ADPCM}}}{R_{\text{CELP}}}&=\frac{32\,000}{8000}=4\end{aligned} \tag{5.8}\]</div></div>
+        <div class="step"><div class="why">Canais LPC-10: parte inteira da divisão</div><div class="m">\[ \Big\lfloor\frac{64\,000}{\cssId{v2-l}{2400}}\Big\rfloor=\lfloor 26{,}7\rfloor=\boxed{26} \tag{5.9}\]</div></div>
+        <div class="step txt" style="font-size:21px">O CELP gasta \(8000/2400=3{,}3\) vezes os bits do LPC-10. Em troca, manda a melhor excitação do dicionário em vez de impulsos ou ruído, e a voz deixa de soar robótica.</div>
+      </div>
+      <div class="col" style="gap:6px">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Tronco de 64 kbit/s dividido em canais de cada codificador"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="4" data-to="v2-c">\(8000\) bit/s, Eq. 5.4</div>
+  <div class="note" data-on="5" data-to="v2-l">Eq. 4.3; sobram \(64\,000-26\times2400=1600\) bit/s</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 2: Levinson ============ -->
+<section class="slide" id="vx3" data-sec="5 Exercícios · da reflexão aos coeficientes" data-fig="vx3">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: dos coeficientes de reflexão aos \(a_k\)</h2><div class="sub">Recursão de Levinson-Durbin com \(p=2\) · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
+      <div class="col deriv narrowwhy exv" style="gap:4px">
+        <div class="step txt" style="font-size:21px">Um LPC de ordem \(2\) recebe \(r_1=0{,}5\) e \(r_2=-0{,}75\) de um bloco com \(R_0=4\). Ache \(a_1\), \(a_2\), o erro de cada ordem e o ganho \(G\).</div>
+        <div class="step"><div class="why">Ordem \(1\): o preditor é o próprio \(r_1\)</div><div class="m">\[ \begin{aligned}a_1^{(1)}&=r_1=0{,}5\\ \mathcal E_1&=R_0\cssId{v3-f1}{(1-r_1^2)}=4\times0{,}75=3\end{aligned} \tag{5.10}\]</div></div>
+        <div class="step"><div class="why">Ordem \(2\): \(a_2=r_2\) e \(a_1\) é corrigido</div><div class="m">\[ \begin{aligned}a_2&=r_2=-0{,}75\\ a_1&=a_1^{(1)}\cssId{v3-c}{(1-r_2)}=0{,}5\times1{,}75=0{,}875\end{aligned} \tag{5.11}\]</div></div>
+        <div class="step"><div class="why">O estágio \(2\) multiplica o erro por \(1-r_2^2\)</div><div class="m">\[ \mathcal E_2=\mathcal E_1\cssId{v3-f2}{(1-r_2^2)}=3\times0{,}4375=1{,}3125 \tag{5.12}\]</div></div>
+        <div class="step"><div class="why">Ganho do sintetizador, Eq. 3.13</div><div class="m">\[ G=\sqrt{\mathcal E_2}=\sqrt{1{,}3125}=\boxed{1{,}146} \tag{5.13}\]</div></div>
+        <div class="step"><div class="why">Ganho de predição</div><div class="m">\[ 10\log_{10}\frac{R_0}{\cssId{v3-e2}{\mathcal E_2}}=10\log_{10}3{,}048=\boxed{4{,}84\ \text{dB}} \tag{5.14}\]</div></div>
+      </div>
+      <div class="col" style="gap:6px">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Erro de predição em cada estágio da recursão"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="v3-f1">\(1-0{,}5^2=1-0{,}25=0{,}75\)</div>
+  <div class="note" data-on="3" data-to="v3-c">\(1-(-0{,}75)=1{,}75\)</div>
+  <div class="note" data-on="4" data-to="v3-f2">\(1-0{,}75^2=1-0{,}5625\)</div>
+  <div class="note" data-on="6" data-to="v3-e2">só o 2º estágio: \(-10\log_{10}0{,}4375=3{,}59\) dB</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 2: estabilidade e formante ============ -->
+<section class="slide" id="vx4" data-sec="5 Exercícios · estabilidade e formante" data-fig="vx4">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: estabilidade e formante</h2><div class="sub">\(x_n=0{,}875\,x_{n-1}-0{,}75\,x_{n-2}+G\,w_n\), \(f_s=8\) kHz · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
+      <div class="col deriv narrowwhy exv" style="gap:4px">
+        <div class="step txt" style="font-size:21px">O sintetizador do slide anterior é estável? Em que frequência fica o formante? Que razões de log-áreas seriam quantizadas?</div>
+        <div class="step"><div class="why">Pelos \(r_k\), Eq. 4.1</div><div class="m">\[ |r_1|=0{,}5\lt1,\quad |r_2|=0{,}75\lt 1\ \Rightarrow\ \text{estável} \tag{5.15}\]</div></div>
+        <div class="step"><div class="why">Polos: raízes de \(z^2-a_1z-a_2\)</div><div class="m">\[ \begin{aligned}&z^2-0{,}875\,z+0{,}75=0\\ &\cssId{v4-d}{a_1^2+4a_2}=0{,}766-3=-2{,}234\end{aligned} \tag{5.16}\]</div></div>
+        <div class="step"><div class="why">Fórmula de Bhaskara</div><div class="m">\[ \begin{aligned}z&=\frac{0{,}875\pm j\sqrt{2{,}234}}{2}=0{,}4375\pm j\,0{,}747\\ |z|&=\cssId{v4-m}{\sqrt{-a_2}}=\sqrt{0{,}75}=0{,}866\end{aligned} \tag{5.17}\]</div></div>
+        <div class="step"><div class="why">Ângulo do polo vira frequência</div><div class="m">\[ \begin{aligned}\theta&=\arctan\frac{0{,}747}{0{,}4375}=59{,}7^\circ\\ f&=\cssId{v4-f}{\frac{\theta}{360^\circ}}\,f_s=0{,}1657\times8000=1326\ \text{Hz}\end{aligned} \tag{5.18}\]</div></div>
+        <div class="step"><div class="why">Razões de log-áreas, Eq. 4.2</div><div class="m">\[ \begin{aligned}o_1&=\ln\frac{1+r_1}{1-r_1}=\ln\frac{1{,}5}{0{,}5}=\ln 3=1{,}10\\ o_2&=\ln\frac{0{,}25}{1{,}75}=\ln\tfrac17=-1{,}95\end{aligned} \tag{5.19}\]</div></div>
+      </div>
+      <div class="col" style="gap:6px">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Coeficientes de reflexão, polos, envelope e razões de log-áreas"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="3" data-to="v4-d">negativo: polos complexos conjugados</div>
+  <div class="note" data-on="4" data-to="v4-m">o produto dos polos é \(-a_2=0{,}75\)</div>
+  <div class="note" data-on="5" data-to="v4-f">uma volta inteira no círculo vale \(f_s\)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1478,7 +1590,138 @@ function figCelp(ctx, w, h, s, t) {
   v.forEach((r, k) => { box(ctx, P.X(k) - 26, P.Y(r), 52, P.Y(0) - P.Y(r), c.P, tint(c.P, 0.3), null, { lw: 1.2 }); txt(ctx, fmtc(r, r % 1 ? 1 : 0), P.X(k), P.Y(r) - 11, { c: c.P, size: 14, align: "center" }); });
   return "Taxas de voz: forma de onda em cima, vocoders embaixo.";
 }
-const FIGS = { fontefiltro: figFonteFiltro, polos: figPolos, espectro: figEspectro, yw: figYW, ortog: figOrtog, ex2: figEx2, analise: figAnalise, lar: figLar, celp: figCelp };
+// ----- exercícios -----
+function figVx1(ctx, w, h, s) {   // quadro do CELP: subquadros, campos de bits, amostras
+  const c = C(), x0 = 24, x1 = w - 18, W = x1 - x0, ty = 34, th = 42;
+  txt(ctx, "quadro de 20 ms", x0, 14, { c: c.M, size: 15 });
+  for (let k = 0; k < 4; k++) box(ctx, x0 + k * W / 4, ty, W / 4, th, c.RU, k === 0 && s >= 2 ? tint(c.P, 0.14) : "#fff", (w < 520 ? `${k + 1}` : `subquadro ${k + 1}`), { size: 14, c: c.K });
+  for (let k = 0; k <= 4; k++) txt(ctx, `${5 * k} ms`, x0 + k * W / 4, ty + th + 12, { c: c.M, size: 13, align: k === 0 ? "left" : k === 4 ? "right" : "center", mono: true });
+  if (s >= 4) {
+    for (let n = 0; n < 160; n++) { const x = x0 + (n + 0.5) * W / 160; line(ctx, x, ty + th + 24, x, ty + th + 34, c.G, 1); }
+    txt(ctx, "160 amostras, uma a cada 0,125 ms", x0 + W / 2, ty + th + 48, { c: c.G, size: 15, align: "center" });
+  }
+  const zy = 190, zh = 44;
+  if (s >= 2) {
+    const F = [[9, "índice", c.P, 0.4], [3, "ganho", c.P, 0.18], [14, "índice", c.G, 0.4], [6, "ganho", c.G, 0.18]];
+    let x = x0; const sc = W / 32;
+    txt(ctx, "dicionário adaptativo", x0 + 6 * sc, zy - 14, { c: c.P, size: 14, align: "center" });
+    txt(ctx, "dicionário fixo", x0 + 22 * sc, zy - 14, { c: c.G, size: 14, align: "center" });
+    F.forEach(([b, lab, col, a]) => { box(ctx, x, zy, b * sc, zh, col, tint(col, a), null, { lw: 1.4 }); txt(ctx, `${b}`, x + b * sc / 2, zy + 15, { c: c.K, size: 16, align: "center", bold: true }); if (b * sc > 40) txt(ctx, lab, x + b * sc / 2, zy + 33, { c: c.K, size: 12, align: "center" }); x += b * sc; });
+    txt(ctx, "9 + 3 + 14 + 6 = 32 bits por subquadro", x0 + W / 2, zy + zh + 16, { c: c.K, size: 15, align: "center" });
+    const zt = ty + th + (s >= 4 ? 58 : 4); line(ctx, x0, zt, x0, zy - 28, c.M, 1, [4, 4]); line(ctx, x0 + W / 4, zt, x1, zy - 28, c.M, 1, [4, 4]);
+  }
+  const fy = 318, fh = 44, sc = W / 160;
+  if (s >= 3) {
+    line(ctx, x0, zy + zh + 28, x0 + 27 * sc, fy, c.M, 1, [4, 4]); line(ctx, x1, zy + zh + 28, x0 + 59 * sc, fy, c.M, 1, [4, 4]);
+    let x = x0;
+    box(ctx, x, fy, 27 * sc, fh, c.Y, tint(c.Y, 0.3), null, { lw: 1.4 }); txt(ctx, "LSP 27", x + 13.5 * sc, fy + fh / 2, { c: c.K, size: 14, align: "center" }); x += 27 * sc;
+    for (let k = 0; k < 4; k++) {
+      [[12, c.P, 0.3], [20, c.G, 0.3]].forEach(([b, col, a]) => { box(ctx, x, fy, b * sc, fh, col, tint(col, a), null, { lw: 1 }); x += b * sc; });
+      txt(ctx, "32", x - 16 * sc, fy + fh / 2, { c: c.K, size: 14, align: "center" });
+    }
+    box(ctx, x, fy, 5 * sc, fh, c.M, tint(c.M, 0.3), null, { lw: 1 }); txt(ctx, "5", x + 2.5 * sc, fy - 10, { c: c.M, size: 13, align: "center" });
+    txt(ctx, "27 + 4 × 32 + 5 = 160 bits por quadro", x0 + W / 2, fy + fh + 16, { c: c.K, size: 15, align: "center" });
+  }
+  if (s >= 5) {
+    txt(ctx, "160 bits a cada 20 ms: 50 × 160 = 8000 bit/s", x0 + W / 2, fy + fh + 46, { c: c.R, size: 17, align: "center", bold: true });
+  }
+  if (s >= 6) {
+    const py = h - 50, ph = 26;
+    box(ctx, x0, py, W, ph, c.M, "#fff", null, { lw: 1.2 });
+    box(ctx, x0, py, W / 8, ph, c.R, tint(c.R, 0.35), null, { lw: 1.4 });
+    txt(ctx, "CELP 160", x0 + W / 16, py + ph + 12, { c: c.R, size: 13, align: "center" });
+    txt(ctx, (w < 520 ? "PCM: 1280 bits" : "PCM de 8 bits no mesmo quadro: 8 × 160 = 1280 bits"), x0 + W / 8 + 10, py + ph / 2, { c: c.M, size: 14 });
+  }
+  return ["Um quadro de 20 ms dividido em 4 subquadros de 5 ms.", "Ampliação do subquadro 1: os quatro campos da excitação.", "O quadro inteiro: LSP, quatro subquadros e sincronismo.", "160 amostras cabem no mesmo quadro de 20 ms.", "50 quadros por segundo.", "1 bit por amostra, contra 8 do PCM."][Math.min(s, 6) - 1];
+}
+function figVx2(ctx, w, h, s) {   // tronco de 64 kbit/s repartido entre canais
+  const c = C(), x0 = 92, x1 = w - 16, W = x1 - x0, sc = W / 64000;
+  line(ctx, x0, 34, x1, 34, c.K, 1.4);
+  [0, 16, 32, 48, 64].forEach((v) => { const x = x0 + v * 1000 * sc; line(ctx, x, 29, x, 39, c.K, 1.4); txt(ctx, String(v), x, 16, { c: c.M, size: 13, align: "center", mono: true }); });
+  txt(ctx, "kbit/s", x0 - 10, 16, { c: c.M, size: 13, align: "right" });
+  const rows = [["PCM", 64000, c.P, 2], ["ADPCM", 32000, c.P, 3], ["CELP", 8000, c.G, 4], ["LPC-10", 2400, c.R, 5]];
+  rows.forEach(([nm, r, col, s0], i) => {
+    const y = 64 + i * 100, rh = 48;
+    txt(ctx, nm, x0 - 10, y + rh / 2, { c: s >= s0 ? c.K : c.GR, size: 17, align: "right" });
+    box(ctx, x0, y, W, rh, c.GR, "#fff", null, { lw: 1 });
+    if (s < s0) return;
+    const n = Math.floor(64000 / r), bw = r * sc, full = (nm === "CELP" && s === 4) ? 1 : n;
+    for (let k = 0; k < n; k++) {
+      if (k < full) box(ctx, x0 + k * bw, y, bw, rh, col, tint(col, 0.3), null, { lw: 1 });
+      else { ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = col; ctx.strokeRect(x0 + k * bw, y, bw, rh); ctx.restore(); }
+    }
+    if (bw > 60) txt(ctx, `${fmtc(r / 1000, 0)} kbit/s`, x0 + bw / 2, y + rh / 2, { c: c.K, size: 14, align: "center" });
+    if (nm === "LPC-10") { ctx.save(); ctx.fillStyle = tint(c.M, 0.25); ctx.fillRect(x0 + n * bw, y, W - n * bw, rh); ctx.restore(); txt(ctx, "sobra 1,6 kbit/s", x1, y + rh + 14, { c: c.M, size: 13, align: "right" }); }
+    const lab = nm === "CELP" && s === 4 ? "64 000 / 8000 = 8 blocos" : `${n} ${n === 1 ? "canal" : "canais"}`;
+    txt(ctx, lab, x0, y + rh + 14, { c: col, size: 15 });
+    if (s >= 6 && nm === "CELP") { ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 3; ctx.strokeRect(x0, y, bw, rh); ctx.restore(); }
+    if (s >= 6 && nm === "LPC-10") { ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 3; ctx.strokeRect(x0, y, 8000 * sc, rh); ctx.restore(); txt(ctx, "um canal CELP ocupa 3,3 canais LPC-10", x0 + 8000 * sc + 10, y - 14, { c: c.R, size: 14 }); }
+  });
+  return ["O tronco de 64 kbit/s, ainda vazio.", "Um único canal PCM ocupa o tronco inteiro.", "O ADPCM cabe duas vezes.", "Cada canal CELP ocupa 8 kbit/s: um oitavo do tronco.", "8 canais CELP e 26 canais LPC-10.", "Em vermelho, o espaço de um canal CELP."][Math.min(s, 6) - 1];
+}
+function figVx3(ctx, w, h, s) {   // erro de predição em cada estágio da treliça
+  const c = C(), yb = 300, k = 52, bw = 50, xs = [w * 0.1, w * 0.5, w * 0.9], E = [4, 3, 1.3125];
+  ["ordem 0", "ordem 1", "ordem 2"].forEach((t, i) => txt(ctx, t, xs[i], 16, { c: c.M, size: 15, align: "center" }));
+  line(ctx, 14, yb, w - 14, yb, c.RU, 1);
+  const bar = (i, col, lab) => { box(ctx, xs[i] - bw / 2, yb - E[i] * k, bw, E[i] * k, col, tint(col, 0.3), null, { lw: 1.4 }); txt(ctx, lab, xs[i], yb - E[i] * k - 12, { c: col, size: 16, align: "center" }); };
+  bar(0, c.P, "R_0 = 4");
+  const stage = (i, r, f, on) => {
+    const xm = (xs[i] + xs[i + 1]) / 2, y = 120;
+    box(ctx, xm - 54, y - 30, 108, 60, c.K, "#fff", null, { lw: 1.6 });
+    txt(ctx, `estágio ${i + 1}`, xm, y - 13, { c: c.M, size: 13, align: "center" });
+    txt(ctx, `r_${i + 1} = ${r}`, xm, y + 10, { c: c.K, size: 16, align: "center", italic: true });
+    if (on) { arrowTo(ctx, xs[i] + bw / 2 + 4, y, xm - 56, y, c.R, 2, 9); arrowTo(ctx, xm + 56, y, xs[i + 1] - bw / 2 - 4, y, c.R, 2, 9); txt(ctx, `× (1 − r_${i + 1}^2) = × ${f}`, xm, y + 46, { c: c.R, size: 14, align: "center" }); }
+  };
+  stage(0, fmtc(0.5, 1), fmtc(0.75, 2), s >= 2); stage(1, fmtc(-0.75, 2), fmtc(0.4375, 4), s >= 4);
+  if (s >= 2) bar(1, c.G, "ℰ_1 = 3");
+  if (s >= 4) bar(2, c.R, `ℰ_2 = ${fmtc(1.3125, 4)}`);
+  if (s >= 2) txt(ctx, `a_1^{(1)} = ${fmtc(0.5, 1)}`, xs[1], yb + 26, { c: c.G, size: 16, align: "center", italic: true });
+  if (s >= 3) { txt(ctx, `a_1 = ${fmtc(0.875, 3)}`, xs[2], yb + 26, { c: c.R, size: 16, align: "center", italic: true }); txt(ctx, `a_2 = ${fmtc(-0.75, 2)}`, xs[2], yb + 50, { c: c.R, size: 16, align: "center", italic: true }); }
+  if (s >= 5) { txt(ctx, `G = √ℰ_2 = ${fmtc(1.146, 3)}`, xs[2] - 6, yb + 78, { c: c.K, size: 16, align: "center" }); }
+  if (s >= 6) {
+    txt(ctx, `+${fmtc(1.249, 2)} dB`, (xs[0] + xs[1]) / 2, 210, { c: c.G, size: 15, align: "center", bold: true });
+    txt(ctx, `+${fmtc(3.59, 2)} dB`, (xs[1] + xs[2]) / 2, 210, { c: c.G, size: 15, align: "center", bold: true });
+    txt(ctx, `ganho de predição: ${fmtc(1.25, 2)} + ${fmtc(3.59, 2)} = ${fmtc(4.84, 2)} dB`, w / 2, h - 34, { c: c.G, size: 17, align: "center", bold: true });
+  }
+  return ["Cada estágio da treliça recebe um coeficiente de reflexão.", "O estágio 1 deixa 75 % do erro.", "Os a_k de ordem 2 saem dos de ordem 1 e de r_2.", "O estágio 2 deixa 43,75 % do que sobrou.", "G é a raiz do erro final.", "Os ganhos em dB de cada estágio se somam."][Math.min(s, 6) - 1];
+}
+function figVx4(ctx, w, h, s) {   // r_k na reta, polos no plano z, envelope e log-áreas
+  const c = C(), a = [0.875, -0.75], G = Math.sqrt(1.3125);
+  const X = (r) => 30 + (r + 1.15) / 2.3 * (w - 60), ly = 44;
+  ctx.save(); ctx.fillStyle = tint(c.G, 0.14); ctx.fillRect(X(-1), ly - 18, X(1) - X(-1), 36); ctx.restore();
+  line(ctx, X(-1.15), ly, X(1.15), ly, c.K, 1.4);
+  [-1, -0.5, 0, 0.5, 1].forEach((v) => { line(ctx, X(v), ly - 5, X(v), ly + 5, c.K, 1.4); txt(ctx, fmtc(v, v % 1 ? 1 : 0), X(v), ly + 28, { c: c.M, size: 13, align: "center", mono: true }); });
+  txt(ctx, "|r_k| < 1", X(1) - 6, ly - 28, { c: c.G, size: 14, align: "right" });
+  if (s >= 2) [[0.5, "r_1"], [-0.75, "r_2"]].forEach(([r, n]) => { dot(ctx, X(r), ly, 7, c.R); txt(ctx, n, X(r), ly - 26, { c: c.R, size: 15, align: "center", italic: true }); });
+  const Rr = Math.min(100, w * 0.17), cx = Math.max(w * 0.23, Rr * 1.25 + 14), cy = 220;
+  zplane(ctx, cx, cy, Rr);
+  const re = 0.4375, im = 0.747, mod = Math.sqrt(0.75), th = Math.atan2(im, re);
+  if (s >= 3 && s < 4) txt(ctx, "Δ < 0: par complexo", cx, cy + Rr + 34, { c: c.R, size: 14, align: "center" });
+  if (s >= 4) {
+    ctx.save(); ctx.setLineDash([5, 4]); ctx.strokeStyle = c.R; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(cx, cy, Rr * mod, 0, TAU); ctx.stroke(); ctx.restore();
+    xmark(ctx, cx + Rr * re, cy - Rr * im, 7, c.R); xmark(ctx, cx + Rr * re, cy + Rr * im, 7, c.R);
+    txt(ctx, `|z| = ${fmtc(mod, 3)}`, cx, cy + Rr + 34, { c: c.R, size: 15, align: "center" });
+  }
+  if (s >= 5) {
+    ctx.save(); ctx.strokeStyle = c.P; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, 34, -th, 0); ctx.stroke(); ctx.restore();
+    line(ctx, cx, cy, cx + Rr * re, cy - Rr * im, c.P, 1.4, [4, 3]);
+    txt(ctx, `θ = ${fmtc(59.7, 1)}°`, cx + 40, cy - 16, { c: c.P, size: 14 });
+    const fr = range(0, 4000, 201), env = fr.map((f) => envDb(a, G, f));
+    const P = panel(ctx, w * 0.62, 110, w * 0.36, 190, { xmin: 0, xmax: 4000, ymin: -10, ymax: 16, xticks: [0, 2000, 4000], xfmt: (t) => fmtc(t / 1000, 0), yticks: [-10, 0, 10], xlabel: "f em kHz", ylabel: w < 520 ? null : "dB", ylw: 26 });
+    P.clip(); curve(ctx, fr, env, P.X, P.Y, c.P, 2.4); P.unclip();
+    line(ctx, P.X(1326), P.Y(16), P.X(1326), P.Y(-10), c.R, 1.4, [5, 4]);
+    txt(ctx, "1326 Hz", P.X(1326) + 6, P.Y(-6), { c: c.R, size: 14 });
+    txt(ctx, "G/|A(f)|", P.X(4000) - 4, P.Y(13), { c: c.P, size: 14, align: "right", italic: true });
+  }
+  if (s >= 6) {
+    const P = panel(ctx, 60, 372, w - 80, h - 412, { xmin: -1, xmax: 1, ymin: -3, ymax: 3, xticks: [-1, -0.5, 0, 0.5, 1], xfmt: decFmt(1), yticks: [-2, 0, 2], xlabel: "r_k", ylabel: "o_k", ylw: 18 });
+    const rs = range(-0.9, 0.9, 200);
+    P.clip(); curve(ctx, rs, rs.map((r) => Math.log((1 + r) / (1 - r))), P.X, P.Y, c.P, 2.2); P.unclip();
+    [[0.5, Math.log(3), "o_1"], [-0.75, Math.log(1 / 7), "o_2"]].forEach(([r, o, n]) => { dot(ctx, P.X(r), P.Y(o), 6, c.R); txt(ctx, `${n} = ${fmtc(o, 2)}`, P.X(r) + (r > 0 ? -10 : 10), P.Y(o), { c: c.R, size: 14, align: r > 0 ? "right" : "left", italic: true }); });
+  }
+  return ["Reta dos r_k e plano z, ainda vazios.", "Os dois r_k entre −1 e 1: sintetizador estável.", "Discriminante negativo: os polos formam um par complexo.", "Polos no raio 0,866, dentro do círculo unitário.", "O ângulo do polo marca o formante; o pico do envelope fica em 1318 Hz.", "As razões de log-áreas dos dois coeficientes."][Math.min(s, 6) - 1];
+}
+const FIGS = { fontefiltro: figFonteFiltro, polos: figPolos, espectro: figEspectro, yw: figYW, ortog: figOrtog, ex2: figEx2, analise: figAnalise, lar: figLar, celp: figCelp, vx1: figVx1, vx2: figVx2, vx3: figVx3, vx4: figVx4 };
 
 // ---------- (c) instrumentos ----------
 let AC = null;

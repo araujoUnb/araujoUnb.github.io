@@ -391,7 +391,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <a data-go="sec3"><b>3.</b>DPCM<span class="d">amostras vizinhas, potência da diferença, erro que acumula, laço do codificador e passo a passo</span></a>
       <a data-go="sec4"><b>4.</b>Modulação delta<span class="d">DM passo a passo, ruído granular e sobrecarga, limite da inclinação e DM adaptativa</span></a>
       <a data-go="sec5"><b>5.</b>Exercício: três codificadores<span class="d">o mesmo sinal em PCM, DPCM e DM: bits, reconstrução, distorção e SQNR</span></a>
-      <a data-go="resumo"><b>6.</b>Resumo<span class="d">quadro comparativo e a ponte para os vocoders</span></a>
+      <a data-go="sec6"><b>6.</b>Exercícios: telefonia, companding e predição<span class="d">canal de voz em PCM, tronco TDM, assinante que fala baixo e preditor ótimo do DPCM</span></a>
+      <a data-go="resumo"><b>7.</b>Resumo<span class="d">quadro comparativo e a ponte para os vocoders</span></a>
     </div>
     <div class="block" style="margin-top:auto"><span class="bt">Fonte e numeração</span>
       <p>J. G. Proakis e M. Salehi, Fundamentals of Communication Systems, 2.ª ed., seção 7.4. As equações com o número do livro aparecem como 7.4.k; as demais são numeradas por seção deste material.</p></div>
@@ -1190,8 +1191,116 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <aside class="notes"></aside>
 </section>
 
+<!-- ============ seção 6: exercícios ============ -->
+<section class="slide" id="sec6" data-sec="6 Exercícios" data-nonum>
+  <div class="divider"><div class="num">6</div><div class="ttl">Exercícios: telefonia, companding e predição</div><div class="gbar"></div>
+  <div class="what">O PCM de um canal de voz e do tronco TDM, o assinante que fala baixo e o preditor ótimo do DPCM.</div></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="extel" data-sec="6 Exercício · PCM de um canal de voz" data-fig="extel">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício: PCM de um canal de voz</h2><div class="sub">Contas no quadro · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step txt">Voz de banda \(W = 3{,}6\) kHz, amostrada a \(f_s = 9\) kHz com \(\nu = 9\) bits por amostra. Qual a taxa de bits do canal, a banda mínima e a SQNR máxima?</div>
+        <div class="step"><div class="why">Confere a taxa de Nyquist</div><div class="m">\[ f_s = 9 \text{ kHz} > \cssId{tl-2w}{2W} = 7{,}2 \text{ kHz} \]</div></div>
+        <div class="step"><div class="why">\(\nu\) bits por amostra, por (1.5)</div><div class="m">\[ R_b = \nu f_s = 9 \times 9000 = \boxed{81\,000 \text{ bits/s}} \]</div></div>
+        <div class="step"><div class="why">\(R\) bits/s ocupam no mínimo \(R/2\) Hz</div><div class="m">\[ \text{BW} = \frac{\cssId{tl-rb}{R_b}}{2} = \boxed{40{,}5 \text{ kHz}} \]</div></div>
+        <div class="step"><div class="why">Senoide de amplitude \(x_{\max}\)</div><div class="m">\[ P_X = \cssId{tl-px}{\frac{x_{\max}^2}{2}} \]</div></div>
+        <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} = 3\cdot 4^{9}\cdot\frac{1}{2} = 1{,}5\cdot 4^{9} = 393\,216 \]</div></div>
+        <div class="step"><div class="why">Em dB</div><div class="m">\[ \cssId{tl-176}{1{,}76} + \cssId{tl-54}{54{,}19} = \boxed{55{,}95 \text{ dB}} \]</div></div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="420" aria-label="Voz amostrada, bits de cada amostra, banda e SQNR"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="tl-2w">\(2\times 3{,}6\) kHz: a taxa de Nyquist da voz</div>
+  <div class="note" data-on="4" data-to="tl-rb">sinal binário: um bit por símbolo</div>
+  <div class="note" data-on="5" data-to="tl-px">a média de \(\sin^2\) vale \(1/2\)</div>
+  <div class="note" data-on="7" data-to="tl-176">\(10\log_{10}1{,}5\)</div>
+  <div class="note" data-on="7" data-to="tl-54">\(9 \times 6{,}02\)</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="extdm" data-sec="6 Exercício · tronco TDM" data-fig="extdm">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício: tronco TDM</h2><div class="sub">Os canais do slide anterior num quadro · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body" style="gap:6px">
+    <div class="fig"><canvas data-figcanvas height="220" aria-label="Quadro TDM com 23 intervalos e os 9 bits de um intervalo"></canvas></div>
+    <div class="deriv" style="gap:2px">
+      <div class="step txt">A cada \(T_s\), um quadro leva uma amostra de 20 canais de voz e 3 de serviço, todos a 81 kbit/s. Taxa e banda do tronco?</div>
+      <div class="step"><div class="why">Intervalos por quadro</div><div class="m">\[ N = \cssId{td-n}{20 + 3} = 23 \text{ intervalos} \]</div></div>
+      <div class="step"><div class="why">9 bits em cada intervalo</div><div class="m">\[ 23 \times 9 = 207 \text{ bits por quadro} \]</div></div>
+      <div class="step"><div class="why">Um quadro a cada \(T_s = 1/f_s\)</div><div class="m">\[ R = 207 \times \cssId{td-fs}{9000} = 1\,863\,000 \text{ bits/s} = \boxed{1{,}863 \text{ Mbit/s}} \]</div></div>
+      <div class="step"><div class="why">Confere pelos canais</div><div class="m">\[ R = 23 \times \cssId{td-81}{81 \text{ kbit/s}} = 1\,863 \text{ kbit/s} \]</div></div>
+      <div class="step"><div class="why">Banda mínima, \(R/2\)</div><div class="m">\[ \text{BW} = \frac{1\,863\,000}{2} = \boxed{931{,}5 \text{ kHz}} \]</div></div>
+      <div class="step txt">O E1 da telefonia segue a mesma conta: \(32 \times 8 \times 8000 = 2{,}048\) Mbit/s, com 30 canais de voz e 2 de serviço.</div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="td-n">uma amostra de cada canal por quadro</div>
+  <div class="note" data-on="4" data-to="td-fs">quadros por segundo \(= f_s\)</div>
+  <div class="note" data-on="5" data-to="td-81">\(R_b\) do slide anterior</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exfraco" data-sec="6 Exercício · assinante que fala baixo" data-fig="exfraco">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício: assinante que fala baixo</h2><div class="sub">PCM uniforme contra lei μ · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step txt">Uma senoide 28 dB abaixo do fundo de escala, com \(x_{\max} = 1\) e \(\nu = 8\) bits. Qual a SQNR com PCM uniforme e com a lei μ de \(\mu = 255\)?</div>
+        <div class="step"><div class="why">28 dB abaixo da amplitude 1</div><div class="m">\[ A = 10^{-28/20} = 0{,}0398 \]</div></div>
+        <div class="step"><div class="why">Passo do uniforme, (1.1)</div><div class="m">\[ \Delta = \frac{2}{2^8} = 0{,}0078 \ \Rightarrow\ \cssId{fr-2a}{\frac{2A}{\Delta}} = 10{,}2 \]</div></div>
+        <div class="step"><div class="why">\(P_X = A^2/2\) em (1.4)</div><div class="m">\[ \text{SQNR}_{\text{unif}} = \cssId{fr-px}{-31{,}01} + 52{,}93 = \boxed{21{,}92 \text{ dB}} \]</div></div>
+        <div class="step"><div class="why">Patamar da lei μ, (2.5)</div><div class="m">\[ \text{SQNR}_\mu = 52{,}93 - \cssId{fr-ln}{20\log_{10}\ln 256} = \boxed{38{,}05 \text{ dB}} \]</div></div>
+        <div class="step"><div class="why">Ganho do companding</div><div class="m">\[ G = 38{,}05 - 21{,}92 = 16{,}13 \text{ dB} \]</div></div>
+        <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{16{,}13}{6{,}02} = 2{,}68 \ \Rightarrow\ \cssId{fr-3}{3 \text{ bits a mais}} \]</div></div>
+        <div class="step txt">O uniforme precisaria de 11 bits para tratar esse assinante como a lei μ trata com 8. Por isso a telefonia usa 8 bits com companding.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="420" aria-label="Senoide fraca quantizada pelo uniforme e pela lei mu, e SQNR contra o nível"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="3" data-to="fr-2a">\(2A\) cobre só 10 degraus dos 256</div>
+  <div class="note" data-on="4" data-to="fr-px">\(10\log_{10}(A^2/2) = -28 - 3{,}01\)</div>
+  <div class="note" data-on="5" data-to="fr-ln">\(14{,}88\) dB; vale com \(\mu A = 10{,}2\) grande</div>
+  <div class="note" data-on="7" data-to="fr-3">arredonda para cima</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="expred" data-sec="6 Exercício · preditor ótimo" data-fig="expred">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício: preditor ótimo do DPCM</h2><div class="sub">Primeira ordem, \(\hat{x}_n = a\,x_{n-1}\) · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout">
+      <div class="deriv">
+        <div class="step txt">Sinal estacionário com \(\sigma^2 = 3\) e \(\rho = 0{,}92\), preditor \(\hat{x}_n = a\,x_{n-1}\). Qual \(a\) minimiza a potência do erro de predição e quantos bits o DPCM economiza?</div>
+        <div class="step"><div class="why">Expande o quadrado</div><div class="m">\[ \sigma_e^2(a) = E[X_n^2] - 2a\,\cssId{pr-r}{E[X_nX_{n-1}]} + a^2 E[X_{n-1}^2] \]</div></div>
+        <div class="step"><div class="why">Estacionário</div><div class="m">\[ \sigma_e^2(a) = \sigma^2\,(1 - 2a\rho + a^2) \]</div></div>
+        <div class="step"><div class="why">Derivada nula</div><div class="m">\[ \frac{d\sigma_e^2}{da} = \sigma^2(\cssId{pr-d}{2a - 2\rho}) = 0 \ \Rightarrow\ \boxed{a = \rho = 0{,}92} \]</div></div>
+        <div class="step"><div class="why">Leva \(a = \rho\)</div><div class="m">\[ \sigma_e^2 = \sigma^2(\cssId{pr-1r}{1 - \rho^2}) = 3 \times 0{,}1536 = 0{,}4608 \]</div></div>
+        <div class="step"><div class="why">Ganho de predição</div><div class="m">\[ G_p = \frac{\sigma^2}{\sigma_e^2} = \frac{1}{0{,}1536} = 6{,}51 \ \to\ 8{,}14 \text{ dB} \]</div></div>
+        <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{8{,}14}{6{,}02} = \boxed{1{,}35 \text{ bit a menos por amostra}} \]</div></div>
+        <div class="step txt">Com \(a = 1\), a diferença simples do slide da potência da diferença, \(\sigma_e^2 = 2\sigma^2(1 - \rho) = 0{,}48\): só 0,18 dB pior. Perto de \(\rho = 1\) a diferença simples já é quase ótima.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="420" aria-label="Pares de amostras com a reta do preditor e a parábola do erro"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="pr-r">\(R_X(T_s) = \rho\sigma^2\)</div>
+  <div class="note" data-on="4" data-to="pr-d">derivada de \(a^2 - 2a\rho\)</div>
+  <div class="note" data-on="5" data-to="pr-1r">\(0{,}92^2 = 0{,}8464\)</div>
+  <aside class="notes"></aside>
+</section>
+
 <!-- ============ resumo ============ -->
-<section class="slide" id="resumo" data-sec="6 Resumo">
+<section class="slide" id="resumo" data-sec="7 Resumo">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Resumo da forma de onda</h2><div class="sub">O que cada esquema quantiza e quanto custa · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
@@ -2045,6 +2154,168 @@ function figExComp(ctx, w, h, s, t) {
   return s < 5 ? "Acima: amostras e reconstruções. Abaixo: SQNR de cada um." : "Sinal lento favorece DPCM e DM; num sinal rápido o PCM ganharia.";
 }
 Object.assign(FIGS, { copiar: figCopiar, pcmchain: figPcmChain, pcmunif: figPcmUnif, exunif: figExUnif, banda: figBanda, faixa: figFaixa, compand: figCompand, compq: figCompq, leimu: figLeiMu, leia: figLeiA, porlog: figPorLog, sqnrmu: figSqnrMu, muunif: figMuUnif, viz: figViz, potdif: figPotDif, acum: figAcum, dpcmdiag: figDpcmDiag, errodpcm: figErroDpcm, dpcmpasso: figDpcmPasso, ex742: figEx742, dmdiag: figDmDiag, dmpasso: figDmPasso, gran: figGran, limite: figLimite, adm: figAdm, exenun: figExEnun, expcm: figExPcm, exdpcm: figExDpcm, exdm: figExDm, excomp: figExComp });
+// ----- exercícios da seção 6: telefonia, companding e predição -----
+const LNG = (pt, en) => ((document.documentElement.lang || "").startsWith("en") ? en : pt);
+const TSU = 1e6 / 9000;   // T_s em µs, f_s = 9 kHz
+const TELV = (u) => 0.55 * Math.sin(TAU * 1.1e-3 * u + 0.4) + 0.3 * Math.sin(TAU * 2.9e-3 * u + 1.3);   // voz de exemplo, u em µs
+const code9 = (v) => Math.min(511, Math.max(0, Math.floor((v + 1) * 256))).toString(2).padStart(9, "0");
+function figExTel(ctx, w, h, s, t) {
+  const c = C(), el = since("extel", s, t), r1 = { x: 60, y: 14, w: w - 76, h: 140 };
+  const { X, Y } = frame(ctx, r1, { xmin: 0, xmax: 3.4 * TSU, ymin: -1, ymax: 1, xt: [0, 1, 2, 3].map((k) => k * TSU), xf: (v) => fmtc(v, 0), yt: [-1, 0, 1], xl: LNG("t em µs", "t in µs"), yl: "x(t)", ylo: 40 });
+  const us = range(0, 3.4 * TSU, 500); clipR(ctx, r1, () => curve(ctx, us, us.map(TELV), X, Y, s >= 2 ? LG : c.P, 2.4));
+  if (s >= 2) {
+    for (let n = 0; n <= 3; n++) { line(ctx, X(n * TSU), Y(0), X(n * TSU), Y(TELV(n * TSU)), c.K, 1.8); dot(ctx, X(n * TSU), Y(TELV(n * TSU)), 5, c.P); }
+    const yb = Y(-0.82); arrowTo(ctx, X(1.5 * TSU), yb, X(TSU), yb, c.R, 1.8, 9); arrowTo(ctx, X(1.5 * TSU), yb, X(2 * TSU), yb, c.R, 1.8, 9);
+    txt(ctx, LNG("T_s = 111,1 µs", "T_s = 111.1 µs"), X(2 * TSU) + 8, yb, { size: 15, c: c.R });
+    if (s === 2) { const y2 = Y(0.86); line(ctx, X(TSU), y2, X(TSU + 138.9), y2, c.G, 2.2); line(ctx, X(TSU), y2 - 6, X(TSU), y2 + 6, c.G, 2); line(ctx, X(TSU + 138.9), y2 - 6, X(3 * TSU + 138.9), y2 + 6, c.G, 2);
+      txt(ctx, LNG("1/(2W) = 138,9 µs", "1/(2W) = 138.9 µs"), X(TSU + 145), y2, { size: 15, c: c.G }); }
+  }
+  if (s >= 3) {   // os 9 bits de cada amostra dentro do seu T_s
+    const yb = 206, hb = 30, cw = (X(TSU) - X(0)) / 9, nb = s === 3 ? Math.floor(el / 0.05) : 99;
+    txt(ctx, "bits", r1.x - 8, yb + hb / 2, { size: 15, align: "right", c: c.M });
+    for (let n = 0; n <= 2; n++) { const cd = code9(TELV(n * TSU)), col = n % 2 ? c.G : c.P;
+      for (let b = 0; b < 9; b++) { if (n * 9 + b >= nb) break; const x = X(n * TSU) + b * cw;
+        rrect(ctx, x, yb, cw, hb, 0, col, tint(col === c.P ? "#003B5C" : "#006633", cd[b] === "1" ? 0.3 : 0.06), 1);
+        txt(ctx, cd[b], x + cw / 2, yb + hb / 2 + 1, { size: cw < 20 ? 12 : 14, mono: true, align: "center", c: c.K }); } }
+    { line(ctx, X(0), yb - 6, X(0), yb, c.M, 1); line(ctx, X(0) + cw, yb - 6, X(0) + cw, yb, c.M, 1); txt(ctx, LNG("T_b = T_s/9 = 12,3 µs", "T_b = T_s/9 = 12.3 µs"), X(0), yb - 14, { size: 14, c: c.M }); }
+  }
+  const r3 = { x: 60, y: 286, w: w - 76, h: 96 };
+  if (s === 4) {
+    const { X: X3, Y: Y3 } = frame(ctx, r3, { xmin: 0, xmax: 46, ymin: 0, ymax: 1.3, xt: [0, 3.6, 40.5], xf: (v) => fmtc(v, v % 1 ? 1 : 0), xl: LNG("f em kHz", "f in kHz") });
+    const p = cl01(el / 0.9), fb = 3.6 + (40.5 - 3.6) * p;
+    ctx.save(); ctx.fillStyle = tint("#B03A2E", 0.15); ctx.fillRect(X3(0), Y3(0.45), X3(fb) - X3(0), Y3(0) - Y3(0.45)); ctx.restore(); curve(ctx, [0, fb, fb], [0.45, 0.45, 0], X3, Y3, c.R, 2.2);
+    ctx.save(); ctx.fillStyle = tint("#003B5C", 0.3); ctx.fillRect(X3(0), Y3(1), X3(3.6) - X3(0), Y3(0) - Y3(1)); ctx.restore(); curve(ctx, [0, 3.6, 3.6], [1, 1, 0], X3, Y3, c.P, 2.2);
+    txt(ctx, LNG("voz", "voice"), X3(4.2), Y3(0.95), { size: 16, c: c.P });
+    if (p >= 1) txt(ctx, LNG("PCM: R_b/2 = 40,5 kHz", "PCM: R_b/2 = 40.5 kHz"), X3(24), Y3(0.62), { size: 16, align: "center", c: c.R });
+  }
+  if (s >= 5) {   // senoide de fundo de escala e a escada de 6,02 dB por bit
+    const NW = w < 520, rs = { x: 60, y: r3.y, w: NW ? 90 : 150, h: r3.h };
+    const { X: Xs, Y: Ys } = frame(ctx, rs, { xmin: 0, xmax: 1, ymin: -1.25, ymax: 1.25, yt: [-1, 1], yf: (v) => (v > 0 ? "x_{max}" : "−x_{max}") });
+    [-1, 1].forEach((v) => line(ctx, rs.x, Ys(v), rs.x + rs.w, Ys(v), c.R, 1.4, [5, 4])); const xs = range(0, 1, 100); curve(ctx, xs, xs.map((x) => Math.sin(TAU * x)), Xs, Ys, c.P, 2.2);
+    txt(ctx, "P_X = x_{max}^2/2", rs.x + rs.w / 2, rs.y + rs.h + 16, { size: 15, align: "center", c: c.P });
+    if (s >= 6) {
+      const rl = { x: rs.x + rs.w + 40, y: r3.y + 26, w: w - rs.x - rs.w - 60, h: 40 }, { X: Xl } = frame(ctx, rl, { xmin: 0, xmax: 60, ymin: 0, ymax: 1, xt: [0, 20, 40, 60], xl: LNG("SQNR em dB", "SQNR in dB") });
+      const nseg = s === 6 ? Math.min(9, Math.floor(el / 0.18) + 1) : 9;
+      for (let k = 0; k < nseg; k++) { ctx.save(); ctx.fillStyle = tint(k % 2 ? "#003B5C" : "#2c6fb0", 0.35); ctx.fillRect(Xl(k * 6.02), rl.y + 4, Xl(6.02) - Xl(0), rl.h - 8); ctx.restore(); txt(ctx, String(k + 1), Xl(k * 6.02 + 3.01), rl.y + rl.h / 2, { size: 13, align: "center", c: c.K }); }
+      txt(ctx, s >= 7 ? LNG("9 × 6,02 + 1,76 = 55,95 dB", "9 × 6.02 + 1.76 = 55.95 dB") : LNG("9 × 6,02 = 54,19 dB", "9 × 6.02 = 54.19 dB"), rl.x + rl.w / 2, rl.y - 12, { size: 15, align: "center", c: s >= 7 ? c.R : c.P });
+      if (s >= 7) { ctx.save(); ctx.fillStyle = tint("#006633", 0.45); ctx.fillRect(Xl(54.19), rl.y + 4, Xl(55.95) - Xl(54.19), rl.h - 8); ctx.restore(); line(ctx, Xl(55.95), rl.y - 4, Xl(55.95), rl.y + rl.h + 4, c.R, 2.4);
+      }
+    }
+  }
+  return [LNG("Um trecho de 0,6 ms de voz com banda de 3,6 kHz.", "A 0.6 ms stretch of voice with 3.6 kHz bandwidth."),
+    LNG("Amostras a cada T_s = 111,1 µs, mais perto que o limite 1/(2W) = 138,9 µs.", "Samples every T_s = 111.1 µs, closer than the limit 1/(2W) = 138.9 µs."),
+    LNG("Cada amostra vira 9 bits dentro do seu T_s.", "Each sample becomes 9 bits inside its own T_s."),
+    LNG("O fluxo de 81 kbit/s ocupa ao menos 40,5 kHz, 11,25 vezes a banda da voz.", "The 81 kbit/s stream needs at least 40.5 kHz, 11.25 times the voice bandwidth."),
+    LNG("Senoide de fundo de escala: P_X = x_{max}²/2.", "Full-scale sinusoid: P_X = x_{max}²/2."),
+    LNG("Cada bit acrescenta 6,02 dB.", "Each bit adds 6.02 dB."),
+    LNG("Mais 1,76 dB da senoide: 55,95 dB.", "Plus 1.76 dB from the sinusoid: 55.95 dB.")][s - 1];
+}
+function figExTdm(ctx, w, h, s, t) {
+  const c = C(), el = since("extdm", s, t), NW = w < 900, N = 23, x0 = NW ? 34 : 70, x1 = w - (NW ? 10 : 40), yb = 32, hb = 44, sw = (x1 - x0) / N, K = 5, fs = NW ? 12 : 16;
+  const kind = (k) => (k === 0 ? 0 : k >= 21 ? 2 : 1), cols = [["#006633", c.G], ["#003B5C", c.P], ["#c76a00", ORG]];
+  const lab = (k) => (NW ? (k === 0 ? "S" : k >= 21 ? "A" : k === 1 || k % 5 === 0 ? String(k) : "") : k === 0 ? LNG("sinc", "sync") : k >= 21 ? LNG("sinal", "sig") : String(k));
+  arrowTo(ctx, (x0 + x1) / 2, 13, x0, 13, c.K, 1.6, 9); arrowTo(ctx, (x0 + x1) / 2, 13, x1, 13, c.K, 1.6, 9);
+  label(ctx, LNG("um quadro: T_s = 1/f_s = 111,1 µs", "one frame: T_s = 1/f_s = 111.1 µs"), (x0 + x1) / 2, 13, c.K, { align: "center", size: NW ? 13 : 16 });
+  const nshow = s === 1 ? Math.min(N, Math.floor(el / 0.07) + 1) : N;
+  for (let k = 0; k < nshow; k++) { const [hx, cc] = cols[kind(k)], hot = s >= 3 && k === K;
+    rrect(ctx, x0 + k * sw, yb, sw, hb, 0, hot ? c.R : cc, tint(hx, hot ? 0.35 : 0.16), hot ? 3 : 1.4);
+    txt(ctx, lab(k), x0 + (k + 0.5) * sw, yb + hb / 2, { size: NW ? 12 : 15, align: "center", c: cc }); }
+  if (s <= 2 && NW) txt(ctx, LNG("S: sincronismo · A: sinalização", "S: synchronization · A: signaling"), x0, h - 14, { size: 13, c: c.K });
+  if (s <= 2 && !NW) { const ly = h - 14; [[0, LNG("sincronismo", "synchronization")], [1, LNG("voz, canais 1 a 20", "voice, channels 1 to 20")], [2, LNG("sinalização", "signaling")]].forEach(([k, s2], i) => {
+    const lx = x0 + i * 300; rrect(ctx, lx, ly - 9, 24, 18, 0, cols[k][1], tint(cols[k][0], 0.2), 1.4); txt(ctx, s2, lx + 32, ly, { size: 16, c: c.K }); }); }
+  if (s >= 2) { const y = yb + hb + 10; line(ctx, x0, y, x1, y, c.M, 1.4); line(ctx, x0, y - 6, x0, y + 1, c.M, 1.4); line(ctx, x1, y - 6, x1, y + 1, c.M, 1.4);
+    const t2 = s >= 5 ? LNG("23 intervalos × 81 kbit/s = 1 863 kbit/s", "23 slots × 81 kbit/s = 1863 kbit/s") : LNG("23 intervalos de T_s/23 = 4,83 µs", "23 slots of T_s/23 = 4.83 µs");
+    txt(ctx, t2, (x0 + x1) / 2, y + 14, { size: fs, align: "center", c: s >= 5 ? c.R : c.K }); }
+  if (s >= 3) {   // zoom no intervalo do canal 5: os 9 bits
+    const cw = Math.min(40, (x1 - x0) / 9), bx = Math.max(x0, Math.min(x1 - 9 * cw, x0 + (K + 0.5) * sw - 4.5 * cw)), by = 116, bh = 34, bits = "101100111", nb = s === 3 ? Math.floor(el / 0.12) + 1 : 9;
+    line(ctx, x0 + K * sw, yb + hb, bx, by, c.R, 1.2, [4, 3]); line(ctx, x0 + (K + 1) * sw, yb + hb, bx + 9 * cw, by, c.R, 1.2, [4, 3]);
+    for (let b = 0; b < Math.min(9, nb); b++) { rrect(ctx, bx + b * cw, by, cw, bh, 0, c.R, tint("#B03A2E", bits[b] === "1" ? 0.25 : 0.05), 1.4); txt(ctx, bits[b], bx + (b + 0.5) * cw, by + bh / 2 + 1, { size: NW ? 14 : 18, mono: true, align: "center", c: c.K }); }
+    const tx = bx + 9 * cw + 24;
+    if (!NW) txt(ctx, LNG("9 bits por intervalo: 23 × 9 = 207 bits por quadro", "9 bits per slot: 23 × 9 = 207 bits per frame"), tx, by + 10, { size: 16, c: c.K });
+    if (s >= 4 && !NW) txt(ctx, LNG("207 bits × 9000 quadros/s = 1,863 Mbit/s", "207 bits × 9000 frames/s = 1.863 Mbit/s"), tx, by + 34, { size: 16, c: c.R });
+    if (s >= 6) { const yy = by + bh + 12; arrowTo(ctx, bx + cw / 2, yy, bx, yy, c.G, 1.6, 8); arrowTo(ctx, bx + cw / 2, yy, bx + cw, yy, c.G, 1.6, 8);
+      txt(ctx, NW ? LNG("T_b = 0,537 µs", "T_b = 0.537 µs") : LNG("T_b = 1/R = 0,537 µs → BW ≥ R/2 = 931,5 kHz", "T_b = 1/R = 0.537 µs → BW ≥ R/2 = 931.5 kHz"), bx + cw + 10, yy, { size: NW ? 13 : 16, c: c.G }); }
+  }
+  if (s >= 7) {   // E1: 32 intervalos de 8 bits a cada 125 µs
+    const ey = h - 24, eh = 20, ew = (x1 - x0) / 32; txt(ctx, "E1", x0 - 10, ey + eh / 2, { size: 16, align: "right", c: c.K });
+    for (let k = 0; k < 32; k++) { const kk = k === 0 ? 0 : k === 16 ? 2 : 1; rrect(ctx, x0 + k * ew, ey, ew, eh, 0, cols[kk][1], tint(cols[kk][0], 0.16), 1); }
+  }
+  return [LNG("Os 23 intervalos de um quadro, um por canal.", "The 23 slots of a frame, one per channel."),
+    LNG("Cada intervalo dura T_s/23.", "Each slot lasts T_s/23."),
+    LNG("O intervalo do canal 5, em vermelho, aberto em seus 9 bits.", "The slot of channel 5, in red, opened into its 9 bits."),
+    LNG("Um quadro de 207 bits a cada 111,1 µs.", "One 207-bit frame every 111.1 µs."),
+    LNG("Mesma conta por canal: 23 canais de 81 kbit/s.", "Same result per channel: 23 channels at 81 kbit/s."),
+    LNG("Cada bit dura 0,537 µs no tronco.", "Each bit lasts 0.537 µs on the trunk."),
+    LNG("E1: 32 intervalos de 8 bits a cada 125 µs; sincronismo no 0 e sinalização no 16.", "E1: 32 slots of 8 bits every 125 µs; sync in slot 0 and signaling in slot 16.")][s - 1];
+}
+// senoide fraca: quantizador de 8 bits em [−1, 1], uniforme e lei μ = 255
+const q8 = (v) => Math.min(1 - 1 / 256, Math.max(-1 + 1 / 256, (2 / 256) * (Math.floor(v / (2 / 256)) + 0.5)));
+const qmu8 = (v) => gmuI(q8(gmu(v, 255)), 255);
+function sineSqnr(A, f) { let ps = 0, pe = 0; for (let i = 0; i < 2000; i++) { const x = A * Math.sin(TAU * (i + 0.37) / 2000), e = f(x) - x; ps += x * x; pe += e * e; } return 10 * Math.log10(ps / pe); }
+const FRACO = (() => { const Ls = range(-60, 0, 121); return { Ls, m: Ls.map((L) => sineSqnr(10 ** (L / 20), qmu8)) }; })();
+function figExFraco(ctx, w, h, s, t) {
+  const c = C(), A = 10 ** (-28 / 20), NW = w < 520, r1 = { x: 64, y: 12, w: w - (NW ? 80 : 210), h: 180 };
+  const { X, Y } = frame(ctx, r1, { xmin: 0, xmax: 1, ymin: -0.052, ymax: 0.052, yt: [-0.04, 0, 0.04], yf: (v) => fmtc(v, 2), yl: "x", ylo: 50 });
+  const ts = range(0, 1, 900), xs = ts.map((u) => A * Math.sin(TAU * u));
+  if (s >= 3) clipR(ctx, r1, () => { for (let k = -7; k <= 6; k++) line(ctx, r1.x, Y((k + 0.5) / 128), r1.x + r1.w, Y((k + 0.5) / 128), "#d0d6db", 1); });
+  clipR(ctx, r1, () => curve(ctx, ts, xs, X, Y, s >= 3 ? LG : c.P, 2.4));
+  if (s >= 2) { [-A, A].forEach((v) => line(ctx, r1.x, Y(v), r1.x + r1.w, Y(v), c.R, 1.2, [5, 4])); txt(ctx, LNG("±A = ±0,0398", "±A = ±0.0398"), X(0.5), Y(A) - 10, { size: 15, c: c.R, align: "center" }); }
+  if (s >= 3) { curve(ctx, ts, xs.map(q8), X, Y, c.R, 2.2); line(ctx, r1.x, r1.y + r1.h + 22, r1.x + 22, r1.y + r1.h + 22, c.R, 2.6); txt(ctx, LNG("uniforme: 12 níveis de 256", "uniform: 12 of 256 levels"), r1.x + 28, r1.y + r1.h + 22, { size: 15, c: c.R }); }
+  if (s >= 5) { curve(ctx, ts, xs.map(qmu8), X, Y, c.G, 2.2); const lx = NW ? r1.x : r1.x + 250, ly = r1.y + r1.h + (NW ? 42 : 22); line(ctx, lx, ly, lx + 22, ly, c.G, 2.6); txt(ctx, LNG("lei μ: degraus finos perto de zero", "μ-law: fine steps near zero"), lx + 28, ly, { size: 15, c: c.G }); }
+  // detalhe: a mesma senoide na escala inteira
+  if (!NW) { const ri = { x: w - 120, y: 30, w: 104, h: 130 }, { Y: Yi } = frame(ctx, ri, { xmin: 0, xmax: 1, ymin: -1.1, ymax: 1.1, yt: [-1, 1], yf: (v) => (v > 0 ? "1" : "−1") });
+  curve(ctx, ts, xs, (u) => ri.x + u * ri.w, Yi, c.P, 2); txt(ctx, LNG("escala inteira", "full scale"), ri.x + ri.w / 2, ri.y - 12, { size: 14, align: "center", c: c.M }); }
+  if (s >= 4) {
+    const r2 = { x: 64, y: 254, w: w - 80, h: 124 };
+    const { X: X2, Y: Y2 } = frame(ctx, r2, { xmin: -60, xmax: 0, ymin: 0, ymax: 56, xt: [-60, -40, -28, -20, 0], yt: [0, 20, 40], xl: LNG("nível da senoide em dB abaixo do fundo de escala", "sine level in dB below full scale").replace(NW ? "nível da senoide em " : "@", "").replace(NW ? "sine level in " : "@", ""), yl: "SQNR (dB)", ylo: 50 });
+    clipR(ctx, r2, () => curve(ctx, [-60, 0], [-10.08, 49.92], X2, Y2, c.R, 2.4));
+    dot(ctx, X2(-28), Y2(21.92), 6, c.R); txt(ctx, LNG("21,92", "21.92"), X2(-28) + 10, Y2(21.92) + 10, { size: 15, c: c.R });
+    if (s >= 5) { line(ctx, r2.x, Y2(38.05), r2.x + r2.w, Y2(38.05), c.G, 1.2, [3, 3]); curve(ctx, FRACO.Ls, FRACO.m, X2, Y2, c.G, 2.4);
+      dot(ctx, X2(-28), Y2(38.05), 6, c.G); txt(ctx, LNG("38,05", "38.05"), X2(-28) - 10, Y2(38.05) - 12, { size: 15, c: c.G, align: "right" }); }
+    if (s >= 6) { arrowTo(ctx, X2(-28), Y2(23), X2(-28), Y2(37), ORG, 2.4, 10); label(ctx, LNG("16,13 dB", "16.13 dB"), X2(-33), Y2(30), ORG, { align: "right" }); }
+    if (s >= 7) { const pts = [[-28, 21.92]]; for (let k = 1; k <= 3; k++) { const v = 21.92 + 6.02 * k, x = -28 + 3 * k; pts.push([x, 21.92 + 6.02 * (k - 1)], [x, v]); txt(ctx, "+" + k, X2(x) + 6, Y2(v - 3), { size: 14, c: c.P }); } pts.push([-17, 39.98]); ctx.save(); ctx.strokeStyle = c.P; ctx.lineWidth = 2.4; ctx.beginPath(); pts.forEach(([x, v], i) => (i ? ctx.lineTo(X2(x), Y2(v)) : ctx.moveTo(X2(x), Y2(v)))); ctx.stroke(); ctx.restore(); }
+  }
+  return [LNG("A senoide fraca vista de perto; no detalhe, na escala inteira.", "The weak sinusoid up close; the inset shows it on the full scale."),
+    LNG("Amplitude A = 0,0398.", "Amplitude A = 0.0398."),
+    LNG("Os níveis do uniforme, em cinza, são grossos para esse sinal.", "The uniform levels, in gray, are coarse for this signal."),
+    LNG("SQNR do uniforme: reta 49,92 + nível em dB.", "Uniform SQNR: the line 49.92 + level in dB."),
+    LNG("Lei μ simulada, em verde: 37,7 dB em −28 dB, perto do patamar de 38,05.", "Simulated μ-law, in green: 37.7 dB at −28 dB, close to the 38.05 plateau."),
+    LNG("O companding ganha 16,13 dB nesse nível.", "Companding gains 16.13 dB at this level."),
+    LNG("Cada bit a mais no uniforme sobe 6,02 dB: só o terceiro passa de 38,05.", "Each extra uniform bit adds 6.02 dB: only the third passes 38.05."),
+    LNG("Uniforme de 11 bits ou lei μ de 8 bits.", "11-bit uniform or 8-bit μ-law.")][s - 1];
+}
+// preditor de primeira ordem: σ² = 3, ρ = 0,92
+const PRED = (() => { const sg = Math.sqrt(3), rho = 0.92, x = [sg * gn(500)]; for (let n = 1; n < 160; n++) x.push(rho * x[n - 1] + Math.sqrt(1 - rho * rho) * sg * gn(500 + n)); return x; })();
+function figExPred(ctx, w, h, s, t) {
+  const NW = w < 520, c = C(), el = since("expred", s, t), side = 190, r1 = { x: (w - side) / 2 + 10, y: 12, w: side, h: side };
+  const { X, Y } = frame(ctx, r1, { xmin: -5, xmax: 5, ymin: -5, ymax: 5, xt: [-4, 0, 4], yt: [-4, 0, 4], xl: "x_{n−1}", yl: "x_n", ylo: 36 });
+  clipR(ctx, r1, () => { for (let n = 1; n < PRED.length; n++) dot(ctx, X(PRED[n - 1]), Y(PRED[n]), 2.8, s >= 4 ? LG : c.P);
+    if (s >= 4) { line(ctx, X(-5), Y(-4.6), X(5), Y(4.6), c.R, 2.6); }
+    if (s >= 8) line(ctx, X(-5), Y(-5), X(5), Y(5), ORG, 2.2, [6, 4]); });
+  if (s >= 4) txt(ctx, LNG("x̂_n = 0,92 x_{n−1}", "x̂_n = 0.92 x_{n−1}"), NW ? r1.x + 6 : r1.x + r1.w + 10, NW ? r1.y + 14 : Y(3.2), { size: NW ? 14 : 16, c: c.R });
+  if (s >= 8) txt(ctx, "a = 1", NW ? r1.x + 6 : r1.x + r1.w + 10, NW ? r1.y + 32 : Y(4.6), { size: NW ? 14 : 16, c: ORG });
+  if (s >= 2 && s < 4) txt(ctx, LNG("ρ = 0,92", "ρ = 0.92"), r1.x + 8, r1.y + 14, { size: 16, c: c.P });
+  if (s >= 3) {
+    const r2 = { x: 64, y: 252, w: w - 80, h: 126 }, f = (a) => 3 * (1 - 1.84 * a + a * a);
+    const { X: X2, Y: Y2 } = frame(ctx, r2, { xmin: 0, xmax: 1.6, ymin: 0, ymax: 3.3, xt: [0, 0.5, 1, 1.5], yt: [0, 1, 2, 3], xl: "a", yl: "σ_e^2(a)", ylo: 46 });
+    const amax = s === 3 ? 1.6 * cl01(el / 1.2) : 1.6, as = range(0, Math.max(amax, 0.01), 200); curve(ctx, as, as.map(f), X2, Y2, c.P, 2.6);
+    if (s >= 4) { line(ctx, X2(0.92), Y2(0.4608), X2(0.92), Y2(0), c.R, 1.2, [4, 3]); line(ctx, X2(0.72), Y2(0.4608), X2(1.12), Y2(0.4608), c.R, 2); dot(ctx, X2(0.92), Y2(0.4608), 6, c.R);
+      txt(ctx, s >= 5 ? LNG("a = 0,92: σ_e^2 = 0,4608", "a = 0.92: σ_e^2 = 0.4608") : LNG("a = ρ = 0,92", "a = ρ = 0.92"), X2(0.92), Y2(1.25), { size: 16, align: "center", c: c.R }); }
+    if (s >= 6) { arrowTo(ctx, X2(0.06), Y2(3), X2(0.06), Y2(0.55), c.G, 2.2, 10); line(ctx, X2(0.06), Y2(0.4608), X2(0.72), Y2(0.4608), c.G, 1, [3, 3]);
+      txt(ctx, LNG("÷ 6,51: 8,14 dB", "÷ 6.51: 8.14 dB"), X2(0.3), Y2(2.8), { size: 16, c: c.G }); }
+    if (s >= 7) txt(ctx, LNG("1,35 bit a menos", "1.35 bit fewer"), X2(0.3), Y2(2.3), { size: 16, c: c.G });
+    if (s >= 8) { dot(ctx, X2(1), Y2(0.48), 6, ORG); txt(ctx, LNG("a = 1: 0,48", "a = 1: 0.48"), NW ? r2.x + r2.w - 4 : X2(1.16), Y2(0.2), { size: 16, c: ORG, align: NW ? "right" : "left" }); }
+  }
+  return [LNG("Pares de amostras vizinhas com ρ = 0,92: nuvem estreita na diagonal.", "Neighboring sample pairs with ρ = 0.92: a narrow cloud along the diagonal."),
+    LNG("O termo cruzado mede quanto a nuvem se alinha.", "The cross term measures how well the cloud lines up."),
+    LNG("A potência do erro é uma parábola em a.", "The error power is a parabola in a."),
+    LNG("Mínimo em a = ρ: a reta vermelha prevê x_n a partir de x_{n−1}.", "Minimum at a = ρ: the red line predicts x_n from x_{n−1}."),
+    LNG("No mínimo sobra σ²(1 − ρ²).", "At the minimum σ²(1 − ρ²) is left."),
+    LNG("A potência cai de 3 para 0,46.", "The power drops from 3 to 0.46."),
+    LNG("Cada 6,02 dB valem um bit.", "Every 6.02 dB is worth one bit."),
+    LNG("Com a = 1, tracejado laranja, o erro sobe só para 0,48.", "With a = 1, dashed orange, the error rises only to 0.48.")][s - 1];
+}
+Object.assign(FIGS, { extel: figExTel, extdm: figExTdm, exfraco: figExFraco, expred: figExPred });
 
 // ---------- (d) instrumentos ----------
 const MULIST = [0, 1, 2, 5, 10, 20, 50, 100, 255, 500];

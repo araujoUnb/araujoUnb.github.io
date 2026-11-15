@@ -389,6 +389,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <a data-go="sec2"><b>2.</b>Teorema da amostragem<span class="d">réplicas que se encostam, taxa e intervalo de Nyquist</span></a>
       <a data-go="sec3"><b>3.</b>Reconstrução<span class="d">filtro de reconstrução, resposta ao impulso, fórmula de interpolação e interpolação com sincs</span></a>
       <a data-go="sec4"><b>4.</b>Aliasing e banda de guarda<span class="d">aliasing no tempo, banda de guarda da telefonia e a cadeia completa</span></a>
+      <a data-go="sec5"><b>5.</b>Exercícios<span class="d">taxa de Nyquist de sinais sinc e queda do segurador de ordem zero no D/A de áudio</span></a>
     </div>
     <div class="block" style="margin-top:auto"><span class="bt">Fonte</span>
       <p>J. G. Proakis e M. Salehi, Fundamentals of Communication Systems, 2.ª ed., seção 7.1. As equações são numeradas nesta aula; as passagens intermediárias da dedução são deste material.</p></div>
@@ -843,12 +844,141 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ referências ============ -->
+<!-- ============ seção 5: exercícios ============ -->
+<section class="slide" id="sec5" data-sec="5 Exercícios" data-nonum>
+  <div class="divider"><div class="num">5</div><div class="ttl">Exercícios</div><div class="gbar"></div>
+  <div class="what">Duas questões do banco resolvidas no quadro: a taxa de Nyquist de sinais do tipo sinc e a queda sinc do segurador de ordem zero no conversor D/A de áudio.</div></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exnyq1" data-sec="5 Exercício 1 · sinc e sinc²" data-fig="exnyq1">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 1: taxa de Nyquist de sinais sinc</h2><div class="sub">Itens a e b · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="deriv" style="gap:5px">
+        <div class="step txt">Determine a taxa de Nyquist de \(g_a(t)=4\operatorname{sinc}(800\,t)\) e de \(g_b(t)=2\operatorname{sinc}^2(2000\,t)\), com \(t\) em segundos.</div>
+        <div class="step"><div class="why">Par de transformada</div><div class="m">\[ \operatorname{sinc}(at)\;\Longleftrightarrow\;\frac{1}{a}\,\cssId{n1-rect}{\operatorname{rect}\!\left(\frac{f}{a}\right)} \]</div></div>
+        <div class="step"><div class="why">Item a: \(a=800\) Hz, ganho \(4\)</div><div class="m">\[ G_a(f)=\frac{4}{800}\operatorname{rect}\!\left(\frac{f}{800}\right)=0{,}005\operatorname{rect}\!\left(\frac{f}{800}\right) \]</div></div>
+        <div class="srow">
+          <div class="step"><div class="why">Borda do retângulo</div><div class="m">\[ B_a=\cssId{n1-ba}{\frac{800}{2}}=400\text{ Hz} \]</div></div>
+          <div class="step cont"><div class="m">\[ \Rightarrow\; f_N=2\times 400=\boxed{800\text{ Hz}} \]</div></div>
+        </div>
+        <div class="step"><div class="why">Item b: \(\operatorname{sinc}^2\) é um produto</div><div class="m">\[ \operatorname{sinc}^2(2000t)=\operatorname{sinc}(2000t)\cdot\operatorname{sinc}(2000t) \]</div></div>
+        <div class="step"><div class="why">Produto vira convolução</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\operatorname{rect}\!\left(\frac{f}{2000}\right)\cssId{n1-conv}{\,*\,}\operatorname{rect}\!\left(\frac{f}{2000}\right) \]</div></div>
+        <div class="step"><div class="why">Área comum de dois retângulos</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\cdot\cssId{n1-area}{2000\,\Lambda(f/2000)}=0{,}001\,\Lambda(f/2000) \]</div></div>
+        <div class="step"><div class="why">Base do triângulo</div><div class="m">\[ B_b=\cssId{n1-bb}{1000+1000}=2000\text{ Hz} \]</div></div>
+        <div class="step"><div class="why">Taxa de Nyquist</div><div class="m">\[ f_N=2B_b=2\times 2000=\boxed{4000\text{ Hz}} \]</div></div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Espectros de g_a e de g_b, este montado pela convolução de dois retângulos"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="n1-rect">ocupa \(|f|\le a/2\)</div>
+  <div class="note" data-on="4-5" data-to="n1-ba">metade da largura total \(a\)</div>
+  <div class="note" data-on="7" data-to="n1-conv">produto no tempo vira convolução na frequência</div>
+  <div class="note" data-on="8" data-to="n1-area">sobreposição máxima \(2000\) em \(f=0\), cai a zero em \(|f|=2000\)</div>
+  <div class="note" data-on="9" data-to="n1-bb">as larguras das bordas se somam</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exnyq2" data-sec="5 Exercício 1 · soma e produto" data-fig="exnyq2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 1: soma e produto de sincs</h2><div class="sub">Itens c e d · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="deriv" style="gap:5px">
+        <div class="step txt">Determine a taxa de Nyquist de \(g_c(t)=\operatorname{sinc}(1600\,t)+\operatorname{sinc}^2(700\,t)\) e de \(g_d(t)=3\operatorname{sinc}(600\,t)\operatorname{sinc}(1400\,t)\).</div>
+        <div class="step"><div class="why">Item c: soma no tempo é soma na frequência</div><div class="m">\[ G_c(f)=\cssId{n2-r}{\frac{1}{1600}\operatorname{rect}\!\left(\frac{f}{1600}\right)}+\cssId{n2-t}{\frac{1}{700}\Lambda\!\left(\frac{f}{700}\right)} \]</div></div>
+        <div class="srow">
+          <div class="step"><div class="why">Vale a borda mais distante</div><div class="m">\[ B_c=\max(\cssId{n2-800}{800},\,\cssId{n2-700}{700})=800\text{ Hz} \]</div></div>
+          <div class="step cont"><div class="m">\[ \Rightarrow\; f_N=\boxed{1600\text{ Hz}} \]</div></div>
+        </div>
+        <div class="step"><div class="why">Item d: produto vira convolução</div><div class="m">\[ G_d(f)=\frac{3}{600\cdot 1400}\,\cssId{n2-r1}{\operatorname{rect}\!\left(\frac{f}{600}\right)}*\cssId{n2-r2}{\operatorname{rect}\!\left(\frac{f}{1400}\right)} \]</div></div>
+        <div class="step"><div class="why">O retângulo estreito cabe inteiro no largo</div><div class="m">\[ G_d(0)=\frac{3}{600\cdot1400}\cdot\cssId{n2-600}{600}=\frac{3}{1400}\approx 2{,}14\times10^{-3} \]</div></div>
+        <div class="step"><div class="why">Trapézio: plano até \(700-300\)</div><div class="m">\[ G_d(f)\;\text{plano em }|f|\le\cssId{n2-400}{400}\text{ Hz, nulo em }|f|\ge 1000\text{ Hz} \]</div></div>
+        <div class="step"><div class="why">As bordas se somam</div><div class="m">\[ B_d=\cssId{n2-bd}{300+700}=1000\text{ Hz} \]</div></div>
+        <div class="step"><div class="why">Taxa de Nyquist</div><div class="m">\[ f_N=2B_d=2\times1000=\boxed{2000\text{ Hz}} \]</div></div>
+        <div class="step txt">Na soma vale a maior banda. No produto as bandas se somam, mesmo quando cada fator sozinho pediria bem menos.</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Espectro de g_c como soma e espectro de g_d como convolução de dois retângulos"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="n2-t">\(\operatorname{sinc}^2(bt)\) dá triângulo de base \(|f|\le b\)</div>
+  <div class="note" data-on="3-4" data-to="n2-800">\(1600/2\)</div>
+  <div class="note" data-on="5" data-to="n2-r1">ocupa \(|f|\le 300\)</div>
+  <div class="note" data-on="5" data-to="n2-r2">ocupa \(|f|\le 700\)</div>
+  <div class="note" data-on="6" data-to="n2-600">área comum é a largura do estreito</div>
+  <div class="note" data-on="7" data-to="n2-400">o estreito ainda está todo dentro</div>
+  <div class="note" data-on="8" data-to="n2-bd">a largura da convolução é a soma das larguras</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exzoh1" data-sec="5 Exercício 2 · segurador de ordem zero" data-fig="exzoh1">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: segurador de ordem zero no D/A</h2><div class="sub">Resposta em frequência · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout" style="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)">
+      <div class="deriv" style="gap:8px">
+        <div class="step txt">Um D/A de áudio segura cada amostra durante \(T_s\). O áudio tem banda \(W=20\) kHz. Quanto o segurador atenua em \(f=W\) com \(f_s=48\text{ kHz}\) e com \(f_s=192\text{ kHz}\), e que ganho o equalizador precisa dar?</div>
+        <div class="step"><div class="why">Cada amostra vira um degrau de largura \(T_s\)</div><div class="m">\[ h(t)=\cssId{z1-h}{\operatorname{rect}\!\left(\frac{t-T_s/2}{T_s}\right)} \]</div></div>
+        <div class="step"><div class="why">Par de transformada</div><div class="m">\[ \operatorname{rect}\!\left(\frac{t}{T_s}\right)\;\Longleftrightarrow\;T_s\operatorname{sinc}(fT_s) \]</div></div>
+        <div class="step"><div class="why">Atraso de \(T_s/2\)</div><div class="m">\[ H(f)=T_s\operatorname{sinc}(fT_s)\,\cssId{z1-fase}{e^{-j\pi fT_s}} \]</div></div>
+        <div class="step"><div class="why">Módulo</div><div class="m">\[ |H(f)|=\boxed{T_s\,|\operatorname{sinc}(fT_s)|} \]</div></div>
+        <div class="step txt">O fator \(T_s\) é só escala. A distorção vem da queda do sinc dentro da banda, que se mede relativa a \(f=0\).</div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="520" aria-label="Saída em degraus do segurador e módulo da resposta em frequência"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="z1-h">pulso de \(0\) a \(T_s\)</div>
+  <div class="note" data-on="4-5" data-to="z1-fase">\(|e^{-j\theta}|=1\): só muda a fase</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exzoh2" data-sec="5 Exercício 2 · atenuação e equalizador" data-fig="exzoh2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: queda na borda da banda</h2><div class="sub">\(W=20\) kHz, \(f_s=48\) e \(192\) kHz · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body" style="gap:6px">
+    <div class="fig"><canvas data-figcanvas height="205" aria-label="Módulo do sinc normalizado para f_s de 48 e 192 kHz com a borda da banda W"></canvas></div>
+    <div class="deriv" style="gap:3px">
+      <div class="step txt">Em \(f=W\) o argumento do sinc é \(WT_s=W/f_s\). A atenuação relativa a \(f=0\) é \(-20\log_{10}\operatorname{sinc}(W/f_s)\).</div>
+      <div class="srow">
+        <div class="step"><div class="why">\(f_s=48\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{48}\right)=\frac{\sin(\cssId{z2-75}{\pi\cdot 20/48})}{\pi\cdot 20/48} \]</div></div>
+        <div class="step cont"><div class="m">\[ =\frac{\sin 75^\circ}{1{,}3090}=\frac{0{,}9659}{1{,}3090}=\cssId{z2-v1}{0{,}7379} \]</div></div>
+      </div>
+      <div class="srow">
+        <div class="step"><div class="why">Em dB e ganho</div><div class="m">\[ -20\log_{10}0{,}7379=\boxed{2{,}64\text{ dB}} \]</div></div>
+        <div class="step cont"><div class="m">\[ G_{eq}=\frac{1}{0{,}7379}=1{,}355\;\to\;\cssId{z2-g1}{+2{,}64\text{ dB}} \]</div></div>
+      </div>
+      <div class="srow">
+        <div class="step"><div class="why">\(f_s=192\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{192}\right)=\frac{\sin\cssId{z2-18}{18{,}75^\circ}}{\pi\cdot 20/192}=\frac{0{,}3214}{0{,}3272} \]</div></div>
+        <div class="step cont"><div class="m">\[ =\cssId{z2-v2}{0{,}9822} \]</div></div>
+      </div>
+      <div class="srow">
+        <div class="step"><div class="why">Em dB e ganho</div><div class="m">\[ -20\log_{10}0{,}9822=\boxed{0{,}16\text{ dB}} \]</div></div>
+        <div class="step cont"><div class="m">\[ G_{eq}=\frac{1}{0{,}9822}=1{,}018\;\to\;+0{,}16\text{ dB} \]</div></div>
+      </div>
+      <div class="step txt">Com \(f_s\) quatro vezes maior, \(W\) cai no topo quase plano do sinc: a queda vai de \(2{,}64\) para \(0{,}16\) dB.</div>
+    </div>
+  </div>
+  <div class="note" data-on="2" data-to="z2-75" style="left:800px;top:445px">\(180^\circ\times 20/48=75^\circ\)</div>
+  <div class="note" data-on="5" data-to="z2-g1">o equalizador desfaz a queda</div>
+  <div class="note" data-on="6" data-to="z2-18" style="left:820px;top:600px">\(180^\circ\times 20/192=18{,}75^\circ\)</div>
+  <aside class="notes"></aside>
+</section>
+
 <section class="slide" id="refs" data-sec="Referências">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Referências</h2><div class="bar"></div></div>
   <div class="body">
     <div class="refs">
       <p>[1] John G. Proakis e Masoud Salehi. Fundamentals of Communication Systems. Pearson, Upper Saddle River, NJ, 2.ª ed., 2014.</p>
+      <p>[2] B. P. Lathi e Zhi Ding. Modern Digital and Analog Communication Systems. Oxford University Press, New York, 5.ª ed., 2019. Exercício 1 adaptado do Prob. 5.1-1.</p>
     </div>
   </div>
   <aside class="notes"></aside>
@@ -1456,7 +1586,178 @@ function figGuarda(ctx, w, h, s) {
   return null;
 }
 
-const FIGS = { motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, guarda: figGuarda };
+// ----- exercícios: taxa de Nyquist de sincs e segurador de ordem zero -----
+const EXL = {
+  khz: "f em kHz", ts: "t em unidades de T_s", fn: "f em unidades de f_s",
+  c1: "Em G_a, o retângulo de altura 4/800 ocupa |f| ≤ 400 Hz.",
+  c2: "Em G_b, um retângulo desliza sobre o outro; a área comum desenha o triângulo.",
+  c3: "G_b é um triângulo de base |f| ≤ 2000 Hz: o dobro da borda de cada retângulo.",
+  c4: "Em G_c, o retângulo vai a 800 Hz e o triângulo a 700 Hz; a soma vai à borda maior.",
+  c5: "Em G_d, o retângulo de ±300 Hz desliza sobre o de ±700 Hz.",
+  c6: "G_d é um trapézio: plano em |f| ≤ 400 Hz e nulo a partir de 1000 Hz.",
+  z1: "Amostras em preto, saída do segurador em degraus azuis, sinal original tracejado.",
+  z2: "Cada degrau é uma cópia de h(t), de largura T_s, com a altura da amostra.",
+  z3: "|H(f)|/T_s = |sinc(f/f_s)|: zeros em múltiplos de f_s.",
+  z4: "Áudio com f_s = 48 kHz: a borda W = 20 kHz cai em f/f_s = 0,417, já na descida do sinc.",
+  sum: "soma", eq: "equalizador", band: "banda do áudio", area: "área comum", sinal: "sinal",
+};
+
+function exNyqConv(ctx, B, wa, wb, hgt, t, col) {
+  // retângulo fixo de meia-largura wb e retângulo móvel de meia-largura wa; traça a área comum normalizada por hgt
+  const c = C(), L = wa + wb, f0 = -L + 2 * L * frac(t / 5);
+  const ov = (f) => Math.max(0, Math.min(f + wa, wb) - Math.max(f - wa, -wb));
+  const top = 2 * Math.min(wa, wb);
+  rectFill(ctx, B, -wb, wb, 0, 1, tint(c.P, 0.14)); poly(ctx, B, [[-wb, 0], [-wb, 1], [wb, 1], [wb, 0]], c.P, 2.2);
+  const a0 = Math.max(f0 - wa, -wb), a1 = Math.min(f0 + wa, wb);
+  if (a1 > a0) rectFill(ctx, B, a0, a1, 0, 1, tint(c.R, 0.28));
+  clipB(ctx, B, () => poly(ctx, B, [[f0 - wa, 0], [f0 - wa, 1], [f0 + wa, 1], [f0 + wa, 0]], ORG, 2.4, [7, 4]));
+  trace(ctx, B, (f) => hgt * ov(f) / top, c.R, 3, null, 300, f0, -L);
+  dot(ctx, B.X(f0), B.Y(hgt * ov(f0) / top), 6, c.R);
+  txt(ctx, EXL.area, B.X(f0), B.Y(1) - 14, { c: c.R, align: "center", size: 16 });
+}
+
+function figExNyq1(ctx, w, h, s, t) {
+  const c = C(), Ba = tbox(40, 40, w - 120, 150, -1300, 1300, 0, 1.25), Bb = tbox(40, 290, w - 120, h - 360, -2600, 2600, 0, 1.25);
+  taxis(ctx, Ba, "f"); taxis(ctx, Bb, "f");
+  txt(ctx, "G_a(f)", Ba.x + 4, Ba.y - 16, { italic: true, size: 19 });
+  txt(ctx, "G_b(f)", Bb.x + 4, Bb.y - 16, { italic: true, size: 19 });
+  ftick(ctx, Ba, 0, "0", { italic: false }); ftick(ctx, Bb, 0, "0", { italic: false });
+  if (s >= 2) {
+    if (s >= 3) rectFill(ctx, Ba, -400, 400, 0, 1, tint(c.P, 0.18));
+    poly(ctx, Ba, [[-400, 0], [-400, 1], [400, 1], [400, 0]], c.P, 2.6, s >= 3 ? null : [7, 4]);
+    ftick(ctx, Ba, -400, s >= 3 ? "−400" : "−a/2", { italic: s < 3 }); ftick(ctx, Ba, 400, s >= 3 ? "400" : "a/2", { italic: s < 3 });
+    txt(ctx, s >= 3 ? "4/800 = " + fmtc(0.005, 3) : "1/a", Ba.X(420), Ba.Y(1) - 12, { c: c.P, size: 17, italic: s < 3 });
+  }
+  if (s >= 4) { spanH(ctx, Ba.X(0), Ba.X(400), Ba.Y(0.5), c.R, null); txt(ctx, "B_a = 400 Hz", Ba.X(400) + 10, Ba.Y(0.5), { c: c.R, size: 17, italic: true }); }
+  if (s >= 6 && s <= 7) {
+    if (s === 6) {
+      rectFill(ctx, Bb, -1000, 1000, 0, 1, tint(c.P, 0.14)); poly(ctx, Bb, [[-1000, 0], [-1000, 1], [1000, 1], [1000, 0]], c.P, 2.4);
+      poly(ctx, Bb, [[-1000, 0], [-1000, 0.8], [1000, 0.8], [1000, 0]], ORG, 2.4, [7, 4]);
+      txt(ctx, "rect(f/2000)", Bb.X(1050), Bb.Y(0.9), { c: c.P, size: 16, italic: true });
+    } else exNyqConv(ctx, Bb, 1000, 1000, 1.05, t, c.P);
+    ftick(ctx, Bb, -1000, "−1000", { italic: false }); ftick(ctx, Bb, 1000, "1000", { italic: false });
+  }
+  if (s >= 8) {
+    trifill(ctx, Bb, 0, 2000, 1.05, c.G, 0.18, 2.8);
+    ftick(ctx, Bb, -2000, "−2000", { italic: false }); ftick(ctx, Bb, 2000, "2000", { italic: false }); ftick(ctx, Bb, 1000, "1000", { italic: false });
+    txt(ctx, fmtc(0.001, 3), Bb.X(0) + 12, Bb.Y(1.05) - 4, { c: c.G, size: 17 });
+  }
+  if (s >= 9) {
+    poly(ctx, Bb, [[-1000, 0], [-1000, 0.55], [1000, 0.55], [1000, 0]], tint(c.P, 0.7), 1.8, [6, 4]);
+    spanH(ctx, Bb.X(0), Bb.X(2000), Bb.Y(1.2), c.R, "B_b = 1000 + 1000 = 2000 Hz", false, 17);
+  }
+  if (s <= 1) return null;
+  if (s <= 5) return EXL.c1;
+  if (s <= 7) return EXL.c2;
+  return EXL.c3;
+}
+
+function figExNyq2(ctx, w, h, s, t) {
+  const c = C(), Bc = tbox(40, 40, w - 120, 150, -1300, 1300, 0, 1.75), Bd = tbox(40, 290, w - 120, h - 360, -1300, 1300, 0, 1.25);
+  taxis(ctx, Bc, "f"); taxis(ctx, Bd, "f");
+  txt(ctx, "G_c(f)", Bc.x + 4, Bc.y - 16, { italic: true, size: 19 });
+  txt(ctx, "G_d(f)", Bd.x + 4, Bd.y - 16, { italic: true, size: 19 });
+  ftick(ctx, Bc, 0, "0", { italic: false }); ftick(ctx, Bd, 0, "0", { italic: false });
+  const hr = (1 / 1600) / (1 / 700), ht = 1;     // alturas relativas: triângulo 1/700, retângulo 1/1600
+  if (s >= 2) {
+    rectFill(ctx, Bc, -800, 800, 0, hr, tint(c.P, 0.18)); poly(ctx, Bc, [[-800, 0], [-800, hr], [800, hr], [800, 0]], c.P, 2.4);
+    trifill(ctx, Bc, 0, 700, ht, c.G, 0.16, 2.4);
+    trace(ctx, Bc, (f) => (Math.abs(f) <= 800 ? hr : 0) + tri(f, 0, 700) * ht, c.R, 3, null, 1200, 1250, -1250);
+    txt(ctx, "1/1600", Bc.X(820), Bc.Y(hr) - 10, { c: c.P, size: 16 });
+    txt(ctx, "1/700", Bc.X(-1250), Bc.Y(1.35), { c: c.G, size: 16 }); arrowTo(ctx, Bc.X(-1000), Bc.Y(1.3), Bc.X(-30), Bc.Y(1.01), c.G, 1.6, 9);
+    txt(ctx, EXL.sum, Bc.X(0) + 10, Bc.Y(hr + ht) - 4, { c: c.R, size: 16 });
+    ftick(ctx, Bc, -800, "−800", { italic: false }); ftick(ctx, Bc, 800, "800", { italic: false });
+    ftick(ctx, Bc, 700, "700", { italic: false, row: 1, c: c.G });
+  }
+  if (s >= 3) spanH(ctx, Bc.X(0), Bc.X(800), Bc.Y(1.62), c.R, "B_c = 800 Hz", false, 17);
+  if (s >= 5 && s <= 6) {
+    if (s === 5) {
+      rectFill(ctx, Bd, -700, 700, 0, 1, tint(c.P, 0.14)); poly(ctx, Bd, [[-700, 0], [-700, 1], [700, 1], [700, 0]], c.P, 2.4);
+      poly(ctx, Bd, [[-300, 0], [-300, 0.85], [300, 0.85], [300, 0]], ORG, 2.6, [7, 4]);
+    } else exNyqConv(ctx, Bd, 300, 700, 1, t, c.P);
+    ftick(ctx, Bd, -700, "−700", { italic: false }); ftick(ctx, Bd, 700, "700", { italic: false });
+    ftick(ctx, Bd, -300, "−300", { italic: false, c: ORG }); ftick(ctx, Bd, 300, "300", { italic: false, c: ORG });
+  }
+  if (s >= 6) {
+    dot(ctx, Bd.X(0), Bd.Y(1), 6, c.R);
+    if (s === 6) txt(ctx, "3/1400", Bd.X(0) + 12, Bd.Y(1) - 30, { c: c.R, size: 17 });
+  }
+  if (s >= 7) {
+    const pts = [[-1000, 0], [-400, 1], [400, 1], [1000, 0]];
+    ctx.save(); ctx.beginPath(); pts.forEach(([f, v], i) => i ? ctx.lineTo(Bd.X(f), Bd.Y(v)) : ctx.moveTo(Bd.X(f), Bd.Y(v))); ctx.closePath(); ctx.fillStyle = tint(c.G, 0.18); ctx.fill(); ctx.restore();
+    poly(ctx, Bd, pts, c.G, 2.8);
+    for (const f of [-1000, -400, 400, 1000]) ftick(ctx, Bd, f, String(f).replace("-", "−"), { italic: false });
+    txt(ctx, "3/1400", Bd.X(-460), Bd.Y(1.06), { c: c.G, size: 17, align: "right" });
+  }
+  if (s >= 8) {
+    poly(ctx, Bd, [[-700, 0], [-700, 0.45], [700, 0.45], [700, 0]], tint(c.P, 0.7), 1.8, [6, 4]);
+    poly(ctx, Bd, [[700, 0.45], [700, 0.6], [1000, 0.6], [1000, 0]], tint(ORG, 0.9), 1.8, [6, 4]);
+    spanH(ctx, Bd.X(0), Bd.X(1000), Bd.Y(1.2), c.R, "B_d = 300 + 700 = 1000 Hz", false, 17);
+  }
+  if (s <= 1) return null;
+  if (s <= 4) return EXL.c4;
+  if (s <= 6) return EXL.c5;
+  return EXL.c6;
+}
+
+function figExZoh1(ctx, w, h, s) {
+  const c = C(), Bt = tbox(40, 30, w - 130, 200, -0.3, 8.3, -0.1, 1.15), Bf = tbox(40, 320, w - 130, h - 380, -3.2, 3.2, -0.3, 1.1);
+  const xs = (t) => 0.55 + 0.3 * Math.sin(TAU * 0.09 * t + 0.4) + 0.12 * Math.cos(TAU * 0.21 * t);
+  taxis(ctx, Bt, "t/T_s");
+  for (let n = 0; n <= 8; n++) ftick(ctx, Bt, n, String(n), { italic: false, size: 15 });
+  trace(ctx, Bt, xs, "#9a9a9a", 2, [6, 4], 500, 8.2, -0.2);
+  for (let n = 0; n < 8; n++) {
+    const v = xs(n);
+    if (s >= 2 && n === 3) { rectFill(ctx, Bt, n, n + 1, 0, v, tint(c.R, 0.22)); poly(ctx, Bt, [[n, 0], [n, v], [n + 1, v], [n + 1, 0]], c.R, 2.8); }
+    else poly(ctx, Bt, [[n, 0], [n, v], [n + 1, v], [n + 1, 0]], tint(c.P, 0.85), 2.2);
+  }
+  for (let n = 0; n <= 8; n++) stem(ctx, Bt, n, xs(n), c.K, 5, 2.2);
+  if (s >= 2) spanH(ctx, Bt.X(3), Bt.X(4), Bt.Y(xs(3)) - 20, c.R, "T_s", false, 17);
+  if (s >= 3) {
+    taxis(ctx, Bf, "f/f_s");
+    for (const k of [-3, -2, -1, 1, 2, 3]) ftick(ctx, Bf, k, String(k).replace("-", "−"), { italic: false, size: 15 });
+    ftick(ctx, Bf, 0, "0", { italic: false, size: 15 });
+    txt(ctx, s >= 5 ? "|H(f)|/T_s" : "H(f)/T_s", Bf.x + 4, Bf.y - 14, { italic: true, size: 18 });
+    if (s <= 4) trace(ctx, Bf, sinc, c.P, 2.8, null, 600);
+    else { trace(ctx, Bf, sinc, tint(c.P, 0.35), 1.8, [6, 4], 600); trace(ctx, Bf, (f) => Math.abs(sinc(f)), c.P, 3, null, 600); }
+    for (const k of [-3, -2, -1, 1, 2, 3]) dot(ctx, Bf.X(k), Bf.Y(0), 5, c.R);
+  }
+  if (s >= 6) {
+    const x = 20 / 48;
+    rectFill(ctx, Bf, -x, x, 0, 1.05, tint(c.G, 0.18));
+    dot(ctx, Bf.X(x), Bf.Y(sinc(x)), 6, c.R);
+    arrowTo(ctx, Bf.X(1.3), Bf.Y(0.95), Bf.X(x) + 8, Bf.Y(sinc(x)) - 4, c.R, 2, 10);
+    txt(ctx, "f = W", Bf.X(1.33), Bf.Y(0.95), { c: c.R, size: 17, italic: true });
+    txt(ctx, EXL.band, Bf.X(0), Bf.Y(1.05) - 12, { c: c.G, size: 15, align: "center" });
+  }
+  if (s <= 1) return EXL.z1;
+  if (s <= 2) return EXL.z2;
+  if (s <= 5) return EXL.z3;
+  return EXL.z4;
+}
+
+function figExZoh2(ctx, w, h, s) {
+  const c = C(), B = tbox(70, 26, w - 190, h - 76, 0, 100, 0, 1.45);
+  taxis(ctx, B, EXL.khz);
+  line(ctx, B.x, B.y, B.x, B.y + B.h, C().M, 1.3);
+  for (const f of [0, 20, 40, 48, 60, 80, 96, 100]) ftick(ctx, B, f, f === 20 ? "W = 20" : String(f), { italic: false, size: 15, c: f === 20 ? c.R : undefined });
+  for (const v of [0.5, 1]) { line(ctx, B.x - 5, B.Y(v), B.x, B.Y(v), C().M, 1.3); txt(ctx, fmtc(v, 1), B.x - 9, B.Y(v), { align: "right", size: 15, c: C().M }); line(ctx, B.x, B.Y(v), B.x + B.w, B.Y(v), C().GR, 1); }
+  rectFill(ctx, B, 0, 20, 0, 1.4, tint(c.G, 0.12));
+  line(ctx, B.X(20), B.y, B.X(20), B.Y(0), c.R, 1.6, [5, 4]);
+    if (s >= 2) { trace(ctx, B, (f) => Math.abs(sinc(f / 48)), c.P, 3, null, 500); txt(ctx, "f_s = 48 kHz", B.X(50), B.Y(0.25), { c: c.P, size: 17 }); }
+  if (s >= 3) { dot(ctx, B.X(20), B.Y(0.7379), 6, c.P); txt(ctx, fmtc(0.7379, 4) + (s >= 4 ? "  →  −" + fmtc(2.64, 2) + " dB" : ""), B.X(25), B.Y(0.8), { c: c.P, size: 17 }); }
+  if (s >= 4) line(ctx, B.X(20), B.Y(1), B.X(20), B.Y(0.7379), c.P, 2.4);
+  if (s >= 5) {
+    trace(ctx, B, (f) => 1 / sinc(f / 48), c.R, 2.4, [7, 4], 200, 20, 0);
+    dot(ctx, B.X(20), B.Y(1.355), 5, c.R);
+    txt(ctx, EXL.eq + " " + fmtc(1.355, 3), B.X(21.5), B.Y(1.355), { c: c.R, size: 17 });
+  }
+  if (s >= 6) { trace(ctx, B, (f) => Math.abs(sinc(f / 192)), c.G, 3, null, 500); txt(ctx, "f_s = 192 kHz", B.X(78), B.Y(0.82), { c: c.G, size: 17 }); }
+  if (s >= 7) { dot(ctx, B.X(20), B.Y(0.9822), 6, c.G); txt(ctx, fmtc(0.9822, 4) + (s >= 8 ? "  →  −" + fmtc(0.16, 2) + " dB" : ""), B.X(30), B.Y(1.12), { c: c.G, size: 17 }); }
+  return null;
+}
+
+const FIGS = { motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, guarda: figGuarda, exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
 
 // ---------- (c) instrumentos ----------
 const wFmt = (t) => t === 0 ? "0" : (fmtc(t, 0) + "W").replace("1W", "W");
