@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- =====================================================================
+     MOTOR REVEAL.JS 5.1.0, local em lib/ (sem CDN para o reveal), com notas (S) e quadro (B, C).
      AULA: TRANSFORMADA DE FOURIER, a partir do MODELO DE AULA INTERATIVA — UnB / LabTelecom (tema "unbclean", palco 1600x900)
      Arquivo único e autocontido: CSS, logos (data: URI), MathJax 3.2.2 (cdnjs)
      e o script do deck. Para começar uma aula nova: copie este arquivo,
@@ -25,6 +26,8 @@
   };
 </script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<link rel="stylesheet" href="lib/reveal/dist/reveal.css">
+<link rel="stylesheet" href="lib/reveal-plugins/chalkboard/style.css">
 <style>
 /* Layout: the UnB/LabTelecom "unbclean" Beamer theme on a 1600x900 stage
    (1 cm of the 16 cm Beamer page = 100 px). Single light look, as in the PDF slides.
@@ -55,8 +58,6 @@ body { margin: 0; background: var(--letterbox); color: var(--unb-text); font-fam
 #stage { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: center center; background: #ffffff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
 
 /* ---- frame anatomy (template) ---- */
-.slide { position: absolute; inset: 0; display: none; font-size: 26px; line-height: 1.42; }
-.slide.active { display: block; }
 .slide .logo-head { position: absolute; top: 45px; right: 100px; height: 55px; }
 .frametitle { position: absolute; top: 45px; left: 100px; right: 520px; }
 .frametitle h2 { margin: 0; font-size: 44px; font-weight: 700; color: var(--unb-primary); line-height: 1.1; }
@@ -151,7 +152,7 @@ dl.syms::before { content: "Symbols"; font-weight: 700; color: var(--unb-seconda
 
 /* instruments */
 .inst { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 40px; flex: 1; min-height: 0; }
-.controls { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
+.painel { display: flex; flex-direction: column; gap: 14px; font-size: 19px; }
 .ctl { display: grid; gap: 4px; }
 .ctl .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .ctl output { font-family: var(--font-mono); font-size: 18px; color: var(--unb-primary); font-variant-numeric: tabular-nums; }
@@ -194,7 +195,6 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .toc .d { display: block; font-size: 20px; color: var(--unb-muted); margin-left: 34px; }
 .refs { columns: 2; column-gap: 50px; font-size: 18px; line-height: 1.3; }
 .refs p { break-inside: avoid; margin: 0 0 7px; padding-left: 2.3em; text-indent: -2.3em; }
-@media (max-width: 760px) { .refs { columns: 1; font-size: 14px; } }
 
 /* navigation bar (outside the slide) */
 nav.ctrl { position: fixed; left: 0; right: 0; bottom: 0; height: calc(48px + env(safe-area-inset-bottom, 0px)); padding: 0 16px env(safe-area-inset-bottom, 0px); display: flex; align-items: center; gap: 12px; background: #fff; border-top: 1px solid var(--rule); font-size: 15px; color: var(--unb-muted); }
@@ -205,29 +205,6 @@ nav.ctrl #sec { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; te
 nav.ctrl select { font: inherit; font-size: 14px; color: var(--unb-primary); max-width: 260px; padding: 3px 6px; }
 :focus-visible { outline: 3px solid var(--unb-secondary); outline-offset: 2px; }
 
-@media (max-width: 760px) {
-  body { overflow: auto; background: #fff; }
-  #deck { position: static; background: #fff; overflow: visible; padding-inline: 16px; }
-  #stage { position: static; width: auto; height: auto; transform: none !important; box-shadow: none; }
-  .slide { position: relative; display: block; padding-block: 28px 20px; border-bottom: 2px solid var(--unb-secondary); font-size: 17px; }
-  .slide .logo-head, .foot, .stepinfo, nav.ctrl { display: none; }
-  .frametitle, .body, .titlepage, .divider { position: static; inset: auto; }
-  .frametitle { margin-bottom: 18px; } .frametitle h2 { font-size: 26px; } .frametitle .sub { font-size: 17px; }
-  .body { gap: 14px; }
-  .titlepage h1 { font-size: 40px; } .titlepage .subtitle { font-size: 20px; } .titlepage .logos { gap: 12px; } .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
-  .titlepage .author { font-size: 20px; } .titlepage .inst, .titlepage .date { font-size: 16px; } .titlepage .mid { margin: 28px 0; }
-  .divider .num { font-size: 56px; } .divider .ttl { font-size: 30px; } .divider .what { font-size: 17px; }
-  .cols, .inst, .plots.two, .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .toc { font-size: 19px; } .toc .d { font-size: 15px; }
-  .step, .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } .step .why, .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
-  .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .dlayout .step .m { font-size: 17px; }
-  dl.syms, .figcap, .symline { font-size: 15px; } dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
-  .block, .block .bt, .controls, .readouts, .legend, .cap, .try { font-size: 15px; }
-  .eqn > .tag, .step .tag { font-size: 14px; }
-  table { font-size: 15px; min-width: 540px; }
-  code { overflow-wrap: anywhere; }
-}
 @media (prefers-reduced-motion: reduce) { .step, nav.ctrl .progress { transition: none; } }
 /* passos de texto e blocos revelados por passo */
 .step.txt { display: block; font-size: 22px; line-height: 1.38; padding: 6px 0 6px 14px; }
@@ -244,7 +221,6 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
-@media (max-width: 760px) { .note, svg.notelayer { display: none; } }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -290,13 +266,99 @@ table.cmp td mjx-container { font-size: 96%; }
 .solo2 .step.txt { font-size: 22px; }
 .tight .step.txt { padding: 3px 0 3px 14px; }
 
+/* ---------- reveal.js: palco 1600x900, barra embaixo, passos como fragmentos ---------- */
+body.reveal-viewport { background: var(--letterbox); line-height: normal; }
+html:not(.reveal-print) .reveal { position: fixed; left: 0; right: 0; top: env(safe-area-inset-top, 0px); bottom: calc(48px + env(safe-area-inset-bottom, 0px)); width: auto; height: auto; }
+html:fullscreen:not(.reveal-print) .reveal { top: 0; bottom: 0; }
+html:fullscreen nav.ctrl { display: none; }
+.reveal .slides { text-align: left; }
+.reveal .slides > section.slide { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; padding: 0; margin: 0; box-sizing: border-box; font-size: 26px; line-height: 1.42; text-align: left; background: #fff; box-shadow: 0 4px 30px rgba(0, 30, 50, .18); }
+html.reveal-print .reveal .slides > section.slide { box-shadow: none; }
+/* os passos usam as próprias classes .hidden e .current, não o visual de fragmento do reveal */
+.reveal .slides section .step.fragment { opacity: 1; visibility: inherit; transform: none; transition: opacity .35s ease, transform .35s ease, border-color .35s; will-change: auto; }
+.reveal .slides section .step.fragment.hidden { opacity: 0; transform: translateY(10px); pointer-events: none; }
+.reveal .slides section .step.fragment.block { transition: opacity .35s ease, transform .35s ease, box-shadow .35s; }
+/* visão geral */
+.reveal.overview .slides > section.slide { box-shadow: 0 0 0 1px var(--rule); }
+/* PDF: estado final, sem transições */
+html.reveal-print *, html.reveal-print *::before { transition: none !important; animation: none !important; }
+html.reveal-print nav.ctrl { display: none; }
+html.reveal-print svg.notelayer path.ln { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+nav.ctrl { z-index: 40; line-height: normal; }
+/* dentro da visão do apresentador (S) as miniaturas não mostram a barra */
+html.receiver nav.ctrl { display: none; }
+/* quadro (chalkboard) sem Font Awesome: ícones da paleta desenhados em CSS */
+.palette .fa-square::before { content: ""; display: inline-block; width: .9em; height: .9em; background: currentColor; border-radius: 2px; vertical-align: middle; }
+.boardhandle .fa-chevron-up::before { content: "▲"; color: #fff; font-style: normal; }
+.boardhandle .fa-chevron-down::before { content: "▼"; color: #fff; font-style: normal; }
+.boardhandle a { text-decoration: none; }
+/* ---------- barra compacta: telas de toque e janelas estreitas ---------- */
+nav.ctrl #pg { white-space: nowrap; }
+nav.ctrl #more { display: none; }
+nav.ctrl #extra { display: contents; }
+@media (max-width: 1279px), (pointer: coarse) {
+  nav.ctrl { gap: 10px; }
+  nav.ctrl button { min-height: 38px; min-width: 44px; padding: 6px 12px; }
+  nav.ctrl #more { display: inline-block; font-size: 20px; line-height: 1; }
+  nav.ctrl #extra { display: none; position: absolute; right: 10px; bottom: calc(100% + 8px); flex-direction: column; align-items: stretch; gap: 8px; padding: 10px; min-width: 220px; background: #fff; border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 28px rgba(0, 30, 50, .22); }
+  nav.ctrl #extra.open { display: flex; }
+  nav.ctrl #extra button, nav.ctrl #extra select { min-height: 42px; text-align: left; max-width: none; font-size: 16px; }
+}
+@media (max-width: 560px) { nav.ctrl #sec { display: none; } }
 
+/* ---------- modo coluna: celular em pé (até 760 px), sem o reveal ---------- */
+html.narrow, html.narrow body { height: auto; overflow: auto; background: #fff; }
+html.narrow .reveal { position: static; width: auto; height: auto; overflow: visible; padding-inline: 16px; touch-action: auto; }
+html.narrow .reveal .slides { position: static; width: auto; height: auto; inset: auto; margin: 0; transform: none !important; pointer-events: auto; perspective: none; }
+html.narrow .reveal .slides > section.slide { position: relative; display: block !important; inset: auto; width: auto; height: auto; padding: 28px 0 20px; font-size: 17px; box-shadow: none; border-bottom: 2px solid var(--unb-secondary); transform: none !important; }
+html.narrow .slide .logo-head, html.narrow .foot, html.narrow .stepinfo, html.narrow aside.notes, html.narrow .note, html.narrow svg.notelayer { display: none; }
+html.narrow .frametitle, html.narrow .body, html.narrow .titlepage, html.narrow .divider { position: static; inset: auto; }
+html.narrow .frametitle { margin-bottom: 18px; } html.narrow .frametitle h2 { font-size: 26px; } html.narrow .frametitle .sub { font-size: 17px; }
+html.narrow .body { gap: 14px; }
+html.narrow .titlepage h1 { font-size: 40px; } html.narrow .titlepage .subtitle { font-size: 20px; } html.narrow .titlepage .logos { gap: 12px; } html.narrow .titlepage .logos img { height: 44px !important; max-width: 48%; object-fit: contain; object-position: left center; }
+html.narrow .titlepage .author { font-size: 20px; } html.narrow .titlepage .inst, html.narrow .titlepage .date { font-size: 16px; } html.narrow .titlepage .mid { margin: 28px 0; }
+html.narrow .divider .num { font-size: 56px; } html.narrow .divider .ttl { font-size: 30px; } html.narrow .divider .what { font-size: 17px; }
+html.narrow .cols, html.narrow .inst, html.narrow .plots.two, html.narrow .toc { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .toc { font-size: 19px; } html.narrow .toc .d { font-size: 15px; }
+html.narrow .step, html.narrow .dlayout .step { grid-template-columns: minmax(0, 1fr) auto; } html.narrow .step .why, html.narrow .dlayout .step .why { grid-column: 1 / -1; font-size: 15px; }
+html.narrow .dlayout { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+html.narrow .dlayout .step .m { font-size: 17px; }
+html.narrow dl.syms, html.narrow .figcap, html.narrow .symline { font-size: 15px; } html.narrow dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
+html.narrow .block, html.narrow .block .bt, html.narrow .painel, html.narrow .readouts, html.narrow .legend, html.narrow .cap, html.narrow .try { font-size: 15px; }
+html.narrow .eqn > .tag, html.narrow .step .tag { font-size: 14px; }
+html.narrow table { font-size: 15px; }
+html.narrow code { overflow-wrap: anywhere; }
+html.narrow .refs { columns: 1; font-size: 14px; }
+html.narrow .slide svg:not(.notelayer) { max-width: 100%; height: auto; }
+html.narrow .deriv > *, html.narrow .step, html.narrow .step > * { min-width: 0; }
+html.narrow .step .m, html.narrow .eqn { overflow-x: auto; overflow-y: hidden; }
+html.narrow mjx-container[display="true"] { min-width: 0 !important; }
+html.narrow .trow.th { grid-template-columns: minmax(0, 1fr) auto; }
+html.narrow .srow { flex-direction: column; align-items: stretch; }
+html.narrow .srow > .step { flex: 1 1 auto; }
+/* rede de segurança: nada passa da largura da tela; equações e tabelas rolam para o lado */
+html.narrow .reveal .slides > section.slide *:not(mjx-container, mjx-container *, table, table *, svg *) { max-width: 100%; min-width: 0; }
+html.narrow .reveal .slides > section.slide :is(img, canvas, video) { height: auto; }
+html.narrow .reveal .slides > section.slide [style*="width"]:not(mjx-container, mjx-container *, svg *) { width: auto !important; }
+html.narrow :is(.fig, .rfig, .rswap, .schem, .painel, .plot) { width: auto !important; }
+html.narrow pre, html.narrow .code, html.narrow table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; }
+html.narrow mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+html.narrow .reveal .slides > section.slide :is(a, .block, li, td, th, p) { overflow-wrap: anywhere; }
+html.narrow input[type="range"] { width: 100%; }
+html.narrow .reveal .slides > section.slide [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+html.narrow .reveal .slides > section.slide img[style*="height"] { height: auto !important; }
+html.narrow .tri, html.narrow .qgrid { grid-template-columns: minmax(0, 1fr) !important; }
+/* no modo coluna a barra fica só com a troca de língua, no canto */
+html.narrow nav.ctrl { position: fixed; left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: auto; padding: 0; gap: 0; background: none; border: 0; }
+html.narrow nav.ctrl > :not(#extra), html.narrow nav.ctrl #extra > :not(#lang) { display: none !important; }
+html.narrow nav.ctrl #extra { display: contents !important; }
+html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30, 50, .2); }
 </style>
 </head>
 <body>
 
-<div id="deck" aria-roledescription="presentation">
-<div id="stage">
+<div class="reveal" aria-roledescription="presentation">
+<div class="slides">
 
 <!-- =====================================================================
      SLIDES. Cada <section class="slide"> é um slide do palco 1600x900.
@@ -327,6 +389,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
     <div class="date" data-cfg="rodape_titulo">use ← → to advance, F for full screen</div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ roteiro ============ -->
@@ -345,12 +408,14 @@ table.cmp td mjx-container { font-size: 96%; }
       <p>This lecture follows chapter 3, section 3.1, of Lathi and Ding [1]. Equations are numbered by section of this material.</p></div>
     <p class="symline">The figures and instruments compute the curves in the browser, with the same functions as the Beamer plots.</p>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 1 ============ -->
 <section class="slide" id="sec1" data-sec="1 Fourier's idea" data-nonum>
   <div class="divider"><div class="num">1</div><div class="ttl">Fourier's idea</div><div class="gbar"></div>
   <div class="what">A periodic signal is a sum of sinusoids at multiples of \(\omega_0\). The orthogonality of the exponentials isolates each coefficient.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="prisma" data-sec="1 Fourier's idea · sinusoids" data-fig="prisma">
@@ -364,6 +429,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt al">The question of this section: how much of each frequency is there in \(f(t)\)?</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="quadrada" data-sec="1 Fourier's idea · square wave" data-fig="quadrada">
@@ -376,6 +442,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt">Each frequency component carries the weight of one harmonic. Adding harmonics in time is the same as adding frequency components.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="quadinst" data-sec="1 Fourier's idea · instrument" data-draw="quadinst">
@@ -383,7 +450,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <div class="frametitle"><h2>Instrument: square-wave series</h2><div class="sub">Interactive figure · odd harmonics with weight \(4/(\pi n)\)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><div class="row"><label for="qi-n">last harmonic \(n\)</label><output id="qi-n-o"></output></div><input id="qi-n" type="range" min="1" max="41" step="2" value="5"></div>
         <label class="check"><input id="qi-g" type="checkbox" checked> show the square wave</label>
         <div class="readouts" id="qi-read"></div>
@@ -394,6 +461,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="trig" data-noteafter="1" data-sec="1 Fourier series · trigonometric" data-fig="trig">
@@ -419,6 +487,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <div class="note" data-on="2-" data-to="tg-a0">mean value of \(f(t)\)</div>
   <div class="note" data-on="3-" data-to="tg-nw">only integer multiples of \(\omega_0\)</div>
   <div class="note" data-on="4-" data-to="tg-an">weight of each harmonic</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="euler" data-noteafter="2" data-sec="1 Fourier series · Euler" data-fig="euler">
@@ -443,6 +512,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="3-" data-to="eu-ta">use the cosine identity, with \(\theta = n\omega_0 t\)</div>
   <div class="note" data-on="4-" data-to="eu-tb">use the sine identity</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="agrupa" data-noteafter="1" data-sec="1 Fourier series · exponential" data-fig="agrupa">
@@ -467,6 +537,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2-" data-to="ag-a">call it \(c_n\)</div>
   <div class="note" data-on="3-" data-to="ag-b">it is the conjugate, \(c_{-n} = c_n^{*}\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="polar1" data-noteafter="3" data-sec="1 Fourier series · conjugate pair" data-fig="polar">
@@ -489,6 +560,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="3-" data-to="po-r">\(|c_n|\big[e^{j(n\omega_0 t+\theta_n)} + e^{-j(n\omega_0 t+\theta_n)}\big]\) and Euler with \(\theta = n\omega_0 t + \theta_n\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="polar2" data-noteafter="1" data-sec="1 Fourier series · polar form" data-fig="espec">
@@ -514,6 +586,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2-" data-to="pp-a">amplitude \(C_n = 2|c_n|\)</div>
   <div class="note" data-on="3-" data-to="pp-b">phase \(\theta_n = \arg c_n\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="mult" data-sec="1 Coefficients · multiply" data-fig="ortoM">
@@ -535,6 +608,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="3-" data-to="mu-a">same base: the exponents add up, \(e^{j(n-k)\omega_0 t}\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="integ" data-noteafter="2" data-sec="1 Coefficients · integrate" data-fig="ortoI">
@@ -554,6 +628,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="3-" data-to="or-a">everything depends on this integral. What is its value?</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="caso1" data-sec="1 Coefficients · case m ≠ 0" data-fig="ortoZ">
@@ -576,6 +651,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="4-" data-to="in-b">\(\omega_0 T_0/2 = \pi\), since \(\omega_0 = 2\pi/T_0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="caso1b" data-noteafter="1" data-sec="1 Coefficients · the result is zero" data-fig="ortoZ2">
@@ -595,6 +671,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="2-" data-to="zn-a">\(m\) is an integer, so \(\sin(m\pi) = 0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="caso0" data-noteafter="1" data-sec="1 Coefficients · case m = 0" data-fig="orto0">
@@ -613,6 +690,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="2-" data-to="i0-a">equals \(1\) for every \(t\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="colapsa" data-noteafter="2" data-sec="1 Coefficients · the sum collapses" data-fig="colapsa">
@@ -632,6 +710,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="3-" data-to="cp-a">only \(c_k\,T_0\) remains</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="coef" data-sec="1 Coefficients · formula" data-fig="coef">
@@ -650,6 +729,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="periodo" data-sec="1 Growing period" data-fig="periodo">
@@ -663,6 +743,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt al">When \(T_0\to\infty\) a single pulse remains and the frequency components merge into the continuous envelope.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="perinst" data-sec="1 Growing period · instrument" data-draw="perinst">
@@ -670,7 +751,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <div class="frametitle"><h2>Instrument: period and envelope</h2><div class="sub">Interactive figure · components \(T_0 c_n\) of a pulse train of width \(\tau\)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><div class="row"><label for="pi-r">\(T_0/\tau\)</label><output id="pi-r-o"></output></div><input id="pi-r" type="range" min="2" max="24" step="1" value="4"></div>
         <label class="check"><input id="pi-e" type="checkbox" checked> show the envelope</label>
         <div class="readouts" id="pi-read"></div>
@@ -681,12 +762,14 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 2 ============ -->
 <section class="slide" id="sec2" data-sec="2 Derivation of the transform" data-nonum>
   <div class="divider"><div class="num">2</div><div class="ttl">Derivation of the Fourier transform</div><div class="gbar"></div>
   <div class="what">Letting \(T_0\to\infty\), the series sum becomes an integral and the envelope becomes the continuous spectrum \(F(\omega)\).</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="passo1" data-noteafter="3" data-sec="2 Derivation · step 1" data-fig="env1">
@@ -707,6 +790,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="4-" data-to="p1-a">depends on \(n\) only through \(n\omega_0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="passo2" data-noteafter="2" data-sec="2 Derivation · step 2" data-fig="env2">
@@ -730,6 +814,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="3-" data-to="p2-a">it is the dashed envelope of the growing-period slide</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="passo2b" data-sec="2 Derivation · step 2b" data-fig="env3">
@@ -747,6 +832,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="riemann" data-sec="2 Derivation · Riemann sum" data-fig="riemann">
@@ -766,6 +852,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="limite" data-sec="2 Derivation · limit" data-fig="limite">
@@ -781,6 +868,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt">The integration limits \([-T_0/2,\,T_0/2]\) also open up to the whole real line.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="par" data-sec="2 Transform pair" data-fig="par">
@@ -800,6 +888,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="difs" data-noteafter="1" data-sec="2 There and back">
@@ -814,6 +903,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2-" data-to="pt-a pt-b">exponents with opposite signs</div>
   <div class="note" data-on="3-" data-to="pt-c">\(1/2\pi\) only on the way back, because \(\omega\) is in rad/s</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="tabela" data-sec="2 Series and transform">
@@ -833,6 +923,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt al" style="margin-top:30px">Bridge between the two, by definition (2.2): \(F(n\omega_0) = T_0\, c_n\).</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="interp" data-noteafter="1" data-sec="2 Interpretation" data-fig="interp">
@@ -856,6 +947,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2-" data-to="it-a">magnitude spectrum: the size of the component</div>
   <div class="note" data-on="3-" data-to="it-b">phase spectrum: the shift of the component</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="magfase" data-sec="2 Magnitude and phase" data-fig="magfase">
@@ -871,12 +963,14 @@ table.cmp td mjx-container { font-size: 96%; }
       <div class="step txt al">Discarding the phase and keeping only the magnitude destroys the signal.</div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 3 ============ -->
 <section class="slide" id="sec3" data-sec="3 Magnitude and phase spectra" data-nonum>
   <div class="divider"><div class="num">3</div><div class="ttl">Magnitude and phase spectra</div><div class="gbar"></div>
   <div class="what">Magnitude and phase, or real and imaginary parts: two ways of writing the same \(F(\omega)\).</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="repr" data-sec="3 Spectral representation" data-fig="repr">
@@ -899,12 +993,14 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 4 ============ -->
 <section class="slide" id="sec4" data-sec="4 Examples" data-nonum>
   <div class="divider"><div class="num">4</div><div class="ttl">Examples</div><div class="gbar"></div>
   <div class="what">Causal decaying exponential and two-sided exponential pulse, with the integrals solved on the board.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1a" data-sec="4 Example 1 · integral" data-fig="ex1a">
@@ -926,6 +1022,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="2" data-to="e1-0">before \(t=0\) the signal is zero</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1b" data-sec="4 Example 1 · limits" data-fig="ex1b">
@@ -944,6 +1041,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="1" data-to="e1-z">\(|e^{-(a+j\omega)t}| = e^{-at} \to 0\)</div>
   <div class="note" data-on="2" data-to="e1-d">\((a+j\omega)(a-j\omega) = a^2 + \omega^2\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1c" data-sec="4 Example 1 · magnitude and phase" data-fig="ex1c">
@@ -963,6 +1061,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2" data-to="e1-m">\(\sqrt{\dfrac{a^2+\omega^2}{(a^2+\omega^2)^2}}\)</div>
   <div class="note" data-on="3" data-to="e1-f">\(\arctan\dfrac{-\omega}{a}\), and the arctangent is odd</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1d" data-sec="4 Example 1 · analysis" data-fig="ex1d">
@@ -984,6 +1083,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1vis" data-sec="4 Example 1 · visualization">
@@ -1000,6 +1100,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex1inst" data-sec="4 Example 1 · instrument" data-draw="ex1inst">
@@ -1007,7 +1108,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <div class="frametitle"><h2>Instrument: the decay constant</h2><div class="sub">Interactive figure · Eqs. (4.1), (4.4) and (4.5)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><div class="row"><label for="e1-a">\(a\), in 1/s</label><output id="e1-a-o"></output></div><input id="e1-a" type="range" min="0.5" max="6" step="0.25" value="2"></div>
         <label class="check"><input id="e1-r" type="checkbox" checked> keep the \(a = 2\) curve</label>
         <div class="readouts" id="e1-read"></div>
@@ -1019,6 +1120,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex2a" data-sec="4 Example 2 · decomposition" data-fig="ex2a">
@@ -1038,6 +1140,7 @@ table.cmp td mjx-container { font-size: 96%; }
   </div>
   <div class="note" data-on="2" data-to="e2-d">holds for \(t \gt 0\)</div>
   <div class="note" data-on="2" data-to="e2-e">holds for \(t \lt 0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex2b" data-sec="4 Example 2 · integrals" data-fig="ex2b">
@@ -1056,6 +1159,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
   </div>
   <div class="note" data-on="2" data-to="e2-n">at \(0\) it equals \(1/(a-j\omega)\); at \(-\infty\), \(e^{at}\to 0\)</div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex2c" data-sec="4 Example 2 · result" data-fig="ex2c">
@@ -1075,6 +1179,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="ex2vis" data-sec="4 Example 2 · visualization">
@@ -1084,12 +1189,14 @@ table.cmp td mjx-container { font-size: 96%; }
     <img class="figimg" src="figs/tf_bilateral_exponential.png" alt="Two-sided pulse and spectrum for a = 1 and a = 2" style="width:1280px;align-self:center">
     <p style="font-size:24px">Fast decay, with large \(a\), widens the spectrum. The spectrum is real and even because \(f(t)\) is even.</p>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <!-- ============ seção 5 ============ -->
 <section class="slide" id="sec5" data-sec="5 Time-frequency uncertainty" data-nonum>
   <div class="divider"><div class="num">5</div><div class="ttl">Time-frequency uncertainty</div><div class="gbar"></div>
   <div class="what">Squeezing a signal in time widens its spectrum. The product of the two widths has a floor.</div></div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="incerteza" data-sec="5 Uncertainty · principle" data-fig="uncert">
@@ -1103,6 +1210,7 @@ table.cmp td mjx-container { font-size: 96%; }
     </div>
     <p class="symline" data-show="4-">The Heisenberg-Gabor inequality, with \(\Delta t\) and \(\Delta\omega\) measured as standard deviations of \(|f(t)|^2\) and \(|F(\omega)|^2\).</p>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="incerteza2" data-sec="5 Uncertainty · consequences">
@@ -1120,6 +1228,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="uncinst" data-sec="5 Uncertainty · instrument" data-draw="uncinst">
@@ -1127,7 +1236,7 @@ table.cmp td mjx-container { font-size: 96%; }
   <div class="frametitle"><h2>Instrument: squeezing the Gaussian</h2><div class="sub">Interactive figure · Gaussian \(e^{-t^2/(2\sigma^2)}\) and its spectrum \(\sigma\sqrt{2\pi}\,e^{-\sigma^2\omega^2/2}\)</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
-      <div class="controls">
+      <div class="painel">
         <div class="ctl"><div class="row"><label for="ui-s">\(\sigma\), in s</label><output id="ui-s-o"></output></div><input id="ui-s" type="range" min="0.15" max="1.5" step="0.01" value="0.9"></div>
         <div class="readouts" id="ui-read"></div>
       </div>
@@ -1137,6 +1246,7 @@ table.cmp td mjx-container { font-size: 96%; }
       </div>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="refs" data-sec="References">
@@ -1147,6 +1257,7 @@ table.cmp td mjx-container { font-size: 96%; }
       <p>[1] B. P. Lathi and Zhi Ding. Modern Digital and Analog Communication Systems. Oxford University Press, New York, 5th ed., 2019.</p>
     </div>
   </div>
+  <aside class="notes"></aside>
 </section>
 
 
@@ -1161,12 +1272,21 @@ table.cmp td mjx-container { font-size: 96%; }
   <button id="next" type="button" aria-label="Next">→</button>
   <span id="pg"></span>
   <span id="sec"></span>
-  <button id="gotoc" type="button" title="Go to the outline (R)">Outline</button>
-  <select id="secsel" aria-label="Go to a section (S)"></select>
-  <button id="lang" type="button" title="Versão em português" data-href="transformada_fourier.html">PT</button>
-  <button id="full" type="button">Full screen</button>
+  <button id="more" type="button" aria-expanded="false" aria-controls="extra" title="More options">⋯</button>
+  <div id="extra">
+    <button id="gotoc" type="button" title="Go to the outline (R)">Outline</button>
+    <select id="secsel" aria-label="Go to a section (G)" title="Sections (G)"></select>
+    <button id="ovw" type="button" title="Overview (Esc)">Overview</button>
+    <button id="pen" type="button" title="Pen on the slide (C)">Pen</button>
+    <button id="board" type="button" title="Blank whiteboard (B)">Board</button>
+    <button id="lang" type="button" title="Versão em português" data-href="transformada_fourier.html">PT</button>
+    <button id="full" type="button" title="Full screen (F)">Full screen</button>
+  </div>
 </nav>
 
+<script src="lib/reveal/dist/reveal.js"></script>
+<script src="lib/reveal/plugin/notes/notes.js"></script>
+<script src="lib/reveal-plugins/chalkboard/plugin.js"></script>
 <script>
 (() => {
 "use strict";
@@ -1192,7 +1312,7 @@ const CONFIG = {
   subtitulo: "From the Fourier series to the transform, magnitude and phase spectra, examples and time-frequency uncertainty",
   autor: "Prof. Daniel Costa Araújo",
   instituicao: "Faculty of Science and Technology in Engineering (FCTE), University of Brasília (UnB)<br>LabTelecom",
-  rodape_titulo: "FGA0092 Principles of Communication for Engineering · Module 1 · use ← → to advance, F for full screen",
+  rodape_titulo: "FGA0092 Principles of Communication for Engineering · Module 1 · use ← → to advance, F for full screen, S for the speaker view",
   contato: "Daniel Araújo · LabTelecom, FCTE, University of Brasília (UnB)",
   rodape: "Fourier Transform &nbsp;|&nbsp; Daniel Araújo",
 };
@@ -1327,6 +1447,7 @@ const pow10Fmt = (t) => t === 0 ? "1" : "10" + String(t).replace("-", "⁻").rep
 function bind(ids, fmt, draw) {
   for (const id of ids) {
     const el = $(id), out = $(id + "-o");
+    if (!el) continue;   // controle de outra aula, ausente neste deck
     const upd = () => { if (out) out.textContent = fmt[id] ? fmt[id](Number(el.value)) : el.value; draw(); };
     el.addEventListener("input", upd); el.addEventListener("change", upd);
     if (out) out.textContent = fmt[id] ? fmt[id](Number(el.value)) : el.value;
@@ -1977,11 +2098,24 @@ bind(["pi-r", "pi-e"], { "pi-r": (v) => fmtc(v, 0) }, drawPerInst);
 bind(["e1-a", "e1-r"], { "e1-a": (v) => fmtc(v, 2) }, drawEx1Inst);
 bind(["ui-s"], { "ui-s": (v) => fmtc(v, 2) + " s" }, drawUncInst);
 
-// ---------- deck: footer, numbering, overlays, navigation, scaling ----------
-// Registre cada instrumento: chave do data-draw -> função de desenho.
-
-const deck = $("deck"), stage = $("stage"), slides = [...document.querySelectorAll(".slide")];
-const narrow = () => window.matchMedia("(max-width: 760px)").matches;
+// =====================================================================
+//  Motor do deck sobre o reveal.js 5.1.0 (lib/reveal, sem CDN).
+//  Cada .step do slide vira fragmento do reveal: o primeiro passo já
+//  aparece ao entrar no slide, como no motor antigo, e o passo k ≥ 2
+//  recebe data-fragment-index = k − 2. O passo atual de um slide é lido
+//  das classes .visible que o reveal põe nos fragmentos; assim o mesmo
+//  código pinta o slide ao vivo, na visão geral e nas páginas do PDF.
+//  As figuras (FIGS), os instrumentos (DRAW) e as notas com seta são os
+//  do motor antigo, chamados pelos eventos do reveal.
+// =====================================================================
+const PRINT = /print-pdf/i.test(location.search);
+// celular em pé: coluna rolável com todos os passos, sem o reveal (como no motor antigo)
+const NARROW_MQ = window.matchMedia("(max-width: 760px)");
+const NARROW = NARROW_MQ.matches && !PRINT && !/receiver/i.test(location.search);
+if (NARROW) document.documentElement.classList.add("narrow");
+try { NARROW_MQ.addEventListener("change", () => location.reload()); } catch (e) { /* navegador antigo */ }
+if (/receiver/i.test(location.search)) document.documentElement.classList.add("receiver");
+const slides = [...document.querySelectorAll(".reveal .slides > section")];
 const numbered = slides.filter((sl) => !sl.hasAttribute("data-nonum"));
 const UNB = document.querySelector('.titlepage .logos img').getAttribute("src");
 const LAB = $("lablogo").getAttribute("src");
@@ -1991,61 +2125,67 @@ numbered.forEach((sl, i) => {
   f.className = "foot";
   f.innerHTML = `<span>${CONFIG.rodape}</span>` +
     `<span class="right"><img src="${UNB}" alt=""><span class="n">${i + 1}<span>&thinsp;/&thinsp;${numbered.length}</span></span></span>`;
-  sl.appendChild(f);
-  if (sl.querySelector(".step")) { const si = document.createElement("div"); si.className = "stepinfo"; sl.appendChild(si); }
+  sl.insertBefore(f, sl.querySelector("aside.notes"));
+  if (sl.querySelector(".step")) { const si = document.createElement("div"); si.className = "stepinfo"; sl.insertBefore(si, sl.querySelector("aside.notes")); }
 });
-let cur = 0, shown = 0;
 const steps = (sl) => [...sl.querySelectorAll(".step")];
-function paintSteps() {
-  const st = steps(slides[cur]);
+// passos -> fragmentos do reveal
+slides.forEach((sl) => steps(sl).forEach((e, k) => { if (k > 0) { e.classList.add("fragment"); e.dataset.fragmentIndex = k - 1; } }));
+// passo atual: 1 + fragmentos visíveis; 0 em slide sem passos
+const shownOf = (sl) => { const n = sl.querySelectorAll(".step").length; return NARROW ? n : n ? 1 + sl.querySelectorAll(".step.fragment.visible").length : 0; };
+// arrastar o dedo sobre controles e figuras não troca de slide
+document.querySelectorAll(".painel, canvas, select, input, nav.ctrl").forEach((e) => e.setAttribute("data-prevent-swipe", ""));
+const slideNum = (sl) => { const k = numbered.indexOf(sl); return k >= 0 ? [k + 1, " / ", numbered.length] : [""]; };
+
+function paintSteps(sl, shown) {
+  const st = steps(sl);
   st.forEach((e, k) => { e.classList.toggle("hidden", k >= shown); e.classList.toggle("current", k === shown - 1 && shown < st.length + 1 && st.length > 1); });
-  const info = slides[cur].querySelector(".stepinfo");
+  const info = sl.querySelector(".stepinfo");
   if (info) info.textContent = st.length ? `step ${Math.max(shown, 1)} / ${st.length}` : "";
-  slides[cur].querySelectorAll(".syms [data-from]").forEach((e) => {
+  sl.querySelectorAll(".syms [data-from]").forEach((e) => {
     const k = Number(e.dataset.from);
     e.classList.toggle("hidden", k > Math.max(shown, 1));
     e.classList.toggle("new", k === Math.max(shown, 1) && st.length > 0);
   });
-  const kk = Math.max(shown, 1), win = Number(slides[cur].dataset.window || 0);
-  steps(slides[cur]).forEach((e, k) => e.classList.toggle("gone", win > 0 && k < kk - win));
-  slides[cur].querySelectorAll("[data-show]").forEach((e) => { e.classList.toggle("on", e.dataset.show.split(",").some((r) => { const [a, b] = r.split("-").map(Number); return kk >= a && kk <= (b || 1e9); })); });
-  refreshFigs();
-  scheduleNotes();
+  const kk = Math.max(shown, 1), win = Number(sl.dataset.window || 0);
+  st.forEach((e, k) => e.classList.toggle("gone", win > 0 && k < kk - win));
+  sl.querySelectorAll("[data-show]").forEach((e) => { e.classList.toggle("on", e.dataset.show.split(",").some((r) => { const [a, b] = r.split("-").map(Number); return kk >= a && kk <= (b || 1e9); })); });
 }
 // ---------- anotações com seta (notas .note ligadas a \cssId{...} das equações) ----------
 // <div class="note" data-on="3" data-to="id"> aparece no passo 3 (ou "3-5") com uma seta
 // até o elemento id; sem left/top no style, a nota fica abaixo do último passo, sob o alvo.
+// Os alvos são procurados dentro do slide, porque o PDF clona o slide uma vez por passo.
 const SVGNS = "http://www.w3.org/2000/svg";
 document.querySelectorAll(".note").forEach((n) => { if (!n.style.left) n.dataset.auto = "1"; });
-const onRange = (s, k) => { const [a, b] = s.split("-").map(Number); return k >= a && k <= (s.endsWith("-") ? 1e9 : (b || a)); };
-function drawNotes(sl, animate) {
+const onRange = (s, k) => { const [a, b] = s.split("-"); const A = Number(a), B = b === undefined ? A : b === "" ? 1e9 : Number(b); return k >= A && k <= B; };   // "k-": do passo k em diante
+let markerSeq = 0;
+function drawNotes(sl, shown, animate) {
   const notes = [...sl.querySelectorAll(".note")], links = [...sl.querySelectorAll(".link")]; if (!notes.length && !links.length) return;
   let layer = sl.querySelector("svg.notelayer");
-  if (!layer) { layer = document.createElementNS(SVGNS, "svg"); layer.setAttribute("class", "notelayer"); layer.setAttribute("viewBox", "0 0 1600 900"); sl.appendChild(layer); }
-  layer.innerHTML = `<defs><marker id="nah-${sl.id}" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css("--accent-3")}"/></marker></defs>`;
-  if (narrow() || sl !== slides[cur]) { notes.forEach((n) => n.classList.remove("on")); return; }
-  const k = Math.max(shown, 1), S = STAGE_SCALE || 1, sr = sl.getBoundingClientRect();
+  if (!layer) { layer = document.createElementNS(SVGNS, "svg"); layer.setAttribute("class", "notelayer"); layer.setAttribute("viewBox", "0 0 1600 900"); sl.insertBefore(layer, sl.querySelector("aside.notes")); }
+  const mk = "nah-" + (++markerSeq);
+  layer.innerHTML = `<defs><marker id="${mk}" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="13" markerHeight="13" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="${css("--accent-3")}"/></marker></defs>`;
+  const k = Math.max(shown, 1), sr = sl.getBoundingClientRect(), S = sr.width / 1600 || 1;
+  const byId = (id) => sl.querySelector(`[id="${id}"]`);
   const rel = (el) => { const r = el.getBoundingClientRect(); return { x: (r.left - sr.left) / S, y: (r.top - sr.top) / S, w: r.width / S, h: r.height / S }; };
   const vis = notes.filter((n) => onRange(n.dataset.on, k));
   notes.forEach((n) => n.classList.toggle("on", vis.includes(n)));
   // ligações elemento do circuito -> termo da equação: <div class="link" data-on="k" data-from="id" data-to="id">rótulo</div>
   for (const lk of links.filter((l) => onRange(l.dataset.on, k))) {
-    const se = document.getElementById(lk.dataset.from), te = document.getElementById(lk.dataset.to);
+    const se = byId(lk.dataset.from), te = byId(lk.dataset.to);
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x, acima = tb.y + tb.h < sb.y;
-    // termo acima e à esquerda: sai pela esquerda do elemento e chega por baixo do termo, na vertical,
-    // sem atravessar o resto da linha da equação (abaixo do passo atual não há nada visível)
+    const left = tb.x + tb.w < sb.x;
     const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
     const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
     const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
-    const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#nah-${sl.id})`); layer.appendChild(p);
+    const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
     if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
-  const tg = (n) => (n.dataset.to || "").split(/\s+/).map((id) => document.getElementById(id)).filter(Boolean).map(rel);
+  const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
   const st = steps(sl), der = sl.querySelector(".deriv") || sl.querySelector(".body");
   if (st.length && der) {
@@ -2074,125 +2214,191 @@ function drawNotes(sl, animate) {
       const vert = Math.abs(ey - sy) > Math.abs(ex - sx) * 0.5;
       const d = vert ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}` : `M${sx},${sy} C${(sx + ex) / 2},${sy} ${(sx + ex) / 2},${ey} ${ex},${ey}`;
       const p = document.createElementNS(SVGNS, "path");
-      p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#nah-${sl.id})`);
+      p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`);
       layer.appendChild(p);
       if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
     }
   }
 }
+function clearNotes(sl) { const l = sl.querySelector("svg.notelayer"); if (l) l.innerHTML = ""; sl.querySelectorAll(".note").forEach((n) => n.classList.remove("on")); }
 let noteTimer = 0;
-function scheduleNotes() { const sl = slides[cur]; const l = sl.querySelector("svg.notelayer"); if (l) l.innerHTML = ""; sl.querySelectorAll(".note").forEach((n) => n.classList.remove("on")); clearTimeout(noteTimer); noteTimer = setTimeout(() => drawNotes(slides[cur], true), 380); }
+function scheduleNotes(sl) {
+  clearNotes(sl); clearTimeout(noteTimer);
+  noteTimer = setTimeout(() => { if (Reveal.getCurrentSlide() === sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), true); }, 380);
+}
 
+// ---------- figuras animadas e instrumentos ----------
 const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const T0 = performance.now();
-function drawFigsAt(now) {
-  const list = narrow() ? slides.filter((sl) => sl.dataset.fig) : (slides[cur] && slides[cur].dataset.fig ? [slides[cur]] : []);
-  for (const sl of list) {
-    const cv = sl.querySelector("canvas[data-figcanvas]");
-    if (!cv || !cv.clientWidth) continue;
-    const n = steps(sl).length, stp = narrow() ? Math.max(n, 1) : Math.max(n ? shown : 1, 1);
-    const { ctx, w, h } = setupCanvas(cv);
-    ctx.clearRect(0, 0, w, h);
-    let cap = null;
-    try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, REDUCED ? 2.2 : (now - T0) / 1000); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
-    const capEl = sl.querySelector(".figcap");
-    if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
-  }
+function drawFig(sl, tsec) {
+  if (!sl.dataset.fig || !FIGS[sl.dataset.fig]) return;
+  const cv = sl.querySelector("canvas[data-figcanvas]");
+  if (!cv || !cv.clientWidth) return;
+  const n = steps(sl).length, stp = Math.max(n ? shownOf(sl) : 1, 1);
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.clearRect(0, 0, w, h);
+  let cap = null;
+  try { cap = FIGS[sl.dataset.fig](ctx, w, h, stp, tsec); } catch (e) { console.error("fig " + sl.dataset.fig, e); }
+  const capEl = sl.querySelector(".figcap");
+  if (capEl && cap && capEl.dataset.txt !== cap) { capEl.innerHTML = richHTML(cap); capEl.dataset.txt = cap; }
 }
-function refreshFigs() { requestAnimationFrame((ts) => drawFigsAt(ts)); }
-function figLoop(ts) { if (!document.hidden) drawFigsAt(ts); requestAnimationFrame(figLoop); }
-if (!REDUCED) requestAnimationFrame(figLoop);
-function drawVisible() {
-  const list = narrow() ? slides : [slides[cur]];
-  for (const sl of list) { const k = sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+let ready = false;
+const tnow = (now) => REDUCED ? 2.2 : (now - T0) / 1000;
+function drawFigsAt(now) { if (!ready) return; const sl = Reveal.getCurrentSlide(); if (sl) drawFig(sl, tnow(now)); }
+function refreshFigs() { requestAnimationFrame(drawFigsAt); }
+function figLoop(ts) { if (!document.hidden && !Reveal.isOverview()) drawFigsAt(ts); requestAnimationFrame(figLoop); }
+function drawInst(sl) { const k = sl && sl.dataset.draw; if (k && DRAW[k]) { try { DRAW[k](); } catch (e) { console.error("draw " + k, e); } } }
+function drawVisible() { if (ready) drawInst(Reveal.getCurrentSlide()); }
+
+// ---------- barra de navegação ----------
+const tocIdx = slides.findIndex((sl) => sl.dataset.sec === "Outline");
+function updateNav(sl) {
+  const h = Reveal.getIndices(sl).h, fr = Reveal.availableFragments();
+  const nm = slideNum(sl);
+  $("pg").textContent = nm.length > 1 ? nm.join("") : "";
+  $("bar").style.width = `${(100 * (h + 1)) / slides.length}%`;
+  $("prev").disabled = Reveal.isFirstSlide() && !fr.prev;
+  $("next").disabled = Reveal.isLastSlide() && !fr.next;
+  $("sec").textContent = sl.dataset.sec || "";
 }
-function fit() {
-  if (narrow()) { STAGE_SCALE = 1; stage.style.transform = ""; slides.forEach((sl) => sl.classList.add("static")); return; }
-  slides.forEach((sl) => sl.classList.remove("static"));
-  const r = deck.getBoundingClientRect();
-  STAGE_SCALE = Math.min(r.width / 1600, r.height / 900);
-  stage.style.transform = `translate(-50%, -50%) scale(${STAGE_SCALE})`;
+function onState() {
+  if (!ready) return;
+  const sl = Reveal.getCurrentSlide(); if (!sl) return;
+  paintSteps(sl, shownOf(sl)); refreshFigs(); scheduleNotes(sl); updateNav(sl);
 }
-function show(i, opts = {}) {
-  cur = Math.max(0, Math.min(slides.length - 1, i));
-  const n = steps(slides[cur]).length;
-  shown = opts.allSteps ? n : (n ? 1 : 0);
-  slides.forEach((sl, k) => sl.classList.toggle("active", k === cur));
-  paintSteps();
-  const k = numbered.indexOf(slides[cur]);
-  $("pg").textContent = k >= 0 ? `${k + 1} / ${numbered.length}` : "";
-  $("bar").style.width = `${(100 * (cur + 1)) / slides.length}%`;
-  $("prev").disabled = cur === 0 && shown <= 1;
-  $("next").disabled = cur === slides.length - 1 && shown >= n;
-  $("sec").textContent = slides[cur].dataset.sec || "";
-  try { history.replaceState(null, "", "#" + (cur + 1)); } catch (e) { /* sandboxed viewer */ }
-  requestAnimationFrame(drawVisible);
+// visão geral: pinta todos os slides no estado em que o reveal os deixou
+function paintAll() {
+  slides.forEach((sl) => { paintSteps(sl, shownOf(sl)); drawFig(sl, 2.2); drawInst(sl); });
 }
-function forward() {
-  const n = steps(slides[cur]).length;
-  if (shown < n) { shown++; paintSteps(); $("next").disabled = cur === slides.length - 1 && shown >= n; $("prev").disabled = false; }
-  else if (cur < slides.length - 1) show(cur + 1);   // no último passo do último slide, não faz nada
-}
-function backward() {
-  if (shown > 1) { shown--; paintSteps(); $("next").disabled = false; }
-  else if (cur > 0) show(cur - 1, { allSteps: true });
-}
-$("prev").addEventListener("click", backward);
-$("next").addEventListener("click", forward);
-document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
-  const g = a.dataset.go, idx = slides.findIndex((sl) => sl.id === g);
-  if (idx >= 0) show(idx);
-}));
-document.addEventListener("keydown", (e) => {
-  if (narrow()) return;
-  const t = e.target;
-  const field = t && (t.tagName === "SELECT" || (t.tagName === "INPUT" && t.type === "range"));
-  if (field && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", " "].includes(e.key)) return;
-  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); forward(); }
-  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); backward(); }
-  else if (e.key === "Home") show(0);
-  else if (e.key === "End") show(slides.length - 1, { allSteps: true });
-  else if (e.key === "f" || e.key === "F") toggleFull();
-});
 function toggleFull() {
   try {
     if (document.fullscreenElement) document.exitFullscreen();
-    else if (deck.requestFullscreen) deck.requestFullscreen().catch(() => {});
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
   } catch (e) { /* not available in this viewer */ }
 }
-$("full").addEventListener("click", toggleFull);
-// navegação por seção: botão Roteiro, lista com os divisores e atalhos R e S
-const tocIdx = slides.findIndex((sl) => sl.dataset.sec === "Outline");
-$("gotoc").addEventListener("click", () => { if (tocIdx >= 0) show(tocIdx); });
 const secsel = $("secsel");
 secsel.innerHTML = `<option value="">Sections…</option>` + slides.map((sl, i) => sl.hasAttribute("data-nonum") && sl.id ? `<option value="${i}">${(sl.querySelector(".divider .num")?.textContent || "") + " " + (sl.querySelector(".divider .ttl")?.textContent || "")}</option>` : sl.id === "refs" ? `<option value="${i}">References</option>` : "").join("");
-secsel.addEventListener("change", () => { const v = secsel.value; if (v !== "") show(Number(v)); secsel.value = ""; secsel.blur(); });
-document.addEventListener("keydown", (e) => {
-  if (narrow() || e.target.tagName === "SELECT" || e.target.tagName === "INPUT") return;
-  if (e.key === "r" || e.key === "R") { if (tocIdx >= 0) show(tocIdx); }
-  else if (e.key === "s" || e.key === "S") { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } }
+secsel.addEventListener("change", () => { const v = secsel.value; if (v !== "") Reveal.slide(Number(v)); secsel.value = ""; secsel.blur(); });
+const goToc = () => { if (tocIdx >= 0) Reveal.slide(tocIdx); };
+const openSec = () => { secsel.focus(); if (secsel.showPicker) try { secsel.showPicker(); } catch (er) { /* sem suporte */ } };
+const extra = $("extra"), moreBtn = $("more");
+const closeMore = () => { extra.classList.remove("open"); moreBtn.setAttribute("aria-expanded", "false"); };
+moreBtn.addEventListener("click", (e) => { e.stopPropagation(); const o = extra.classList.toggle("open"); moreBtn.setAttribute("aria-expanded", String(o)); });
+extra.addEventListener("click", (e) => { if (e.target.closest("button")) closeMore(); });
+secsel.addEventListener("change", closeMore);
+document.addEventListener("click", (e) => { if (!e.target.closest("#extra, #more")) closeMore(); });
+$("prev").addEventListener("click", () => Reveal.prev());
+$("next").addEventListener("click", () => Reveal.next());
+$("gotoc").addEventListener("click", goToc);
+$("full").addEventListener("click", toggleFull);
+$("board").addEventListener("click", () => RevealChalkboard.toggleChalkboard());
+$("pen").addEventListener("click", () => RevealChalkboard.toggleNotesCanvas());
+$("ovw").addEventListener("click", () => Reveal.toggleOverview());
+document.querySelectorAll("[data-go]").forEach((a) => a.addEventListener("click", () => {
+  const idx = slides.findIndex((sl) => sl.id === a.dataset.go);
+  if (idx >= 0) { if (NARROW) slides[idx].scrollIntoView({ behavior: "smooth" }); else Reveal.slide(idx); }
+}));
+// versão inglesa, ainda no motor antigo: #N.k com N contado a partir de 1 e k o passo
+$("lang").addEventListener("click", (e) => {
+  if (NARROW) { const i = topSlide(); location.href = e.currentTarget.dataset.href + "#" + (i + 1); return; }
+  const sl = Reveal.getCurrentSlide(), h = Reveal.getIndices().h, k = shownOf(sl);
+  location.href = e.currentTarget.dataset.href + "#" + (h + 1) + (k > 1 ? "." + k : "");
 });
-let x0 = null;
-stage.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-stage.addEventListener("touchend", (e) => {
-  if (x0 === null || narrow()) return;
-  const dx = e.changedTouches[0].clientX - x0; x0 = null;
-  if (e.target.closest("input, select, button, canvas")) return;
-  if (Math.abs(dx) > 60) (dx < 0 ? forward : backward)();
-}, { passive: true });
 
+// ---------- redesenho após resize, fontes e MathJax ----------
 let pending = false;
-const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(() => { pending = false; fit(); drawVisible(); refreshFigs(); drawNotes(slides[cur], false); }); } };
-new ResizeObserver(schedule).observe(deck);
-window.addEventListener("resize", schedule);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
-window.__mathReady = schedule;
-// deep links: #12 opens slide 12, #12.4 opens slide 12 at step 4
+const schedule = () => {
+  if (PRINT || pending) return;
+  pending = true;
+  requestAnimationFrame(() => {
+    pending = false; if (!ready) return;
+    STAGE_SCALE = Reveal.getScale() || 1;
+    drawVisible(); refreshFigs();
+    const sl = Reveal.getCurrentSlide();
+    if (sl && !Reveal.isOverview()) drawNotes(sl, shownOf(sl), false);
+  });
+};
+
+// ---------- PDF: ?print-pdf, uma página por passo ----------
+function printAll() {
+  STAGE_SCALE = 2;   // canvas com o dobro de pixels no PDF
+  const pages = [...document.querySelectorAll(".reveal .slides .pdf-page > section")];
+  pages.forEach((sl) => paintSteps(sl, shownOf(sl)));
+  pages.forEach((sl) => { drawFig(sl, 2.2); drawInst(sl); });
+  pages.forEach((sl) => drawNotes(sl, shownOf(sl), false));
+  document.documentElement.dataset.printReady = "1";
+}
+
+// links antigos do motor anterior, #N e #N.k, viram #/N−1/0/k−2
 const hm = (location.hash || "").match(/^#(\d+)(?:\.(\d+))?$/);
-fit();
-show(hm ? Number(hm[1]) - 1 : 0);
-if (hm && hm[2]) { shown = Math.max(1, Math.min(steps(slides[cur]).length, Number(hm[2]))); paintSteps(); }
+if (hm && !NARROW) { const h = Math.max(Number(hm[1]) - 1, 0), k = Number(hm[2] || 1); try { history.replaceState(null, "", "#/" + h + (k > 1 ? "/0/" + (k - 2) : "")); } catch (e) { /* sandboxed viewer */ } }
+
+function start() {
+  Reveal.on("slidechanged", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("fragmentshown", onState);
+  Reveal.on("fragmenthidden", onState);
+  Reveal.on("resize", schedule);
+  Reveal.on("overviewshown", paintAll);
+  Reveal.on("overviewhidden", () => { onState(); requestAnimationFrame(drawVisible); });
+  Reveal.on("pdf-ready", printAll);
+  Reveal.initialize({
+    width: 1600, height: 900, margin: 0.01, minScale: 0.05, maxScale: 4,
+    center: false, controls: false, progress: false,
+    hash: true, fragmentInURL: true, history: false, respondToHashChanges: true,
+    transition: "none", transitionSpeed: "fast", backgroundTransition: "none",
+    slideNumber: slideNum, showSlideNumber: "speaker",
+    pdfSeparateFragments: true, pdfMaxPagesPerSlide: 100, scrollActivationWidth: null,
+    keyboard: { 70: toggleFull },
+    chalkboard: { theme: "whiteboard", storage: "pricom-transformada_fourier-quadro", toggleChalkboardButton: false, toggleNotesButton: false, colorButtons: true, boardHandle: true, transition: 300 },
+    plugins: [RevealNotes, RevealChalkboard],
+  }).then(() => {
+    Reveal.addKeyBinding({ keyCode: 82, key: "R", description: "Outline" }, goToc);
+    Reveal.addKeyBinding({ keyCode: 71, key: "G", description: "Sections" }, openSec);
+    ready = true;
+    STAGE_SCALE = PRINT ? 2 : (Reveal.getScale() || 1);
+    if (PRINT) return;
+    onState(); drawVisible();
+    if (!REDUCED) requestAnimationFrame(figLoop);
+  });
+}
+// ---------- modo coluna (celular em pé) ----------
+function topSlide() { let best = 0; slides.forEach((sl, i) => { if (sl.getBoundingClientRect().top <= 80) best = i; }); return best; }
+const onScreen = new Set();
+function narrowDraw() {
+  STAGE_SCALE = 1;
+  slides.forEach((sl) => { paintSteps(sl, shownOf(sl)); drawInst(sl); drawFig(sl, 2.2); });
+}
+function narrowLoop(ts) { if (!document.hidden) onScreen.forEach((sl) => drawFig(sl, tnow(ts))); requestAnimationFrame(narrowLoop); }
+function startNarrow() {
+  slides.forEach((sl) => sl.classList.add("static"));
+  ready = true;
+  narrowDraw();
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((es) => es.forEach((en) => en.isIntersecting ? onScreen.add(en.target) : onScreen.delete(en.target)));
+    slides.filter((sl) => sl.dataset.fig).forEach((sl) => io.observe(sl));
+  }
+  if (!REDUCED) requestAnimationFrame(narrowLoop);
+  if (hm) { const i = Math.min(Math.max(Number(hm[1]) - 1, 0), slides.length - 1); requestAnimationFrame(() => slides[i].scrollIntoView()); }
+  let t = 0; const redo = () => { clearTimeout(t); t = setTimeout(narrowDraw, 150); };
+  window.__mathReady = redo;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redo);
+  window.addEventListener("resize", redo);
+}
+// No PDF o reveal clona os slides: a matemática precisa estar pronta antes.
+let started = false;
+const startOnce = () => { if (!started) { started = true; start(); } };
+if (NARROW) {
+  startNarrow();
+} else if (PRINT) {
+  const fontsOk = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+  window.__mathReady = () => fontsOk.then(startOnce);
+  setTimeout(startOnce, 20000);   // sem internet, o MathJax não chega
+} else {
+  window.__mathReady = schedule;
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+  window.addEventListener("resize", schedule);
+  startOnce();
+}
 })();
-document.getElementById("lang").addEventListener("click", e => { const sl = [...document.querySelectorAll(".slide")], i = sl.findIndex((s) => s.classList.contains("active")), st = i >= 0 ? [...sl[i].querySelectorAll(".step")] : [], k = st.filter((s) => !s.classList.contains("hidden")).length; location.href = e.currentTarget.dataset.href + (i >= 0 ? "#" + (i + 1) + (st.length ? "." + Math.max(k, 1) : "") : location.hash); });
 </script>
 </body>

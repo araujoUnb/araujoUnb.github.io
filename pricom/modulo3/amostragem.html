@@ -313,7 +313,7 @@ html.narrow .dlayout .step .m { font-size: 17px; }
 html.narrow dl.syms, html.narrow .figcap, html.narrow .symline { font-size: 15px; } html.narrow dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
 html.narrow .block, html.narrow .block .bt, html.narrow .painel, html.narrow .readouts, html.narrow .legend, html.narrow .cap, html.narrow .try { font-size: 15px; }
 html.narrow .eqn > .tag, html.narrow .step .tag { font-size: 14px; }
-html.narrow table { font-size: 15px; min-width: 540px; }
+html.narrow table { font-size: 15px; }
 html.narrow code { overflow-wrap: anywhere; }
 html.narrow .refs { columns: 1; font-size: 14px; }
 html.narrow .slide svg:not(.notelayer) { max-width: 100%; height: auto; }
@@ -323,6 +323,18 @@ html.narrow mjx-container[display="true"] { min-width: 0 !important; }
 html.narrow .trow.th { grid-template-columns: minmax(0, 1fr) auto; }
 html.narrow .srow { flex-direction: column; align-items: stretch; }
 html.narrow .srow > .step { flex: 1 1 auto; }
+/* rede de segurança: nada passa da largura da tela; equações e tabelas rolam para o lado */
+html.narrow .reveal .slides > section.slide *:not(mjx-container, mjx-container *, table, table *, svg *) { max-width: 100%; min-width: 0; }
+html.narrow .reveal .slides > section.slide :is(img, canvas, video) { height: auto; }
+html.narrow .reveal .slides > section.slide [style*="width"]:not(mjx-container, mjx-container *, svg *) { width: auto !important; }
+html.narrow :is(.fig, .rfig, .rswap, .schem, .painel, .plot) { width: auto !important; }
+html.narrow pre, html.narrow .code, html.narrow table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; }
+html.narrow mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+html.narrow .reveal .slides > section.slide :is(a, .block, li, td, th, p) { overflow-wrap: anywhere; }
+html.narrow input[type="range"] { width: 100%; }
+html.narrow .reveal .slides > section.slide [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+html.narrow .reveal .slides > section.slide img[style*="height"] { height: auto !important; }
+html.narrow .tri, html.narrow .qgrid { grid-template-columns: minmax(0, 1fr) !important; }
 /* no modo coluna a barra fica só com a troca de língua, no canto */
 html.narrow nav.ctrl { position: fixed; left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: auto; padding: 0; gap: 0; background: none; border: 0; }
 html.narrow nav.ctrl > :not(#extra), html.narrow nav.ctrl #extra > :not(#lang) { display: none !important; }

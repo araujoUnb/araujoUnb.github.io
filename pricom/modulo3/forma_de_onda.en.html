@@ -195,6 +195,7 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
 .toc .d { display: block; font-size: 20px; color: var(--unb-muted); margin-left: 34px; }
 .refs { columns: 2; column-gap: 50px; font-size: 18px; line-height: 1.3; }
 .refs p { break-inside: avoid; margin: 0 0 7px; padding-left: 2.3em; text-indent: -2.3em; }
+
 /* navigation bar (outside the slide) */
 nav.ctrl { position: fixed; left: 0; right: 0; bottom: 0; height: calc(48px + env(safe-area-inset-bottom, 0px)); padding: 0 16px env(safe-area-inset-bottom, 0px); display: flex; align-items: center; gap: 12px; background: #fff; border-top: 1px solid var(--rule); font-size: 15px; color: var(--unb-muted); }
 nav.ctrl .progress { position: absolute; left: 0; top: -1px; height: 3px; background: var(--unb-secondary); transition: width .2s; }
@@ -312,7 +313,7 @@ html.narrow .dlayout .step .m { font-size: 17px; }
 html.narrow dl.syms, html.narrow .figcap, html.narrow .symline { font-size: 15px; } html.narrow dl.syms > div { grid-template-columns: 96px minmax(0, 1fr); }
 html.narrow .block, html.narrow .block .bt, html.narrow .painel, html.narrow .readouts, html.narrow .legend, html.narrow .cap, html.narrow .try { font-size: 15px; }
 html.narrow .eqn > .tag, html.narrow .step .tag { font-size: 14px; }
-html.narrow table { font-size: 15px; min-width: 540px; }
+html.narrow table { font-size: 15px; }
 html.narrow code { overflow-wrap: anywhere; }
 html.narrow .refs { columns: 1; font-size: 14px; }
 html.narrow .slide svg:not(.notelayer) { max-width: 100%; height: auto; }
@@ -322,6 +323,18 @@ html.narrow mjx-container[display="true"] { min-width: 0 !important; }
 html.narrow .trow.th { grid-template-columns: minmax(0, 1fr) auto; }
 html.narrow .srow { flex-direction: column; align-items: stretch; }
 html.narrow .srow > .step { flex: 1 1 auto; }
+/* rede de segurança: nada passa da largura da tela; equações e tabelas rolam para o lado */
+html.narrow .reveal .slides > section.slide *:not(mjx-container, mjx-container *, table, table *, svg *) { max-width: 100%; min-width: 0; }
+html.narrow .reveal .slides > section.slide :is(img, canvas, video) { height: auto; }
+html.narrow .reveal .slides > section.slide [style*="width"]:not(mjx-container, mjx-container *, svg *) { width: auto !important; }
+html.narrow :is(.fig, .rfig, .rswap, .schem, .painel, .plot) { width: auto !important; }
+html.narrow pre, html.narrow .code, html.narrow table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; }
+html.narrow mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+html.narrow .reveal .slides > section.slide :is(a, .block, li, td, th, p) { overflow-wrap: anywhere; }
+html.narrow input[type="range"] { width: 100%; }
+html.narrow .reveal .slides > section.slide [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+html.narrow .reveal .slides > section.slide img[style*="height"] { height: auto !important; }
+html.narrow .tri, html.narrow .qgrid { grid-template-columns: minmax(0, 1fr) !important; }
 /* no modo coluna a barra fica só com a troca de língua, no canto */
 html.narrow nav.ctrl { position: fixed; left: auto; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); height: auto; padding: 0; gap: 0; background: none; border: 0; }
 html.narrow nav.ctrl > :not(#extra), html.narrow nav.ctrl #extra > :not(#lang) { display: none !important; }
@@ -1402,6 +1415,7 @@ const pow10Fmt = (t) => t === 0 ? "1" : "10" + String(t).replace("-", "⁻").rep
 function bind(ids, fmt, draw) {
   for (const id of ids) {
     const el = $(id), out = $(id + "-o");
+    if (!el) continue;   // controle de outra aula, ausente neste deck
     const upd = () => { if (out) out.textContent = fmt[id] ? fmt[id](Number(el.value)) : el.value; draw(); };
     el.addEventListener("input", upd); el.addEventListener("change", upd);
     if (out) out.textContent = fmt[id] ? fmt[id](Number(el.value)) : el.value;
@@ -2153,7 +2167,7 @@ function paintSteps(sl, shown) {
 // Os alvos são procurados dentro do slide, porque o PDF clona o slide uma vez por passo.
 const SVGNS = "http://www.w3.org/2000/svg";
 document.querySelectorAll(".note").forEach((n) => { if (!n.style.left) n.dataset.auto = "1"; });
-const onRange = (s, k) => { const [a, b] = s.split("-").map(Number); return k >= a && k <= (b || a); };
+const onRange = (s, k) => { const [a, b] = s.split("-"); const A = Number(a), B = b === undefined ? A : b === "" ? 1e9 : Number(b); return k >= A && k <= B; };   // "k-": do passo k em diante
 let markerSeq = 0;
 function drawNotes(sl, shown, animate) {
   const notes = [...sl.querySelectorAll(".note")], links = [...sl.querySelectorAll(".link")]; if (!notes.length && !links.length) return;
@@ -2185,7 +2199,7 @@ function drawNotes(sl, shown, animate) {
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
   const st = steps(sl), der = sl.querySelector(".deriv") || sl.querySelector(".body");
   if (st.length && der) {
-    const D = rel(der), lastVis = st[Math.min(k, st.length) - 1], yb = (lastVis ? rel(lastVis).y + rel(lastVis).h : D.y) + 22;
+    const D = rel(der), lastVis = st[((sl.dataset.noteafter || "").split(",").map(Number).filter((v) => v && v <= k).pop() || Math.min(k, st.length)) - 1], yb = (lastVis ? rel(lastVis).y + rel(lastVis).h : D.y) + 22;
     const items = vis.filter((n) => n.dataset.auto).map((n) => { const ts = tg(n); const cx = ts.length ? ts.reduce((s, r) => s + r.x + r.w / 2, 0) / ts.length : D.x; return { n, cx }; }).sort((a, b) => a.cx - b.cx);
     let xcur = D.x, y = yb, rowH = 0;
     items.forEach(({ n, cx }) => {   // lado a lado; se não couber, nova linha
