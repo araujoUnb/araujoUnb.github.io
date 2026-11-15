@@ -136,6 +136,7 @@ COURSES = {
                      ("maxwell-07-polarizacao.html", "Polarização", "Polarization"),
                      ("maxwell-08-contorno.html", "Condições de contorno", "Boundary conditions"),
                      ("maxwell-09-reflexao-normal.html", "Reflexão em incidência normal", "Reflection at normal incidence"),
+                     ("maxwell-10-reflexao-obliqua.html", "Reflexão em incidência oblíqua", "Reflection at oblique incidence"),
                  ]}),
             ]),
         ],

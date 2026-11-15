@@ -11,7 +11,7 @@
      os marcadores de slides, código e lista de partes deste modelo.
      ===================================================================== -->
 <title>Maxwell 2 · Lei de Faraday</title>
-<meta name="description" content="Equações de Maxwell: campos variantes no tempo, ondas planas, potência, polarização, condições de contorno e reflexão.">
+<meta name="description" content="Equações de Maxwell: campos variantes no tempo, ondas planas, potência, polarização, condições de contorno, reflexão normal e oblíqua.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
@@ -445,6 +445,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
       <a href="maxwell-07-polarizacao.html#s-pol"><b>7.</b>Polarização<span class="d">linear, elíptica e circular, sentido de rotação, fasores, exemplo</span></a>
       <a href="maxwell-08-contorno.html#s-cc"><b>8.</b>Condições de contorno<span class="d">E e H tangenciais, D e B normais, refração das linhas de campo, condutor perfeito, exemplo</span></a>
       <a href="maxwell-09-reflexao-normal.html#s-rn"><b>9.</b>Reflexão em incidência normal<span class="d">coeficientes de reflexão e transmissão, onda estacionária, razão de onda estacionária, potência, exemplo</span></a>
+      <a href="maxwell-10-reflexao-obliqua.html#s-ro"><b>10.</b>Reflexão em incidência oblíqua<span class="d">casamento de fase, lei de Snell, coeficientes de Fresnel, ângulo de Brewster, reflexão interna total, potência, exemplo</span></a>
     </div>
   </div>
 </section>
@@ -1732,13 +1733,172 @@ function boardRnExT() {
   const labels = B.labels + A.labels + lb(378, 128, Rw`\vH_t`, "G") + lb(350, 252, Rw`\vE_t`, "P") + lb(410, 245, Rw`+\az`, "sm");
   return board(560, 440, svg, labels);
 }
+// ---------- quadros: reflexão em incidência oblíqua ----------
+// mesmo arranjo da parte 9: z para a direita, x para cima, y saindo da tela; plano de incidência = tela.
+// mp(P, a, d): ponto a distância d de P na direção de ângulo matemático a (graus, x da tela para a direita, y para cima)
+const mp = (P, a, d) => [P[0] + d * Math.cos(a * DEG), P[1] - d * Math.sin(a * DEG)];
+const OB_TI = 40, OB_TT = 25.37;   // n2/n1 = 1,5
+// raios incidente, refletido e transmitido a partir de O; ângulos medidos a partir da normal (+z)
+function obRays(O, ti = OB_TI, tt = OB_TT, o = {}) {
+  const L = o.L || 210, Lr = o.Lr || 190, Lt = o.Lt || 200;
+  let svg = G.ln(O[0] - 290, O[1], O[0] + 250, O[1], "M", 1.4, "", "6 5");
+  const a = mp(O, 180 + ti, L), b = mp(O, 180 + ti, 6);
+  svg += G.ar(a[0], a[1], b[0], b[1], "K", 3);
+  if (!o.noR) { const r = mp(O, 180 - ti, Lr); svg += G.ar(O[0], O[1], r[0], r[1], "K", o.wr || 3, o.exR || ""); }
+  if (!o.noT) { const t = mp(O, tt, Lt); svg += G.ar(O[0], O[1], t[0], t[1], "K", 3); }
+  svg += G.arc(O[0], O[1], 66, 180 - ti, 180, "M", 1.6);
+  if (!o.noR) svg += G.arc(O[0], O[1], 84, 180, 180 + ti, "M", 1.6);
+  if (!o.noT) svg += G.arc(O[0], O[1], 76, -tt, 0, "M", 1.6);
+  let labels = lb(...mp(O, 180 + ti / 2, 92), Rw`\theta_i`, "sm");
+  if (!o.noR) labels += lb(...mp(O, 180 - ti / 2, 110), Rw`\theta_r`, "sm");
+  if (!o.noT) labels += lb(...mp(O, tt / 2, 104), Rw`\theta_t`, "sm");
+  return { svg, labels };
+}
+const lbs = (x, y, tex, cls, st, ex = "") => `<div class="lb ${cls}" style="left:${x}px;top:${y}px;${st}" ${ex}>\\(${tex}\\)</div>`;
+const lbts = (x, y, text, st, ex = "") => `<div class="lb txt" style="left:${x}px;top:${y}px;${st}" ${ex}>${text}</div>`;
+const clipR = (id, x, y, w, h) => `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath></defs>`;
+function boardObK() {
+  const W = 560, H = 440, O = [280, 220], a = 35, sp = 62;
+  let svg = `<rect x="0" y="0" width="${W}" height="${H}" style="fill:rgba(0,59,92,.05)"/>` + clipR("ob-ck", 0, 0, W, H) + `<g clip-path="url(#ob-ck)">`;
+  for (let s = -5; s <= 5; s++) { const c = mp(O, a, s * sp), p = mp(c, a + 90, 400), q = mp(c, a - 90, 400); svg += G.ln(p[0], p[1], q[0], q[1], "P", 2, `style="opacity:.45"`); }
+  svg += `</g>`;
+  const k0 = mp(O, a, -150), k1 = mp(O, a, 150);
+  svg += G.ar(k0[0], k0[1], k1[0], k1[1], "K", 3.6) + G.ar(30, 410, 100, 410, "M", 1.4) + G.ar(30, 410, 30, 340, "M", 1.4);
+  const labels = lb(k1[0] - 10, k1[1] - 26, Rw`\vec{\mathbf k}`) + lb(112, 410, "z", "M sm") + lb(30, 326, "x", "M sm") + lbt(430, 405, "planos de fase constante");
+  return board(W, H, svg, labels);
+}
+function boardObPlano() {
+  const B = rnBase(560, 440, 300, "meio 1 (ε₁, μ₁)", "meio 2 (ε₂, μ₂)"), O = [300, 220], R = obRays(O), P = mp(O, 180 + OB_TI, 210);
+  let svg = B.svg + R.svg + G.g(S("3"), G.ln(P[0], P[1], O[0], P[1], "P", 1.6, "", "6 4") + G.ln(P[0], P[1], P[0], O[1], "G", 1.6, "", "6 4"));
+  const labels = B.labels + R.labels + lb(P[0] - 14, P[1] + 22, Rw`\vec{\mathbf k}_i`, "", `id="ob-lki"`) + lb(...mp(O, 180 - OB_TI, 212), Rw`\vec{\mathbf k}_r`) + lb(...mp(O, OB_TT, 226), Rw`\vec{\mathbf k}_t`) +
+    lb(500, O[1] - 18, Rw`\hat{\mathbf a}_n=\az`, "M sm") +
+    `<div ${S("3")}>` + lb((P[0] + O[0]) / 2, P[1] + 22, Rw`\beta_1\cos\theta_i`, "P sm") + lb(P[0] - 52, (P[1] + O[1]) / 2, Rw`\beta_1\sen\theta_i`, "G sm") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObFase() {
+  const B = rnBase(560, 440, 300, "meio 1 (n₁)", "meio 2 (n₂ > n₁)"), xI = 300, d = 62;
+  let svg = B.svg + clipR("ob-cf1", 0, 40, 300, 350) + clipR("ob-cf2", 300, 40, 260, 350);
+  let w1 = "", w2 = "";
+  for (let m = -7; m <= 7; m++) { const P = [xI, 220 + m * d], a = mp(P, 90 + OB_TI, 500), b = mp(P, -90 + OB_TT, 500); w1 += G.ln(P[0], P[1], a[0], a[1], "P", 2, `style="opacity:.5"`); w2 += G.ln(P[0], P[1], b[0], b[1], "P", 2, `style="opacity:.5"`); }
+  svg += `<g clip-path="url(#ob-cf1)">${w1}</g><g clip-path="url(#ob-cf2)">${w2}</g>`;
+  svg += G.ar(...mp([150, 300], 180 + OB_TI, 60), ...mp([150, 300], OB_TI, 70), "K", 3.4) + G.ar(...mp([440, 150], 180 + OB_TT, 50), ...mp([440, 150], OB_TT, 70), "K", 3.4);
+  let dots = ""; for (let m = -2; m <= 2; m++) dots += G.dot(xI, 220 + m * d, 5, "R");
+  svg += G.g(S("2"), dots + G.brace(xI + 6, 220 - d, xI + 6, 220, -10, "R"));
+  const labels = B.labels + lb(...mp([150, 300], OB_TI, 92), Rw`\vec{\mathbf k}_i`) + lb(...mp([440, 150], OB_TT, 92), Rw`\vec{\mathbf k}_t`) +
+    lbs(418, 222, Rw`\frac{\lambda_1}{\sen\theta_i}=\frac{\lambda_2}{\sen\theta_t}`, "R", "background:rgba(255,255,255,.92);padding:4px 6px;border-radius:3px", S("2"));
+  return board(560, 440, svg, labels);
+}
+function obPanel(ox, isPerp) {
+  const W = 300, H = 360, xI = ox + 190, O = [xI, 200], ti = OB_TI;
+  let svg = `<rect x="${ox}" y="20" width="190" height="${H - 20}" style="fill:rgba(0,59,92,.06)"/><rect x="${xI}" y="20" width="${W - 190}" height="${H - 20}" style="fill:rgba(192,120,40,.10)"/>` + G.ln(xI, 20, xI, H, "K", 2.4);
+  const a = mp(O, 180 + ti, 220), P = mp(O, 180 + ti, 120);
+  svg += G.ar(a[0], a[1], O[0] - 4, O[1] + 3, "K", 3);
+  let labels = lbts(ox + 95, 4, isPerp ? "perpendicular (⊥)" : "paralela (∥)", "font-weight:700;color:var(--unb-text)");
+  if (isPerp) { const h = mp(P, ti - 90, 70); svg += G.sym(P[0], P[1], 11, false, "P") + G.ar(...mp(P, ti - 90, 14), h[0], h[1], "G", 3.2); labels += lb(...mp(P, 130, 46), Rw`\vE_i`, "P") + lb(h[0] + 22, h[1] + 8, Rw`\vH_i`, "G"); }
+  else { const e = mp(P, 90 + ti, 70); svg += G.sym(P[0], P[1], 11, false, "G") + G.ar(...mp(P, 90 + ti, 14), e[0], e[1], "P", 3.2); labels += lb(e[0] - 18, e[1] - 18, Rw`\vE_i`, "P") + lb(P[0] + 30, P[1] + 22, Rw`\vH_i`, "G"); }
+  return { svg, labels };
+}
+function boardObPols() { const A = obPanel(0, true), B = obPanel(340, false); return board(640, 360, A.svg + B.svg, A.labels + B.labels); }
+function boardObPerp() {
+  const B = rnBase(560, 440, 300, "meio 1 (η₁, β₁)", "meio 2 (η₂, β₂)"), O = [300, 220], R = obRays(O), Pi = mp(O, 180 + OB_TI, 140), Pr = mp(O, 180 - OB_TI, 135);
+  const hi = mp(Pi, OB_TI - 90, 64), hr = mp(Pr, 90 - OB_TI, 64);
+  let svg = B.svg + R.svg + G.sym(Pi[0], Pi[1], 11, false, "P") + G.ar(...mp(Pi, OB_TI - 90, 14), hi[0], hi[1], "G", 3.2) +
+    G.g(S("4"), G.sym(Pr[0], Pr[1], 11, false, "P") + G.ar(...mp(Pr, 90 - OB_TI, 14), hr[0], hr[1], "G", 3.2));
+  const labels = B.labels + R.labels + lb(...mp(Pi, 130, 44), Rw`\vE_i`, "P") + lb(hi[0] + 6, hi[1] + 22, Rw`\vH_i`, "G", `id="ob-lHi"`) +
+    `<div ${S("4")}>` + lb(Pr[0] - 46, Pr[1] + 4, Rw`\vE_r`, "P") + lb(hr[0] + 22, hr[1] - 6, Rw`\vH_r`, "G") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObPar() {
+  const B = rnBase(560, 440, 300, "meio 1 (η₁, β₁)", "meio 2 (η₂, β₂)"), O = [300, 220], R = obRays(O), Pi = mp(O, 180 + OB_TI, 140), Pr = mp(O, 180 - OB_TI, 135);
+  const ei = mp(Pi, 90 + OB_TI, 64), er = mp(Pr, 90 - OB_TI, 64);
+  let svg = B.svg + R.svg + G.sym(Pi[0], Pi[1], 11, false, "G") + G.ar(...mp(Pi, 90 + OB_TI, 14), ei[0], ei[1], "P", 3.2) +
+    G.g(S("4"), G.sym(Pr[0], Pr[1], 11, true, "G") + G.ar(...mp(Pr, 90 - OB_TI, 14), er[0], er[1], "P", 3.2));
+  const labels = B.labels + R.labels + lb(ei[0] - 20, ei[1] - 16, Rw`\vE_i`, "P", `id="ob-lEi"`) + lb(Pi[0] + 30, Pi[1] + 20, Rw`\vH_i`, "G") +
+    `<div ${S("4")}>` + lb(er[0] + 22, er[1] - 6, Rw`\vE_r`, "P") + lb(Pr[0] - 46, Pr[1] + 4, Rw`\vH_r`, "G") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObBrew() {
+  const B = rnBase(560, 440, 300, "meio 1 (n₁)", "meio 2 (n₂)"), O = [300, 230], tb = 57.7, tt = 32.3;
+  let svg = B.svg + G.ln(10, O[1], 540, O[1], "M", 1.4, "", "6 5");
+  const a = mp(O, 180 + tb, 230), t = mp(O, tt, 220), r = mp(O, 180 - tb, 200);
+  svg += G.ar(a[0], a[1], ...mp(O, 180 + tb, 6), "K", 3) + G.ar(O[0], O[1], t[0], t[1], "K", 3) + G.ar(O[0], O[1], r[0], r[1], "M", 1.8, `style="opacity:.6"`, "3 5");
+  svg += G.arc(O[0], O[1], 66, 180 - tb, 180, "M", 1.6);
+  const c1 = mp(O, tt, 30), c2 = mp(c1, tt + 90, 30), c3 = mp(O, tt + 90, 30);
+  svg += G.g(S("5"), G.pa(`M${c1[0].toFixed(1)},${c1[1].toFixed(1)} L${c2[0].toFixed(1)},${c2[1].toFixed(1)} L${c3[0].toFixed(1)},${c3[1].toFixed(1)}`, "R", 1.8));
+  const labels = B.labels + lb(...mp(O, 180 + tb / 2, 92), Rw`\theta_B`, "sm") + lb(r[0] - 64, r[1] + 14, Rw`\Gamma_\parallel=0`, "R sm") + lb(...mp(O, tt + 45, 62), Rw`90^\circ`, "R sm", S("5")) +
+    lb(...mp(O, tt, 246), Rw`\vec{\mathbf k}_t`);
+  return board(560, 440, svg, labels);
+}
+// coeficientes do ar para n2 (meios não magnéticos), em função de theta_i (graus)
+const obGam = (n, th) => { const c = Math.cos(th * DEG), s = Math.sin(th * DEG), r = Math.sqrt(n * n - s * s); return { perp: (c - r) / (c + r), par: (r - n * n * c) / (r + n * n * c) }; };
+function boardObGraf() {
+  const W = 560, H = 440, x0 = 80, x1 = 520, y0 = 380, y1 = 40, n = Math.sqrt(2.5), X = (t) => x0 + (x1 - x0) * t / 90, Y = (v) => (y0 + y1) / 2 - v * (y0 - y1) / 2, tB = Math.atan(n) / DEG;
+  let svg = `<rect x="${x0}" y="${y1}" width="${x1 - x0}" height="${y0 - y1}" style="fill:none;stroke:var(--rule);stroke-width:1"/>`;
+  for (const v of [-1, -0.5, 0.5, 1]) svg += G.ln(x0, Y(v), x1, Y(v), "M", 0.8, `style="opacity:.35"`);
+  svg += G.ln(x0, Y(0), x1, Y(0), "M", 1.4) + G.ln(X(tB), y1, X(tB), y0, "M", 1.2, "", "3 4");
+  svg += G.pa(curvePath((x) => Y(obGam(n, (x - x0) / (x1 - x0) * 89.99).perp), x0, x1, 200), "P", 3.4);
+  svg += G.g(S("2"), G.pa(curvePath((x) => Y(obGam(n, (x - x0) / (x1 - x0) * 89.99).par), x0, x1, 200), "R", 3.4, "", "9 6") + G.dot(X(tB), Y(0), 6, "R"));
+  const labels = [-1, -0.5, 0, 0.5, 1].map((v) => lb(x0 - 30, Y(v), fmtc(v, v % 1 ? 1 : 0), "M sm")).join("") + [[0, "0^\\circ"], [30, "30^\\circ"], [60, "60^\\circ"], [90, "90^\\circ"]].map(([t, s]) => lb(X(t), y0 + 22, s, "M sm")).join("") +
+    lb(X(tB), y1 - 16, Rw`\theta_B`, "R sm") + lb(X(45), y0 + 48, Rw`\theta_i`, "M sm") + lb(X(14), Y(-0.38), Rw`\Gamma_\perp`, "P") + lb(X(72), Y(0.42), Rw`\Gamma_\parallel`, "R", S("2"));
+  return board(W, H, svg, labels);
+}
+function boardObTir() {
+  const B = rnBase(560, 440, 300, "vidro (n₁ = 1,5)", "ar (n₂ = 1)", "rgba(255,255,255,.6)"), O = [300, 220];
+  const R1 = obRays(O, 30, 48.6, { wr: 1.6 }), R2 = obRays(O, 55, 0, { noT: true });
+  let ev = ""; [[22, .8], [55, .5], [95, .28], [140, .12]].forEach(([d, op]) => { ev += G.ln(300 + d, 70, 300 + d, 340, "P", 2.4, `style="opacity:${op}"`); });
+  const svg = B.svg + G.g(S("1-2"), R1.svg) + G.g(S("3"), R2.svg + ev + G.ar(310, 372, 470, 372, "P", 1.6));
+  const labels = B.labels + `<div ${S("1-2")}>` + R1.labels + lb(420, 300, Rw`\theta_t>\theta_i`, "sm") + `</div><div ${S("3")}>` + R2.labels + lbts(430, 52, "onda evanescente", "color:var(--unb-alert)") + lb(505, 372, Rw`e^{-\beta_2bz}`, "P sm") + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObPow() {
+  const B = rnBase(560, 440, 300), O = [300, 220], A = [300, 165], Bp = [300, 275];
+  const band = (a, L, fill, ex = "") => G.poly([A, Bp, mp(Bp, a, L), mp(A, a, L)], fill, "R", 0, ex);
+  const svg = B.svg + band(180 + OB_TI, 230, "rgba(192,80,77,.30)") + G.g(S("2"), band(180 - OB_TI, 200, "rgba(192,80,77,.13)")) + G.g(S("3"), band(OB_TT, 220, "rgba(192,80,77,.22)")) +
+    G.ln(300, 165, 300, 275, "R", 6) + G.ar(...mp(O, 180 + OB_TI, 200), ...mp(O, 180 + OB_TI, 40), "K", 2.4);
+  const labels = B.labels + lbts(345, 300, "área S", "color:var(--unb-alert)") + lb(110, 340, Rw`\mathcal P_i`) + `<div ${S("2")}>` + lb(120, 90, Rw`\mathcal P_r`) + `</div><div ${S("3")}>` + lb(480, 150, Rw`\mathcal P_t`) + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObExEn() {
+  const B = rnBase(520, 170, 260, "ar", "εr = 2,5");
+  return board(520, 170, B.svg + G.ar(130, 140, 254, 70, "K", 3), B.labels + lbt(120, 100, "onda incidente"));
+}
+function boardObExK() {
+  const B = rnBase(560, 440, 300, "ar", "εr = 2,5"), A = rnAxes(500, 360), O = [300, 190], s = 34, P = [O[0] - 3 * s, O[1] + 4 * s];
+  let svg = B.svg + A.svg + G.ln(10, O[1], 290, O[1], "M", 1.4, "", "6 5") + G.ar(P[0], P[1], O[0] - 3, O[1] + 4, "K", 3.4);
+  const M = [(P[0] + O[0]) / 2, (P[1] + O[1]) / 2];
+  svg += G.sym(M[0] - 18, M[1] + 24, 11, false, "P");
+  svg += G.g(S("2"), G.ln(P[0], P[1], O[0], P[1], "P", 1.8, "", "6 4") + G.ln(O[0] - 4, P[1], O[0] - 4, O[1], "G", 1.8, "", "6 4"));
+  svg += G.g(S("4"), G.arc(O[0], O[1], 58, 126.87, 180, "M", 1.8));
+  const labels = B.labels + A.labels + lb(P[0] - 26, P[1] - 6, Rw`\vec{\mathbf k}_i`, "", `id="ob-lk"`) + lb(M[0] - 48, M[1] + 30, Rw`\vE`, "P") +
+    `<div ${S("2")}>` + lb((P[0] + O[0]) / 2, P[1] + 20, "3", "P sm") + lb(O[0] - 22, (P[1] + O[1]) / 2, "4", "G sm") + `</div>` + lb(O[0] - 70, O[1] + 34, Rw`\theta_i`, "sm", S("4"));
+  return board(560, 440, svg, labels);
+}
+function obTrans(O, withH) {
+  const t = mp(O, 30.4, 220), P = mp(O, 30.4, 120), h = mp(P, -59.6, 80);
+  let svg = G.ar(O[0], O[1], t[0], t[1], "K", 3.2) + G.sym(P[0], P[1], 11, false, "P");
+  let labels = lb(...mp(P, 140, 50), Rw`\vE_t`, "P");
+  if (withH) { svg += G.ar(...mp(P, -59.6, 14), h[0], h[1], "G", 3.2); labels += lb(h[0] + 24, h[1], Rw`\vH_t`, "G"); }
+  return { svg, labels, t };
+}
+function boardObExT() {
+  const B = rnBase(560, 440, 300, "ar", "εr = 2,5"), A = rnAxes(500, 360), O = [300, 250], a = mp(O, 233.13, 180), T = obTrans(O, false);
+  const P = mp(O, 30.4, 120), svg = B.svg + A.svg + G.ar(a[0], a[1], O[0] - 3, O[1] + 4, "K", 3.2) + G.ar(O[0], O[1], T.t[0], T.t[1], "K", 3.2) + G.g(S("3"), G.sym(P[0], P[1], 11, false, "P"));
+  const labels = B.labels + A.labels + lb(T.t[0] - 10, T.t[1] - 22, Rw`\vec{\mathbf k}_t`, "", `id="ob-lkt"`) + `<div ${S("3")}>` + T.labels + `</div>`;
+  return board(560, 440, svg, labels);
+}
+function boardObExH() {
+  const B = rnBase(560, 440, 300, "ar", "εr = 2,5"), A = rnAxes(500, 360), O = [300, 250], T = obTrans(O, true);
+  return board(560, 440, B.svg + A.svg + T.svg, B.labels + A.labels + T.labels + lb(T.t[0] - 10, T.t[1] - 22, Rw`\vec{\mathbf k}_t`));
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, capjd: boardCapJd, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
   pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
   poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
   ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
-  rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT };
+  rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT,
+  obk: boardObK, obplano: boardObPlano, obfase: boardObFase, obpols: boardObPols, obperp: boardObPerp, obpar: boardObPar, obbrew: boardObBrew, obgraf: boardObGraf, obtir: boardObTir, obpow: boardObPow,
+  obexen: boardObExEn, obexk: boardObExK, obext: boardObExT, obexh: boardObExH };
 document.querySelectorAll("[data-mount]").forEach((el) => { const f = BOARDS[el.dataset.mount]; if (f) el.outerHTML = f(); });
 
 // ---------- overlays e setas curvas ----------
@@ -2270,8 +2430,76 @@ bindIf(["rn-er", "rn-mr"], { "rn-er": (v) => fmtc(v, 1), "rn-mr": (v) => fmtc(v,
 $("rn-pec")?.addEventListener("change", drawRn); $("rn-sep")?.addEventListener("change", drawRn);
 $("rn-play")?.addEventListener("click", () => { RN.play = !RN.play; $("rn-play").textContent = RN.play ? "Pausar" : "Animar"; });
 
+// ---------- instrumento: incidência oblíqua (Fresnel) ----------
+// meios não magnéticos; campo tangencial total: E_y (perpendicular) ou eta1*H_y (paralela), normalizado por E_io
+const OB = { t: 0, play: true, run: false, last: null, off: null };
+function obCoef(n1, n2, th) {   // th em rad; devolve coeficientes complexos e cos(theta_t) complexo
+  const ci = Math.cos(th), st = n1 / n2 * Math.sin(th), tir = st > 1;
+  const ct = tir ? [0, -Math.sqrt(st * st - 1)] : [Math.sqrt(1 - st * st), 0];
+  const e1 = 1 / n1, e2 = 1 / n2;   // eta / eta0
+  const Gp = cdiv(csub([e2 * ci, 0], cscale(ct, e1)), cadd([e2 * ci, 0], cscale(ct, e1)));
+  const Gl = cdiv(csub(cscale(ct, e2), [e1 * ci, 0]), cadd(cscale(ct, e2), [e1 * ci, 0]));
+  return { ci, st, ct, tir, Gp, Tp: cadd([1, 0], Gp), Gl, Tl: cscale(csub([1, 0], Gl), e2 / e1) };
+}
+function drawOb() {
+  const cv = $("ob-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C();
+  const n1 = val("ob-n1s"), n2 = val("ob-n2s"), thd = val("ob-th"), th = thd * DEG, par = $("ob-par").checked, K = obCoef(n1, n2, th);
+  const G1 = par ? cscale(K.Gl, -1) : K.Gp, T2 = par ? csub([1, 0], K.Gl) : K.Tp;   // fator do campo tangencial plotado
+  const lam0 = 120, k1 = TAU * n1 / lam0, k2 = TAU * n2 / lam0, kx = k1 * Math.sin(th), kz1 = k1 * K.ci, ph = TAU * 0.5 * OB.t;
+  const xI = Math.round(w * 0.5), cy = h * 0.5;
+  const sc = 4, ow = Math.ceil(w / sc), oh = Math.ceil(h / sc);
+  if (!OB.off || OB.off.width !== ow || OB.off.height !== oh) { OB.off = document.createElement("canvas"); OB.off.width = ow; OB.off.height = oh; }
+  const octx = OB.off.getContext("2d"), img = octx.createImageData(ow, oh), D = img.data;
+  for (let j = 0; j < oh; j++) for (let i = 0; i < ow; i++) {
+    const z = i * sc - xI, x = cy - j * sc, px = ph - kx * x;   // fase comum: wt - kx x
+    let e;
+    if (z < 0) e = Math.cos(px - kz1 * z) + G1[0] * Math.cos(px + kz1 * z) - G1[1] * Math.sin(px + kz1 * z);
+    else { const a = Math.exp(k2 * K.ct[1] * z), p2 = px - k2 * K.ct[0] * z; e = a * (T2[0] * Math.cos(p2) - T2[1] * Math.sin(p2)); }
+    const q = 4 * (j * ow + i), s = Math.min(1, Math.abs(e) / 1.9) * 0.75, col = e > 0 ? [192, 80, 77] : [91, 143, 199];
+    D[q] = 255 + (col[0] - 255) * s; D[q + 1] = 255 + (col[1] - 255) * s; D[q + 2] = 255 + (col[2] - 255) * s; D[q + 3] = 255;
+  }
+  octx.putImageData(img, 0, 0);
+  ctx.clearRect(0, 0, w, h); ctx.save(); ctx.imageSmoothingEnabled = true; ctx.drawImage(OB.off, 0, 0, ow * sc, oh * sc); ctx.restore();
+  line(ctx, xI, 0, xI, h, c.K, 2.4); line(ctx, 0, cy, w, cy, c.M, 1.2, [6, 5]);
+  const R = Math.min(xI, h / 2) * 0.82, Rr = cabs2(K.Gp), Rl = cabs2(K.Gl), Rf = par ? Rl : Rr, lw = 9;
+  const tt = K.tir ? null : Math.asin(Math.min(1, K.st));
+  const pt = (a, d) => [xI + d * Math.cos(a), cy - d * Math.sin(a)];
+  const ray = (a, d, wd, col, out) => { if (wd < 0.4) return; const [x2, y2] = pt(a, d); out ? arrowTo(ctx, xI, cy, x2, y2, col, wd, 12 + wd) : arrowTo(ctx, x2, y2, xI - 2 * Math.cos(a + Math.PI), cy + 2 * Math.sin(a + Math.PI), col, wd, 12 + wd); };
+  ray(Math.PI + th, R, lw, c.K, false); ray(Math.PI - th, R, Math.max(0.6, lw * Rf), c.K, true);
+  if (tt !== null) ray(tt, R, Math.max(0.6, lw * (1 - Rf)), c.K, true);
+  else txt(ctx, "onda evanescente", xI + 14, cy + 30, { size: 16, c: c.R });
+  txt(ctx, `n₁ = ${fmtc(n1, 2)}`, 12, 20, { size: 17, c: c.M }); txt(ctx, `n₂ = ${fmtc(n2, 2)}`, xI + 12, 20, { size: 17, c: c.M });
+  txt(ctx, par ? "η₁H_y (∥)" : "E_y (⊥)", w - 10, h - 14, { size: 16, c: c.M, align: "right" });
+  // gráfico |Gamma|^2 x theta
+  const ths = range(0, 89.9, 300), rp = [], rl = [];
+  ths.forEach((t) => { const k = obCoef(n1, n2, t * DEG); rp.push(cabs2(k.Gp)); rl.push(cabs2(k.Gl)); });
+  const vl = [];
+  if (n1 * Math.sin(89.9 * DEG) > n2) vl.push({ x: Math.asin(n2 / n1) / DEG, color: "--accent-3" });
+  const tB = Math.atan(n2 / n1) / DEG; if (Math.abs(n1 - n2) > 1e-9) vl.push({ x: tB, color: "--muted" });
+  plot($("ob-g"), { xmin: 0, xmax: 90, ymin: 0, ymax: 1, xticks: [0, 15, 30, 45, 60, 75, 90], yticks: [0, 0.25, 0.5, 0.75, 1], xfmt: degFmt, yfmt: decFmt(2), xlabel: "θ_i", ylabel: "|Γ|²",
+    vlines: vl, series: [{ x: ths, y: rp, color: "--accent", width: 3 }, { x: ths, y: rl, color: "--accent-3", width: 3, dash: true },
+      { x: [thd], y: [par ? Rl : Rr], color: par ? "--accent-3" : "--accent", pts: true, size: 7 }] });
+  const fmtC = (z) => Math.abs(z[1]) < 1e-9 ? fmtc(z[0], 3) : `${fmtc(Math.hypot(z[0], z[1]), 3)}∠${fmtc(Math.atan2(z[1], z[0]) / DEG, 0)}°`;
+  setRead("ob-read", `<span>\\(\\theta_t\\): <b>${tt === null ? "reflexão total" : fmtc(tt / DEG, 1) + "°"}</b></span>` +
+    `<span>\\(\\Gamma_\\perp\\): <b>${fmtC(K.Gp)}</b>, \\(\\Gamma_\\parallel\\): <b>${fmtC(K.Gl)}</b></span>` +
+    `<span>refletida (\\(${par ? "\\parallel" : "\\perp"}\\)): <b>${fmtc(100 * Rf, 1)} %</b>; transmitida: <b>${fmtc(100 * (1 - Rf), 1)} %</b></span>` +
+    `<span>\\(\\theta_{B\\parallel}\\): <b>${Math.abs(n1 - n2) > 1e-9 ? fmtc(tB, 1) + "°" : "—"}</b>, \\(\\theta_c\\): <b>${n1 > n2 ? fmtc(Math.asin(n2 / n1) / DEG, 1) + "°" : "não há"}</b></span>`);
+}
+function obFrame(ts) {
+  const sl = $("ob-cv").closest(".slide");
+  if (!sl.classList.contains("active")) { OB.run = false; return; }
+  const dt = OB.last === null ? 0 : (ts - OB.last) / 1000; OB.last = ts;
+  if (OB.play) OB.t += dt;
+  drawOb(); requestAnimationFrame(obFrame);
+}
+function startOb() { drawOb(); if (!OB.run) { OB.run = true; OB.last = null; requestAnimationFrame(obFrame); } }
+bindIf(["ob-n1s", "ob-n2s", "ob-th"], { "ob-n1s": (v) => fmtc(v, 2), "ob-n2s": (v) => fmtc(v, 2), "ob-th": (v) => fmtDeg(v) }, drawOb);
+$("ob-par")?.addEventListener("change", drawOb);
+$("ob-play")?.addEventListener("click", () => { OB.play = !OB.play; $("ob-play").textContent = OB.play ? "Pausar" : "Animar"; });
+
 const FIGS = {};
-const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn };
+const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb };
 
 // ---------- modo rolável (celular, tablet em pé): quadros e equações cabem na largura ----------
 function narrowFit() {
@@ -2311,7 +2539,7 @@ function wideFit() {
 //  do motor antigo, chamados pelos eventos do reveal.
 // =====================================================================
 // Registre cada instrumento: chave do data-draw -> função de desenho.
-const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": false}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": true}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": false}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}];   // [{nav, href, cur}] quando o curso está separado em um arquivo por seção
+const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": false}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": true}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": false}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}, {"nav": "10. Reflexão em incidência oblíqua", "href": "maxwell-10-reflexao-obliqua.html#s-ro", "cur": false}];   // [{nav, href, cur}] quando o curso está separado em um arquivo por seção
 const PRINT = /print-pdf/i.test(location.search);
 // celular em pé: coluna rolável com todos os passos, sem o reveal (como no motor antigo)
 const NARROW_MQ = window.matchMedia("(max-width: 760px), (orientation: portrait) and (max-width: 1100px)");   // celular e tablet em pé
