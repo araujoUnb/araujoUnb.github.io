@@ -11,14 +11,14 @@
      os marcadores de slides, código e lista de partes deste modelo.
      ===================================================================== -->
 <title>Maxwell 1 · Estática e regime variante</title>
-<meta name="description" content="Equações de Maxwell: campos variantes no tempo, ondas planas, potência, polarização, condições de contorno, reflexão normal e oblíqua.">
+<meta name="description" content="Equações de Maxwell: campos variantes no tempo, ondas planas, potência, polarização, condições de contorno, reflexão normal e oblíqua, radiação do dipolo de Hertz.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <script>
   window.MathJax = {
     loader: { load: ["[tex]/html", "[tex]/color"] },
-    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color"] }, macros: { cb: ["{\\color[RGB]{0,59,92}{#1}}", 1], cg: ["{\\color[RGB]{0,102,51}{#1}}", 1], cr: ["{\\color[RGB]{176,58,46}{#1}}", 1], sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vB: "\\vec{\\mathbf B}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vJ: "\\vec{\\mathbf J}", dvl: "d\\vec{\\mathbf l}", dvS: "d\\vec{\\mathbf S}", az: "\\hat{\\mathbf a}_z", aphi: "\\hat{\\mathbf a}_\\phi", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", arho: "\\hat{\\mathbf a}_\\rho", vP: "\\vec{\\mathbf P}" } },
+    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color"] }, macros: { cb: ["{\\color[RGB]{0,59,92}{#1}}", 1], cg: ["{\\color[RGB]{0,102,51}{#1}}", 1], cr: ["{\\color[RGB]{176,58,46}{#1}}", 1], sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vB: "\\vec{\\mathbf B}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vJ: "\\vec{\\mathbf J}", dvl: "d\\vec{\\mathbf l}", dvS: "d\\vec{\\mathbf S}", az: "\\hat{\\mathbf a}_z", aphi: "\\hat{\\mathbf a}_\\phi", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", arho: "\\hat{\\mathbf a}_\\rho", vP: "\\vec{\\mathbf P}", vA: "\\vec{\\mathbf A}", arr: "\\hat{\\mathbf a}_r", ath: "\\hat{\\mathbf a}_\\theta" } },
     svg: { fontCache: "global", displayAlign: "left", displayIndent: "0" },
     options: { enableMenu: false },
     startup: { ready() { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__mathReady && window.__mathReady()); } }
@@ -391,6 +391,10 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
 /* ---- motor reveal: sem "passo k/n" (o painel de controles chama-se .painel: .controls é do reveal) ---- */
 .stepinfo { display: none; }
 
+/* roteiro com 11 partes: um pouco mais compacto (o modo estreito do modelo continua valendo) */
+.toc { gap: 12px 60px; font-size: 26px; }
+.toc .d { font-size: 17px; }
+
 </style>
 </head>
 <body>
@@ -446,6 +450,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
       <a href="maxwell-08-contorno.html#s-cc"><b>8.</b>Condições de contorno<span class="d">E e H tangenciais, D e B normais, refração das linhas de campo, condutor perfeito, exemplo</span></a>
       <a href="maxwell-09-reflexao-normal.html#s-rn"><b>9.</b>Reflexão em incidência normal<span class="d">coeficientes de reflexão e transmissão, onda estacionária, razão de onda estacionária, potência, exemplo</span></a>
       <a href="maxwell-10-reflexao-obliqua.html#s-ro"><b>10.</b>Reflexão em incidência oblíqua<span class="d">casamento de fase, lei de Snell, coeficientes de Fresnel, ângulo de Brewster, reflexão interna total, potência, exemplo</span></a>
+      <a href="maxwell-11-dipolo-hertz.html#s-ant"><b>11.</b>Antena: o dipolo de Hertz<span class="d">potenciais retardados, campos do dipolo, regiões próxima e distante, diagrama de radiação, potência, resistência de radiação, diretividade, exemplos</span></a>
     </div>
   </div>
 </section>
@@ -1669,6 +1674,136 @@ function boardObExH() {
   const B = rnBase(560, 440, 300, "ar", "εr = 2,5"), A = rnAxes(500, 360), O = [300, 250], T = obTrans(O, true);
   return board(560, 440, B.svg + A.svg + T.svg, B.labels + A.labels + T.labels + lb(T.t[0] - 10, T.t[1] - 22, Rw`\vec{\mathbf k}_t`));
 }
+// ---------- quadros: antena (dipolo de Hertz) ----------
+// eixo z para cima, x para a direita, y entrando na tela; mp() usa ângulos matemáticos (graus)
+function antDipolo(O, h = 30, lab = true) {
+  let svg = G.ln(O[0], O[1] - h, O[0], O[1] + h, "R", 7) + G.ar(O[0] + 16, O[1] + h * 0.7, O[0] + 16, O[1] - h * 0.8, "R", 2.2);
+  return { svg, labels: lab ? lb(O[0] + 34, O[1] - h * 0.5, "I", "R sm") : "" };
+}
+function boardAntMot() {
+  const W = 560, H = 440, O = [280, 220], D = antDipolo(O);
+  let svg = G.ar(O[0], 425, O[0], 22, "M", 1.4);
+  [[70, 0.9], [125, 0.7], [180, 0.5], [235, 0.3]].forEach(([r, op]) => {
+    svg += G.arc(O[0], O[1], r, -155, -25, "P", 2.6, `style="opacity:${op}"`) + G.arc(O[0], O[1], r, 25, 155, "P", 2.6, `style="opacity:${op}"`); });
+  svg += D.svg + G.g(S("2"), G.ar(...mp(O, 60, 245), ...mp(O, 60, 290), "K", 3) + G.ar(...mp(O, 120, 245), ...mp(O, 120, 290), "K", 3) +
+    G.ar(...mp(O, -60, 245), ...mp(O, -60, 290), "K", 3) + G.ar(...mp(O, -120, 245), ...mp(O, -120, 290), "K", 3));
+  svg += G.pa(`M430,392 Q360,330 300,250`, "M", 1.6);
+  const labels = D.labels + lb(O[0], 10, "z", "M sm") + lb(470, 405, Rw`I_o\cos\omega t`, "R", `id="ant-lI"`);
+  return board(W, H, svg, labels);
+}
+function boardAntRet() {
+  const W = 560, H = 440, Q = [150, 320], P = [440, 100];
+  let svg = G.pa("M40,330 C40,260 120,250 170,270 C230,290 240,350 200,390 C160,420 60,410 40,330 Z", "R", 2.4, `style="fill:rgba(192,80,77,.12)"`);
+  svg += G.dot(Q[0], Q[1], 6, "R") + G.dot(P[0], P[1], 6, "K") + G.ar(Q[0], Q[1], P[0] - 5, P[1] + 4, "K", 3);
+  let w = ""; [100, 190, 280].forEach((r) => { w += G.arc(Q[0], Q[1], r, -75, -20, "P", 2, `style="stroke-dasharray:6 6"`); });
+  svg += G.g(S("2"), w + G.pa(`M440,330 Q440,250 ${(Q[0] + 230 * Math.cos(-38 * DEG)).toFixed(0)},${(Q[1] + 230 * Math.sin(-38 * DEG)).toFixed(0)}`, "M", 1.6));
+  const labels = lb(Q[0] - 26, Q[1] + 18, "dv", "R sm") + lb(80, 360, Rw`\vJ`, "R") + lb(P[0] + 18, P[1] - 18, "P") + lb(270, 180, "R", "", `id="ant-lR"`) +
+    lbt(445, 350, "chega após \\(R/u\\)", "P", S("2"));
+  return board(W, H, svg, labels);
+}
+function boardAntDip() {
+  const W = 560, H = 440, O = [190, 290], D = antDipolo(O), P = mp(O, 50, 250);
+  let svg = G.ar(O[0], 420, O[0], 30, "M", 1.4) + G.ar(O[0], O[1], 530, O[1], "M", 1.4) + G.ln(O[0], O[1], P[0], P[1], "K", 2.4) + G.dot(P[0], P[1], 6, "K");
+  svg += G.arc(O[0], O[1], 70, -90, -50, "M", 1.6) + D.svg + G.ln(O[0] - 70, O[1] - 30, O[0] - 70, O[1] + 30, "M", 1.6) +
+    G.ln(O[0] - 78, O[1] - 30, O[0] - 62, O[1] - 30, "M", 1.6) + G.ln(O[0] - 78, O[1] + 30, O[0] - 62, O[1] + 30, "M", 1.6);
+  const labels = D.labels + lb(O[0], 16, "z", "M sm") + lb(545, O[1], "x", "M sm") + lb(P[0] + 18, P[1] - 18, "P") + lb(...mp(O, 50, 135).map((v, i) => v + (i ? 18 : 14)), "r") +
+    lb(...mp(O, 70, 95), Rw`\theta`, "sm") + lb(O[0] - 96, O[1], "dl", "M sm", `id="ant-ldl"`) +
+    `<div ${S("2")}>` + lbs(O[0] - 32, O[1] - 44, "+Q", "sm", "color:#2e7d32") + lb(O[0] - 32, O[1] + 44, "-Q", "R sm") + `</div>`;
+  return board(W, H, svg, labels);
+}
+function boardAntSph() {
+  const W = 560, H = 440, O = [110, 410], D = antDipolo(O, 26), P = mp(O, 50, 250), L = 180, u = 62;
+  const az = mp(P, 90, L), ar = mp(P, 50, u), at = mp(P, -40, u), c = mp(P, 50, L * Math.cos(40 * DEG));
+  let svg = G.ar(O[0], 435, O[0], 30, "M", 1.4) + G.ln(O[0], O[1], P[0], P[1], "M", 1.6, "", "6 5") + G.arc(O[0], O[1], 70, -90, -50, "M", 1.6) + D.svg;
+  svg += G.g(S("2"), G.ar(P[0], P[1], c[0], c[1], "P", 3, "", "7 5") + G.ar(c[0], c[1], az[0] + 3, az[1] + 3, "P", 3, "", "7 5") +
+    G.pa(`M${mp(c, 230, 14).map((v) => v.toFixed(1)).join(",")} L${mp(mp(c, 230, 14), 140, 14).map((v) => v.toFixed(1)).join(",")} L${mp(c, 140, 14).map((v) => v.toFixed(1)).join(",")}`, "P", 1.4));
+  svg += G.ar(P[0], P[1], az[0], az[1], "R", 3.4) + G.ar(P[0], P[1], ar[0], ar[1], "K", 3.4) + G.ar(P[0], P[1], at[0], at[1], "K", 3.4) + G.sym(P[0] - 44, P[1] + 24, 11, true, "K") + G.dot(P[0], P[1], 5, "K");
+  const labels = D.labels + lb(O[0], 16, "z", "M sm") + lb(...mp(O, 70, 92), Rw`\theta`, "sm") + lb(az[0] - 26, az[1] + 4, Rw`\az`, "R") + lb(ar[0] + 24, ar[1] + 8, Rw`\hat{\mathbf a}_r`) +
+    lb(at[0] + 22, at[1] + 4, Rw`\hat{\mathbf a}_\theta`) + lb(P[0] - 76, P[1] + 24, Rw`\aphi`) + lb(P[0] - 22, P[1] - 14, "P", "sm") +
+    `<div ${S("2")}>` + lb(...mp(mp(P, 50, L * 0.766 * 0.8), -40, 40), Rw`\cos\theta\,\hat{\mathbf a}_r`, "P sm") + lb(...mp(mp(c, 140, 70), 50, 52), Rw`-\sen\theta\,\hat{\mathbf a}_\theta`, "P sm") + `</div>`;
+  return board(W, H, svg, labels);
+}
+// gráfico log-log dos pesos 1/(beta r)^n
+function boardAntTermos() {
+  const W = 560, H = 440, x0 = 80, x1 = 520, y0 = 380, y1 = 30, X = (l) => x0 + (x1 - x0) * (l + 1) / 2, Y = (l) => y0 - (y0 - y1) * (l + 3) / 6;
+  let svg = `<rect x="${x0}" y="${y1}" width="${x1 - x0}" height="${y0 - y1}" style="fill:none;stroke:var(--rule);stroke-width:1"/>`;
+  for (const v of [-2, -1, 0, 1, 2]) svg += G.ln(x0, Y(v), x1, Y(v), "M", 0.8, `style="opacity:.3"`);
+  svg += G.ln(X(0), y1, X(0), y0, "M", 1.4, "", "3 4");
+  const seg = (n, c, w, ex = "", dash = "") => { const la = Math.max(-1, -3 / n), lb2 = 1; return G.ln(X(la), Y(-n * la), X(lb2), Y(-n * lb2), c, w, ex, dash); };
+  svg += G.g(S("2"), seg(3, "P", 3.2)) + G.g(S("3"), seg(2, "G", 3.2, "", "9 6")) + G.g(S("4"), seg(1, "R", 3.6));
+  const labels = [[-3, "10^{-3}"], [0, "1"], [3, "10^{3}"]].map(([v, s]) => lb(x0 - 32, Y(v), s, "M sm")).join("") + [[-1, "0{,}1"], [0, "1"], [1, "10"]].map(([v, s]) => lb(X(v), y0 + 22, s, "M sm")).join("") +
+    lb(X(0), y0 + 50, Rw`\beta r`, "M sm") + lb(X(-0.62), Y(2.3), Rw`1/r^3`, "P", S("2")) + lb(X(-0.12), Y(2.0) - 6, Rw`1/r^2`, "G", S("3")) + lb(X(0.55), Y(0.15), Rw`1/r`, "R", S("4")) +
+    lbt(X(-0.55), y0 - 24, "βr ≪ 1", "M") + lbt(X(0.6), y0 - 24, "βr ≫ 1", "M");
+  return board(W, H, svg, labels);
+}
+// linhas de E do dipolo estático: r = C sen^2(theta)
+function boardAntPerto() {
+  const W = 560, H = 440, O = [280, 220], D = antDipolo(O, 22, false);
+  let svg = clipR("ant-cp", 0, 0, W, H) + `<g clip-path="url(#ant-cp)">`;
+  for (const C of [55, 95, 150, 230, 340, 480]) for (const s of [1, -1]) {
+    let d = ""; for (let i = 1; i < 120; i++) { const t = Math.PI * i / 120, r = C * Math.sin(t) ** 2; d += (i > 1 ? " L" : "M") + (O[0] + s * r * Math.sin(t)).toFixed(1) + "," + (O[1] - r * Math.cos(t)).toFixed(1); }
+    svg += G.pa(d, "P", 2.2);
+  }
+  svg += `</g>` + G.ar(O[0], 435, O[0], 18, "M", 1.4) + D.svg;
+  const labels = lb(O[0] + 14, 14, "z", "M sm") + lbs(150, 412, "\\vE\\ \\text{(dipolo elétrico)}", "P sm", "background:rgba(255,255,255,.9);padding:2px 6px");
+  return board(W, H, svg, labels);
+}
+function boardAntLonge() {
+  const W = 560, H = 440, O = [80, 410], D = antDipolo(O, 26), R0 = 330, P = mp(O, 45, R0);
+  let svg = G.ar(O[0], 438, O[0], 20, "M", 1.4) + G.pa(arcD(O[0], O[1], R0, -85, -8), "M", 1.4, `style="opacity:.6"`) + D.svg + G.dot(P[0], P[1], 6, "K");
+  const ar = mp(P, 45, 100), et = mp(P, -45, 100);
+  svg += G.ar(P[0], P[1], ar[0], ar[1], "K", 3.2) + G.g(S("2"), G.ar(P[0], P[1], et[0], et[1], "P", 3.4) + G.sym(P[0] - 52, P[1] - 4, 12, true, "G"));
+  const labels = D.labels + lb(O[0] + 14, 14, "z", "M sm") + lb(ar[0] + 18, ar[1] - 12, Rw`\hat{\mathbf a}_r`) + `<div ${S("2")}>` + lb(et[0] + 20, et[1] + 8, Rw`\vE`, "P") + lb(P[0] - 90, P[1] - 4, Rw`\vH`, "G") + `</div>`;
+  return board(W, H, svg, labels);
+}
+function boardAntDiag() {
+  const W = 560, H = 440, O = [170, 210], R = 140, Q = [450, 210];
+  let d = ""; for (let i = 0; i <= 240; i++) { const t = TAU * i / 240, r = R * Math.abs(Math.sin(t)); d += (i ? " L" : "M") + (O[0] + r * Math.sin(t)).toFixed(1) + "," + (O[1] - r * Math.cos(t)).toFixed(1); }
+  let svg = G.ar(O[0], 400, O[0], 22, "M", 1.4) + `<circle cx="${O[0]}" cy="${O[1]}" r="${R}" ${sty("M", 1, "4 5")}/>` + G.pa(d, "P", 3.4);
+  const h = R * Math.SQRT1_2;
+  svg += G.g(S("4"), G.ln(O[0], O[1], ...mp(O, 45, h), "R", 2.2) + G.ln(O[0], O[1], ...mp(O, -45, h), "R", 2.2) + G.arc(O[0], O[1], 40, -45, 45, "R", 1.8));
+  svg += G.g(S("3"), `<circle cx="${Q[0]}" cy="${Q[1]}" r="90" ${sty("P", 3.4)}/>` + G.sym(Q[0], Q[1], 11, false, "K"));
+  const labels = lb(O[0] + 14, 12, "z", "M sm") + lbt(O[0], 420, "plano E (φ fixo)", "M") + lb(O[0] + 66, O[1], "90^\\circ", "R sm", S("4")) +
+    `<div ${S("3")}>` + lbt(Q[0], 330, "plano H (θ = 90°)", "M") + lb(Q[0] + 24, Q[1] - 18, "z", "M sm") + `</div>`;
+  return board(W, H, svg, labels);
+}
+function boardAntPow() {
+  const W = 560, H = 440, O = [280, 220], R = 120, D = antDipolo(O, 22, false);
+  let svg = `<circle cx="${O[0]}" cy="${O[1]}" r="${R}" style="fill:rgba(0,59,92,.05);stroke:var(--cM);stroke-width:1.4"/>` + G.ar(O[0], 420, O[0], 20, "M", 1.4) + D.svg;
+  let a = ""; for (let k = 1; k < 12; k++) { const th = 15 * k, L = 85 * Math.sin(th * DEG) ** 2; if (L < 6) continue; for (const s of [1, -1]) { const ang = 90 - s * th, p = mp(O, ang, R), q = mp(O, ang, R + L); a += G.ar(p[0], p[1], q[0], q[1], "R", 2.8); } }
+  svg += G.g(S("1"), a);
+  const labels = lb(O[0] + 14, 10, "z", "M sm") + lb(O[0] + 150, O[1] - 30, Rw`\vec{\mathcal P}_{\mathrm{ave}}`, "R") + lbt(O[0] - 76, O[1] + 140, "esfera de raio r", "M");
+  return board(W, H, svg, labels);
+}
+function boardAntRrad() {
+  const W = 560, H = 440, x0 = 80, x1 = 520, y0 = 370, y1 = 30, X = (v) => x0 + (x1 - x0) * v / 0.1, Y = (v) => y0 - (y0 - y1) * v / 8;
+  let svg = `<rect x="${x0}" y="${y1}" width="${x1 - x0}" height="${y0 - y1}" style="fill:none;stroke:var(--rule);stroke-width:1"/>`;
+  for (const v of [2, 4, 6]) svg += G.ln(x0, Y(v), x1, Y(v), "M", 0.8, `style="opacity:.3"`);
+  svg += G.pa(curvePath((x) => Y(80 * Math.PI ** 2 * ((x - x0) / (x1 - x0) * 0.1) ** 2), x0, x1, 120), "R", 3.4);
+  svg += G.g(S("3"), G.ln(X(0.05), y0, X(0.05), Y(1.974), "P", 1.6, "", "4 4") + G.ln(x0, Y(1.974), X(0.05), Y(1.974), "P", 1.6, "", "4 4") + G.dot(X(0.05), Y(1.974), 6, "P"));
+  const labels = [0, 2, 4, 6, 8].map((v) => lb(x0 - 24, Y(v), String(v), "M sm")).join("") + [[0, "0"], [0.025, "\\tfrac{1}{40}"], [0.05, "\\tfrac{1}{20}"], [0.075, "\\tfrac{3}{40}"], [0.1, "\\tfrac{1}{10}"]].map(([v, s]) => lb(X(v), y0 + 24, s, "M sm")).join("") +
+    lb(X(0.05), y0 + 58, Rw`dl/\lambda`, "M sm") + lbs(x0 - 58, Y(4), Rw`R_{\mathrm{rad}}\,(\Omega)`, "M sm", "transform:translate(-50%,-50%) rotate(-90deg)") + lb(X(0.05) - 44, Y(1.974) - 22, "1{,}97\\ \\Omega", "P sm", S("3"));
+  return board(W, H, svg, labels);
+}
+function boardAntDir() {
+  const W = 560, H = 440, O = [280, 220], R = 175, Ri = R / 1.5;
+  let d = ""; for (let i = 0; i <= 240; i++) { const t = TAU * i / 240, r = R * Math.sin(t) ** 2; d += (i ? " L" : "M") + (O[0] + r * Math.sin(t)).toFixed(1) + "," + (O[1] - r * Math.cos(t)).toFixed(1); }
+  let svg = G.ar(O[0], 420, O[0], 20, "M", 1.4) + G.ln(70, O[1], 490, O[1], "M", 1, "", "3 5") + G.pa(d, "R", 3.4) + G.g(S("2"), `<circle cx="${O[0]}" cy="${O[1]}" r="${Ri.toFixed(1)}" ${sty("P", 2.6, "8 6")}/>`);
+  svg += G.g(S("3"), G.dot(O[0] + R, O[1], 6, "R") + G.dot(O[0] + Ri, O[1], 6, "P"));
+  const labels = lb(O[0] + 14, 10, "z", "M sm") + lb(140, 360, Rw`U(\theta)\propto\sen^2\theta`, "R") + lb(...mp(O, 55, Ri + 34), Rw`U_{\mathrm{iso}}`, "P", S("2")) +
+    `<div ${S("3")}>` + lb(O[0] + R + 4, O[1] - 26, Rw`U_{\max}`, "R sm") + lb(O[0] + Ri - 34, O[1] + 34, Rw`U_{\max}/1{,}5`, "P sm") + `</div>`;
+  return board(W, H, svg, labels);
+}
+function boardAntEx1En() {
+  const O = [70, 150], D = antDipolo(O, 16, false), a = mp(O, 60, 70), b = mp(O, 30, 430);
+  const svg = G.ar(O[0], 200, O[0], 14, "M", 1.4) + D.svg + G.ln(O[0], O[1], a[0], a[1], "K", 2.2) + G.dot(a[0], a[1], 5, "K") + G.ln(O[0], O[1], b[0], b[1], "K", 2, "", "7 6") + G.dot(b[0], b[1], 5, "K") + G.arc(O[0], O[1], 34, -90, -60, "M", 1.4);
+  return board(560, 210, svg, lb(a[0] + 22, a[1] - 8, "(a)", "sm") + lb(b[0] + 24, b[1], "(b)", "sm") + lb(O[0] + 14, 8, "z", "M sm"));
+}
+function boardAntEx2En() {
+  const O = [60, 100], D = antDipolo(O, 18, false);
+  const svg = G.ar(O[0], 180, O[0], 14, "M", 1.4) + D.svg + G.ln(O[0], O[1], 400, O[1], "K", 2, "", "7 6") + G.dot(400, O[1], 5, "K");
+  return board(560, 190, svg, lbt(230, O[1] - 20, "2 km", "") + lb(482, O[1], Rw`|\vH|=5\ \mu\mathrm{A/m}`, "sm") + lb(230, O[1] + 26, Rw`\theta=90^\circ`, "M sm"));
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, capjd: boardCapJd, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
   pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, extriade: boardExTriade,
@@ -1677,7 +1812,9 @@ const BOARDS = { flux: boardFluxo, lenz: boardLenz, obs: boardObs, fint: boardFi
   ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
   rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT,
   obk: boardObK, obplano: boardObPlano, obfase: boardObFase, obpols: boardObPols, obperp: boardObPerp, obpar: boardObPar, obbrew: boardObBrew, obgraf: boardObGraf, obtir: boardObTir, obpow: boardObPow,
-  obexen: boardObExEn, obexk: boardObExK, obext: boardObExT, obexh: boardObExH };
+  obexen: boardObExEn, obexk: boardObExK, obext: boardObExT, obexh: boardObExH,
+  antmot: boardAntMot, antret: boardAntRet, antdip: boardAntDip, antsph: boardAntSph, anttermos: boardAntTermos, antperto: boardAntPerto, antlonge: boardAntLonge,
+  antdiag: boardAntDiag, antpow: boardAntPow, antrrad: boardAntRrad, antdir: boardAntDir, antex1en: boardAntEx1En, antex2en: boardAntEx2En };
 document.querySelectorAll("[data-mount]").forEach((el) => { const f = BOARDS[el.dataset.mount]; if (f) el.outerHTML = f(); });
 
 // ---------- overlays e setas curvas ----------
@@ -2277,8 +2414,80 @@ bindIf(["ob-n1s", "ob-n2s", "ob-th"], { "ob-n1s": (v) => fmtc(v, 2), "ob-n2s": (
 $("ob-par")?.addEventListener("change", drawOb);
 $("ob-play")?.addEventListener("click", () => { OB.play = !OB.play; $("ob-play").textContent = OB.play ? "Pausar" : "Animar"; });
 
+// ---------- instrumento: dipolo de Hertz ----------
+// linhas de E no plano xz = curvas de nível de psi(t) = sen^2(theta) [cos(wt - rho) + sen(wt - rho)/rho], rho = beta r
+const ANT = { t: 0, play: true, run: false, last: null };
+function antPsi(rho, s2, ph) { return s2 * (Math.cos(ph - rho) + Math.sin(ph - rho) / rho); }
+function drawAnt() {
+  const cv = $("ant-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C();
+  const rmax = val("ant-r"), heat = $("ant-heat").checked, ph = TAU * 0.4 * ANT.t;
+  const cx = w / 2, cy = h / 2, pxl = Math.min(cx, cy) / rmax;   // pixels por comprimento de onda
+  const rho = (X, Z) => TAU * Math.hypot(X, Z) / pxl;           // beta r com X, Z em pixels
+  const st = 5, nx = Math.ceil(w / st) + 1, nz = Math.ceil(h / st) + 1, F = new Float32Array(nx * nz);
+  for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
+    const X = i * st - cx, Z = cy - j * st, r = Math.hypot(X, Z), p = Math.max(rho(X, Z), 0.25);
+    F[j * nx + i] = antPsi(p, r > 0 ? (X / r) ** 2 : 0, ph);
+  }
+  ctx.clearRect(0, 0, w, h);
+  if (heat) {   // |E| instantâneo aproximado pelo termo dominante: cor = sinal de E_theta no plano
+    for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
+      const X = i * st - cx + st / 2, Z = cy - j * st - st / 2, r = Math.hypot(X, Z), p = Math.max(rho(X, Z), 0.25), s = r > 0 ? Math.abs(X) / r : 0;
+      const e = s * (Math.cos(ph - p) / p - (1 - 1 / (p * p)) * Math.sin(ph - p)) * Math.min(1, p);   // r E_theta instantâneo; perto, atenuado para o termo 1/r^3 não saturar
+      const a = Math.min(1, Math.abs(e)) * 0.35; if (a < 0.02) continue;
+      ctx.fillStyle = e > 0 ? `rgba(192,80,77,${a})` : `rgba(91,143,199,${a})`; ctx.fillRect(i * st, j * st, st + 0.5, st + 0.5);
+    }
+  }
+  // curvas de nível (marching squares)
+  const levels = []; for (let k = -6; k <= 6; k++) if (k) levels.push(k * 0.28);
+  ctx.save(); ctx.strokeStyle = c.P; ctx.lineWidth = 1.8; ctx.beginPath();
+  for (const L of levels) for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
+    const a = F[j * nx + i] - L, b = F[j * nx + i + 1] - L, d = F[(j + 1) * nx + i] - L, e = F[(j + 1) * nx + i + 1] - L;
+    const pts = [], x = i * st, y = j * st;
+    if ((a > 0) !== (b > 0)) pts.push([x + st * a / (a - b), y]);
+    if ((b > 0) !== (e > 0)) pts.push([x + st, y + st * b / (b - e)]);
+    if ((d > 0) !== (e > 0)) pts.push([x + st * d / (d - e), y + st]);
+    if ((a > 0) !== (d > 0)) pts.push([x, y + st * a / (a - d)]);
+    if (pts.length >= 2) { ctx.moveTo(pts[0][0], pts[0][1]); ctx.lineTo(pts[1][0], pts[1][1]); }
+    if (pts.length === 4) { ctx.moveTo(pts[2][0], pts[2][1]); ctx.lineTo(pts[3][0], pts[3][1]); }
+  }
+  ctx.stroke(); ctx.restore();
+  // escala: círculos em r = lambda/(2 pi) e múltiplos de lambda
+  ctx.save(); ctx.setLineDash([4, 5]); ctx.strokeStyle = c.M; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(cx, cy, pxl / TAU, 0, TAU); ctx.stroke();
+  for (let k = 1; k <= rmax; k++) { ctx.beginPath(); ctx.arc(cx, cy, k * pxl, 0, TAU); ctx.stroke(); }
+  ctx.restore();
+  ctx.save(); ctx.fillStyle = "#fff"; ctx.fillRect(cx - 5, cy - 14, 10, 28); ctx.restore();
+  line(ctx, cx, cy - 12, cx, cy + 12, c.R, 6);
+  const I = Math.cos(ph); arrowTo(ctx, cx + 12, cy + 10 * Math.sign(I), cx + 12, cy - 10 * Math.sign(I), c.R, 2, 8);
+  txt(ctx, "λ/2π", cx + pxl / TAU * 0.71 + 4, cy - pxl / TAU * 0.71 - 8, { size: 14, c: c.M });
+  for (let k = 1; k <= rmax; k++) txt(ctx, `${k}λ`, cx + k * pxl * 0.71 + 4, cy - k * pxl * 0.71 - 8, { size: 14, c: c.M });
+  txt(ctx, "z", cx + 10, 14, { size: 15, c: c.M }); line(ctx, cx, 0, cx, h, c.M, 0.8, [2, 6]);
+  // pesos dos termos de E_theta
+  const xs = range(-1.3, 1.3, 200);
+  const pr = plot($("ant-g"), { xmin: -1.3, xmax: 1.3, ymin: -3, ymax: 3, xticks: [-1, 0, 1], yticks: [-3, -2, -1, 0, 1, 2, 3], xfmt: (t) => ["0,1", "1", "10"][t + 1], yfmt: pow10Fmt,
+    xlabel: "βr (escala log)", ylabel: "peso relativo",
+    vlines: [{ x: Math.log10(TAU * rmax), color: "--accent-2", solid: true, width: 2 }, { x: 0, color: "--muted" }],
+    series: [{ x: xs, y: xs.map((l) => -3 * l), color: "--accent", width: 3 }, { x: xs, y: xs.map((l) => -2 * l), color: "--accent-2", width: 3, dash: true }, { x: xs, y: xs.map((l) => -l), color: "--accent-3", width: 3 }] });
+  if (pr) { const g = pr.ctx; txt(g, "1/r³", pr.X(-1.15), pr.Y(2.6), { size: 15, c: c.P }); txt(g, "1/r²", pr.X(-0.6), pr.Y(1.75), { size: 15, c: c.G }); txt(g, "1/r", pr.X(0.7), pr.Y(-0.25), { size: 15, c: c.R }); txt(g, "borda", pr.X(Math.log10(TAU * rmax)) + 6, pr.Y(-2.6), { size: 14, c: c.G }); }
+  const pe = TAU * rmax;
+  setRead("ant-read", `<span>borda da figura: \\(r=${fmtc(rmax, 1)}\\lambda\\), \\(\\beta r=${fmtc(pe, 1)}\\)</span>` +
+    `<span>na borda, \\(1/r^2\\) vale <b>${fmtc(100 / pe, 1)} %</b> e \\(1/r^3\\) vale <b>${fmtc(100 / (pe * pe), 2)} %</b> do termo \\(1/r\\)</span>`);
+}
+function antFrame(ts) {
+  const sl = $("ant-cv").closest(".slide");
+  if (!sl.classList.contains("active")) { ANT.run = false; return; }
+  const dt = ANT.last === null ? 0 : (ts - ANT.last) / 1000; ANT.last = ts;
+  if (ANT.play) ANT.t += dt;
+  drawAnt(); requestAnimationFrame(antFrame);
+}
+function startAnt() { drawAnt(); if (!ANT.run) { ANT.run = true; ANT.last = null; requestAnimationFrame(antFrame); } }
+bindIf(["ant-r"], { "ant-r": (v) => fmtc(v, 1) + " λ" }, drawAnt);
+$("ant-heat")?.addEventListener("change", drawAnt);
+$("ant-play")?.addEventListener("click", () => { ANT.play = !ANT.play; $("ant-play").textContent = ANT.play ? "Pausar" : "Animar"; });
+
 const FIGS = {};
-const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb };
+const DRAW = { far: drawFar, exi: drawExi, cap: drawCap, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb, ant: startAnt };
 
 // ---------- modo rolável (celular, tablet em pé): quadros e equações cabem na largura ----------
 function narrowFit() {
@@ -2318,7 +2527,7 @@ function wideFit() {
 //  do motor antigo, chamados pelos eventos do reveal.
 // =====================================================================
 // Registre cada instrumento: chave do data-draw -> função de desenho.
-const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": true}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": false}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": false}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}, {"nav": "10. Reflexão em incidência oblíqua", "href": "maxwell-10-reflexao-obliqua.html#s-ro", "cur": false}];   // [{nav, href, cur}] quando o curso está separado em um arquivo por seção
+const DECKS = [{"nav": "1. Estática e regime variante", "href": "maxwell-01-estatica.html#s-est", "cur": true}, {"nav": "2. Lei de Faraday", "href": "maxwell-02-faraday.html#s-far", "cur": false}, {"nav": "3. Lei de Ampère–Maxwell", "href": "maxwell-03-ampere-maxwell.html#s-am", "cur": false}, {"nav": "4. Equação de onda 3D", "href": "maxwell-04-onda.html#s-onda", "cur": false}, {"nav": "5. Meios com perdas", "href": "maxwell-05-perdas.html#s-perdas", "cur": false}, {"nav": "6. Vetor de Poynting", "href": "maxwell-06-poynting.html#s-poy", "cur": false}, {"nav": "7. Polarização", "href": "maxwell-07-polarizacao.html#s-pol", "cur": false}, {"nav": "8. Condições de contorno", "href": "maxwell-08-contorno.html#s-cc", "cur": false}, {"nav": "9. Reflexão em incidência normal", "href": "maxwell-09-reflexao-normal.html#s-rn", "cur": false}, {"nav": "10. Reflexão em incidência oblíqua", "href": "maxwell-10-reflexao-obliqua.html#s-ro", "cur": false}, {"nav": "11. Antena: o dipolo de Hertz", "href": "maxwell-11-dipolo-hertz.html#s-ant", "cur": false}];   // [{nav, href, cur}] quando o curso está separado em um arquivo por seção
 const PRINT = /print-pdf/i.test(location.search);
 // celular em pé: coluna rolável com todos os passos, sem o reveal (como no motor antigo)
 const NARROW_MQ = window.matchMedia("(max-width: 760px), (orientation: portrait) and (max-width: 1100px)");   // celular e tablet em pé

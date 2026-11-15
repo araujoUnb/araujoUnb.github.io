@@ -137,6 +137,7 @@ COURSES = {
                      ("maxwell-08-contorno.html", "Condições de contorno", "Boundary conditions"),
                      ("maxwell-09-reflexao-normal.html", "Reflexão em incidência normal", "Reflection at normal incidence"),
                      ("maxwell-10-reflexao-obliqua.html", "Reflexão em incidência oblíqua", "Reflection at oblique incidence"),
+                     ("maxwell-11-dipolo-hertz.html", "Antena: o dipolo de Hertz", "Antenna: the Hertzian dipole"),
                  ]}),
             ]),
         ],
