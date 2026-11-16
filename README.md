@@ -36,3 +36,12 @@ The script also copies every local file a deck references (`figs/`, the `.en.htm
 linked from Teaching. They are copied from `~/Documentos/UnB/Aulas/curso_*`:
 edit the `COURSES` list in `sync_courses.py` if needed, run `python3 sync_courses.py`
 and `python3 build.py`, then commit.
+
+## Talks and slides
+
+- Invited talks, seminars and research visits go in `_src/pages/talks.html` (menu entry "Talks").
+- Slide and flyer PDFs live in `assets/talks/`, named `YYYY-MM_<host>_<topic>_slides.pdf`.
+- Conference-presentation slides are linked next to the paper in `_src/pages/publications.html`,
+  right after the doi link, always crediting the speaker:
+  `<a class="link" href="assets/talks/....pdf">slides</a> <span class="presenter">presented by Name</span>`.
+  Also list them under "Conference presentations" in `talks.html`.

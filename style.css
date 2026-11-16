@@ -150,6 +150,21 @@ ol.pubs .doi { font-size: .86rem; white-space: nowrap; }
 ol.pubs .badge { font-size: .72rem; padding: .05rem .4rem; border-radius: 3px; background: var(--accent); color: #fff; font-weight: 600; margin-left: .3rem; vertical-align: middle; white-space: nowrap; }
 ol.pubs .badge.soft { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 
+ol.talks { list-style: none; padding: 0; margin: 0 0 1rem; }
+ol.talks > li { margin-bottom: 1rem; }
+ol.talks .when { display: inline-block; min-width: 5.2rem; font-weight: 600; color: var(--heading); }
+ol.talks .venue { font-style: italic; }
+ol.pubs .link, ol.talks .link { font-size: .86rem; white-space: nowrap; margin-left: .3rem; }
+ol.pubs .link::before, ol.talks .link::before { content: "["; color: var(--muted); }
+ol.pubs .link::after, ol.talks .link::after { content: "]"; color: var(--muted); }
+ol.pubs .presenter { font-size: .86rem; color: var(--muted); white-space: nowrap; }
+ol.pubs .presenter::before { content: "· "; }
+ol.talks .presenter { color: var(--muted); }
+.presenter a.id { font-size: .78rem; margin-left: .15rem; }
+ol.talks details { margin-top: .3rem; font-size: .92rem; }
+ol.talks summary { cursor: pointer; color: var(--accent); }
+ol.talks details p { margin: .4rem 0; }
+
 dl.students { margin: 0; }
 dl.students dt { font-weight: 600; color: var(--heading); margin-top: .7rem; }
 dl.students dd { margin: .1rem 0 0; color: var(--muted); font-size: .92rem; }
