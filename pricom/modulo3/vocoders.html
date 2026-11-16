@@ -362,7 +362,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ roteiro ============ -->
-<section class="slide" data-sec="Roteiro">
+<section class="slide" id="roteiro" data-sec="Roteiro">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Roteiro</h2><div class="bar"></div></div>
   <div class="body">
@@ -999,6 +999,16 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   </div>
   <aside class="notes"></aside>
 </section>
+
+<!-- ============ próximo tópico ============ -->
+<section class="slide slide-proximo" data-sec="Próximo tópico" data-nonum>
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Próximo tópico</h2><div class="bar"></div></div>
+  <div class="body" style="justify-content:center"><div class="toc" style="grid-template-columns:minmax(0,1fr);max-width:1150px;gap:56px;font-size:36px"><a href="video.html"><b>→</b>Compressão de vídeo<span class="d">Módulo 3 · Conversão analógico-digital</span></a><a data-go="roteiro"><b>↩</b>Roteiro<span class="d">todas as seções desta aula</span></a></div></div>
+  <script>if (/\/Modulo\d\/html\/[^/]*$/.test(location.pathname)) document.querySelectorAll("a[data-mod]").forEach((a) => { a.href = "../../Modulo" + a.dataset.mod + "/html/" + a.getAttribute("href").split("/").pop(); });</script>
+  <aside class="notes"></aside>
+</section>
+<!-- ============ fim do próximo tópico ============ -->
 
 </div>
 </div>
