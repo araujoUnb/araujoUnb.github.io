@@ -221,6 +221,11 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -406,12 +411,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Vídeo sem compressão</h2><div class="sub">HDTV, 30 quadros por segundo, 8 bits por amostra · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Taxa de bits do vídeo cru</div><div class="m">\[ R=\cssId{tx-px}{1920\times1080}\times1{,}5\times8\times30 \]</div></div>
-        <div class="step"><div class="why">Pixels vezes amostras por pixel</div><div class="m">\[ 2\,073\,600\times\cssId{tx-am}{1{,}5}=3\,110\,400\ \text{amostras} \]</div></div>
-        <div class="step"><div class="why">8 bits por amostra, 30 quadros por segundo</div><div class="m">\[ 3\,110\,400\times8\times30\approx\cssId{tx-r}{746\ \text{Mbit/s}} \]</div></div>
-        <div class="step"><div class="why">Duas horas de filme, 7200 s</div><div class="m">\[ \frac{746\times10^{6}\times7200}{8}\approx670\ \text{GB} \]</div></div>
-        <div class="step"><div class="why">MPEG-2 num canal de 6 MHz, 19,39 Mbit/s</div><div class="m">\[ \frac{746}{19{,}39}\approx38\ \text{vezes menos} \]</div></div>
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Taxa de bits do vídeo cru</div><div class="m">\[ R=\cssId{tx-px}{1920\times1080}\times\cssId{tx-am}{1{,}5}\times8\times30 \]</div></div>
+        <div class="step"><div class="why">Pixels por quadro</div><div class="m">\[ R=\cssId{tx-pa}{\cssId{tx-px2}{2\,073\,600}\times1{,}5}\times8\times30 \]</div></div>
+        <div class="step"><div class="why">Pixels vezes amostras por pixel</div><div class="m">\[ R=\cssId{tx-s}{3\,110\,400}\ \text{amostras}\times\cssId{tx-b}{8\times30} \]</div></div>
+        <div class="step"><div class="why">8 bits por amostra, 30 quadros por segundo</div><div class="m">\[ R=\cssId{tx-r0}{746\,496\,000}\ \text{bit/s}\approx\cssId{tx-r}{746\ \text{Mbit/s}} \]</div></div>
+        <div class="step"><div class="why">Duas horas de filme, 7200 s</div><div class="m">\[ \cssId{tx-f5}{\frac{\cssId{tx-r2}{746\times10^{6}}\times7200}{8}}=\frac{5{,}37\times10^{12}}{8}\approx670\ \text{GB} \]</div></div>
+        <div class="step"><div class="why">MPEG-2 num canal de 6 MHz, 19,39 Mbit/s</div><div class="m">\[ \frac{\cssId{tx-r3}{746}}{19{,}39}\approx38\ \text{vezes menos} \]</div></div>
         <div class="step txt">O DPCM daria um fator 2. A chave é a percepção visual: o olho não nota boa parte do que se joga fora.</div>
       </div>
       <div class="figcol">
@@ -419,9 +425,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="tx-px">2,07 milhões de pixels por quadro</div>
-  <div class="note" data-on="2" data-to="tx-am">amostras por pixel, com a cor subamostrada: próximo slide</div>
+  <div class="note" data-on="1" data-to="tx-am">amostras por pixel, com a cor subamostrada: próximo slide</div>
+  <div class="link" data-on="2" data-from="tx-px" data-to="tx-px2">1920 × 1080 = 2,07 milhões de pixels</div>
+  <div class="link" data-on="3" data-from="tx-pa" data-to="tx-s">× 1,5 amostras por pixel</div>
+  <div class="link" data-on="4" data-from="tx-b" data-to="tx-r0">× 8 bits × 30 quadros/s</div>
   <div class="note" data-on="4" data-to="tx-r">o Lathi arredonda para 800 Mbit/s</div>
+  <div class="link" data-on="5" data-from="tx-r" data-to="tx-r2">2 h = 7200 s, em bytes: ÷ 8</div>
+  <div class="link" data-on="6" data-from="tx-f5" data-to="tx-r3">contra 19,39 Mbit/s do MPEG-2</div>
   <aside class="notes"></aside>
 </section>
 
@@ -563,21 +573,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Um bloco 8 × 8</h2><div class="sub">Tabela 5.2 do Lathi, imagem cameraman · pressione →</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
+    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="deriv board" style="gap:22px">
         <div class="step txt">Bloco da imagem cameraman, na borda do casaco, que é escuro embaixo.</div>
-        <div class="step"><div class="why">Coeficiente DC, \(\ell=k=0\)</div><div class="m">\[ F(0,0)=\frac{\cssId{bl-cc}{C(0)^2}}{8}\sum_{n}\sum_{m}f(n,m)\,\cssId{bl-cs}{\cos0\,\cos0} \]</div></div>
+        <div class="step"><div class="why">DC: \(\ell=k=0\) na Eq. 5.52a, com \(N=8\)</div><div class="m">\[ F(0,0)=\cssId{bl-cc}{\frac{C(0)\,C(0)}{8}}\sum_{n}\sum_{m}f(n,m)\,\cssId{bl-cs}{\cos\tfrac{(2n+1)\,0\,\pi}{16}\,\cos\tfrac{(2m+1)\,0\,\pi}{16}} \]</div></div>
+        <div class="step"><div class="why">\(C(0)=1\) e \(\cos0=1\)</div><div class="m">\[ F(0,0)=\cssId{bl-cc2}{\frac{1\cdot1}{8}}\,\cssId{bl-sum}{\sum_{n}\sum_{m}f(n,m)}\cdot\cssId{bl-cs2}{1\cdot1} \]</div></div>
         <div class="step"><div class="why">Soma os 64 pixels</div><div class="m">\[ F(0,0)=\frac{1}{8}\cdot\cssId{bl-s}{9924}=1240{,}5 \]</div></div>
-        <div class="step"><div class="why">Oito vezes a média: o primeiro número da Tabela 5.3</div><div class="m">\[ \frac{9924}{64}=155{,}06\ \Rightarrow\ F(0,0)=8\times155{,}06 \]</div></div>
+        <div class="step"><div class="why">Oito vezes a média: o primeiro número da Tabela 5.3</div><div class="m">\[ F(0,0)=8\times\frac{\cssId{bl-s2}{9924}}{64}=8\times155{,}06 \]</div></div>
       </div>
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="450" aria-label="Pixels do bloco com somas das linhas"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="bl-cc">\(C(0)=1\)</div>
-  <div class="note" data-on="2" data-to="bl-cs">\(=1\)</div>
-  <div class="note" data-on="3-4" data-to="bl-s">soma dos 64 pixels, média 155,06</div>
+  <div class="link" data-on="3" data-from="bl-cc" data-to="bl-cc2">C(0) = 1</div>
+  <div class="link" data-on="3" data-from="bl-cs" data-to="bl-cs2">cos 0 = 1</div>
+  <div class="link" data-on="4" data-from="bl-sum" data-to="bl-s">soma dos 64 pixels</div>
+  <div class="link" data-on="5" data-from="bl-s" data-to="bl-s2">1/8 = 8/64: a média 155,06</div>
   <aside class="notes"></aside>
 </section>
 
@@ -607,11 +619,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Quantização dos coeficientes</h2><div class="sub">Tabelas 5.4 e 5.5 do Lathi · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Cada coeficiente tem seu próprio degrau</div><div class="m">\[ P_n(\ell,k)=\text{round}\,\frac{F(\ell,k)}{\cssId{qt-q}{Q(\ell,k)}} \tag{5.53}\]</div></div>
-        <div class="step"><div class="why">Três contas</div><div class="m">\[ \begin{aligned} \frac{1240{,}5}{16}&=77{,}5\ \to\ 78\\[8pt] \frac{56{,}83}{12}&=4{,}74\ \to\ 5\\[8pt] \frac{\cssId{qt-f}{7{,}14}}{61}&=0{,}12\ \to\ 0 \end{aligned} \]</div></div>
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Cada coeficiente tem seu próprio degrau</div><div class="m">\[ P_n(\ell,k)=\text{round}\,\cssId{qt-F}{\frac{F(\ell,k)}{\cssId{qt-q}{Q(\ell,k)}}} \tag{5.53} \]</div></div>
+        <div class="step"><div class="why">\(\ell=k=0\): \(F=1240{,}5\) e \(Q=16\)</div><div class="m">\[ P_n(0,0)=\text{round}\,\cssId{qt-a}{\frac{1240{,}5}{16}}=\text{round}\,77{,}5=78 \]</div></div>
+        <div class="step"><div class="why">\(\ell=1,\ k=0\): \(Q=12\)</div><div class="m">\[ P_n(1,0)=\text{round}\,\cssId{qt-b}{\frac{56{,}83}{12}}=\text{round}\,4{,}74=5 \]</div></div>
+        <div class="step"><div class="why">\(\ell=0,\ k=7\): \(Q=61\)</div><div class="m">\[ P_n(0,7)=\text{round}\,\cssId{qt-f}{\frac{7{,}14}{61}}=\text{round}\,0{,}12=\cssId{qt-z}{0} \]</div></div>
         <div class="step txt">Sobram 19 coeficientes não nulos de 64, todos no canto de cima.</div>
-        <div class="step"><div class="why">Multiplicar \(Q\) por \(Q_p\) troca qualidade por taxa: o botão de compressão</div><div class="m">\[ P_n(\ell,k)=\text{round}\,\frac{F(\ell,k)}{Q_p\,Q(\ell,k)} \]</div></div>
+        <div class="step"><div class="why">Multiplicar \(Q\) por \(Q_p\) troca qualidade por taxa: o botão de compressão</div><div class="m">\[ P_n(\ell,k)=\text{round}\,\frac{F(\ell,k)}{\cssId{qt-qp}{Q_p\,Q(\ell,k)}} \]</div></div>
       </div>
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="450" aria-label="Matriz de quantização e coeficientes quantizados"></canvas><div class="figcap"></div></div>
@@ -619,7 +633,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     </div>
   </div>
   <div class="note" data-on="1" data-to="qt-q">degrau pequeno nas frequências baixas, grande nas altas</div>
-  <div class="note" data-on="2" data-to="qt-f">\(F(0,7)\): menos de meio degrau, vira zero</div>
+  <div class="link" data-on="2" data-from="qt-F" data-to="qt-a">ℓ = k = 0: F da Tabela 5.3, Q = 16</div>
+  <div class="link" data-on="3" data-from="qt-a" data-to="qt-b">ℓ = 1, k = 0: Q = 12</div>
+  <div class="link" data-on="4" data-from="qt-b" data-to="qt-f">ℓ = 0, k = 7: Q = 61</div>
+  <div class="note" data-on="4" data-to="qt-z">\(F(0,7)\): menos de meio degrau, vira zero</div>
+  <div class="note" data-on="6" data-to="qt-qp">\(Q_p\) escala a matriz inteira</div>
   <aside class="notes"></aside>
 </section>
 
@@ -673,18 +691,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Reconstrução no decodificador</h2><div class="sub">Tabelas 5.6 e 5.7 do Lathi · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
-      <div class="deriv">
-        <div class="step"><div class="why">Conhece \(P_n\) e \(Q\): desfaz a normalização, Tabela 5.6</div><div class="m">\[ \begin{aligned} \hat F(\ell,k)&=P_n(\ell,k)\,Q(\ell,k)\\ \hat F(0,0)&=78\times16=1248\\ \hat F(1,0)&=5\times12=60 \end{aligned} \]</div></div>
-        <div class="step"><div class="why">Aplica a IDCT</div><div class="m">\[ \begin{gathered} \hat f(n,m)=\frac1N\sum_{\ell}\sum_{k}C(\ell)C(k)\hat F(\ell,k)\\ \times\cos\tfrac{(2n+1)\ell\pi}{2N}\cos\tfrac{(2m+1)k\pi}{2N} \end{gathered} \tag{5.52b}\]</div></div>
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Conhece \(P_n\) e \(Q\): desfaz a normalização, Tabela 5.6</div><div class="m">\[ \hat F(\ell,k)=\cssId{rc-p}{P_n(\ell,k)\,Q(\ell,k)} \]</div></div>
+        <div class="step"><div class="why">Os dois primeiros não nulos</div><div class="m">\[ \hat F(0,0)=\cssId{rc-p0}{78\times16}=\cssId{rc-f0}{1248},\qquad \hat F(1,0)=5\times12=60 \]</div></div>
+        <div class="step"><div class="why">Aplica a IDCT</div><div class="m">\[ \begin{gathered} \hat f(n,m)=\frac1N\sum_{\ell}\sum_{k}C(\ell)C(k)\cssId{rc-fh}{\hat F(\ell,k)}\\ \times\cos\tfrac{(2n+1)\ell\pi}{2N}\cos\tfrac{(2m+1)k\pi}{2N} \end{gathered} \tag{5.52b} \]</div></div>
         <div class="step txt">Tabela 5.7: o bloco volta muito parecido.</div>
-        <div class="step"><div class="why">Erro máximo de 11 níveis em 255</div><div class="m">\[ \begin{aligned} e_{\text{rms}}&=\sqrt{\tfrac{1}{64}\textstyle\sum\sum(\hat f-f)^2}=4{,}65\\[4pt] \text{PSNR}&=20\log_{10}\frac{255}{\cssId{rc-e}{4{,}65}}=20\log_{10}54{,}8=34{,}8\ \text{dB} \end{aligned} \]</div></div>
+        <div class="step"><div class="why">Erro máximo de 11 níveis em 255</div><div class="m">\[ e_{\text{rms}}=\sqrt{\tfrac{1}{64}\textstyle\sum\sum(\hat f-f)^2}=\cssId{rc-e}{4{,}65} \]</div></div>
+        <div class="step"><div class="why">Relação sinal-ruído de pico, com pico 255</div><div class="m">\[ \text{PSNR}=20\log_{10}\cssId{rc-e2}{\frac{255}{4{,}65}}=20\log_{10}54{,}8=20\times1{,}739=34{,}8\ \text{dB} \]</div></div>
       </div>
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="360" aria-label="Coeficientes, reconstrução e erro"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="4" data-to="rc-e">RMS dos 64 erros da figura, à direita</div>
+  <div class="link" data-on="2" data-from="rc-p" data-to="rc-p0">ℓ = k = 0: Pₙ = 78, Q = 16</div>
+  <div class="link" data-on="3" data-from="rc-f0" data-to="rc-fh">os 19 F̂ não nulos entram na soma</div>
+  <div class="note" data-on="5" data-to="rc-e">RMS dos 64 erros da figura, à direita</div>
+  <div class="link" data-on="6" data-from="rc-e" data-to="rc-e2">erro RMS contra o pico 255</div>
   <aside class="notes"></aside>
 </section>
 
@@ -746,11 +769,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercício 1: vídeo 4K sem compressão</h2><div class="sub">Amostras por pixel em 4:4:4, 4:2:2 e 4:2:0 · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv">
+      <div class="deriv board" style="gap:22px">
         <div class="step txt">Um vídeo 4K tem quadros de \(3840\times2160\) pixels, \(30\) quadros por segundo e \(10\) bits por amostra, em Y′CbCr. Quanto ele ocupa sem compressão em cada formato de cor? Primeiro, contamos as amostras num grupo de \(8\) pixels.</div>
-        <div class="step"><div class="why">4:4:4: croma em todo pixel</div><div class="m">\[ \frac{8+\cssId{ea-c4}{8+8}}{8}=3\ \text{amostras por pixel} \]</div></div>
-        <div class="step"><div class="why">4:2:2: croma a cada dois pixels da linha</div><div class="m">\[ \frac{8+\cssId{ea-c2}{4+4}}{8}=2\ \text{amostras por pixel} \]</div></div>
-        <div class="step"><div class="why">4:2:0: croma a cada bloco 2 × 2</div><div class="m">\[ \frac{8+\cssId{ea-c0}{2+2}}{8}=\cssId{ea-r0}{1{,}5}\ \text{amostras por pixel} \]</div></div>
+        <div class="step"><div class="why">Num grupo de 8 pixels: 8 lumas mais as cromas</div><div class="m">\[ n=\cssId{ea-cc}{\frac{8+N_{\text{Cb}}+N_{\text{Cr}}}{8}}\ \text{amostras por pixel} \]</div></div>
+        <div class="step"><div class="why">4:4:4: croma em todo pixel</div><div class="m">\[ n_{4:4:4}=\cssId{ea-c4}{\frac{8+8+8}{8}}=\frac{24}{8}=3 \]</div></div>
+        <div class="step"><div class="why">4:2:2: croma a cada dois pixels da linha</div><div class="m">\[ n_{4:2:2}=\cssId{ea-c2}{\frac{8+4+4}{8}}=\frac{16}{8}=2 \]</div></div>
+        <div class="step"><div class="why">4:2:0: croma a cada bloco 2 × 2</div><div class="m">\[ n_{4:2:0}=\cssId{ea-c0}{\frac{8+2+2}{8}}=\frac{12}{8}=1{,}5 \]</div></div>
         <div class="step txt">Só a luma daria \(1\) amostra por pixel. O 4:2:0 tem metade das amostras do 4:4:4 e só \(50\) % a mais que o vídeo em preto e branco.</div>
       </div>
       <div class="figcol">
@@ -758,9 +782,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ea-c4">8 Cb e 8 Cr</div>
-  <div class="note" data-on="3" data-to="ea-c2">um Cb e um Cr por par</div>
-  <div class="note" data-on="4" data-to="ea-c0">um Cb e um Cr por bloco 2 × 2</div>
+  <div class="link" data-on="3" data-from="ea-cc" data-to="ea-c4">8 Cb e 8 Cr</div>
+  <div class="link" data-on="4" data-from="ea-c4" data-to="ea-c2">um Cb e um Cr por par</div>
+  <div class="link" data-on="5" data-from="ea-c2" data-to="ea-c0">um Cb e um Cr por bloco 2 × 2</div>
   <aside class="notes"></aside>
 </section>
 
@@ -769,14 +793,14 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício 1: taxa, disco e canal</h2><div class="sub">3840 × 2160, 30 quadros/s, 10 bits · pressione →</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Pixels por quadro</div><div class="m">\[ 3840\times2160=\cssId{eb-px}{8\,294\,400}\ \text{pixels} \]</div></div>
-        <div class="step"><div class="why">Bits por quadro em 4:2:0</div><div class="m">\[ 8\,294\,400\times\cssId{eb-am}{1{,}5}\times\cssId{eb-b}{10}=124\,416\,000\ \text{bit} \]</div></div>
-        <div class="step"><div class="why">30 quadros por segundo</div><div class="m">\[ 124\,416\,000\times30\approx\cssId{eb-r}{3{,}73\ \text{Gbit/s}} \]</div></div>
-        <div class="step"><div class="why">Mesma conta com 3 e 2 amostras</div><div class="m">\[ R_{4:4:4}\approx\cssId{eb-444}{7{,}46},\quad R_{4:2:2}\approx4{,}98\ \text{Gbit/s} \]</div></div>
-        <div class="step"><div class="why">Episódio de 45 min, 2700 s</div><div class="m">\[ \frac{3{,}73\times10^{9}\times2700}{\cssId{eb-8}{8}}\approx1{,}26\ \text{TB} \]</div></div>
-        <div class="step"><div class="why">Streaming 4K a 25 Mbit/s</div><div class="m">\[ C=\frac{3732{,}5\ \text{Mbit/s}}{25\ \text{Mbit/s}}\approx\cssId{eb-c}{149} \]</div></div>
+    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Pixels por quadro</div><div class="m">\[ N_{\text{px}}=3840\times2160=\cssId{eb-px}{8\,294\,400}\ \text{pixels} \]</div></div>
+        <div class="step"><div class="why">Bits por quadro em 4:2:0</div><div class="m">\[ \cssId{eb-px2}{8\,294\,400}\times\cssId{eb-am}{1{,}5}\times\cssId{eb-b}{10}=\cssId{eb-bq}{124\,416\,000}\ \text{bit} \]</div></div>
+        <div class="step"><div class="why">30 quadros por segundo</div><div class="m">\[ R=\cssId{eb-bq2}{124\,416\,000}\times30=3\,732\,480\,000\ \text{bit/s}\approx\cssId{eb-r}{3{,}73\ \text{Gbit/s}} \]</div></div>
+        <div class="step"><div class="why">Mesma conta com 3 e 2 amostras</div><div class="m">\[ R_{4:4:4}=\cssId{eb-r2}{3{,}73}\times\tfrac{3}{1{,}5}\approx\cssId{eb-444}{7{,}46},\quad R_{4:2:2}=3{,}73\times\tfrac{2}{1{,}5}\approx4{,}98\ \text{Gbit/s} \]</div></div>
+        <div class="step"><div class="why">Episódio de 45 min, 2700 s</div><div class="m">\[ \cssId{eb-f5}{\frac{\cssId{eb-r3}{3{,}73\times10^{9}}\times2700}{\cssId{eb-8}{8}}}=\frac{1{,}01\times10^{13}}{8}\approx1{,}26\ \text{TB} \]</div></div>
+        <div class="step"><div class="why">Streaming 4K a 25 Mbit/s</div><div class="m">\[ C=\frac{\cssId{eb-r4}{3732{,}5\ \text{Mbit/s}}}{25\ \text{Mbit/s}}\approx\cssId{eb-c}{149} \]</div></div>
         <div class="step txt">Nenhum codificador de forma de onda chega perto de 149. O fator vem da DCT quantizada pela percepção, do zigue-zague com códigos de comprimento variável e da compensação de movimento.</div>
       </div>
       <div class="figcol">
@@ -785,10 +809,15 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     </div>
   </div>
   <div class="note" data-on="1" data-to="eb-px">8,3 milhões de pixels</div>
+  <div class="link" data-on="2" data-from="eb-px" data-to="eb-px2">pixels por quadro</div>
   <div class="note" data-on="2" data-to="eb-am">4:2:0, do slide anterior</div>
   <div class="note" data-on="2" data-to="eb-b">bits por amostra</div>
+  <div class="link" data-on="3" data-from="eb-bq" data-to="eb-bq2">bits por quadro × 30 quadros/s</div>
+  <div class="link" data-on="4" data-from="eb-r" data-to="eb-r2">razão das amostras</div>
   <div class="note" data-on="4" data-to="eb-444">o dobro do 4:2:0</div>
+  <div class="link" data-on="5" data-from="eb-r2" data-to="eb-r3">4:2:0 em bit/s, × 2700 s</div>
   <div class="note" data-on="5" data-to="eb-8">8 bits por byte</div>
+  <div class="link" data-on="6" data-from="eb-f5" data-to="eb-r4">a mesma taxa em Mbit/s</div>
   <div class="note" data-on="6" data-to="eb-c">razão de compressão necessária</div>
   <aside class="notes"></aside>
 </section>
@@ -799,13 +828,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercício 2: grupo de quadros IBBP</h2><div class="sub">Taxa média de bits · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv">
+      <div class="deriv board" style="gap:22px">
         <div class="step txt">Vídeo de \(1920\times1080\) em 4:2:0, \(8\) bits e \(60\) quadros por segundo. O grupo tem \(12\) quadros, IBBPBBPBBPBB. Em média, um I ocupa \(900\) kbit, um P \(300\) kbit e um B \(90\) kbit. Qual é a taxa média?</div>
         <div class="step"><div class="why">Conta os tipos no grupo</div><div class="m">\[ \cssId{ga-n}{1\ \text{I}+3\ \text{P}+8\ \text{B}}=12\ \text{quadros} \]</div></div>
-        <div class="step"><div class="why">Bits de cada tipo</div><div class="m">\[ 1\times900+3\times300+8\times\cssId{ga-b}{90} \]</div></div>
-        <div class="step"><div class="why">Soma do grupo</div><div class="m">\[ =900+900+720=\cssId{ga-tot}{2520\ \text{kbit}} \]</div></div>
-        <div class="step"><div class="why">Duração do grupo</div><div class="m">\[ \frac{12\ \text{quadros}}{60\ \text{quadros/s}}=\cssId{ga-t}{0{,}2\ \text{s}} \]</div></div>
-        <div class="step"><div class="why">Taxa média</div><div class="m">\[ R=\frac{2520\ \text{kbit}}{0{,}2\ \text{s}}=\cssId{ga-r}{12{,}6\ \text{Mbit/s}} \]</div></div>
+        <div class="step"><div class="why">Bits de cada tipo</div><div class="m">\[ \cssId{ga-w}{1\times900+3\times300+\cssId{ga-b8}{8\times\cssId{ga-b}{90}}} \]</div></div>
+        <div class="step"><div class="why">Soma do grupo</div><div class="m">\[ =900+900+\cssId{ga-c}{720}=\cssId{ga-tot}{2520\ \text{kbit}} \]</div></div>
+        <div class="step"><div class="why">Duração do grupo</div><div class="m">\[ T=\frac{12\ \text{quadros}}{60\ \text{quadros/s}}=\cssId{ga-t}{0{,}2\ \text{s}} \]</div></div>
+        <div class="step"><div class="why">Taxa média</div><div class="m">\[ R=\cssId{ga-t2}{\frac{2520\ \text{kbit}}{0{,}2\ \text{s}}}=\cssId{ga-k}{12\,600\ \text{kbit/s}}=\cssId{ga-r}{12{,}6\ \text{Mbit/s}} \]</div></div>
       </div>
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="520" aria-label="Doze quadros I, P e B, barras proporcionais aos bits de cada quadro e soma do grupo"></canvas><div class="figcap"></div></div>
@@ -813,8 +842,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     </div>
   </div>
   <div class="note" data-on="2" data-to="ga-n">uma âncora a cada 3 quadros</div>
+  <div class="link" data-on="3" data-from="ga-n" data-to="ga-w">cada tipo × seus kbit</div>
   <div class="note" data-on="3" data-to="ga-b">8 B custam menos que um I</div>
-  <div class="note" data-on="6" data-to="ga-r">kbit por segundo: ÷ 0,2</div>
+  <div class="link" data-on="4" data-from="ga-b8" data-to="ga-c">8 × 90 = 720</div>
+  <div class="link" data-on="6" data-from="ga-t" data-to="ga-t2">divide pela duração</div>
+  <div class="note" data-on="6" data-to="ga-k">kbit por segundo: ÷ 0,2</div>
   <aside class="notes"></aside>
 </section>
 
@@ -824,14 +856,14 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercício 2: compressão e ordem de envio</h2><div class="sub">1920 × 1080, 4:2:0, 8 bits, 60 quadros/s · pressione →</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Taxa sem compressão</div><div class="m">\[ 1920\times1080\times1{,}5\times8\times60\approx\cssId{gb-cru}{1493\ \text{Mbit/s}} \]</div></div>
-        <div class="step"><div class="why">Razão de compressão do grupo</div><div class="m">\[ C=\frac{1493}{\cssId{gb-r}{12{,}6}}\approx118 \]</div></div>
-        <div class="step"><div class="why">Se todos fossem I</div><div class="m">\[ R_I=900\ \text{kbit}\times60\ \text{s}^{-1}=54\ \text{Mbit/s} \]</div></div>
-        <div class="step"><div class="why">Razão só com I</div><div class="m">\[ C_I=\frac{1493}{54}\approx27{,}6 \]</div></div>
-        <div class="step"><div class="why">Ganho da previsão</div><div class="m">\[ \frac{R_I}{R}=\frac{54}{12{,}6}\approx\cssId{gb-g}{4{,}3} \]</div></div>
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Taxa sem compressão</div><div class="m">\[ R_0=1920\times1080\times1{,}5\times8\times60\approx\cssId{gb-cru}{1493\ \text{Mbit/s}} \]</div></div>
+        <div class="step"><div class="why">Razão de compressão do grupo</div><div class="m">\[ C=\frac{\cssId{gb-cru2}{1493}}{\cssId{gb-r}{12{,}6}}\approx118 \]</div></div>
+        <div class="step"><div class="why">Se todos fossem I</div><div class="m">\[ R_I=900\ \text{kbit}\times60\ \text{s}^{-1}=\cssId{gb-ri}{54\ \text{Mbit/s}} \]</div></div>
+        <div class="step"><div class="why">Razão só com I</div><div class="m">\[ C_I=\cssId{gb-c4}{\frac{1493}{\cssId{gb-ri2}{54}}}\approx27{,}6 \]</div></div>
+        <div class="step"><div class="why">Ganho da previsão</div><div class="m">\[ \frac{R_I}{R}=\frac{\cssId{gb-ri3}{54}}{12{,}6}\approx\cssId{gb-g}{4{,}3} \]</div></div>
         <div class="step"><div class="why">Exibição dos 7 primeiros</div><div class="m">\[ I_1\ B_2\ B_3\ \cssId{gb-p4}{P_4}\ B_5\ B_6\ P_7 \]</div></div>
-        <div class="step"><div class="why">Transmissão</div><div class="m">\[ \cssId{gb-tx}{I_1\ P_4\ B_2\ B_3\ P_7\ B_5\ B_6} \]</div></div>
+        <div class="step"><div class="why">Transmissão</div><div class="m">\[ I_1\ \cssId{gb-p4t}{P_4}\ B_2\ B_3\ P_7\ B_5\ B_6 \]</div></div>
         <div class="step txt">O decodificador guarda duas âncoras na memória, decodifica os B do meio e só então exibe na ordem certa. O preço é um atraso de alguns quadros.</div>
       </div>
       <div class="figcol">
@@ -839,10 +871,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="gb-cru" data-to="gb-cru2">taxa sem compressão</div>
   <div class="note" data-on="2" data-to="gb-r">taxa média do slide anterior</div>
+  <div class="link" data-on="4" data-from="gb-ri" data-to="gb-c4">só quadros I</div>
+  <div class="link" data-on="5" data-from="gb-ri2" data-to="gb-ri3">contra os 12,6 do IBBP</div>
   <div class="note" data-on="5" data-to="gb-g">P e B mandam vetores e resíduo</div>
   <div class="note" data-on="6" data-to="gb-p4">B₂ e B₃ precisam de P₄</div>
-  <div class="note" data-on="7" data-to="gb-tx">cada âncora antes dos seus B</div>
+  <div class="link" data-on="7" data-from="gb-p4" data-to="gb-p4t">cada âncora antes dos seus B</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1236,6 +1271,7 @@ function rrect(ctx, x, y, w, h, r, stroke, fill, lw = 2) {
 
 // ---------- (c) figuras ----------
 function figTaxa(ctx, w, h, s, t) {
+  s = Math.max(1, s - 1);   // quadro: um passo a mais no início da dedução
   const c = C(), fw = 250, fh = 141, x0 = 24, y0 = 80, n = s >= 3 ? 7 : 1, dxs = 10, dys = 7;
   for (let k = n - 1; k >= 0; k--) {
     const x = x0 + k * dxs, y = y0 - k * dys;
@@ -1445,6 +1481,7 @@ function figDct1d(ctx, w, h, s, t) {
 }
 
 function figBloco(ctx, w, h, s, t) {
+  s = Math.max(1, s - 1);   // quadro: C(0) e cos 0 resolvidos num passo próprio
   const c = C(), cs = 46, x0 = 40, y0 = 34;
   grid8(ctx, x0, y0, cs, (i, j) => pixCell(VBLK[i][j]), { fs: 15 });
   axes8(ctx, x0, y0, cs, "m", "n");
@@ -1474,11 +1511,12 @@ function figCoef(ctx, w, h, s, t) {
 }
 
 function figQuant(ctx, w, h, s, t) {
+  const s0 = s; s = s <= 1 ? 1 : s <= 4 ? 2 : s - 2;   // quadro: uma conta por passo, de 2 a 4
   const c = C(), cs = 48, x0 = 40, y0 = 34;
   if (s <= 2) {
     grid8(ctx, x0, y0, cs, (i, j) => ({ fill: tint(c.Y, 0.08 + 0.75 * VQ[i][j] / 121), text: String(VQ[i][j]), tc: VQ[i][j] > 80 ? "#fff" : c.K }), { fs: 15 });
     axes8(ctx, x0, y0, cs);
-    if (s === 2) [[0, 0], [1, 0], [0, 7]].forEach(([i, j]) => cellBox(ctx, x0, y0, cs, i, j, c.R, 4));
+    if (s === 2) [[0, 0], [1, 0], [0, 7]].slice(0, s0 - 1).forEach(([i, j]) => cellBox(ctx, x0, y0, cs, i, j, c.R, 4));
     return s === 1 ? "Matriz Q, Tabela 5.4: degraus de 10 a 121." : "Os três degraus usados nas contas: Q(0,0) = 16, Q(1,0) = 12, Q(0,7) = 61.";
   }
   grid8(ctx, x0, y0, cs, (i, j) => pCell(V1.P[i][j]), { fs: 16 });
@@ -1508,6 +1546,7 @@ function figZigue(ctx, w, h, s, t) {
 }
 
 function figRecon(ctx, w, h, s, t) {
+  s = s <= 2 ? 1 : s <= 4 ? s - 1 : 4;   // quadro: F^ em dois passos, erro RMS e PSNR em dois
   const c = C(), cs = Math.min(34, Math.floor((w - 80) / 16)), xa = 24, xb = xa + 8 * cs + 44, y0 = 40;
   const ttl = (x, s1) => txt(ctx, s1, x + 4 * cs, 18, { size: 17, align: "center", c: c.P });
   if (s === 1) {
@@ -1566,6 +1605,7 @@ const tipoCor = (ch) => { const c = C(); return ch === "I" ? tint(c.P, 0.25) : c
 const tipoTraco = (ch) => { const c = C(); return ch === "I" ? c.P : ch === "P" ? c.G : "#a35a00"; };
 
 function figExAmos(ctx, w, h, s) {
+  s = Math.max(1, s - 1);   // quadro: fórmula geral antes dos três formatos
   const c = C(), cs = 78, x0 = 20, y0 = 62, fmt = s <= 2 ? "444" : s === 3 ? "422" : "420";
   const smp = (x, y, lab, col) => { ctx.save(); ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, 13, 0, TAU); ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke(); ctx.restore(); txt(ctx, lab, x, y + 1, { size: 12, c: col, align: "center", bold: true }); };
   txt(ctx, s === 1 ? XL("um grupo de 8 pixels", "a group of 8 pixels") : { "444": "4:4:4", "422": "4:2:2", "420": "4:2:0" }[fmt], x0, 30, { size: 22, bold: true, c: s === 1 ? c.K : c.R });
@@ -1913,14 +1953,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
