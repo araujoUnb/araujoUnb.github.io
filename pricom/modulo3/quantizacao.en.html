@@ -221,6 +221,11 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -467,22 +472,24 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Distortion and SQNR</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">The error is random because the sample \(X\) is random</div><div class="m">\[ D=E\big[(X-Q(X))^2\big] \tag{2}\]</div></div>
-        <div class="step"><div class="why">Expectation of a function of \(X\)</div><div class="m">\[ D=\int_{-\infty}^{\infty}\cssId{di-err}{(x-Q(x))^2}\,f_X(x)\,dx \]</div></div>
-        <div class="step"><div class="why">Split the integral over the \(N\) regions</div><div class="m">\[ D=\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\cssId{di-xk}{\hat x_k})^2 f_X(x)\,dx \tag{3}\]</div></div>
+    <div class="deriv board" style="gap:20px">
+        <div class="step"><div class="why">The error is random because the sample \(X\) is random</div><div class="m" style="max-width:850px">\[ D=E\big[\cssId{di-g}{(X-Q(X))^2}\big] \tag{2} \]</div></div>
+        <div class="step"><div class="why">Expectation of a function of \(X\): average weighted by the density</div><div class="m" style="max-width:850px">\[ D=\cssId{di-int}{\int_{-\infty}^{\infty}}\cssId{di-err}{(x-Q(x))^2\,f_X(x)}\,dx \]</div></div>
+        <div class="step"><div class="why">Split the integral over the \(N\) regions</div><div class="m" style="max-width:850px">\[ D=\cssId{di-sum}{\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}}(x-\cssId{di-q}{Q(x)})^2 f_X(x)\,dx \]</div></div>
+        <div class="step"><div class="why">In \(\mathcal R_k\) the quantizer equals the constant \(\hat x_k\)</div><div class="m" style="max-width:850px">\[ D=\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\cssId{di-xk}{\hat x_k})^2 f_X(x)\,dx \tag{3} \]</div></div>
         <div class="step txt">\(D=1\) is little for a signal of power \(1000\) and a lot for one of power \(1\). We normalize:</div>
-        <div class="step"><div class="why">Signal-to-quantization-noise ratio</div><div class="m">\[ \boxed{\ \text{SQNR}=\frac{E[X^2]}{E\big[(X-Q(X))^2\big]}=\frac{E[X^2]}{D}\ } \tag{4}\]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Squared error and density of the sample"></canvas><div class="figcap"></div></div>
-        <p class="symline">Quantizer of Example 7.2.1 and Gaussian sample with \(\sigma=20\).</p>
-      </div>
+        <div class="step"><div class="why">Signal-to-quantization-noise ratio</div><div class="m" style="max-width:850px">\[ \text{SQNR}=\frac{E[X^2]}{\cssId{di-den}{E\big[(X-Q(X))^2\big]}} \]</div></div>
+        <div class="step"><div class="why">The denominator is the distortion \(D\) of (2)</div><div class="m" style="max-width:850px">\[ \boxed{\ \text{SQNR}=\cssId{di-D}{\frac{E[X^2]}{D}}\ } \tag{4} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-4">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Squared error and density of the sample"></canvas><div class="figcap"></div></div>
+      <p class="symline">Quantizer of Example 7.2.1 and Gaussian sample with \(\sigma=20\).</p>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="di-err">function of \(X\): average weighted by the density</div>
-  <div class="note" data-on="3" data-to="di-xk">in \(\mathcal R_k\) the quantizer equals the constant \(\hat x_k\)</div>
+  <div class="link" data-on="2" data-from="di-g" data-to="di-err">average weighted by the density of X</div>
+  <div class="link" data-on="3" data-from="di-int" data-to="di-sum">split the line into the N regions ℛₖ</div>
+  <div class="link" data-on="4" data-from="di-q" data-to="di-xk">in ℛₖ, Q(x) = x̂ₖ</div>
+  <div class="link" data-on="7" data-from="di-den" data-to="di-D">by (2), this is the distortion D</div>
   <aside class="notes"></aside>
 </section>
 
@@ -491,23 +498,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Example: Gaussian source</h2><div class="sub">Example 7.2.1 · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt" style="font-size:20px">Zero-mean Gaussian source with \(S_X(f)=2\) for \(|f|&lt;100\) Hz, sampled at the Nyquist rate and quantized with the 8-level quantizer.</div>
-        <div class="step"><div class="why">Power of the sample</div><div class="m">\[ \sigma^2=\cssId{ga-rx}{R_X(0)}=\int_{-100}^{100}2\,df=400 \]</div></div>
-        <div class="step"><div class="why">Bit rate</div><div class="m">\[ R=\cssId{ga-bits}{3}\times\cssId{ga-fs}{200}=600\ \text{bits/s} \]</div></div>
-        <div class="step"><div class="why">Take the levels into (3); by symmetry, double the positive side</div><div class="m">\[ \begin{aligned} D&amp;=2\sum_{k=5}^{8}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx\\ &amp;\cssId{ga-d}{\approx 33.38} \end{aligned} \]</div></div>
-        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{400}{33.38}=11.98\ \to\ \boxed{10.78\ \text{dB}} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD of the source and density with the quantizer regions"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:20px">
+        <div class="step txt" style="font-size:20px;max-width:840px">Zero-mean Gaussian source with \(S_X(f)=2\) for \(|f|&lt;100\) Hz, sampled at the Nyquist rate and quantized with the 8-level quantizer.</div>
+        <div class="step"><div class="why">Power of the sample: area under the PSD, which equals \(2\) only for \(|f|&lt;100\) Hz</div><div class="m">\[ \sigma^2=R_X(0)=\int_{-100}^{100}\underbrace{2}_{S_X(f)}\,df=2\times 200=400 \]</div></div>
+        <div class="step"><div class="why">Bit rate: \(\nu=\log_2 8\) bits per sample and \(f_s=2W\) samples per second</div><div class="m">\[ R=\nu\,f_s=\underbrace{3}_{\log_2 8}\times\underbrace{200}_{2W}=600\ \text{bits/s} \]</div></div>
+        <div class="step"><div class="why">Take the levels into (3)</div><div class="m">\[ D=\cssId{ga-sum}{\sum_{k=1}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \]</div></div>
+        <div class="step"><div class="why">By symmetry, double the positive side; the Gaussian integrals come out with the \(Q\) function</div><div class="m">\[ D=\cssId{ga-sum2}{2\sum_{k=5}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx\cssId{ga-d}{\approx 33.38} \]</div></div>
+        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\cssId{ga-db}{\frac{400}{33.38}}=11.98\ \to\ \boxed{10.78\ \text{dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD of the source and density with the quantizer regions"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ga-rx">power is the area under the PSD</div>
-  <div class="note" data-on="3" data-to="ga-bits">bits per sample</div>
-  <div class="note" data-on="3" data-to="ga-fs">\(f_s=2W\)</div>
-  <div class="note" data-on="4" data-to="ga-d">8 integrals of the Gaussian, done with the \(Q\) function</div>
+  <div class="link" data-on="5" data-from="ga-sum" data-to="ga-sum2">symmetry: double the positive side</div>
+  <div class="link" data-on="6" data-from="ga-d" data-to="ga-db">take into (4)</div>
+  <div class="note" data-on="5" data-to="ga-d">8 integrals of the Gaussian, done with the \(Q\) function</div>
   <aside class="notes"></aside>
 </section>
 
@@ -532,23 +537,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Power of the quantization noise</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Uniform error on \((-\Delta/2,\Delta/2]\)</div><div class="m">\[ D=E[E^2]=\int_{-\Delta/2}^{\Delta/2}e^2\,\cssId{u-fe}{\frac{1}{\Delta}}\,de \]</div></div>
-        <div class="step"><div class="why">Integrate</div><div class="m">\[ D=\frac{1}{\Delta}\,\cssId{u-prim}{\left[\frac{e^3}{3}\right]_{-\Delta/2}^{\Delta/2}} \]</div></div>
-        <div class="step"><div class="why">Substitute the limits</div><div class="m">\[ D=\frac{1}{3\Delta}\left[\frac{\Delta^3}{8}-\left(\cssId{u-p2}{-\frac{\Delta^3}{8}}\right)\right] \]</div></div>
-        <div class="step"><div class="why">Add the two terms</div><div class="m">\[ D=\frac{1}{3\Delta}\cdot\frac{\Delta^3}{4} \]</div></div>
-        <div class="step"><div class="why">Simplify</div><div class="m">\[ \boxed{\ D=\frac{\Delta^2}{12}\ } \tag{5}\]</div></div>
-        <div class="step"><div class="why">Back to the Gaussian example, \(\Delta=20\)</div><div class="m">\[ \frac{\Delta^2}{12}=\frac{400}{12}=33.3\quad\text{versus}\quad\cssId{u-ex}{D\approx 33.38} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Uniform density of the error, e squared and the antiderivative"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px">
+        <div class="step"><div class="why">Uniform error on \((-\Delta/2,\Delta/2]\): density \(f_E(e)=1/\Delta\)</div><div class="m" style="max-width:850px">\[ D=E[E^2]=\int_{-\Delta/2}^{\Delta/2}\cssId{u-e2}{e^2}\,\underbrace{f_E(e)}_{1/\Delta}\,de \]</div></div>
+        <div class="step"><div class="why">Integrate: antiderivative of \(e^2\)</div><div class="m" style="max-width:850px">\[ D=\frac{1}{\Delta}\,\cssId{u-prim}{\left[\frac{e^3}{3}\right]_{-\Delta/2}^{\Delta/2}} \]</div></div>
+        <div class="step"><div class="why">Substitute the limits</div><div class="m" style="max-width:850px">\[ D=\frac{1}{3\Delta}\cssId{u-br}{\left[\frac{\Delta^3}{8}-\left(-\frac{\Delta^3}{8}\right)\right]} \]</div></div>
+        <div class="step"><div class="why">\(e^3\) is odd: the two terms add</div><div class="m" style="max-width:850px">\[ D=\cssId{u-s}{\frac{1}{3\Delta}\cdot\frac{\Delta^3}{4}} \]</div></div>
+        <div class="step"><div class="why">Simplify</div><div class="m" style="max-width:850px">\[ \boxed{\ D=\cssId{u-r}{\frac{\Delta^2}{12}}\ } \tag{5} \]</div></div>
+        <div class="step"><div class="why">Back to the Gaussian example, \(\Delta=20\): the approximation already works with only 8 levels</div><div class="m" style="max-width:850px">\[ \cssId{u-r2}{\frac{\Delta^2}{12}}=\frac{400}{12}=33.3\quad\text{versus}\quad\cssId{u-ex}{D\approx 33.38} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Uniform density of the error, e squared and the antiderivative"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="u-fe">uniform density</div>
-  <div class="note" data-on="2" data-to="u-prim">antiderivative of \(e^2\)</div>
-  <div class="note" data-on="3" data-to="u-p2">\(e^3\) is odd: the two terms add</div>
+  <div class="link" data-on="2" data-from="u-e2" data-to="u-prim">antiderivative of e²</div>
+  <div class="link" data-on="3" data-from="u-prim" data-to="u-br">e = Δ/2 minus e = −Δ/2</div>
+  <div class="link" data-on="4" data-from="u-br" data-to="u-s">e³ is odd: the two terms add</div>
+  <div class="link" data-on="5" data-from="u-s" data-to="u-r">Δ³/(12Δ) = Δ²/12</div>
+  <div class="link" data-on="6" data-from="u-r" data-to="u-r2">Δ = 20</div>
   <div class="note" data-on="6" data-to="u-ex">the approximation already works with only 8 levels</div>
   <aside class="notes"></aside>
 </section>
@@ -558,24 +563,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>SQNR and number of bits</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">\(\nu\) bits give \(N=2^\nu\) levels in \([-x_{\max},x_{\max}]\)</div><div class="m">\[ \Delta=\frac{2x_{\max}}{N}=\frac{2x_{\max}}{2^\nu} \]</div></div>
-        <div class="step"><div class="why">Take into (5)</div><div class="m">\[ D=\frac{\Delta^2}{12}=\frac{4x_{\max}^2}{12\cdot\cssId{b-q}{4^\nu}}=\frac{x_{\max}^2}{3\cdot 4^\nu} \]</div></div>
-        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{E[X^2]}{D}=3\cdot 4^\nu\,\frac{E[X^2]}{x_{\max}^2} \]</div></div>
-        <div class="step"><div class="why">In decibels, each factor becomes a term</div><div class="m">\[ \begin{aligned}\text{SQNR}_{\text{dB}}=\ &amp;\cssId{b-t1}{10\log_{10}3}+\cssId{b-t2}{10\,\nu\log_{10}4}\\ &amp;+\cssId{b-t3}{10\log_{10}\frac{E[X^2]}{x_{\max}^2}}\end{aligned} \]</div></div>
-        <div class="step"><div class="why">With \(10\log_{10}3=4.77\) and \(10\log_{10}4=6.02\)</div><div class="m">\[ \boxed{\begin{aligned}\text{SQNR}_{\text{dB}}\approx\ &amp;4.77+6.02\,\nu\\ &amp;+10\log_{10}\frac{E[X^2]}{x_{\max}^2}\end{aligned}} \tag{6}\]</div></div>
-        <div class="step txt">Each extra bit halves \(\Delta\), divides the noise power by 4 and gains \(6\) dB.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="2-bit and 3-bit quantizers over the same range and their errors"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px">
+        <div class="step"><div class="why">\(\nu\) bits give \(N=2^\nu\) levels in \([-x_{\max},x_{\max}]\)</div><div class="m" style="max-width:850px">\[ \Delta=\frac{2x_{\max}}{N}=\cssId{b-d}{\frac{2x_{\max}}{2^\nu}} \]</div></div>
+        <div class="step"><div class="why">Take into (5)</div><div class="m" style="max-width:850px">\[ D=\frac{\Delta^2}{12}=\frac{1}{12}\cssId{b-d2}{\left(\frac{2x_{\max}}{2^\nu}\right)^2} \]</div></div>
+        <div class="step"><div class="why">\((2^\nu)^2=4^\nu\)</div><div class="m" style="max-width:850px">\[ D=\cssId{b-q}{\frac{4x_{\max}^2}{12\cdot 4^\nu}}=\cssId{b-D}{\frac{x_{\max}^2}{3\cdot 4^\nu}} \]</div></div>
+        <div class="step"><div class="why">Take into (4)</div><div class="m" style="max-width:850px">\[ \text{SQNR}=\frac{E[X^2]}{D}=\cssId{b-s}{3\cdot 4^\nu\,\frac{E[X^2]}{x_{\max}^2}} \]</div></div>
+        <div class="step"><div class="why">In decibels, each factor becomes a term; the last one depends only on the signal</div><div class="m" style="max-width:850px">\[ \text{SQNR}_{\text{dB}}=\cssId{b-sum}{\cssId{b-t1}{10\log_{10}3}+\cssId{b-t2}{10\,\nu\log_{10}4}+\cssId{b-t3}{10\log_{10}\frac{E[X^2]}{x_{\max}^2}}} \]</div></div>
+        <div class="step"><div class="why">With \(10\log_{10}3=4.77\) and \(10\log_{10}4=6.02\)</div><div class="m" style="max-width:850px">\[ \boxed{\begin{aligned}\text{SQNR}_{\text{dB}}\approx\ &\cssId{b-v1}{4.77}+\cssId{b-v2}{6.02\,\nu}\\ &+10\log_{10}\frac{E[X^2]}{x_{\max}^2}\end{aligned}} \tag{6} \]</div></div>
+        <div class="step txt" style="max-width:840px">Each extra bit halves \(\Delta\), divides the noise power by 4 and gains \(6\) dB.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="2-bit and 3-bit quantizers over the same range and their errors"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="b-q">\((2^\nu)^2=4^\nu\)</div>
-  <div class="note" data-on="4" data-to="b-t1">\(4.77\) dB</div>
-  <div class="note" data-on="4" data-to="b-t2">\(6.02\,\nu\) dB</div>
-  <div class="note" data-on="4" data-to="b-t3">depends only on the signal</div>
+  <div class="link" data-on="2" data-from="b-d" data-to="b-d2">take into (5)</div>
+  <div class="link" data-on="3" data-from="b-d2" data-to="b-q">(2^ν)² = 4^ν</div>
+  <div class="link" data-on="4" data-from="b-D" data-to="b-s">take into (4): divide by D</div>
+  <div class="link" data-on="5" data-from="b-s" data-to="b-sum">log of a product: sum of terms</div>
+  <div class="link" data-on="6" data-from="b-t1" data-to="b-v1">4.77</div>
+  <div class="link" data-on="6" data-from="b-t2" data-to="b-v2">10 log₁₀4 = 6.02</div>
+  <div class="note" data-on="5" data-to="b-t3">depends only on the signal</div>
   <aside class="notes"></aside>
 </section>
 
@@ -584,20 +591,20 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Two typical signals</h2><div class="sub">Sinusoid and Gaussian · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Sinusoid of amplitude \(A=x_{\max}\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{A^2/2}{A^2}=\frac{1}{2} \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \begin{aligned}&amp;10\log_{10}\tfrac12=-3.01\\ &amp;4.77-3.01+6.02\,\nu={\color{#003B5C}1.76+6.02\,\nu}\end{aligned} \]</div></div>
-        <div class="step"><div class="why">Gaussian with \(x_{\max}=4\sigma\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{\sigma^2}{16\sigma^2}=\frac{1}{16} \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \begin{aligned}&amp;10\log_{10}\tfrac1{16}=-12.04\\ &amp;4.77-12.04+6.02\,\nu={\color{#B03A2E}6.02\,\nu-7.27}\end{aligned} \]</div></div>
-        <div class="step txt">CD audio, \(\nu=16\): a full-scale sinusoid gives \(1.76+96.3\approx 98\) dB.</div>
-        <div class="step txt">Telephony, \(\nu=8\): the Gaussian gives only \(41\) dB, because the range needs headroom for the peaks.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the sinusoid and the Gaussian"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Sinusoid of amplitude \(A=x_{\max}\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{A^2/2}{A^2}=\cssId{tp-s}{\frac{1}{2}} \]</div></div>
+        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\underbrace{10\log_{10}\cssId{tp-s2}{\tfrac12}}_{-3.01}={\color{#003B5C}1.76+6.02\,\nu} \]</div></div>
+        <div class="step"><div class="why">Gaussian with \(x_{\max}=4\sigma\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{\sigma^2}{16\sigma^2}=\cssId{tp-g}{\frac{1}{16}} \]</div></div>
+        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\underbrace{10\log_{10}\cssId{tp-g2}{\tfrac1{16}}}_{-12.04}={\color{#B03A2E}6.02\,\nu-7.27} \]</div></div>
+        <div class="step txt" style="max-width:840px">CD audio, \(\nu=16\): a full-scale sinusoid gives \(1.76+96.3\approx 98\) dB.</div>
+        <div class="step txt" style="max-width:840px">Telephony, \(\nu=8\): the Gaussian gives only \(41\) dB, because the range needs headroom for the peaks.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the sinusoid and the Gaussian"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="tp-s" data-to="tp-s2">take into (6)</div>
+  <div class="link" data-on="4" data-from="tp-g" data-to="tp-g2">take into (6)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -667,23 +674,25 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Boundary condition</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">\(a_k\) appears in two terms of (3)</div><div class="m">\[ \begin{aligned} D=\cdots&amp;+\int_{a_{k-1}}^{\cssId{fr-sup}{a_k}}(x-\hat x_k)^2 f_X(x)\,dx\\ &amp;+\int_{\cssId{fr-inf}{a_k}}^{a_{k+1}}(x-\hat x_{k+1})^2 f_X(x)\,dx+\cdots \end{aligned} \]</div></div>
-        <div class="step"><div class="why">Differentiate with respect to \(a_k\)</div><div class="m">\[ \begin{aligned}\frac{\partial D}{\partial a_k}&amp;=\cssId{fr-d1}{(a_k-\hat x_k)^2 f_X(a_k)}\\ &amp;\quad-(a_k-\hat x_{k+1})^2 f_X(a_k)=0\end{aligned} \]</div></div>
-        <div class="step"><div class="why">\(f_X(a_k)&gt;0\) cancels</div><div class="m">\[ (a_k-\hat x_k)^2=(a_k-\hat x_{k+1})^2 \]</div></div>
-        <div class="step"><div class="why">Square root of both sides</div><div class="m">\[ a_k-\hat x_k=\cssId{fr-sg}{-(a_k-\hat x_{k+1})} \]</div></div>
-        <div class="step"><div class="why">Solve for \(a_k\): each sample goes to the nearest level</div><div class="m">\[ \boxed{\ a_k=\frac{\hat x_k+\hat x_{k+1}}{2}\ } \tag{7}\]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Two neighboring levels, the boundary and the squared errors"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">\(a_k\) appears in two terms of (3): upper limit of \(\mathcal R_k\) and lower limit of \(\mathcal R_{k+1}\)</div><div class="m" style="max-width:850px">\[ D=\cdots+\int_{a_{k-1}}^{\cssId{fr-sup}{a_k}}\cssId{fr-i1}{(x-\hat x_k)^2 f_X(x)}\,dx+\int_{\cssId{fr-inf}{a_k}}^{a_{k+1}}\cssId{fr-i2}{(x-\hat x_{k+1})^2 f_X(x)}\,dx+\cdots \]</div></div>
+        <div class="step"><div class="why">Differentiate with respect to \(a_k\): fundamental theorem of calculus, integrand at the limit, with a \(-\) sign at the lower limit</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-d1}{(a_k-\hat x_k)^2 f_X(a_k)}\cssId{fr-d2}{-(a_k-\hat x_{k+1})^2 f_X(a_k)}=0 \]</div></div>
+        <div class="step"><div class="why">\(f_X(a_k)&gt;0\) cancels</div><div class="m" style="max-width:850px">\[ (a_k-\hat x_k)^2=\cssId{fr-r}{(a_k-\hat x_{k+1})^2} \]</div></div>
+        <div class="step"><div class="why">Square root of both sides: \(\hat x_k&lt;a_k&lt;\hat x_{k+1}\) gives opposite signs</div><div class="m" style="max-width:850px">\[ a_k-\hat x_k=\cssId{fr-sg}{-(a_k-\hat x_{k+1})} \]</div></div>
+        <div class="step"><div class="why">Open the parentheses and collect the \(a_k\) terms</div><div class="m" style="max-width:850px">\[ \cssId{fr-2a}{2a_k=\hat x_k+\hat x_{k+1}} \]</div></div>
+        <div class="step"><div class="why">Solve for \(a_k\): each sample goes to the nearest level</div><div class="m" style="max-width:850px">\[ \boxed{\ \cssId{fr-a}{a_k=\frac{\hat x_k+\hat x_{k+1}}{2}}\ } \tag{7} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Two neighboring levels, the boundary and the squared errors"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="fr-sup">upper limit of \(\mathcal R_k\)</div>
-  <div class="note" data-on="1" data-to="fr-inf">lower limit of \(\mathcal R_{k+1}\)</div>
-  <div class="note" data-on="2" data-to="fr-d1" style="max-width:520px">fundamental theorem of calculus: integrand at the limit, with a \(-\) sign at the lower limit</div>
-  <div class="note" data-on="4" data-to="fr-sg">\(\hat x_k&lt;a_k&lt;\hat x_{k+1}\): opposite signs</div>
+  <div class="link" data-on="2" data-from="fr-i1" data-to="fr-d1">integrand at x = aₖ</div>
+  <div class="link" data-on="2" data-from="fr-i2" data-to="fr-d2">lower limit: sign −</div>
+  <div class="link" data-on="3" data-from="fr-d2" data-to="fr-r">f(aₖ) > 0 cancels; move to the right</div>
+  <div class="link" data-on="4" data-from="fr-r" data-to="fr-sg">root: x̂ₖ < aₖ < x̂ₖ₊₁, opposite signs</div>
+  <div class="link" data-on="5" data-from="fr-sg" data-to="fr-2a">open the parentheses, collect aₖ</div>
+  <div class="link" data-on="6" data-from="fr-2a" data-to="fr-a">÷ 2</div>
+  <div class="note" data-on="1" data-to="fr-sup fr-inf">\(a_k\): upper limit of \(\mathcal R_k\) and lower limit of \(\mathcal R_{k+1}\)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -692,20 +701,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Level condition</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">\(\hat x_k\) appears only in the term of \(\mathcal R_k\)</div><div class="m">\[ \frac{\partial D}{\partial\hat x_k}=\int_{a_{k-1}}^{a_k}\cssId{nv-der}{-2(x-\hat x_k)}\,f_X(x)\,dx=0 \]</div></div>
-        <div class="step"><div class="why">Divide by \(-2\) and split</div><div class="m">\[ \int_{a_{k-1}}^{a_k}x\,f_X(x)\,dx=\cssId{nv-cte}{\hat x_k}\int_{a_{k-1}}^{a_k}f_X(x)\,dx \]</div></div>
-        <div class="step"><div class="why">Solve for \(\hat x_k\)</div><div class="m">\[ \boxed{\ \hat x_k=\frac{\int_{\mathcal R_k}x\,f_X(x)\,dx}{\int_{\mathcal R_k}f_X(x)\,dx}=E[X\mid X\in\mathcal R_k]\ } \tag{8}\]</div></div>
-        <div class="step txt">The level is the centroid: the center of mass of the density in the region.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Region, density and distortion of the region as a function of the level"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">\(\hat x_k\) appears only in the term of \(\mathcal R_k\)</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\frac{\partial}{\partial\hat x_k}\int_{a_{k-1}}^{a_k}\cssId{nv-sq}{(x-\hat x_k)^2}\,f_X(x)\,dx \]</div></div>
+        <div class="step"><div class="why">Differentiate inside the integral and set to zero</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\int_{a_{k-1}}^{a_k}\cssId{nv-der}{-2(x-\hat x_k)}\,f_X(x)\,dx=0 \]</div></div>
+        <div class="step"><div class="why">Divide by \(-2\) and split; \(\hat x_k\) is constant and comes out of the integral</div><div class="m" style="max-width:850px">\[ \cssId{nv-sep}{\int_{a_{k-1}}^{a_k}x\,f_X(x)\,dx-\cssId{nv-cte}{\hat x_k}\int_{a_{k-1}}^{a_k}f_X(x)\,dx}=0 \]</div></div>
+        <div class="step"><div class="why">Solve for \(\hat x_k\)</div><div class="m" style="max-width:850px">\[ \boxed{\ \cssId{nv-x}{\hat x_k}=\frac{\int_{\mathcal R_k}x\,f_X(x)\,dx}{\int_{\mathcal R_k}f_X(x)\,dx}=E[X\mid X\in\mathcal R_k]\ } \tag{8} \]</div></div>
+        <div class="step txt" style="max-width:840px">The level is the centroid: the center of mass of the density in the region.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Region, density and distortion of the region as a function of the level"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="nv-der">derivative of \((x-\hat x_k)^2\) with respect to \(\hat x_k\)</div>
-  <div class="note" data-on="2" data-to="nv-cte">constant, comes out of the integral</div>
+  <div class="link" data-on="2" data-from="nv-sq" data-to="nv-der">derivative in x̂ₖ</div>
+  <div class="link" data-on="3" data-from="nv-der" data-to="nv-sep">÷ (−2), split the integral</div>
+  <div class="link" data-on="4" data-from="nv-cte" data-to="nv-x">solve for x̂ₖ</div>
+  <div class="note" data-on="3" data-to="nv-cte">constant, comes out of the integral</div>
   <aside class="notes"></aside>
 </section>
 
@@ -754,22 +764,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Lloyd-Max example</h2><div class="sub">Laplacian density · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Laplacian density, similar to that of speech</div><div class="m">\[ f_X(x)=\tfrac12\,e^{-|x|},\qquad E[X^2]=\cssId{lx-e2}{\int_0^\infty x^2e^{-x}\,dx}=2 \]</div></div>
+    <div class="deriv board" style="gap:16px">
+        <div class="step"><div class="why">Laplacian density, similar to that of speech</div><div class="m">\[ f_X(x)=\cssId{lx-f}{\tfrac12\,e^{-|x|}} \]</div></div>
+        <div class="step"><div class="why">Power: the density is even, double the positive side; \(\int_0^\infty x^n e^{-x}dx=n!\)</div><div class="m">\[ E[X^2]=2\int_0^\infty x^2\,\cssId{lx-f2}{\tfrac12e^{-x}}\,dx=\underbrace{\int_0^\infty x^2e^{-x}\,dx}_{=\,2!}=2 \]</div></div>
         <div class="step"><div class="why">\(N=4\) levels; by symmetry three numbers are enough</div><div class="m">\[ \text{boundaries } 0,\ \pm a\qquad\text{levels } \pm\hat x_1,\ \pm\hat x_2 \]</div></div>
-        <div class="step"><div class="why">Starting point: the uniform one with \(\Delta=1\)</div><div class="m">\[ \hat x_1=0.5,\quad \hat x_2=1.5,\quad a=1 \]</div></div>
-        <div class="step"><div class="why">Take into (3), doubling the positive side</div><div class="m">\[ \begin{aligned} D&amp;=2\Big[\cssId{lx-in}{\int_0^1(x-0.5)^2\tfrac12e^{-x}dx}\\ &amp;\qquad+\cssId{lx-out}{\int_1^\infty(x-1.5)^2\tfrac12e^{-x}dx}\Big]\\ &amp;=2\,[\,0.0272+0.2299\,]=0.514 \end{aligned} \]</div></div>
-        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{2}{0.514}=3.89\ \to\ 5.90\ \text{dB} \]</div></div>
-        <div class="step txt" style="font-size:20px">The density falls quickly: the outer region, from \(a\) to \(\infty\), is long and its level at \(1.5\) seems too close to the center.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="Laplacian density with the regions and levels of the 4-level quantizer"></canvas><div class="figcap"></div></div>
-      </div>
+        <div class="step"><div class="why">Starting point: the uniform one with \(\Delta=1\)</div><div class="m">\[ \cssId{lx-v1}{\hat x_1=0.5},\quad \cssId{lx-v2}{\hat x_2=1.5},\quad a=1 \]</div></div>
+        <div class="step"><div class="why">Take into (3), doubling the positive side</div><div class="m">\[ D=2\Big[\cssId{lx-in}{\int_0^1(x-0.5)^2\tfrac12e^{-x}dx}+\cssId{lx-out}{\int_1^\infty(x-1.5)^2\tfrac12e^{-x}dx}\Big] \]</div></div>
+        <div class="step"><div class="why">Integrate each term: the tail carries almost all of it</div><div class="m">\[ D=2\,[\,\cssId{lx-n1}{0.0272}+\cssId{lx-n2}{0.2299}\,]=\cssId{lx-D}{0.514} \]</div></div>
+        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{2}{\cssId{lx-D2}{0.514}}=3.89\ \to\ 5.90\ \text{dB} \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:840px">The density falls quickly: the outer region, from \(a\) to \(\infty\), is long and its level at \(1.5\) seems too close to the center.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Laplacian density with the regions and levels of the 4-level quantizer"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="lx-e2">\(\int_0^\infty x^n e^{-x}dx=n!\)</div>
-  <div class="note" data-on="4" data-to="lx-out">the tail carries almost all of it</div>
+  <div class="link" data-on="2" data-from="lx-f" data-to="lx-f2">even: double the side x ≥ 0</div>
+  <div class="link" data-on="5" data-from="lx-v1" data-to="lx-in">inner region</div>
+  <div class="link" data-on="5" data-from="lx-v2" data-to="lx-out">outer region</div>
+  <div class="link" data-on="6" data-from="lx-in" data-to="lx-n1">integrate</div>
+  <div class="link" data-on="6" data-from="lx-out" data-to="lx-n2">the tail carries almost all</div>
+  <div class="link" data-on="7" data-from="lx-D" data-to="lx-D2">take into (4)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -778,24 +792,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Centroids of the Laplacian</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Outer region, from \(a\) to \(\infty\), in (8); the \(\tfrac12\) cancels</div><div class="m">\[ \hat x_2=\frac{\int_a^\infty x\,e^{-x}\,dx}{\int_a^\infty e^{-x}\,dx} \]</div></div>
-        <div class="step"><div class="why">Integrate by parts</div><div class="m">\[ \hat x_2=\frac{\cssId{ce-num}{(a+1)\,e^{-a}}}{e^{-a}} \]</div></div>
-        <div class="step"><div class="why">Cancel \(e^{-a}\)</div><div class="m">\[ \hat x_2=\cssId{ce-x2}{a+1} \tag{9}\]</div></div>
-        <div class="step"><div class="why">Inner region, from \(0\) to \(a\)</div><div class="m">\[ \hat x_1=\frac{\int_0^a x\,e^{-x}\,dx}{\int_0^a e^{-x}\,dx} \]</div></div>
-        <div class="step"><div class="why">Same antiderivative</div><div class="m">\[ \hat x_1=\frac{\cssId{ce-n1}{1-(a+1)\,e^{-a}}}{\cssId{ce-d1}{1-e^{-a}}} \tag{10}\]</div></div>
-        <div class="step txt" style="font-size:20px">Together with the boundary at the midpoint, \(a=(\hat x_1+\hat x_2)/2\), these are the three formulas of the iteration.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="Positive half of the Laplacian with the inner and outer regions and their centroids"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:14px">
+        <div class="step"><div class="why">Outer region, from \(a\) to \(\infty\), in (8); the \(\tfrac12\) cancels</div><div class="m" style="max-width:850px">\[ \hat x_2=\cssId{ce-f1}{\frac{\int_a^\infty x\,e^{-x}\,dx}{\int_a^\infty e^{-x}\,dx}} \]</div></div>
+        <div class="step"><div class="why">Antiderivatives; in the numerator, by parts: \(\int x e^{-x}dx=-(x+1)e^{-x}\)</div><div class="m" style="max-width:850px">\[ \hat x_2=\cssId{ce-f2}{\frac{\big[-(x+1)\,e^{-x}\big]_a^\infty}{\big[-e^{-x}\big]_a^\infty}} \]</div></div>
+        <div class="step"><div class="why">As \(x\to\infty\) the antiderivatives go to zero; the limit \(a\) remains</div><div class="m" style="max-width:850px">\[ \hat x_2=\cssId{ce-f3}{\frac{(a+1)\,e^{-a}}{e^{-a}}} \]</div></div>
+        <div class="step"><div class="why">Cancel \(e^{-a}\): the exponential tail is memoryless</div><div class="m" style="max-width:850px">\[ \hat x_2=\cssId{ce-x2}{a+1} \tag{9} \]</div></div>
+        <div class="step"><div class="why">Inner region, from \(0\) to \(a\)</div><div class="m" style="max-width:850px">\[ \hat x_1=\cssId{cf-f1}{\frac{\int_0^a x\,e^{-x}\,dx}{\int_0^a e^{-x}\,dx}} \]</div></div>
+        <div class="step"><div class="why">Same antiderivatives</div><div class="m" style="max-width:850px">\[ \hat x_1=\cssId{cf-f2}{\frac{\big[-(x+1)\,e^{-x}\big]_0^a}{\big[-e^{-x}\big]_0^a}} \]</div></div>
+        <div class="step"><div class="why">Value at \(a\) minus value at \(0\)</div><div class="m" style="max-width:850px">\[ \hat x_1=\cssId{cf-x1}{\frac{1-(a+1)\,e^{-a}}{1-e^{-a}}} \tag{10} \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:840px">Together with the boundary at the midpoint, \(a=(\hat x_1+\hat x_2)/2\), these are the three formulas of the iteration.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Positive half of the Laplacian with the inner and outer regions and their centroids"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ce-num">by parts: \(\int x e^{-x}dx=-(x+1)e^{-x}\)</div>
-  <div class="note" data-on="3" data-to="ce-x2">the exponential tail is memoryless: the centroid always sits \(1\) beyond \(a\)</div>
-  <div class="note" data-on="5" data-to="ce-n1" style="left:560px; top:418px">\(\big[-(x+1)e^{-x}\big]_0^a\)</div>
-  <div class="note" data-on="5" data-to="ce-d1" style="left:560px; top:500px">\(\big[-e^{-x}\big]_0^a\)</div>
+  <div class="link" data-on="2" data-from="ce-f1" data-to="ce-f2">by parts: ∫x e⁻ˣdx = −(x+1)e⁻ˣ</div>
+  <div class="link" data-on="3" data-from="ce-f2" data-to="ce-f3">zero at ∞: x = a remains</div>
+  <div class="link" data-on="4" data-from="ce-f3" data-to="ce-x2">cancel e⁻ᵃ</div>
+  <div class="link" data-on="6" data-from="cf-f1" data-to="cf-f2">same antiderivatives</div>
+  <div class="link" data-on="7" data-from="cf-f2" data-to="cf-x1">x = a minus x = 0</div>
+  <div class="note" data-on="4" data-to="ce-x2">the exponential tail is memoryless: the centroid always sits \(1\) beyond \(a\)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -804,23 +820,24 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>First iteration</h2><div class="sub">Worked on the board · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt" style="font-size:20px">Starting from \(\hat x_1=0.5\) and \(\hat x_2=1.5\).</div>
-        <div class="step"><div class="why">Step 2, boundary at the midpoint, (7)</div><div class="m">\[ a=\frac{0.5+1.5}{2}=1 \]</div></div>
-        <div class="step"><div class="why">Step 3, outer centroid, (9)</div><div class="m">\[ \hat x_2=a+1=\cssId{it-n2}{2} \]</div></div>
-        <div class="step"><div class="why">Inner centroid, (10) with \(a=1\)</div><div class="m">\[ \hat x_1=\frac{1-2\,\cssId{it-e1}{e^{-1}}}{1-e^{-1}} \]</div></div>
-        <div class="step"><div class="why">Do the arithmetic</div><div class="m">\[ \hat x_1=\frac{1-0.736}{0.632}=\cssId{it-n1}{0.418} \]</div></div>
-        <div class="step txt" style="font-size:20px">Distortion with the new values: \(D=0.514\to 0.418\), or \(5.90\to 6.80\) dB.</div>
-        <div class="step txt" style="font-size:20px">The levels have changed, so the boundaries are no longer at the midpoints: new boundary at \(a=(0.418+2)/2=1.209\), and repeat.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="State of the quantizer before and after the first iteration"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:20px">
+        <div class="step txt" style="font-size:20px">Starting from \(\cssId{it-v}{\hat x_1=0.5\ \text{and}\ \hat x_2=1.5}\).</div>
+        <div class="step"><div class="why">Step 2, boundary at the midpoint, (7)</div><div class="m">\[ a=\cssId{it-m}{\frac{0.5+1.5}{2}}=\cssId{it-a}{1} \]</div></div>
+        <div class="step"><div class="why">Step 3, outer centroid, (9): the outer level rises from \(1.5\) to \(2\)</div><div class="m">\[ \hat x_2=\cssId{it-a2}{a}+1=\cssId{it-n2}{2} \]</div></div>
+        <div class="step"><div class="why">Inner centroid, (10) with \(a=1\)</div><div class="m">\[ \hat x_1=\frac{1-(a+1)\,e^{-a}}{1-e^{-a}}\bigg|_{a=1}=\cssId{it-e1}{\frac{1-\cssId{it-2}{2}\,e^{-1}}{1-e^{-1}}} \]</div></div>
+        <div class="step"><div class="why">Do the arithmetic with \(e^{-1}\approx 0.368\): the inner one drops closer to \(0\)</div><div class="m">\[ \hat x_1=\frac{1-\cssId{it-736}{0.736}}{0.632}=\cssId{it-n1}{0.418} \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:840px">Distortion with the new values: \(D=0.514\to 0.418\), or \(5.90\to 6.80\) dB.</div>
+        <div class="step txt" style="font-size:20px;max-width:840px">The levels have changed, so the boundaries are no longer at the midpoints: new boundary at \(a=(0.418+2)/2=1.209\), and repeat.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="State of the quantizer before and after the first iteration"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="it-v" data-to="it-m">(7): midpoint</div>
+  <div class="link" data-on="3" data-from="it-a" data-to="it-a2">(9) with a = 1</div>
+  <div class="link" data-on="4" data-from="it-n2" data-to="it-2">a + 1 = 2</div>
+  <div class="link" data-on="5" data-from="it-e1" data-to="it-736">e⁻¹ ≈ 0.368: 2e⁻¹ ≈ 0.736</div>
   <div class="note" data-on="3" data-to="it-n2">the outer level rises from \(1.5\) to \(2\)</div>
-  <div class="note" data-on="4" data-to="it-e1">\(e^{-1}\approx 0.368\)</div>
   <div class="note" data-on="5" data-to="it-n1">the inner one drops closer to \(0\)</div>
   <aside class="notes"></aside>
 </section>
@@ -940,24 +957,22 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercise 1: SQNR of an A/D converter</h2><div class="sub">12 bits, range \(\pm 2.5\) V · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">A \(\nu=12\)-bit A/D converter has a \(\pm 2.5\) V range and receives a sinusoid of amplitude \(A=1\) V. Compute \(\Delta\), \(D\) and the SQNR.</div>
-        <div class="step"><div class="why">\(2^{12}\) levels over \(2x_{\max}=5\) V</div><div class="m">\[ \Delta=\frac{2x_{\max}}{\cssId{xa-n}{2^{\nu}}}=\frac{5}{4096}=1.22\ \text{mV} \]</div></div>
-        <div class="step"><div class="why">Take into (5)</div><div class="m">\[ D=\frac{\Delta^2}{12}=\frac{(1.22\times10^{-3})^2}{12}=\cssId{xa-d2}{1.24\times10^{-7}\ \text{V}^2} \]</div></div>
-        <div class="step"><div class="why">Power of the sinusoid</div><div class="m">\[ E[X^2]=\cssId{xa-ps}{\frac{A^2}{2}}=\frac{1^2}{2}=0.5\ \text{V}^2 \]</div></div>
-        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{E[X^2]}{D}=\frac{0.5}{1.24\times10^{-7}}=4.03\times10^{6} \]</div></div>
-        <div class="step"><div class="why">In decibels</div><div class="m">\[ 10\log_{10}\!\big(\cssId{xa-db}{4.03\times10^{6}}\big)=\boxed{66.0\ \text{dB}} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="470" aria-label="1 V sinusoid in the 2.5 V range, zoomed staircase and quantization error"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px">
+        <div class="step txt" style="max-width:840px">A \(\nu=12\)-bit A/D converter has a \(\pm 2.5\) V range and receives a sinusoid of amplitude \(A=1\) V. Compute \(\Delta\), \(D\) and the SQNR.</div>
+        <div class="step"><div class="why">\(2^{12}\) levels over \(2x_{\max}=5\) V</div><div class="m">\[ \Delta=\frac{2x_{\max}}{2^{\nu}}=\frac{5}{\underbrace{4096}_{2^{12}}}=\cssId{xa-dl}{1.22\ \text{mV}} \]</div></div>
+        <div class="step"><div class="why">Take into (5)</div><div class="m">\[ D=\frac{\Delta^2}{12}=\frac{\cssId{xa-sq}{(1.22\times10^{-3})^2}}{12}=\frac{1.49\times10^{-6}}{12}=1.24\times10^{-7}\ \text{V}^2 \]</div></div>
+        <div class="step"><div class="why">Power of the sinusoid: the mean of \(\cos^2\) is \(1/2\)</div><div class="m">\[ E[X^2]=\cssId{xa-ps}{\frac{A^2}{2}}=\frac{1^2}{2}=\cssId{xa-p}{0.5}\ \text{V}^2 \]</div></div>
+        <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\frac{E[X^2]}{D}=\frac{\cssId{xa-p2}{0.5}}{1.24\times10^{-7}}=\cssId{xa-r}{4.03\times10^{6}} \]</div></div>
+        <div class="step"><div class="why">In decibels: \(10^6\) gives \(60\) dB and \(10\log_{10}4.03=6.05\) dB</div><div class="m">\[ 10\log_{10}\!\big(\cssId{xa-db}{4.03\times10^{6}}\big)=\underbrace{10\log_{10}10^6}_{60}+\underbrace{10\log_{10}4.03}_{6.05}=\boxed{66.0\ \text{dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="470" aria-label="1 V sinusoid in the 2.5 V range, zoomed staircase and quantization error"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="xa-n">\(2^{12}=4096\)</div>
-  <div class="note" data-on="3" data-to="xa-d2">\(1.49\times10^{-6}\) divided by \(12\)</div>
+  <div class="link" data-on="3" data-from="xa-dl" data-to="xa-sq">take into (5)</div>
+  <div class="link" data-on="5" data-from="xa-p" data-to="xa-p2">take into (4)</div>
+  <div class="link" data-on="6" data-from="xa-r" data-to="xa-db">in dB: log of a product</div>
   <div class="note" data-on="4" data-to="xa-ps">the mean of \(\cos^2\) is \(1/2\)</div>
-  <div class="note" data-on="6" data-to="xa-db">\(10^6\) gives \(60\) dB and \(10\log_{10}4.03=6.05\) dB</div>
   <aside class="notes"></aside>
 </section>
 
@@ -966,25 +981,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercise 1: amplitude backoff and number of bits</h2><div class="sub">The same 1 V sinusoid · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Full-scale sinusoid, \(A=x_{\max}=2.5\) V</div><div class="m">\[ \text{SQNR}=1.76+6.02\times 12=\cssId{xb-cheia}{74.0\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Amplitude backoff</div><div class="m">\[ 20\log_{10}\frac{A}{x_{\max}}=20\log_{10}\frac{1}{2.5}=\cssId{xb-rec}{-7.96\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Add the two terms</div><div class="m">\[ 74.0-7.96=\cssId{xb-conf}{66.0\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Target of \(80\) dB, take into (6)</div><div class="m">\[ 4.77+6.02\,\nu+\cssId{xb-fat}{10\log_{10}0.08}\ \ge 80 \]</div></div>
-        <div class="step"><div class="why">Solve for \(\nu\)</div><div class="m">\[ \nu\ge\frac{80-4.77\cssId{xb-mv}{+10.97}}{6.02}=\frac{86.20}{6.02}=14.32 \]</div></div>
-        <div class="step"><div class="why">\(\nu\) is an integer: round up</div><div class="m">\[ \boxed{\nu=15\ \text{bits}}\qquad \cssId{xb-ver}{4.77+90.30-10.97=84.1\ \text{dB}} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the full-scale sinusoid and the 1 V sinusoid, with the 80 dB target"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px">
+        <div class="step"><div class="why">Full-scale sinusoid, \(A=x_{\max}=2.5\) V</div><div class="m">\[ \text{SQNR}=1.76+6.02\times 12=74.0\ \text{dB} \]</div></div>
+        <div class="step"><div class="why">Amplitude backoff: \(D\) does not change, only the signal power drops</div><div class="m">\[ 20\log_{10}\frac{A}{x_{\max}}=20\log_{10}\frac{1}{2.5}=\cssId{xb-rec}{-7.96\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Add the two terms; matches the previous slide</div><div class="m">\[ \text{SQNR}=74.0\cssId{xb-rec2}{-7.96}=\cssId{xb-conf}{66.0\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Target of \(80\) dB, take into (6)</div><div class="m">\[ 4.77+6.02\,\nu+\cssId{xb-fat}{10\log_{10}\underbrace{\frac{0.5}{6.25}}_{E[X^2]/x_{\max}^2}}\ \ge 80 \]</div></div>
+        <div class="step"><div class="why">\(10\log_{10}0.08=-10.97\)</div><div class="m">\[ 4.77+6.02\,\nu\cssId{xb-mv}{-10.97}\ \ge 80 \]</div></div>
+        <div class="step"><div class="why">Solve for \(\nu\): \(-10.97\) moves to the right with its sign flipped</div><div class="m">\[ \nu\ge\frac{80-4.77\cssId{xb-mv2}{+10.97}}{6.02}=\frac{86.20}{6.02}=\cssId{xb-14}{14.32} \]</div></div>
+        <div class="step"><div class="why">\(\nu\) is an integer: round up; with \(14\) bits it would be \(78.1\) dB</div><div class="m">\[ \cssId{xb-15}{\boxed{\nu=15\ \text{bits}}}\qquad \cssId{xb-ver}{4.77+90.30-10.97=84.1\ \text{dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the full-scale sinusoid and the 1 V sinusoid, with the 80 dB target"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="xb-rec" data-to="xb-rec2">add in dB</div>
+  <div class="link" data-on="5" data-from="xb-fat" data-to="xb-mv">10 log₁₀0.08 = −10.97</div>
+  <div class="link" data-on="6" data-from="xb-mv" data-to="xb-mv2">move to the right: sign flipped</div>
+  <div class="link" data-on="7" data-from="xb-14" data-to="xb-15">integer: round up</div>
   <div class="note" data-on="2" data-to="xb-rec">\(D\) does not change, only the signal power drops</div>
   <div class="note" data-on="3" data-to="xb-conf">matches the previous slide</div>
-  <div class="note" data-on="4" data-to="xb-fat">\(E[X^2]/x_{\max}^2=0.5/6.25=0.08\)</div>
-  <div class="note" data-on="5" data-to="xb-mv">\(10\log_{10}0.08=-10.97\) moves to the right with its sign flipped</div>
-  <div class="note" data-on="6" data-to="xb-ver">with \(14\) bits it would be \(78.1\) dB, below the target</div>
+  <div class="note" data-on="7" data-to="xb-ver">with \(14\) bits it would be \(78.1\) dB, below the target</div>
   <aside class="notes"></aside>
 </section>
 
@@ -993,24 +1009,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercise 2: SQNR of other waveforms</h2><div class="sub">\(\nu=9\) bits, peak \(x_{\max}\) · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">A \(\nu=9\)-bit uniform quantizer has range \([-x_{\max},x_{\max}]\). A triangular wave and a square wave go in, both with peak \(x_{\max}\). What is the SQNR of each?</div>
-        <div class="step"><div class="why">Triangular: uniform amplitude over the range</div><div class="m">\[ E[X^2]=\int_{-x_{\max}}^{x_{\max}}x^2\,\cssId{xf-p}{\frac{1}{2x_{\max}}}\,dx \]</div></div>
-        <div class="step"><div class="why">Integrate</div><div class="m">\[ =\frac{1}{2x_{\max}}\cssId{xf-r}{\left[\frac{x^3}{3}\right]_{-x_{\max}}^{x_{\max}}}=\frac{x_{\max}^2}{3} \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ 4.77+6.02\times9+\cssId{xf-l3}{10\log_{10}\tfrac13}=\boxed{54.18\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Square: always \(\pm x_{\max}\)</div><div class="m">\[ E[X^2]=\cssId{xf-q}{x_{\max}^2}\ \Rightarrow\ 10\log_{10}1=0 \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ 4.77+54.18+0=\boxed{58.95\ \text{dB}} \]</div></div>
-        <div class="step txt">Full-scale sinusoid: \(1.76+54.18=55.94\) dB, between the two. Same range and same \(\Delta\): the more time the signal spends near the edges, the higher the power and the higher the SQNR.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="440" aria-label="Triangular wave and square wave with their amplitude densities"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:16px">
+        <div class="step txt" style="max-width:840px">A \(\nu=9\)-bit uniform quantizer has range \([-x_{\max},x_{\max}]\). A triangular wave and a square wave go in, both with peak \(x_{\max}\). What is the SQNR of each?</div>
+        <div class="step"><div class="why">Triangular: uniform amplitude over the range</div><div class="m">\[ E[X^2]=\int_{-x_{\max}}^{x_{\max}}\cssId{xf-x2}{x^2}\,\cssId{xf-p}{\frac{1}{2x_{\max}}}\,dx \]</div></div>
+        <div class="step"><div class="why">Integrate: \(x^3\) is odd, the two limits add</div><div class="m">\[ E[X^2]=\frac{1}{2x_{\max}}\underbrace{\cssId{xf-r}{\left[\frac{x^3}{3}\right]_{-x_{\max}}^{x_{\max}}}}_{2x_{\max}^3/3}=\cssId{xf-t}{\frac{x_{\max}^2}{3}} \]</div></div>
+        <div class="step"><div class="why">Take into (6): \(-4.77\) dB cancels the first term</div><div class="m">\[ 4.77+6.02\times9+\underbrace{10\log_{10}\cssId{xf-t2}{\tfrac13}}_{-4.77}=\boxed{54.18\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Square: always \(\pm x_{\max}\), half of the time at each level</div><div class="m">\[ E[X^2]=\cssId{xf-q}{x_{\max}^2}\ \Rightarrow\ 10\log_{10}1=\cssId{xf-0}{0} \]</div></div>
+        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ 4.77+54.18+\cssId{xf-02}{0}=\boxed{58.95\ \text{dB}} \]</div></div>
+        <div class="step txt" style="max-width:840px">Full-scale sinusoid: \(1.76+54.18=55.94\) dB, between the two. Same range and same \(\Delta\): the more time the signal spends near the edges, the higher the power and the higher the SQNR.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="Triangular wave and square wave with their amplitude densities"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="xf-x2" data-to="xf-r">antiderivative of x²</div>
+  <div class="link" data-on="4" data-from="xf-t" data-to="xf-t2">E[X²]/x²ₘₐₓ = 1/3</div>
+  <div class="link" data-on="6" data-from="xf-0" data-to="xf-02">take into (6)</div>
   <div class="note" data-on="2" data-to="xf-p">the ramp spends the same time in every amplitude band</div>
-  <div class="note" data-on="3" data-to="xf-r">\(\frac{x_{\max}^3}{3}-\frac{-x_{\max}^3}{3}=\frac{2x_{\max}^3}{3}\)</div>
-  <div class="note" data-on="4" data-to="xf-l3">\(-4.77\) dB cancels the first term</div>
   <div class="note" data-on="5" data-to="xf-q">half of the time at each level</div>
   <aside class="notes"></aside>
 </section>
@@ -1475,7 +1490,7 @@ const FIGS = {
       "Overload: for |x| > 80 the level stays at ±70 and the error grows as a straight line."][s - 1];
   },
   // ---------- 2. distorção ----------
-  dist(ctx, w, h, s) {
+  dist(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 3, 4, 5, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), sg = 20, Qx = (x) => 10 * qex(x / 10), e2 = (x) => (x - Qx(x)) ** 2, f = (x) => gpdf(x / sg) / sg;
     const h1 = h * 0.42;
     const A = frame(w, h, { xmin: -95, xmax: 98, ymin: 0, ymax: 140, ml: 16, mr: 20, mt: 26, mb: 12, top: 0, h: h1 });
@@ -1502,7 +1517,7 @@ const FIGS = {
       "One term of (3) per region: the area of each colored strip.", "D is the total area under the red curve, to be compared with the power E[X²].", "SQNR: signal power divided by the red area."][s - 1];
   },
   // ---------- 2. exemplo gaussiano ----------
-  gauss(ctx, w, h, s) {
+  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.36;
     const A = frame(w, h, { xmin: -160, xmax: 170, ymin: 0, ymax: 3, ml: 20, mr: 20, mt: 22, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: -4.3, xmax: 4.5, ymin: 0, ymax: 0.47, ml: 20, mr: 20, mt: 30, mb: 30, top: h1, h: h - h1 });
@@ -1577,7 +1592,7 @@ const FIGS = {
       "The difference between the two values is Δ²/12.", "D is the red area: Δ²/12.", "With Δ = 20: 33.3, almost the exact value of the example."][s - 1];
   },
   // ---------- 2. bits ----------
-  bits(ctx, w, h, s) {
+  bits(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 2, 3, 4, 5, 6][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.58;
     const A = frame(w, h, { xmin: -1.25, xmax: 1.3, ymin: -1.1, ymax: 1.15, ml: 16, mr: 20, mt: 22, mb: 10, top: 0, h: h1 });
     const B = frame(w, h, { xmin: -1.25, xmax: 1.3, ymin: -0.3, ymax: 0.32, ml: 16, mr: 20, mt: 22, mb: 22, top: h1, h: h - h1 });
@@ -1654,7 +1669,7 @@ const FIGS = {
     return ["Uniform, Δ = σ: boundaries in gray, levels in blue.", "Optimal with 8 levels: boundaries ±0.501, ±1.050, ±1.748 and levels ±0.245, ±0.756, ±1.344, ±2.152.", "Optimal with 8 levels, with the boundaries of the uniform one dashed."][s - 1];
   },
   // ---------- 3. fronteiras ----------
-  fronteiras(ctx, w, h, s) {
+  fronteiras(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.5, xa = 0.756, xb = 1.344, a = s >= 5 ? 1.05 : 1.3;
     const A = frame(w, h, { xmin: 0.25, xmax: 2.1, ymin: 0, ymax: 0.43, ml: 16, mr: 16, mt: 20, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: 0.25, xmax: 2.1, ymin: 0, ymax: 0.62, ml: 16, mr: 16, mt: 22, mb: 30, top: h1, h: h - h1 });
@@ -1688,7 +1703,7 @@ const FIGS = {
       "a_k = (0.756 + 1.344)/2 = 1.050, the boundary in Table 7.2."][s - 1];
   },
   // ---------- 3. níveis ----------
-  niveis(ctx, w, h, s, t) {
+  niveis(ctx, w, h, s, t) { s = s < 0 ? -s : ([0, 1, 2, 2, 3, 4][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.5, l = 1.05, u = 1.748;
     const [i0, i1, i2] = DENS.g.I(l, u), cst = i1 / i0, Dk = (x) => i2 - 2 * x * i1 + x * x * i0;
     const cc = s >= 3 ? cst : cst + 0.38 * Math.sin(0.9 * t);
@@ -1717,7 +1732,7 @@ const FIGS = {
       "Minimum at x̂_k = " + fmtc(cst, 3) + ": the centroid of the region [1.050, 1.748].", "The centroid, 1.344, lies to the left of the middle, 1.399: the density weighs more on the left."][s - 1];
   },
   // ---------- 4. exemplo laplaciano ----------
-  lmex(ctx, w, h, s) {
+  lmex(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 1, 2, 3, 4, 4, 5, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), { X, Y } = frame(w, h, { xmin: -4.7, xmax: 5.0, ymin: 0, ymax: 0.62, ml: 16, mr: 16, mt: 24, mb: 40, top: 0 });
     if (s >= 3) lapState(ctx, X, Y, 1, 0.5, 1.5);
     else if (s === 2) { for (const v of [-1, 0, 1]) line(ctx, X(v), Y(0), X(v), Y(0.55), v ? OR : c.M, 2.4); txt(ctx, "a", X(1), Y(0.55) - 12, { c: OR, size: 18, italic: true, align: "center" }); txt(ctx, "−a", X(-1), Y(0.55) - 12, { c: OR, size: 18, italic: true, align: "center" }); }
@@ -1729,7 +1744,7 @@ const FIGS = {
       "Terms of D/2: almost everything comes from the outer region.", "The outer level, at 1.5, is close to the start of the outer region."][s - 1];
   },
   // ---------- 4. centroides ----------
-  centroides(ctx, w, h, s, t) {
+  centroides(ctx, w, h, s, t) { s = s < 0 ? -s : ([0, 1, 2, 2, 3, 4, 4, 5, 6][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), a = 1.4 + 0.8 * Math.sin(0.7 * t), { X, Y } = frame(w, h, { xmin: -0.2, xmax: 5.4, ymin: 0, ymax: 0.56, ml: 16, mr: 16, mt: 24, mb: 40, top: 0 });
     const x2 = a + 1, x1 = (1 - (a + 1) * Math.exp(-a)) / (1 - Math.exp(-a));
     fillUnder(ctx, X, Y, lpdf, a, 5.1, tint(c.P, 0.2));
@@ -1854,7 +1869,7 @@ const FIGS = {
     }
     return XL.capA[Math.min(s, XL.capA.length) - 1];
   },
-  exadb(ctx, w, h, s) {
+  exadb(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5, 6][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), { X, Y } = frame(w, h, { xmin: 7.5, xmax: 16.5, ymin: 40, ymax: 100, ml: 54, mr: 16, mt: 14, mb: 42, top: 0 });
     for (let v = 40; v <= 100; v += 10) { line(ctx, X(7.5), Y(v), X(16.5), Y(v), c.GR, 1); txt(ctx, String(v), X(7.5) - 8, Y(v), { size: 14, c: c.M, align: "right" }); }
     for (let v = 8; v <= 16; v++) { line(ctx, X(v), Y(40), X(v), Y(100), c.GR, 1); txt(ctx, String(v), X(v), Y(40) + 14, { size: 14, c: c.M, align: "center" }); }
@@ -2101,14 +2116,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
