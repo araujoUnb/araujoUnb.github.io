@@ -1114,19 +1114,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício 2: projeto do equalizador</h2><div class="sub">\(W=20\) kHz, \(f_s=192\) kHz · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="deriv board" style="gap:20px">
+    <div class="deriv board" style="gap:16px">
       <div class="step txt">Projeto: depois do segurador, a cadeia deve deixar só um atraso em \(|f|\le W\) e zerar as réplicas.</div>
       <div class="step"><div class="why">Meta: ganho plano e fase linear na banda</div><div class="m">\[ \cssId{eq-h}{H(f)}\,H_{eq}(f)=T_s\,e^{-j\pi fT_s},\qquad |f|\le W \]</div></div>
       <div class="step"><div class="why">Divide pelo \(H(f)\) do segurador; \(T_s\) e a fase cancelam</div><div class="m">\[ H_{eq}(f)=\frac{{\color{#9a9a9a}{T_s\,e^{-j\pi fT_s}}}}{\cssId{eq-h2}{{\color{#9a9a9a}{T_s}}\operatorname{sinc}(fT_s)\,{\color{#9a9a9a}{e^{-j\pi fT_s}}}}}=\cssId{eq-inv}{\frac{1}{\operatorname{sinc}(fT_s)}} \]</div></div>
+      <div class="step"><div class="why">Onde o sinc zera, \(1/\operatorname{sinc}\) diverge; na banda ele não zera</div><div class="m">\[ \cssId{eq-zero}{\operatorname{sinc}(fT_s)=0\iff f=kf_s,\;k\ne 0\qquad\Rightarrow\qquad |f|\le W=20&lt;192:\ \operatorname{sinc}(fT_s)\ge 0{,}9822} \]</div></div>
       <div class="step"><div class="why">Para \(u\) pequeno, \(\sin u\approx u-u^3/6\)</div><div class="m">\[ \frac{1}{\operatorname{sinc}(fT_s)}=\frac{\pi fT_s}{\cssId{eq-sin}{\sin(\pi fT_s)}}\approx\cssId{eq-tay}{1+\frac{(\pi fT_s)^2}{6}} \]</div></div>
       <div class="step"><div class="why">Em \(f=W\): \(\pi WT_s=\pi\cdot 20/192=0{,}3272\)</div><div class="m">\[ H_{eq}(W)\approx 1+\frac{(0{,}3272)^2}{6}=1+\frac{0{,}1071}{6}=1+0{,}0178=\cssId{eq-res}{\boxed{1{,}018}} \tag{14} \]</div></div>
       <div class="step txt">O equalizador é um reforço suave que cresce com \(f^2\): no máximo \(+0{,}16\) dB em \(W\).</div>
     </div>
   </div>
   <div class="link" data-on="3" data-from="eq-h" data-to="eq-h2">divide por H(f)</div>
-  <div class="link" data-on="4" data-from="eq-inv" data-to="eq-sin">sen u ≈ u − u³/6</div>
-  <div class="link" data-on="5" data-from="eq-tay" data-to="eq-res">f = W</div>
-  <div class="note" data-on="5" data-to="eq-res">confere: 1/0,9822 = 1,018</div>
+  <div class="link" data-on="5" data-from="eq-inv" data-to="eq-sin">sen u ≈ u − u³/6</div>
+  <div class="link" data-on="6" data-from="eq-tay" data-to="eq-res">f = W</div>
+  <div class="note" data-on="6" data-to="eq-res">confere: 1/0,9822 = 1,018</div>
+  <div class="note" data-on="4-4" data-to="eq-zero">por isso só se inverte na banda; fora dela \(H_{eq}=0\), nunca \(1/\operatorname{sinc}\)</div>
   <aside class="notes"></aside>
 </section>
 <section class="slide" id="exeq2" data-sec="5 Exercício 2 · projeto do equalizador" data-fig="exeq2">
@@ -1827,16 +1829,17 @@ function figAntiAlias(ctx, w, h, s) {
 }
 const EQL = {"f": "f em kHz", "zoh": "segurador |sinc(fT_s)|", "eq": "equalizador", "tot": "cadeia: plana até W", "tr": "transição = W_G = 152 kHz", "rep": "réplica"};
 function figEq(ctx, w, h, s) {
-  const c = C(), B = tbox(40, 34, w - 190, h - 90, 0, 200, 0, 1.25), Ts = 1 / 192, W = 20, fs = 192;
+  const c = C(), B = tbox(40, 34, w - 190, h - 90, 0, 200, 0, 3.2), Ts = 1 / 192, W = 20, fs = 192;
   const sn = (f) => { const u = Math.PI * f * Ts; return u === 0 ? 1 : Math.abs(Math.sin(u) / u); };
   const heq = (f) => (f <= W ? 1 / sn(f) : f >= fs - W ? 0 : (1 / sn(W)) * (fs - W - f) / (fs - 2 * W));
-  if (s >= 3) { rectFill(ctx, B, W, fs - W, 0, 1.2, tint(c.G, 0.08)); txt(ctx, EQL.tr, B.X((W + fs - W) / 2), B.Y(1.2) + 14, { c: c.G, align: "center", size: 17 }); }
+  if (s >= 3) { rectFill(ctx, B, W, fs - W, 0, 3.1, tint(c.G, 0.08)); txt(ctx, EQL.tr, B.X((W + fs - W) / 2), B.Y(3.1) + 14, { c: c.G, align: "center", size: 17 }); }
   taxis(ctx, B, EQL.f);
   ftick(ctx, B, 0, "0", { italic: false }); ftick(ctx, B, W, "W = 20", { italic: false }); ftick(ctx, B, fs - W, "172", { italic: false }); ftick(ctx, B, fs, "192", { italic: false });
   trace(ctx, B, sn, c.P, 2.6, null, 500, 200, 0); txt(ctx, EQL.zoh, B.X(100), B.Y(sn(100)) - 22, { c: c.P, size: 17 });
   clipB(ctx, B, () => trifill(ctx, B, fs, W, 0.35, c.M, 0.12, 1.4)); txt(ctx, EQL.rep, B.X(fs), B.Y(0.35) - 12, { c: c.M, size: 16, align: "center" });
   if (s >= 2) {
-    trace(ctx, B, heq, c.R, 2.6, [8, 5], 500, fs - W, 0); txt(ctx, EQL.eq, B.X(60), B.Y(heq(60)) + 20, { c: c.R, size: 17 });
+    clipB(ctx, B, () => trace(ctx, B, (f) => 1 / sn(f), c.M, 2, [3, 4], 600, 191, W)); line(ctx, B.X(fs), B.y, B.X(fs), B.Y(0), c.M, 1.2, [6, 4]); txt(ctx, "1/sinc diverge em f_s", B.X(fs) - 8, B.Y(2.6), { c: c.M, size: 16, align: "right" });
+    trace(ctx, B, heq, c.R, 2.6, [8, 5], 500, fs - W, 0); txt(ctx, EQL.eq, B.X(60), B.Y(heq(60)) + 18, { c: c.R, size: 17 });
     trace(ctx, B, (f) => sn(f) * heq(f), c.G, 3, null, 500, fs - W, 0); txt(ctx, EQL.tot, B.X(2), B.Y(1) - 16, { c: c.G, size: 17 });
   }
   return null;
