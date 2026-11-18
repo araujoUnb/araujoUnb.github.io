@@ -836,30 +836,61 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" id="antialias" data-sec="4 Aliasing · anti-aliasing filter" data-fig="antialias">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Anti-aliasing filter</h2><div class="sub">In practice · press → to advance</div><div class="bar"></div></div>
+  <div class="body" style="gap:6px">
+    <div class="fig"><canvas data-figcanvas height="330" aria-label="Real spectrum without a band limit, overlapping replicas and the effect of the anti-aliasing filter"></canvas></div>
+    <div class="deriv board" style="gap:14px">
+      <div class="step txt">In practice, no signal is strictly band-limited: the spectrum decays but never reaches zero.</div>
+      <div class="step"><div class="why">Eq. (5) inside \(|f|&lt;f_s/2\): the tails of the neighboring replicas fall into the band</div><div class="m">\[ X_\delta(f)=\frac{1}{T_s}\Big[\,X(f)+\cssId{aa-tail}{\underbrace{\cr{X(f-f_s)+X(f+f_s)+\cdots}}_{\ne\,0\text{ in }|f|&lt;f_s/2}}\Big] \]</div></div>
+      <div class="step txt">Solution: a low-pass filter before the sampler, the anti-aliasing filter, zeroes \(X(f)\) above \(W\). Only then is the signal sampled, with \(f_s&gt;2W\).</div>
+      <div class="step txt">What was above \(W\) is lost, but losing it is better than having it folded into the band. A real filter needs a transition band: that is the guard band, next.</div>
+    </div>
+  </div>
+  <div class="note" data-on="2-2" data-to="aa-tail">aliasing: the tails fold into the band and no filter can separate them afterwards</div>
+  <aside class="notes"></aside>
+</section>
+
 <section class="slide" id="guarda" data-sec="4 Guard band · telephony" data-fig="guarda">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Guard band</h2><div class="sub">Example · press → to advance</div><div class="bar"></div></div>
   <div class="body" style="gap:6px">
-    <div class="fig"><canvas data-figcanvas height="210" aria-label="Replicas of voice sampled at 8 kHz and the guard band"></canvas></div>
-    <div class="deriv board" style="gap:16px">
+    <div class="fig"><canvas data-figcanvas height="300" aria-label="Replicas of voice sampled at 8 kHz, the edges W, the guard band and f_s"></canvas></div>
+    <div class="deriv board" style="gap:14px">
       <div class="solo">
         <div class="step txt">Telephony: voice limited to \(W=3.4\) kHz and sampled at \(f_s=8\) kHz, above the Nyquist rate.</div>
-        <div class="step txt">Between \(W\) and \(f_s-W\) there is an empty band, the guard band \(W_G=f_s-2W\).</div>
+        <div class="step txt">Between \(W\) and \(f_s-W\) there is an empty band: the guard band \(W_G\).</div>
       </div>
+      <div class="step"><div class="why">Each edge takes \(W\): the spectrum's edge at 0 and the replica's edge at \(f_s\)</div><div class="m">\[ \cssId{bg-a}{W}+\cssId{bg-b}{W}=\cssId{bg-2w}{2W} \]</div></div>
+      <div class="step"><div class="why">From 0 to \(f_s\), what is left after the two edges is the guard band</div><div class="m">\[ \cssId{bg-wg0}{W_G}=\cssId{bg-fs1}{f_s}-\cssId{bg-2w2}{2W} \]</div></div>
       <div class="step txt">A real filter does not cut vertically. The guard band leaves room for the transition between the passband and the stopband.</div>
+    </div>
+  </div>
+  <div class="link" data-on="4" data-from="bg-2w" data-to="bg-2w2">add the two edges</div>
+  <div class="note" data-on="4" data-to="bg-wg0">what is left of fₛ</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="guarda2" data-sec="4 Guard band · telephony" data-fig="guarda2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Guard band</h2><div class="sub">Example, continued · press → to advance</div><div class="bar"></div></div>
+  <div class="body" style="gap:6px">
+    <div class="fig"><canvas data-figcanvas height="230" aria-label="Replicas of voice sampled at 8 kHz, the edges W, the guard band and f_s"></canvas></div>
+    <div class="deriv board" style="gap:12px">
       <div class="step txt">Which \(f_s\) guarantees a guard band of \(1200\) Hz for \(W=3400\) Hz?</div>
-      <div class="step"><div class="why">Guard band</div><div class="m">\[ W_G=\cssId{bg-fs0}{f_s}-2W \]</div></div>
+      <div class="step"><div class="why">Guard band, from the previous slide</div><div class="m">\[ W_G=\cssId{bg-fs0}{f_s}-2W \]</div></div>
       <div class="step"><div class="why">Solve for \(f_s\)</div><div class="m">\[ \cssId{bg-fs}{f_s}=\cssId{bg-nyq}{2W}+\cssId{bg-wg}{W_G} \]</div></div>
       <div class="step"><div class="why">Substitute \(W=3400\) Hz and \(W_G=1200\) Hz</div><div class="m">\[ f_s=\cssId{bg-sum}{\cssId{bg-n2}{2\times 3400}+\cssId{bg-w2}{1200}} \]</div></div>
       <div class="step"><div class="why">\(6800+1200\)</div><div class="m">\[ f_s=\cssId{bg-res}{\boxed{8000\text{ Hz}}} \tag{13} \]</div></div>
     </div>
   </div>
-  <div class="link" data-on="6" data-from="bg-fs0" data-to="bg-fs">solve for fₛ</div>
-  <div class="note" data-on="6" data-to="bg-nyq">Nyquist rate</div>
-  <div class="note" data-on="6" data-to="bg-wg">margin for the filter</div>
-  <div class="link" data-on="7" data-from="bg-nyq" data-to="bg-n2">W = 3400 Hz, W_G = 1200 Hz</div>
-  <div class="link" data-on="7" data-from="bg-wg" data-to="bg-w2"></div>
-  <div class="link" data-on="8" data-from="bg-sum" data-to="bg-res">6800 + 1200</div>
+  <div class="link" data-on="3" data-from="bg-fs0" data-to="bg-fs">solve for fₛ</div>
+  <div class="note" data-on="3" data-to="bg-nyq">Nyquist rate</div>
+  <div class="note" data-on="3" data-to="bg-wg">margin for the filter</div>
+  <div class="link" data-on="4" data-from="bg-nyq" data-to="bg-n2">W = 3400 Hz, W_G = 1200 Hz</div>
+  <div class="link" data-on="4" data-from="bg-wg" data-to="bg-w2"></div>
+  <div class="link" data-on="5" data-from="bg-sum" data-to="bg-res">6800 + 1200</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1705,12 +1736,72 @@ function figAlias(ctx, w, h, s) {
   return null;
 }
 
+const AAL = {"x": "X(f): decays, never zero", "xd": "X_δ(f): replicas at kf_s", "al": "aliasing", "aa": "anti-aliasing", "xf": "filter output", "ok": "separated replicas", "f": "f"};
+function figAntiAlias(ctx, w, h, s) {
+  // espectro sem limite de banda: X(f) = e^{-|f|/a}; f_s = 5, W = 2 em unidades arbitrárias
+  const c = C(), fs = 5, Wc = 2, X = (f) => Math.exp(-Math.abs(f) / 1.8);
+  const B1 = tbox(40, 30, w - 190, 105, -11, 11, 0, 1.15), B2 = tbox(40, 195, w - 190, 105, -11, 11, 0, 1.15);
+  const filt = s >= 3, Xe = (f) => (filt ? (Math.abs(f) <= Wc ? X(f) : 0) : X(f));
+  const area = (B, g, col, a, b) => { ctx.save(); ctx.beginPath(); ctx.moveTo(B.X(a), B.Y(0)); for (let i = 0; i <= 400; i++) { const f = a + (b - a) * i / 400; ctx.lineTo(B.X(f), B.Y(g(f))); } ctx.lineTo(B.X(b), B.Y(0)); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); ctx.restore(); };
+  // painel de cima: X(f) e, a partir do passo 3, o filtro
+  taxis(ctx, B1, AAL.f); ftick(ctx, B1, 0, "0", { italic: false });
+  area(B1, X, tint(c.P, filt ? 0.08 : 0.18), -11, 11); trace(ctx, B1, X, filt ? tint(c.P, 0.45) : c.P, 2.4);
+  txt(ctx, AAL.x, B1.X(filt ? 4.2 : 1.2), filt ? B1.Y(0.42) : B1.Y(1) - 4, { c: c.P, size: 18 });
+  if (filt) {
+    area(B1, Xe, tint(c.G, 0.3), -Wc, Wc); trace(ctx, B1, Xe, c.G, 2.6, null, 800);
+    poly(ctx, B1, [[-11, 0], [-Wc, 0], [-Wc, 1.08], [Wc, 1.08], [Wc, 0], [11, 0]], c.G, 2.4, [8, 5]);
+    txt(ctx, AAL.aa, B1.X(Wc) + 10, B1.Y(1.08) + 2, { c: c.G, size: 18 });
+    ftick(ctx, B1, -Wc, "−W"); ftick(ctx, B1, Wc, "W");
+    txt(ctx, AAL.xf, B1.X(-Wc) - 10, B1.Y(0.55), { c: c.G, size: 18, align: "right", italic: true });
+  }
+  if (s < 2) return null;
+  // painel de baixo: réplicas
+  taxis(ctx, B2, AAL.f);
+  for (const k of [-2, -1, 0, 1, 2]) ftick(ctx, B2, k * fs, k === 0 ? "0" : (k === 1 ? "f_s" : k === -1 ? "−f_s" : (k > 0 ? "2f_s" : "−2f_s")));
+  clipB(ctx, B2, () => {
+    for (let k = -3; k <= 3; k++) { const g = (f) => Xe(f - k * fs); area(B2, g, tint(c.P, 0.12), k * fs - 6, k * fs + 6); trace(ctx, B2, g, c.P, 2, null, 800); }
+    if (!filt) {
+      const tails = (f) => { let v = 0; for (let k = -3; k <= 3; k++) if (k) v += X(f - k * fs); return v; };
+      area(B2, tails, tint(c.R, 0.55), -fs / 2, fs / 2); trace(ctx, B2, tails, c.R, 2.4, null, 400, fs / 2, -fs / 2);
+    }
+  });
+  line(ctx, B2.X(-fs / 2), B2.y, B2.X(-fs / 2), B2.Y(0), c.M, 1.2, [5, 4]); line(ctx, B2.X(fs / 2), B2.y, B2.X(fs / 2), B2.Y(0), c.M, 1.2, [5, 4]);
+  txt(ctx, "f_s/2", B2.X(fs / 2) + 6, B2.y + 6, { c: c.M, size: 16, italic: true });
+  txt(ctx, AAL.xd, B2.x, B2.y - 8, { c: c.P, size: 18 });
+  if (!filt) txt(ctx, AAL.al, B2.X(-1.5), B2.Y(0.62), { c: c.R, size: 18, align: "center" });
+  else txt(ctx, AAL.ok, B2.X(0), B2.y - 8, { c: c.G, size: 18, align: "center" });
+  return null;
+}
+function hbrace(ctx, x1, x2, y, col, d = 11) {
+  // chave horizontal com a ponta para baixo, de x1 a x2, começando em y
+  const m = (x1 + x2) / 2, r = Math.min(d, (x2 - x1) / 4);
+  ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x1, y);
+  ctx.quadraticCurveTo(x1, y + d / 2, x1 + r, y + d / 2); ctx.lineTo(m - r, y + d / 2); ctx.quadraticCurveTo(m, y + d / 2, m, y + d);
+  ctx.quadraticCurveTo(m, y + d / 2, m + r, y + d / 2); ctx.lineTo(x2 - r, y + d / 2); ctx.quadraticCurveTo(x2, y + d / 2, x2, y); ctx.stroke(); ctx.restore();
+}
 function figGuarda(ctx, w, h, s) {
-  const c = C(), B = tbox(30, 34, w - 160, h - 90, -12, 12, 0, 1.5);
+  const c = C(), B = tbox(30, 30, w - 160, 120, -12, 12, 0, 1.5), y0 = B.Y(0);
   if (s >= 2) { rectFill(ctx, B, 3.4, 4.6, 0, 1.3, tint(c.G, 0.25)); rectFill(ctx, B, -4.6, -3.4, 0, 1.3, tint(c.G, 0.25)); txt(ctx, "W_G", B.X(4), B.Y(1.3) - 12, { c: c.G, align: "center", italic: true }); }
   taxis(ctx, B, "f in kHz"); replicas(ctx, B, 8, 3.4, 1, c.P);
-  ftick(ctx, B, 3.4, "3.4", { italic: false }); ftick(ctx, B, 4.6, "4.6", { italic: false }); ftick(ctx, B, 8, "8", { italic: false });
+  ftick(ctx, B, 0, "0", { italic: false }); ftick(ctx, B, 3.4, "3.4", { italic: false }); ftick(ctx, B, 4.6, "4.6", { italic: false }); ftick(ctx, B, 8, "8", { italic: false });
   if (s >= 3) {
+    const yb = y0 + 34;
+    hbrace(ctx, B.X(0), B.X(3.4), yb, c.P); hbrace(ctx, B.X(4.6), B.X(8), yb, c.P);
+    txt(ctx, "W", B.X(1.7), yb + 26, { c: c.P, align: "center", italic: true, size: 19 });
+    txt(ctx, "W", B.X(6.3), yb + 26, { c: c.P, align: "center", italic: true, size: 19 });
+    if (h >= 280) txt(ctx, "W + W = 2W", B.X(-1), yb + 26, { c: c.P, align: "right", italic: true, size: 19 });
+  }
+  if (s >= 4) {
+    const yb = y0 + 34;
+    hbrace(ctx, B.X(3.4), B.X(4.6), yb, c.G);
+    txt(ctx, "W_G", B.X(4), yb + 26, { c: c.G, align: "center", italic: true, size: 19 });
+    if (h >= 280) {
+      const y2 = yb + 52;
+      hbrace(ctx, B.X(0), B.X(8), y2, c.R);
+      txt(ctx, "f_s = W + W_G + W", B.X(4), y2 + 28, { c: c.R, align: "center", italic: true, size: 19 });
+    }
+  }
+  if (s >= 5) {
     poly(ctx, B, [[-4.6, 0], [-3.4, 1.15], [3.4, 1.15], [4.6, 0]], c.R, 2.8, [8, 5]);
     txt(ctx, "real filter", B.X(-1.5), B.Y(1.15) - 13, { c: c.R, align: "center" });
   }
@@ -1888,7 +1979,7 @@ function figExZoh2(ctx, w, h, s) {
   return null;
 }
 
-const FIGS = { exzoh2b: (ctx, w, h, s, t) => figExZoh2(ctx, w, h, s + 5, t), exnyq2b: (ctx, w, h, s, t) => figExNyq2(ctx, w, h, s + 3, t), hfilt2: (ctx, w, h, s, t) => figH(ctx, w, h, s + 3, t), motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, replicas: figReplicas, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, guarda: figGuarda, exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
+const FIGS = { exzoh2b: (ctx, w, h, s, t) => figExZoh2(ctx, w, h, s + 5, t), exnyq2b: (ctx, w, h, s, t) => figExNyq2(ctx, w, h, s + 3, t), hfilt2: (ctx, w, h, s, t) => figH(ctx, w, h, s + 3, t), motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, replicas: figReplicas, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, antialias: figAntiAlias, guarda: figGuarda, guarda2: (ctx, w, h, s, t) => figGuarda(ctx, w, h, s + 4, t), exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
 
 // ---------- (c) instrumentos ----------
 const wFmt = (t) => t === 0 ? "0" : (fmtc(t, 0) + "W").replace("1W", "W");
