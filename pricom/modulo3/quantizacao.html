@@ -687,10 +687,27 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="solo">
       <div class="step txt">Uniforme: regiões iguais, como no Exemplo 7.2.1 com \(\Delta=\sigma\).</div>
       <div class="step txt">Não uniforme: regiões estreitas onde \(f_X\) é alta e largas nas bordas. Esse é o quantizador ótimo de 8 níveis para a gaussiana, tabela 7.2 do Proakis.</div>
-      <div class="step txt">Como achar as fronteiras \(a_k\) e os níveis \(\hat x_k\) que minimizam \(D\)? Derivando \(D\) em relação a cada um e igualando a zero.
+      <div class="step txt">Como achar as fronteiras \(a_k\) e os níveis \(\hat x_k\) que minimizam \(D\)? É um problema de otimização.
         \[ D=\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \tag{3}\]</div>
     </div>
   </div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="otim" data-sec="3 Lloyd-Max · problema de otimização">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Problema de otimização</h2><div class="sub">Quantizador ótimo · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:26px">
+        <div class="step txt">Quantizador ótimo: escolher as \(N-1\) fronteiras e os \(N\) níveis que tornam a distorção a menor possível.</div>
+        <div class="step"><div class="why">Minimiza (3) em \(2N-1\) variáveis, com \(a_0=-\infty\) e \(a_N=\infty\) fixos</div><div class="m">\[ \min_{\cssId{ot-a}{a_1,\,\dots,\,a_{N-1}},\ \cssId{ot-x}{\hat x_1,\,\dots,\,\hat x_N}}\ D=\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \]</div></div>
+        <div class="step txt">Como resolver? \(D\) é uma função suave das \(2N-1\) variáveis.</div>
+        <div class="step"><div class="why">No mínimo, a derivada em relação a cada variável de otimização é nula</div><div class="m">\[ \cssId{ot-da}{\frac{\partial D}{\partial a_k}=0,\quad k=1,\dots,N-1}\qquad\qquad \cssId{ot-dx}{\frac{\partial D}{\partial \hat x_k}=0,\quad k=1,\dots,N} \]</div></div>
+        <div class="step txt">São \(2N-1\) equações. Começamos pelas fronteiras \(a_k\).</div>
+    </div>
+  </div>
+  <div class="link" data-on="4" data-from="ot-a" data-to="ot-da">deriva em cada aₖ</div>
+  <div class="link" data-on="4" data-from="ot-x" data-to="ot-dx">deriva em cada x̂ₖ</div>
   <aside class="notes"></aside>
 </section>
 
@@ -699,9 +716,35 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Condição das fronteiras</h2><div class="sub">Dedução · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
+    <div class="deriv board" style="gap:16px">
+        <div class="step"><div class="why">\(a_k\) aparece em duas parcelas de (3): limite superior de \(\mathcal R_k\) e inferior de \(\mathcal R_{k+1}\)</div><div class="m" style="max-width:850px">\[ D=\cssId{fr-dots}{\cdots}+\int_{a_{k-1}}^{\cssId{fr-sup}{a_k}}\cssId{fr-i1}{(x-\hat x_k)^2 f_X(x)}\,dx+\int_{\cssId{fr-inf}{a_k}}^{a_{k+1}}\cssId{fr-i2}{(x-\hat x_{k+1})^2 f_X(x)}\,dx+\cdots \]</div></div>
+        <div class="step"><div class="why">Só as duas parcelas dependem de \(a_k\); chama o integrando de \(g_k(x)=(x-\hat x_k)^2 f_X(x)\)</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\frac{\partial}{\partial a_k}\int_{a_{k-1}}^{a_k}\cssId{fr-g1}{g_k(x)}\,dx+\cssId{fr-int2}{\frac{\partial}{\partial a_k}\int_{a_k}^{a_{k+1}}\cssId{fr-g2}{g_{k+1}(x)}\,dx} \]</div></div>
+        <div class="step"><div class="why">Troca os limites da segunda integral: \(\int_a^b=-\int_b^a\), e \(a_k\) passa a ser limite superior</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-t1}{\frac{\partial}{\partial a_k}\int_{a_{k-1}}^{a_k}g_k(x)\,dx}\cssId{fr-flip}{-\frac{\partial}{\partial a_k}\int_{a_{k+1}}^{a_k}g_{k+1}(x)\,dx} \]</div></div>
+        <div class="step"><div class="why">Teorema fundamental do cálculo: \(\frac{d}{du}\int_c^u g(x)\,dx=g(u)\)</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-ga}{g_k(a_k)}\cssId{fr-gb}{-\,g_{k+1}(a_k)} \]</div></div>
+        <div class="step"><div class="why">Substitui \(g_k\) e \(g_{k+1}\) em \(x=a_k\) e iguala a zero</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-d1}{(a_k-\hat x_k)^2 f_X(a_k)}\cssId{fr-d2}{-(a_k-\hat x_{k+1})^2 f_X(a_k)}=0 \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Dois níveis vizinhos, a fronteira e os erros quadráticos"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <div class="note" data-on="1" data-to="fr-sup fr-inf">\(a_k\): limite superior de \(\mathcal R_k\) e inferior de \(\mathcal R_{k+1}\)</div>
+  <div class="link" data-on="2" data-from="fr-i1" data-to="fr-g1">chama de gₖ</div>
+  <div class="link" data-on="2" data-from="fr-i2" data-to="fr-g2">chama de gₖ₊₁</div>
+  <div class="note" data-on="2" data-to="fr-dots">os termos \(\cdots\) não dependem de \(a_k\): derivada nula</div>
+  <div class="link" data-on="3" data-from="fr-int2" data-to="fr-flip">troca os limites: sinal −</div>
+  <div class="link" data-on="4" data-from="fr-t1" data-to="fr-ga">d/du ∫ᶜᵘ g = g(u)</div>
+  <div class="link" data-on="4" data-from="fr-flip" data-to="fr-gb"></div>
+  <div class="link" data-on="5" data-from="fr-ga" data-to="fr-d1">gₖ em x = aₖ</div>
+  <div class="link" data-on="5" data-from="fr-gb" data-to="fr-d2"></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="fronteiras2" data-sec="3 Lloyd-Max · condição das fronteiras, continuação" data-fig="fronteiras2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Condição das fronteiras</h2><div class="sub">Dedução, continuação · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
     <div class="deriv board" style="gap:22px">
-        <div class="step"><div class="why">\(a_k\) aparece em duas parcelas de (3): limite superior de \(\mathcal R_k\) e inferior de \(\mathcal R_{k+1}\)</div><div class="m" style="max-width:850px">\[ D=\cdots+\int_{a_{k-1}}^{\cssId{fr-sup}{a_k}}\cssId{fr-i1}{(x-\hat x_k)^2 f_X(x)}\,dx+\int_{\cssId{fr-inf}{a_k}}^{a_{k+1}}\cssId{fr-i2}{(x-\hat x_{k+1})^2 f_X(x)}\,dx+\cdots \]</div></div>
-        <div class="step"><div class="why">Deriva em \(a_k\): teorema fundamental do cálculo, integrando no limite, com sinal \(-\) no limite inferior</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-d1}{(a_k-\hat x_k)^2 f_X(a_k)}\cssId{fr-d2}{-(a_k-\hat x_{k+1})^2 f_X(a_k)}=0 \]</div></div>
+        <div class="step"><div class="why">Do slide anterior</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-e1}{(a_k-\hat x_k)^2 f_X(a_k)}\cssId{fr-e2}{-(a_k-\hat x_{k+1})^2 f_X(a_k)}=0 \]</div></div>
         <div class="step"><div class="why">\(f_X(a_k)&gt;0\) cancela</div><div class="m" style="max-width:850px">\[ (a_k-\hat x_k)^2=\cssId{fr-r}{(a_k-\hat x_{k+1})^2} \]</div></div>
         <div class="step"><div class="why">Raiz dos dois lados: \(\hat x_k&lt;a_k&lt;\hat x_{k+1}\) dá sinais opostos</div><div class="m" style="max-width:850px">\[ a_k-\hat x_k=\cssId{fr-sg}{-(a_k-\hat x_{k+1})} \]</div></div>
         <div class="step"><div class="why">Abre o parêntese e junta os \(a_k\)</div><div class="m" style="max-width:850px">\[ \cssId{fr-2a}{2a_k=\hat x_k+\hat x_{k+1}} \]</div></div>
@@ -711,13 +754,10 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="fig"><canvas data-figcanvas height="420" aria-label="Dois níveis vizinhos, a fronteira e os erros quadráticos"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="link" data-on="2" data-from="fr-i1" data-to="fr-d1">integrando em x = aₖ</div>
-  <div class="link" data-on="2" data-from="fr-i2" data-to="fr-d2">limite inferior: sinal −</div>
-  <div class="link" data-on="3" data-from="fr-d2" data-to="fr-r">f(aₖ) > 0 cancela; passa para a direita</div>
-  <div class="link" data-on="4" data-from="fr-r" data-to="fr-sg">raiz: x̂ₖ < aₖ < x̂ₖ₊₁, sinais opostos</div>
-  <div class="link" data-on="5" data-from="fr-sg" data-to="fr-2a">abre o parêntese, junta os aₖ</div>
-  <div class="link" data-on="6" data-from="fr-2a" data-to="fr-a">÷ 2</div>
-  <div class="note" data-on="1" data-to="fr-sup fr-inf">\(a_k\): limite superior de \(\mathcal R_k\) e inferior de \(\mathcal R_{k+1}\)</div>
+  <div class="link" data-on="2" data-from="fr-e2" data-to="fr-r">f(aₖ) > 0 cancela; passa para a direita</div>
+  <div class="link" data-on="3" data-from="fr-r" data-to="fr-sg">raiz: x̂ₖ < aₖ < x̂ₖ₊₁, sinais opostos</div>
+  <div class="link" data-on="4" data-from="fr-sg" data-to="fr-2a">abre o parêntese, junta os aₖ</div>
+  <div class="link" data-on="5" data-from="fr-2a" data-to="fr-a">÷ 2</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1738,7 +1778,8 @@ const FIGS = {
     return ["Uniforme, Δ = σ: fronteiras em cinza, níveis em azul.", "Ótimo de 8 níveis: fronteiras ±0,501, ±1,050, ±1,748 e níveis ±0,245, ±0,756, ±1,344, ±2,152.", "Ótimo de 8 níveis, com as fronteiras do uniforme tracejadas."][s - 1];
   },
   // ---------- 3. fronteiras ----------
-  fronteiras(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  fronteiras2(ctx, w, h, s, t) { return this.fronteiras(ctx, w, h, -([0, 2, 3, 4, 4, 5][s] || 5), t); },
+  fronteiras(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 2, 2, 2][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.5, xa = 0.756, xb = 1.344, a = s >= 5 ? 1.05 : 1.3;
     const A = frame(w, h, { xmin: 0.25, xmax: 2.1, ymin: 0, ymax: 0.43, ml: 16, mr: 16, mt: 20, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: 0.25, xmax: 2.1, ymin: 0, ymax: 0.62, ml: 16, mr: 16, mt: 22, mb: 30, top: h1, h: h - h1 });
