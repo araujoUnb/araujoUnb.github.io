@@ -65,14 +65,15 @@ COURSES = {
                      ("dft.html", "DFT e FFT", "DFT and FFT"),
                      ("banda_base_passante.html", "Banda básica e banda passante", "Baseband and passband"),
                  ]}),
-            ]),
-            ("modulo2", ("Módulo 2 — Modulações analógicas e ruído", "Module 2 — Analog modulation and noise"), [
+                # as aulas de AM são do Módulo 1, mas continuam publicadas em modulo2/ (endereços no SIGAA)
                 (("Modulação em amplitude", "Amplitude modulation"),
-                 {"html": "Modulo2/html/modulo2.html#3", "parts": [
+                 {"html": "Modulo1/html/modulo1.html#3", "dir": ("Modulo2/html", "modulo2"), "parts": [
                      ("am_convencional.html", "AM convencional", "Conventional AM"),
                      ("am_dsbsc.html", "AM DSB-SC", "AM DSB-SC"),
                      ("am_ssb_vsb.html", "AM SSB e VSB", "AM SSB and VSB"),
                  ]}),
+            ]),
+            ("modulo2", ("Módulo 2 — Modulação angular e ruído", "Module 2 — Angle modulation and noise"), [
                 (("Modulação angular", "Angle modulation"),
                  {"html": "Modulo2/html/modulo2.html#3", "parts": [
                      ("modulacao_angular.html", "Modulação angular (PM e FM)", "Angle modulation (PM and FM)"),
@@ -263,13 +264,16 @@ for name, c in COURSES.items():
                 row = names(pt, en, rel["pdf"]) + ' <span class="muted">(PDF)</span>'
             if files.get("parts"):  # an HTML deck split into one file per section
                 base = (src / files["html"].partition("#")[0]).parent
+                pdir = mdir
+                if "dir" in files:  # parts published in another module folder (fixed URLs)
+                    base, pdir = src / files["dir"][0], files["dir"][1]
                 items = []
                 for f, p, e in files["parts"]:
-                    copy_deck(base / f, dst / mdir / f, seen)
+                    copy_deck(base / f, dst / pdir / f, seen)
                     tw = (base / f).with_name(pathlib.Path(f).stem + ".en.html")
                     if tw.exists():  # English twin of the part (PriCom decks)
-                        copy_deck(tw, dst / mdir / tw.name, seen)
-                    items.append(f'        <li>{names(p, e, f"{mdir}/{f}", f"{mdir}/{tw.name}" if tw.exists() else None)}</li>')
+                        copy_deck(tw, dst / pdir / tw.name, seen)
+                    items.append(f'        <li>{names(p, e, f"{pdir}/{f}", f"{pdir}/{tw.name}" if tw.exists() else None)}</li>')
                 row += "\n      <ol>\n" + "\n".join(items) + "\n      </ol>\n    "
             rows.append(f"    <li>{row}</li>")
         sections.append(f'<h2>{html.escape(hpt)} <span class="sep">·</span> <span lang="en" class="en">{html.escape(hen)}</span></h2>\n'
