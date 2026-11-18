@@ -714,23 +714,51 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 
 <!-- ============ dois sinais típicos ============ -->
 <section class="slide" id="tipicos" data-sec="2 Distortion and SQNR · two typical signals" data-fig="tipicos">
+  <style>#tipicos .fig { position: relative; } #tipicos .figanchor { position: absolute; display: none; pointer-events: none; }</style>
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Two typical signals</h2><div class="sub">Sinusoid and Gaussian · press → to advance</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>Two typical signals</h2><div class="sub">Sinusoid · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="deriv board" style="gap:22px">
-        <div class="step"><div class="why">Sinusoid of amplitude \(A=x_{\max}\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{A^2/2}{A^2}=\cssId{tp-s}{\frac{1}{2}} \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\underbrace{10\log_{10}\cssId{tp-s2}{\tfrac12}}_{-3.01}={\color{#003B5C}1.76+6.02\,\nu} \]</div></div>
-        <div class="step"><div class="why">Gaussian with \(x_{\max}=4\sigma\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{\sigma^2}{16\sigma^2}=\cssId{tp-g}{\frac{1}{16}} \]</div></div>
-        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\underbrace{10\log_{10}\cssId{tp-g2}{\tfrac1{16}}}_{-12.04}={\color{#B03A2E}6.02\,\nu-7.27} \]</div></div>
-        <div class="step txt" style="max-width:840px">CD audio, \(\nu=16\): a full-scale sinusoid gives \(1.76+96.3\approx 98\) dB.</div>
-        <div class="step txt" style="max-width:840px">Telephony, \(\nu=8\): the Gaussian gives only \(41\) dB, because the range needs headroom for the peaks.</div>
+        <div class="step"><div class="why">Sinusoid of amplitude \(A=x_{\max}\) and period \(T\): the power is the mean of \(x^2\) over one period</div><div class="m">\[ E[X^2]=\frac1T\int_0^T A^2\cssId{tp-c}{\cos^2\!\big(\tfrac{2\pi t}{T}\big)}\,dt=\frac{A^2}{T}\int_0^T\cssId{tp-c2}{\Big[\cssId{tp-c3}{\tfrac12}+\cssId{tp-c4}{\tfrac12\cos\!\big(\tfrac{4\pi t}{T}\big)}\Big]}\,dt \]</div></div>
+        <div class="step"><div class="why">The constant part gives \(T/2\); the cosine integrates to zero over a whole period</div><div class="m">\[ E[X^2]=\frac{A^2}{T}\Big[\cssId{tp-h}{\frac T2}+\cssId{tp-z}{0}\Big]=\cssId{tp-p}{\frac{A^2}{2}} \]</div></div>
+        <div class="step"><div class="why">Divide by the square of the range, \(x_{\max}=A\)</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{\cssId{tp-p2}{A^2/2}}{A^2}=\cssId{tp-s}{\frac{1}{2}} \]</div></div>
+        <div class="step"><div class="why">Take into (6); \(10\log_{10}2=3.01\)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\underbrace{10\log_{10}\cssId{tp-s2}{\tfrac12}}_{-10\log_{10}2\,=\,-3.01}=\cssId{tp-sl}{{\color{#003B5C}1.76+6.02\,\nu}} \]</div></div>
+        <div class="step"><div class="why">CD audio, \(\nu=16\), on the blue line</div><div class="m">\[ \text{SQNR}_{\text{dB}}=1.76+6.02\times 16=1.76+96.32=\cssId{tp-cd}{98.1\ \text{dB}} \]</div></div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the sinusoid and the Gaussian"></canvas><div class="figcap"></div></div>
+      <div class="fig"><span class="figanchor" id="tp-fs"></span><span class="figanchor" id="tp-fcd"></span><canvas data-figcanvas height="440" aria-label="SQNR"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="link" data-on="2" data-from="tp-s" data-to="tp-s2">take into (6)</div>
-  <div class="link" data-on="4" data-from="tp-g" data-to="tp-g2">take into (6)</div>
+  <div class="link" data-on="1" data-from="tp-c" data-to="tp-c2">cos²θ = (1 + cos 2θ)/2</div>
+  <div class="link" data-on="2" data-from="tp-c3" data-to="tp-h">∫ ½ dt = T/2</div>
+  <div class="link" data-on="2" data-from="tp-c4" data-to="tp-z">whole period: 0</div>
+  <div class="link" data-on="3" data-from="tp-p" data-to="tp-p2">power</div>
+  <div class="link" data-on="4" data-from="tp-s" data-to="tp-s2">take into (6)</div>
+  <div class="link" data-on="4" data-from="tp-sl" data-to="tp-fs"></div>
+  <div class="link" data-on="5" data-from="tp-cd" data-to="tp-fcd"></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="tipicos2" data-sec="2 Distortion and SQNR · two typical signals, Gaussian" data-fig="tipicos2">
+  <style>#tipicos2 .fig { position: relative; } #tipicos2 .figanchor { position: absolute; display: none; pointer-events: none; }</style>
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Two typical signals</h2><div class="sub">Gaussian · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">Zero-mean Gaussian: \(E[X^2]=\sigma^2\); range \(x_{\max}=4\sigma\), exceeded only by rare peaks</div><div class="m">\[ \frac{E[X^2]}{x_{\max}^2}=\frac{\sigma^2}{(4\sigma)^2}=\frac{\sigma^2}{16\sigma^2}=\cssId{tp-g}{\frac1{16}} \]</div></div>
+        <div class="step"><div class="why">The logarithm: \(16=2^4\)</div><div class="m">\[ 10\log_{10}\cssId{tp-g2}{\tfrac1{16}}=-10\log_{10}2^4=-4\times 3.01=\cssId{tp-l}{-12.04} \]</div></div>
+        <div class="step"><div class="why">Take into (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu\cssId{tp-l2}{-12.04}=\cssId{tp-gl}{{\color{#B03A2E}6.02\,\nu-7.27}} \]</div></div>
+        <div class="step"><div class="why">Telephony, \(\nu=8\), on the red line</div><div class="m">\[ \text{SQNR}_{\text{dB}}=6.02\times 8-7.27=48.16-7.27=\cssId{tp-tel}{40.9\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Distance between the lines: the headroom for the peaks costs 9 dB</div><div class="m">\[ (1.76+6.02\,\nu)-(6.02\,\nu-7.27)=\cssId{tp-gap}{9.03\ \text{dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><span class="figanchor" id="tp-fg"></span><span class="figanchor" id="tp-ftel"></span><span class="figanchor" id="tp-fgap"></span><canvas data-figcanvas height="440" aria-label="SQNR"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="tp-g" data-to="tp-g2">log₁₀</div>
+  <div class="link" data-on="3" data-from="tp-l" data-to="tp-l2">take into (6)</div>
+  <div class="link" data-on="3" data-from="tp-gl" data-to="tp-fg"></div>
+  <div class="link" data-on="4" data-from="tp-tel" data-to="tp-ftel"></div>
   <aside class="notes"></aside>
 </section>
 
@@ -833,7 +861,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="link" data-on="2" data-from="fr-i2" data-to="fr-g2">call it gₖ₊₁</div>
   <div class="note" data-on="2" data-to="fr-dots">the \(\cdots\) terms do not depend on \(a_k\): zero derivative</div>
   <div class="link" data-on="3" data-from="fr-int2" data-to="fr-flip">swap the limits: sign −</div>
-  <div class="link" data-on="4" data-from="fr-t1" data-to="fr-ga">d/du ∫ᶜᵘ g = g(u)</div>
+  <div class="link" data-on="4" data-from="fr-t1" data-to="fr-ga"></div>
+  <div class="note" data-on="4" data-to="fr-ga fr-gb">Fundamental theorem of calculus: \(\displaystyle\frac{d}{du}\int_c^{u} g(x)\,dx=g(u)\). Differentiating with respect to the upper limit returns the integrand evaluated at that limit.</div>
   <div class="link" data-on="4" data-from="fr-flip" data-to="fr-gb"></div>
   <div class="link" data-on="5" data-from="fr-ga" data-to="fr-d1">gₖ at x = aₖ</div>
   <div class="link" data-on="5" data-from="fr-gb" data-to="fr-d2"></div>
@@ -1876,7 +1905,7 @@ const FIGS = {
       "Three terms in dB.", "6.02 dB per bit.", "One more bit: Δ ÷ 2, D ÷ 4, +6 dB."][s - 1];
   },
   // ---------- 2. dois sinais ----------
-  tipicos(ctx, w, h, s) {
+  tipF(ctx, w, h, o) {
     const c = C(), { X, Y } = frame(w, h, { xmin: 0, xmax: 17, ymin: 0, ymax: 105, ml: 54, mr: 16, mt: 14, mb: 42, top: 0 });
     for (let v = 0; v <= 100; v += 20) { line(ctx, X(0), Y(v), X(17), Y(v), c.GR, 1); txt(ctx, String(v), X(0) - 8, Y(v), { size: 14, c: c.M, align: "right" }); }
     for (let v = 2; v <= 16; v += 2) { line(ctx, X(v), Y(0), X(v), Y(105), c.GR, 1); txt(ctx, String(v), X(v), Y(0) + 14, { size: 14, c: c.M, align: "center" }); }
@@ -1886,12 +1915,19 @@ const FIGS = {
     const ser = (f, n0, col) => { const xs = range(n0, 16, 16 - n0 + 1); curve(ctx, xs, xs.map(f), X, Y, col, 2.6); xs.forEach((x) => dot(ctx, X(x), Y(f(x)), 3.5, col)); };
     ser((v) => 1.76 + 6.02 * v, 1, c.P);
     txt(ctx, "sinusoid", X(6), Y(1.76 + 6.02 * 6) - 18, { c: c.P, size: 17, align: "right" });
-    if (s >= 3) { ser((v) => 6.02 * v - 7.27, 2, c.R); txt(ctx, "Gaussian, 4σ", X(10.3), Y(6.02 * 10 - 7.27) + 18, { c: c.R, size: 17 }); }
-    if (s >= 5) { dot(ctx, X(16), Y(98.1), 7, c.P); txt(ctx, "98.1 dB", X(15.5), Y(98.1), { c: c.P, size: 17, align: "right" }); }
-    if (s >= 6) { dot(ctx, X(8), Y(40.9), 7, c.R); txt(ctx, "40.9 dB", X(8.4), Y(40.9) + 2, { c: c.R, size: 17, base: "top" }); }
-    return ["Full-scale sinusoid: 1.76 + 6.02ν.", "Full-scale sinusoid: 1.76 + 6.02ν.", "Gaussian with x_{max} = 4σ: 9 dB below the sinusoid.", "Gaussian: 6.02ν − 7.27.",
-      "CD, ν = 16: 98.1 dB.", "Telephony, ν = 8, Gaussian: 40.9 dB."][s - 1];
+    if (o.g) { ser((v) => 6.02 * v - 7.27, 2, c.R); txt(ctx, "Gaussian, 4σ", X(10.3), Y(6.02 * 10 - 7.27) + 18, { c: c.R, size: 17 }); }
+    if (o.cd) { dot(ctx, X(16), Y(98.1), 7, c.P); txt(ctx, "98.1 dB", X(15.5), Y(98.1), { c: c.P, size: 17, align: "right" }); }
+    if (o.tel) { dot(ctx, X(8), Y(40.9), 7, c.R); txt(ctx, "40.9 dB", X(8.4), Y(40.9) + 2, { c: c.R, size: 17, base: "top" }); }
+    figAnchor(ctx, w, "tp-fs", X(12) - 10, Y(1.76 + 6.02 * 12) - 10, 20, 20, true);
+    figAnchor(ctx, w, "tp-fcd", X(16) - 10, Y(98.1) - 10, 20, 20, !!o.cd);
+    figAnchor(ctx, w, "tp-fg", X(12) - 10, Y(6.02 * 12 - 7.27) - 10, 20, 20, !!o.g);
+    figAnchor(ctx, w, "tp-ftel", X(8) - 10, Y(40.9) - 10, 20, 20, !!o.tel);
+    if (o.gap) dimV(ctx, X(4), Y(1.76 + 6.02 * 4), Y(6.02 * 4 - 7.27), OR, "9 dB", { dx: -10, align: "right", size: 19 });
+    figAnchor(ctx, w, "tp-fgap", X(14) - 8, Y(6.02 * 14 - 3.5) - 10, 16, 20, !!o.gap);
+    return o.cap;
   },
+  tipicos(ctx, w, h, s, t) { s = s < 0 ? -s : s; return this.tipF(ctx, w, h, { cd: s >= 5, cap: ["Full-scale sinusoid: 1.76 + 6.02ν.", "Full-scale sinusoid: 1.76 + 6.02ν.", "Full-scale sinusoid: 1.76 + 6.02ν.", "Full-scale sinusoid: 1.76 + 6.02ν.", "CD, ν = 16: 98.1 dB."][s - 1] }); },
+  tipicos2(ctx, w, h, s, t) { s = s < 0 ? -s : s; return this.tipF(ctx, w, h, { g: true, cd: true, tel: s >= 4, gap: s >= 5, cap: ["Gaussian with x_{max} = 4σ.", "Gaussian with x_{max} = 4σ.", "Gaussian: 6.02ν − 7.27.", "Telephony, ν = 8, Gaussian: 40.9 dB.", "The lines are parallel, 9 dB apart."][s - 1] }); },
   // ---------- 3. escolha da faixa ----------
   faixa(ctx, w, h, s) {
     const c = C(), xm = s === 1 ? 1.5 : s === 2 ? 5 : 4, { X, Y } = frame(w, h, { xmin: -5.6, xmax: 5.9, ymin: 0, ymax: 0.47, ml: 16, mr: 16, mt: 34, mb: 34, top: 0 });
