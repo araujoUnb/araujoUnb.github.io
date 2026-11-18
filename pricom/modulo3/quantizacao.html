@@ -876,7 +876,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="deriv board" style="gap:22px">
         <div class="step"><div class="why">Do slide anterior</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial a_k}=\cssId{fr-e1}{(a_k-\hat x_k)^2 f_X(a_k)}\cssId{fr-e2}{-(a_k-\hat x_{k+1})^2 f_X(a_k)}=0 \]</div></div>
         <div class="step"><div class="why">\(f_X(a_k)&gt;0\) cancela</div><div class="m" style="max-width:850px">\[ (a_k-\hat x_k)^2=\cssId{fr-r}{(a_k-\hat x_{k+1})^2} \]</div></div>
-        <div class="step"><div class="why">Raiz dos dois lados: \(\hat x_k&lt;a_k&lt;\hat x_{k+1}\) dá sinais opostos</div><div class="m" style="max-width:850px">\[ a_k-\hat x_k=\cssId{fr-sg}{-(a_k-\hat x_{k+1})} \]</div></div>
+        <div class="step"><div class="why">Raiz dos dois lados: \(\sqrt{u^2}=|u|\), o que dá duas possibilidades de sinal</div><div class="m" style="max-width:850px">\[ \cssId{fr-abs}{|a_k-\hat x_k|=|a_k-\hat x_{k+1}|}\ \Rightarrow\ a_k-\hat x_k=\cssId{fr-pm}{\pm}(a_k-\hat x_{k+1}) \]</div></div>
+        <div class="step"><div class="why">Sinal \(+\): os \(a_k\) se cancelam e sobra \(\hat x_k=\hat x_{k+1}\), dois níveis iguais; descartada</div><div class="m" style="max-width:850px">\[ {\color[RGB]{154,154,154}{a_k-\hat x_k=\cssId{fr-p}{+(a_k-\hat x_{k+1})}\ \Rightarrow\ \hat x_k=\hat x_{k+1}}}\quad{\color[RGB]{154,154,154}{\text{descartada: níveis iguais}}} \]</div></div>
+        <div class="step"><div class="why">Sinal \(-\): é o que vale, porque \(\hat x_k&lt;a_k&lt;\hat x_{k+1}\) deixa os dois lados com sinais opostos</div><div class="m" style="max-width:850px">\[ \underbrace{a_k-\hat x_k}_{&gt;\,0}=\cssId{fr-sg}{-\underbrace{(a_k-\hat x_{k+1})}_{&lt;\,0}} \]</div></div>
         <div class="step"><div class="why">Abre o parêntese e junta os \(a_k\)</div><div class="m" style="max-width:850px">\[ \cssId{fr-2a}{2a_k=\hat x_k+\hat x_{k+1}} \]</div></div>
         <div class="step"><div class="why">Isola \(a_k\): cada amostra vai para o nível mais próximo</div><div class="m" style="max-width:850px">\[ \boxed{\ \cssId{fr-a}{a_k=\frac{\hat x_k+\hat x_{k+1}}{2}}\ } \tag{7} \]</div></div>
     </div>
@@ -885,32 +887,38 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     </div>
   </div>
   <div class="link" data-on="2" data-from="fr-e2" data-to="fr-r">f(aₖ) > 0 cancela; passa para a direita</div>
-  <div class="link" data-on="3" data-from="fr-r" data-to="fr-sg">raiz: x̂ₖ < aₖ < x̂ₖ₊₁, sinais opostos</div>
-  <div class="link" data-on="4" data-from="fr-sg" data-to="fr-2a">abre o parêntese, junta os aₖ</div>
-  <div class="link" data-on="5" data-from="fr-2a" data-to="fr-a">÷ 2</div>
+  <div class="link" data-on="3" data-from="fr-r" data-to="fr-abs">raiz: √(u²) = |u|</div>
+  <div class="link" data-on="4" data-from="fr-pm" data-to="fr-p">sinal +</div>
+  <div class="link" data-on="6" data-from="fr-sg" data-to="fr-2a">abre o parêntese, junta os aₖ</div>
+  <div class="link" data-on="7" data-from="fr-2a" data-to="fr-a">÷ 2</div>
   <aside class="notes"></aside>
 </section>
 
 <!-- ============ condição dos níveis ============ -->
 <section class="slide" id="niveis" data-sec="3 Lloyd-Max · condição dos níveis" data-fig="niveis">
+  <style>#niveis .fig { position: relative; } #niveis .figanchor { position: absolute; display: none; pointer-events: none; }</style>
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Condição dos níveis</h2><div class="sub">Dedução · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
     <div class="deriv board" style="gap:22px">
-        <div class="step"><div class="why">\(\hat x_k\) aparece só na parcela de \(\mathcal R_k\)</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\frac{\partial}{\partial\hat x_k}\int_{a_{k-1}}^{a_k}\cssId{nv-sq}{(x-\hat x_k)^2}\,f_X(x)\,dx \]</div></div>
-        <div class="step"><div class="why">Deriva dentro da integral e iguala a zero</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\int_{a_{k-1}}^{a_k}\cssId{nv-der}{-2(x-\hat x_k)}\,f_X(x)\,dx=0 \]</div></div>
+        <div class="step"><div class="why">\(\hat x_k\) aparece só na parcela de \(\mathcal R_k\)</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\frac{\partial}{\partial\hat x_k}\cssId{nv-int}{\int_{a_{k-1}}^{a_k}\cssId{nv-sq}{(x-\hat x_k)^2}\,\cssId{nv-f}{f_X(x)}\,dx} \]</div></div>
+        <div class="step"><div class="why">Deriva dentro da integral e iguala a zero</div><div class="m" style="max-width:850px">\[ \frac{\partial D}{\partial\hat x_k}=\int_{a_{k-1}}^{a_k}\cssId{nv-der}{-2(x-\hat x_k)}\,f_X(x)\,dx\cssId{nv-z}{=0} \]</div></div>
         <div class="step"><div class="why">Divide por \(-2\) e separa; \(\hat x_k\) é constante e sai da integral</div><div class="m" style="max-width:850px">\[ \cssId{nv-sep}{\int_{a_{k-1}}^{a_k}x\,f_X(x)\,dx-\cssId{nv-cte}{\hat x_k}\int_{a_{k-1}}^{a_k}f_X(x)\,dx}=0 \]</div></div>
         <div class="step"><div class="why">Isola \(\hat x_k\)</div><div class="m" style="max-width:850px">\[ \boxed{\ \cssId{nv-x}{\hat x_k}=\frac{\int_{\mathcal R_k}x\,f_X(x)\,dx}{\int_{\mathcal R_k}f_X(x)\,dx}=E[X\mid X\in\mathcal R_k]\ } \tag{8} \]</div></div>
         <div class="step txt" style="max-width:840px">O nível é o centroide: o centro de massa da densidade na região.</div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="420" aria-label="Região, densidade e distorção da região em função do nível"></canvas><div class="figcap"></div></div>
+      <div class="fig"><span class="figanchor" id="nv-ff"></span><span class="figanchor" id="nv-fc"></span><span class="figanchor" id="nv-fm"></span><span class="figanchor" id="nv-fcen"></span><canvas data-figcanvas height="420" aria-label="Região, densidade e distorção da região em função do nível"></canvas><div class="figcap"></div></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="nv-sq" data-to="nv-der">derivada em x̂ₖ</div>
   <div class="link" data-on="3" data-from="nv-der" data-to="nv-sep">÷ (−2), separa a integral</div>
   <div class="link" data-on="4" data-from="nv-cte" data-to="nv-x">isola x̂ₖ</div>
   <div class="note" data-on="3" data-to="nv-cte">constante, sai da integral</div>
+  <div class="link" data-on="1" data-from="nv-f" data-to="nv-ff"></div>
+  <div class="link" data-on="1" data-from="nv-int" data-to="nv-fc"></div>
+  <div class="link" data-on="4" data-from="nv-z" data-to="nv-fm"></div>
+  <div class="link" data-on="5" data-from="nv-x" data-to="nv-fcen"></div>
   <aside class="notes"></aside>
 </section>
 
@@ -1988,7 +1996,7 @@ const FIGS = {
     return ["Uniforme, Δ = σ: fronteiras em cinza, níveis em azul.", "Ótimo de 8 níveis: fronteiras ±0,501, ±1,050, ±1,748 e níveis ±0,245, ±0,756, ±1,344, ±2,152.", "Ótimo de 8 níveis, com as fronteiras do uniforme tracejadas."][s - 1];
   },
   // ---------- 3. fronteiras ----------
-  fronteiras2(ctx, w, h, s, t) { return this.fronteiras(ctx, w, h, -([0, 2, 3, 4, 4, 5][s] || 5), t); },
+  fronteiras2(ctx, w, h, s, t) { return this.fronteiras(ctx, w, h, -([0, 2, 3, 3, 3, 4, 4, 5][s] || 5), t); },
   fronteiras(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 2, 2, 2][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.5, xa = 0.756, xb = 1.344, a = s >= 5 ? 1.05 : 1.3;
     const A = frame(w, h, { xmin: 0.25, xmax: 2.1, ymin: 0, ymax: 0.43, ml: 16, mr: 16, mt: 20, mb: 30, top: 0, h: h1 });
@@ -2043,7 +2051,14 @@ const FIGS = {
     xAxis(ctx, B.X, B.Y, 0.9, 1.85, c.K, "x̂_k");
     tickX(ctx, B.X, B.Y, [l, u], (v) => fmtc(v, 3), c.M);
     fplot(ctx, B.X, B.Y, Dk, 0.94, 1.75, c.P, 2.6);
-    txt(ctx, "parcela de D da região", B.X(cst), B.Y(Dk(0.94) * 1.03), { c: c.P, size: 16, align: "center", base: "top" });
+    txt(ctx, "D_k(x̂_k) = ∫(x − x̂_k)^2 f_X(x) dx", B.X(cst), B.Y(Dk(0.94) * 1.03), { c: c.P, size: 17, align: "center", base: "top", italic: true });
+    txt(ctx, "parcela de D da região, função de x̂_k".replace(", função de", false ? ", as a function of" : ", função de"), B.X(cst), B.Y(Dk(0.94) * 1.03) + 22, { c: c.P, size: 15, align: "center", base: "top" });
+    txt(ctx, "densidade f_X(x)", A.X(1.85), A.Y(0.2), { c: c.K, size: 16 }); txt(ctx, "região R_k", A.X((l + u) / 2), A.Y(0.03), { c: OR, size: 15, align: "center", base: "bottom" });
+    figAnchor(ctx, w, "nv-ff", A.X(0.55) - 10, A.Y(gpdf(0.55)) - 10, 20, 20, true);
+    figAnchor(ctx, w, "nv-fc", B.X(1.62) - 10, B.Y(Dk(1.62)) - 10, 20, 20, true);
+    figAnchor(ctx, w, "nv-fm", B.X(cst) - 12, B.Y(Dk(cst)) - 12, 24, 24, s >= 3);
+    figAnchor(ctx, w, "nv-fcen", A.X(cst) - 10, A.Y(0) + 2, 20, 18, s >= 4);
+
     dot(ctx, B.X(cc), B.Y(Dk(cc)), 6.5, c.R);
     const sl = 2 * (cc * i0 - i1), dx = 0.13;
     if (s < 3) line(ctx, B.X(cc - dx), B.Y(Dk(cc) - sl * dx), B.X(cc + dx), B.Y(Dk(cc) + sl * dx), c.R, 2);
