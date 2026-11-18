@@ -221,6 +221,11 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -443,31 +448,31 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>PCM uniforme</h2><div class="sub">Distorção e SQNR · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Faixa \([-x_{\max}, x_{\max}]\) em \(N = 2^\nu\) regiões iguais</div><div class="m">\[ \Delta = \frac{2x_{\max}}{N} = \frac{2x_{\max}}{2^\nu} \tag{1.1}\]</div></div>
-        <div class="step"><div class="why">Erro uniforme dentro do degrau</div><div class="m">\[ D = \cssId{pu-d12}{\frac{\Delta^2}{12}} = \frac{4x_{\max}^2}{12\cdot 4^\nu} = \frac{x_{\max}^2}{3\cdot 4^\nu} \tag{1.2}\]</div></div>
-        <div class="step"><div class="why">Potência do sinal sobre a distorção</div><div class="m">\[ \text{SQNR} = \frac{P_X}{D} = 3\cdot 4^\nu\,\frac{\cssId{pu-px}{P_X}}{x_{\max}^2} \tag{1.3}\]</div></div>
-        <div class="step"><div class="why">Amplitude limitada</div><div class="m">\[ |X| \le x_{\max}\ \Rightarrow\ \cssId{pu-px4}{P_X} = E[X^2] \le x_{\max}^2 \]</div></div>
-        <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} \le \cssId{pu-teto}{3\cdot 4^\nu} \]</div></div>
-        <div class="step"><div class="why">Em dB, \(10\log_{10}\) de (1.3)</div><div class="m">\[ \text{SQNR}_{\text{dB}} \approx 10\log_{10}\frac{P_X}{x_{\max}^2} + \cssId{pu-6}{6\nu} + \cssId{pu-48}{4{,}8} \tag{1.4}\]</div></div>
-        <div class="step txt">Quanto maior a faixa dinâmica da fonte, menor \(P_X/x_{\max}^2\) e pior a SQNR.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="Quantizador uniforme, erro e SQNR por bit"></canvas><div class="figcap"></div></div>
-        <dl class="syms">
-          <div data-from="1"><dt>\(x_{\max},\ \nu\)</dt><dd>limite da amplitude; bits por amostra</dd></div>
-          <div data-from="2"><dt>\(D\)</dt><dd>distorção, potência média do erro \(\hat x - x\)</dd></div>
-          <div data-from="3"><dt>\(P_X\)</dt><dd>potência do sinal, \(E[X^2]\)</dd></div>
-        </dl>
-      </div>
+    <div class="deriv board" style="gap:20px;max-width:860px">
+      <div class="step"><div class="why">Faixa \([-x_{\max}, x_{\max}]\) em \(N = 2^\nu\) regiões iguais</div><div class="m">\[ \Delta = \frac{2x_{\max}}{N} = \cssId{pu-dl}{\frac{2x_{\max}}{2^\nu}} \tag{1.1} \]</div></div>
+      <div class="step"><div class="why">Erro uniforme dentro do degrau; substitui \(\Delta\)</div><div class="m">\[ D = \cssId{pu-d12}{\frac{\Delta^2}{12}} = \frac{1}{12}\cssId{pu-dsub}{\left(\frac{2x_{\max}}{2^\nu}\right)^{2}} = \frac{4x_{\max}^2}{12\cdot 4^\nu} = \cssId{pu-dres}{\frac{x_{\max}^2}{3\cdot 4^\nu}} \tag{1.2} \]</div></div>
+      <div class="step"><div class="why">Potência do sinal sobre a distorção</div><div class="m">\[ \text{SQNR} = \frac{P_X}{D} = \cssId{pu-inv}{3\cdot 4^\nu\,\frac{P_X}{x_{\max}^2}} \tag{1.3} \]</div></div>
+      <div class="step"><div class="why">Em dB, \(10\log_{10}\) de (1.3): o produto vira soma</div><div class="m">\[ \text{SQNR}_{\text{dB}} = \cssId{pu-log}{10\log_{10}\cssId{pu-pxx}{\frac{P_X}{x_{\max}^2}} + \underbrace{10\log_{10}4^\nu}_{\approx\,6\nu} + \underbrace{10\log_{10}3}_{\approx\,4{,}8}} \tag{1.4} \]</div></div>
+      <div class="step"><div class="why">Amplitude limitada</div><div class="m">\[ \cssId{pu-px4}{P_X} = E[X^2] \le \cssId{pu-xm}{x_{\max}^2} \]</div></div>
+      <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} \le 3\cdot 4^\nu\,\cssId{pu-one}{\frac{x_{\max}^2}{x_{\max}^2}} = \cssId{pu-teto}{3\cdot 4^\nu} \]</div></div>
+      <div class="step txt">Quanto maior a faixa dinâmica da fonte, menor \(P_X/x_{\max}^2\) e pior a SQNR.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Quantizador uniforme, erro e SQNR por bit"></canvas><div class="figcap"></div></div>
+      <dl class="syms">
+        <div data-from="1"><dt>\(x_{\max},\ \nu\)</dt><dd>limite da amplitude; bits por amostra</dd></div>
+        <div data-from="2"><dt>\(D\)</dt><dd>distorção, potência média do erro \(\hat x - x\)</dd></div>
+        <div data-from="3"><dt>\(P_X\)</dt><dd>potência do sinal, \(E[X^2]\)</dd></div>
+      </dl>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="pu-dl" data-to="pu-dsub">substitui Δ</div>
+  <div class="link" data-on="3" data-from="pu-dres" data-to="pu-inv">P_X dividido por D</div>
+  <div class="link" data-on="4" data-from="pu-inv" data-to="pu-log">10 log₁₀: o produto vira soma</div>
+  <div class="link" data-on="5" data-from="pu-pxx" data-to="pu-px4">|X| ≤ xₘₐₓ</div>
+  <div class="link" data-on="6" data-from="pu-xm" data-to="pu-one">P_X ≤ x²ₘₐₓ em (1.3)</div>
   <div class="note" data-on="2" data-to="pu-d12">erro uniforme em \((-\Delta/2, \Delta/2]\)</div>
-  <div class="note" data-on="4" data-to="pu-px4">\(|X| \le x_{\max}\), logo \(P_X \le x_{\max}^2\)</div>
-  <div class="note" data-on="5" data-to="pu-teto">teto: só com o sinal ocupando a faixa inteira</div>
-  <div class="note" data-on="6" data-to="pu-6">\(10\log_{10}4^\nu = \nu\cdot 6{,}02\)</div>
-  <div class="note" data-on="6" data-to="pu-48">\(10\log_{10}3 = 4{,}77\)</div>
+  <div class="note" data-on="6" data-to="pu-teto">teto: só com o sinal ocupando a faixa inteira</div>
   <aside class="notes"></aside>
 </section>
 
@@ -475,24 +480,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exemplo: sinal uniforme</h2><div class="sub">Contas no quadro · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Sinal uniforme em \([-1, 1]\), PCM uniforme com \(N = 256\) níveis. Qual a SQNR?</div>
-        <div class="step"><div class="why">Potência pela densidade</div><div class="m">\[ P_X = \int_{-1}^{1} x^2\, \cssId{eu-fx}{\tfrac{1}{2}}\, dx \]</div></div>
-        <div class="step"><div class="why">Primitiva de \(x^2\)</div><div class="m">\[ P_X = \frac12 \cssId{eu-prim}{\left[\frac{x^3}{3}\right]_{-1}^{1}} \]</div></div>
-        <div class="step"><div class="why">Resolve</div><div class="m">\[ P_X = \frac12\cdot\frac23 = \frac13 \]</div></div>
-        <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} = 3\cdot 4^{\cssId{eu-nu}{8}}\cdot\frac{1/3}{\cssId{eu-xm}{1}^2} \]</div></div>
-        <div class="step"><div class="why">O 3 cancela</div><div class="m">\[ \text{SQNR} = 4^8 = 65\,536 \]</div></div>
-        <div class="step"><div class="why">Em dB</div><div class="m">\[ 10\log_{10} 65\,536 = 80\log_{10}2 \approx \boxed{48{,}16 \text{ dB}} \]</div></div>
-        <div class="step txt">Todos os níveis são igualmente usados e o erro é exatamente uniforme. É o caso em que o PCM uniforme atinge o teto: 6 dB por bit, partindo de 0 dB.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="Densidade uniforme, níveis e SQNR por bit"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:16px;max-width:860px">
+      <div class="step txt">Sinal uniforme em \([-1, 1]\), PCM uniforme com \(N = 256\) níveis. Qual a SQNR?</div>
+      <div class="step"><div class="why">Potência pela densidade, que vale \(1/2\) em \([-1, 1]\)</div><div class="m">\[ P_X = \int_{-1}^{1} x^2\, \underbrace{\cssId{eu-fx}{f_X(x)}}_{=\,1/2}\, dx = \frac12\cssId{eu-int}{\int_{-1}^{1} x^2\, dx} \]</div></div>
+      <div class="step"><div class="why">Primitiva de \(x^2\)</div><div class="m">\[ P_X = \frac12 \cssId{eu-prim}{\left[\frac{x^3}{3}\right]_{-1}^{1}} \]</div></div>
+      <div class="step"><div class="why">Avalia nos extremos</div><div class="m">\[ P_X = \frac12\cssId{eu-ev}{\left(\frac13 - \left(-\frac13\right)\right)} = \frac12\cdot\frac23 = \cssId{eu-px}{\frac13} \]</div></div>
+      <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} = \cssId{eu-c5}{3\cdot 4^{\cssId{eu-nu}{8}}\cdot\frac{\cssId{eu-px2}{1/3}}{\cssId{eu-xm}{1}^2}} \]</div></div>
+      <div class="step"><div class="why">O 3 cancela</div><div class="m">\[ \text{SQNR} = \cssId{eu-c6}{\frac{3}{3}\cdot 4^8} = \cssId{eu-48}{4^8} = 65\,536 \]</div></div>
+      <div class="step"><div class="why">Em dB</div><div class="m">\[ 10\log_{10}\cssId{eu-48b}{4^8} = 80\log_{10}4 \approx \boxed{48{,}16 \text{ dB}} \]</div></div>
+      <div class="step txt">Todos os níveis são igualmente usados e o erro é exatamente uniforme. É o caso em que o PCM uniforme atinge o teto: 6 dB por bit, partindo de 0 dB.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Densidade uniforme, níveis e SQNR por bit"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="eu-int" data-to="eu-prim">primitiva de x²</div>
+  <div class="link" data-on="4" data-from="eu-prim" data-to="eu-ev">avalia em x = 1 e x = −1</div>
+  <div class="link" data-on="5" data-from="eu-px" data-to="eu-px2">P_X em (1.3)</div>
+  <div class="link" data-on="6" data-from="eu-c5" data-to="eu-c6">o 3 cancela</div>
+  <div class="link" data-on="7" data-from="eu-48" data-to="eu-48b">em dB</div>
   <div class="note" data-on="2" data-to="eu-fx">área 1 em largura 2</div>
-  <div class="note" data-on="3" data-to="eu-prim">\(\frac13 - \left(-\frac13\right) = \frac23\)</div>
   <div class="note" data-on="5" data-to="eu-nu">\(\nu = \log_2 256\)</div>
   <div class="note" data-on="5" data-to="eu-xm">\(x_{\max} = 1\)</div>
   <aside class="notes"></aside>
@@ -502,21 +509,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Banda do PCM</h2><div class="sub">Quanto espectro custam os bits · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">\(\nu\) bits por amostra, \(f_s\) amostras por segundo</div><div class="m">\[ R = \nu\, f_s \;\text{bits/s} \tag{1.5}\]</div></div>
-        <div class="step"><div class="why">\(R\) bits/s ocupam no mínimo \(R/2\) Hz, capítulo 10</div><div class="m">\[ \text{BW} = \frac{\nu\, \cssId{bw-fs}{f_s}}{2} \]</div></div>
-        <div class="step"><div class="why">Na taxa de Nyquist</div><div class="m">\[ \text{BW} = \frac{\nu\cdot \cssId{bw-2w}{2W}}{2} = \boxed{\nu W} \tag{1.6}\]</div></div>
-        <div class="step txt">O PCM multiplica a banda do sinal por pelo menos \(\nu\).</div>
-        <div class="step txt">Voz com \(W = 4\) kHz e \(\nu = 8\): o sinal analógico ocupa 4 kHz e o PCM pelo menos 32 kHz.</div>
-        <div class="step txt">Em troca, os bits atravessam o ruído e podem ser regenerados em cada repetidor.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="360" aria-label="Espectro da voz e do PCM"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:20px;max-width:860px">
+      <div class="step"><div class="why">\(\nu\) bits por amostra, \(f_s\) amostras por segundo</div><div class="m">\[ R = \cssId{bw-r1}{\nu\, f_s} \;\text{bits/s} \tag{1.5} \]</div></div>
+      <div class="step"><div class="why">\(R\) bits/s ocupam no mínimo \(R/2\) Hz, capítulo 10</div><div class="m">\[ \text{BW} = \cssId{bw-r2}{\frac{R}{2}} = \frac{\cssId{bw-r}{\nu\, \cssId{bw-fs}{f_s}}}{2} \]</div></div>
+      <div class="step"><div class="why">Na taxa de Nyquist</div><div class="m">\[ \text{BW} = \frac{\nu\cdot \cssId{bw-2w}{2W}}{2} = \boxed{\nu W} \tag{1.6} \]</div></div>
+      <div class="step txt">O PCM multiplica a banda do sinal por pelo menos \(\nu\).</div>
+      <div class="step txt">Voz com \(W = 4\) kHz e \(\nu = 8\): o sinal analógico ocupa 4 kHz e o PCM pelo menos 32 kHz.</div>
+      <div class="step txt">Em troca, os bits atravessam o ruído e podem ser regenerados em cada repetidor.</div>
+    </div>
+    <div class="figfloat" data-show="3-">
+      <div class="fig"><canvas data-figcanvas height="360" aria-label="Espectro da voz e do PCM"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="bw-2w">\(f_s = 2W\), taxa de Nyquist</div>
+  <div class="link" data-on="2" data-from="bw-r1" data-to="bw-r">substitui R</div>
+  <div class="link" data-on="3" data-from="bw-fs" data-to="bw-2w">taxa de Nyquist: fₛ = 2W</div>
+  <div class="note" data-on="2" data-to="bw-r2">\(R\) bits/s ocupam no mínimo \(R/2\) Hz, capítulo 10</div>
   <aside class="notes"></aside>
 </section>
 
@@ -592,20 +599,18 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Lei μ</h2><div class="sub">Compressor dos EUA, Canadá e Japão · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Compressor com \(|x| \le 1\)</div><div class="m">\[ g(x) = \frac{\ln(1 + \mu|x|)}{\ln(1 + \mu)}\,\cssId{mu-sg}{\operatorname{sgn}(x)} \tag{2.1}\]</div></div>
-        <div class="step"><div class="why">\(\mu \to 0\): \(\ln(1+u) \approx u\) com \(u\) pequeno</div><div class="m">\[ g(x) \approx \frac{\cssId{mu-num}{\mu|x|}}{\cssId{mu-den}{\mu}}\,\operatorname{sgn}(x) = x \]</div></div>
-        <div class="step txt">Sem compressão nenhuma: PCM uniforme. Com \(\mu = 5\) a curva já sobe mais rápido perto de zero.</div>
-        <div class="step txt">O padrão é \(\mu = 255\) com \(\nu = 8\) bits por amostra. O ganho sobre o PCM uniforme chega a cerca de 24 dB nas amplitudes baixas.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Lei mu para vários mu"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:22px;max-width:860px">
+      <div class="step"><div class="why">Compressor com \(|x| \le 1\)</div><div class="m">\[ g(x) = \cssId{mu-fr1}{\frac{\ln(1 + \mu|x|)}{\ln(1 + \mu)}}\,\cssId{mu-sg}{\operatorname{sgn}(x)} \tag{2.1} \]</div></div>
+      <div class="step"><div class="why">\(\mu \to 0\): \(\ln(1+u) \approx u\) com \(u\) pequeno</div><div class="m">\[ g(x) \approx \cssId{mu-fr2}{\frac{\mu|x|}{\mu}}\,\operatorname{sgn}(x) = |x|\operatorname{sgn}(x) = x \]</div></div>
+      <div class="step txt">Sem compressão nenhuma: PCM uniforme. Com \(\mu = 5\) a curva já sobe mais rápido perto de zero.</div>
+      <div class="step txt">O padrão é \(\mu = 255\) com \(\nu = 8\) bits por amostra. O ganho sobre o PCM uniforme chega a cerca de 24 dB nas amplitudes baixas.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Lei mu para vários mu"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="mu-fr1" data-to="mu-fr2">μ → 0: ln(1 + u) ≈ u, em cima e embaixo</div>
   <div class="note" data-on="1" data-to="mu-sg">curva ímpar: o sinal passa direto</div>
-  <div class="note" data-on="2" data-to="mu-num mu-den">\(\ln(1+\mu|x|) \approx \mu|x|\) e \(\ln(1+\mu) \approx \mu\)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -613,19 +618,17 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Lei A</h2><div class="sub">Compressor da Europa e do Brasil · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
-      <div class="deriv">
-        <div class="step"><div class="why">Reta perto de zero, logaritmo no resto</div><div class="m">\[ g(x) = \operatorname{sgn}(x)\begin{cases} \dfrac{A|x|}{1 + \ln A}, & |x| < \frac{1}{A}\\[3mm] \dfrac{1 + \ln(A|x|)}{1 + \ln A}, & \frac{1}{A} \le |x| \le 1 \end{cases} \tag{2.2}\]</div></div>
-        <div class="step txt">Perto de zero o logaritmo iria a \(-\infty\): a lei A usa uma reta ali.</div>
-        <div class="step"><div class="why">As partes se encontram em \(|x| = 1/A\)</div><div class="m">\[ \frac{A\cdot\frac1A}{1+\ln A} = \frac{1}{1+\ln A} \qquad \cssId{la-l1}{\frac{1 + \ln 1}{1 + \ln A}} = \frac{1}{1+\ln A} \]</div></div>
-        <div class="step txt">O padrão usa \(A = 87{,}6\), com desempenho parecido com o da lei μ de \(\mu = 255\).</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Lei A para vários A"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:26px;max-width:860px">
+      <div class="step"><div class="why">Reta perto de zero, logaritmo no resto</div><div class="m">\[ g(x) = \cssId{la-g}{\operatorname{sgn}(x)\begin{cases} \cssId{la-c1}{\dfrac{A|x|}{1 + \ln A}}, & |x| < \frac{1}{A}\\[3mm] \dfrac{1 + \ln(A|x|)}{1 + \ln A}, & \frac{1}{A} \le |x| \le 1 \end{cases}} \tag{2.2} \]</div></div>
+      <div class="step"><div class="why">As partes se encontram em \(|x| = 1/A\)</div><div class="m">\[ \cssId{la-j}{\frac{A\cdot\frac1A}{1+\ln A} = \frac{1}{1+\ln A} \qquad \frac{1 + \underbrace{\ln\!\big(A\cdot\tfrac1A\big)}_{=\,\ln 1\,=\,0}}{1 + \ln A} = \frac{1}{1+\ln A}} \]</div></div>
+      <div class="step txt">O padrão usa \(A = 87{,}6\), com desempenho parecido com o da lei μ de \(\mu = 255\).</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Lei A para vários A"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="la-l1">\(\ln 1 = 0\)</div>
+  <div class="link" data-on="2" data-from="la-g" data-to="la-j">|x| = 1/A nas duas partes</div>
+  <div class="note" data-on="1" data-to="la-c1">perto de zero o logaritmo iria a \(-\infty\): a lei A usa uma reta ali</div>
   <aside class="notes"></aside>
 </section>
 
@@ -633,21 +636,24 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Por que o logaritmo</h2><div class="sub">Que curva deixa a SQNR independente do volume · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Que forma deve ter \(g(x)\) para a SQNR não depender do volume?</div>
-        <div class="step txt">O degrau \(\Delta\) no eixo vertical vira um degrau \(\Delta_x\) no eixo \(x\).</div>
-        <div class="step"><div class="why">Curva inclinada, \(\Delta_x\) estreito; curva deitada, \(\Delta_x\) largo</div><div class="m">\[ \Delta \approx \cssId{pl-gl}{g'(x)}\,\Delta_x \ \Longrightarrow\ \Delta_x \approx \frac{\Delta}{g'(x)} \tag{2.3}\]</div></div>
-        <div class="step"><div class="why">Erro uniforme na região de largura \(\Delta_x\)</div><div class="m">\[ D(x) \approx \frac{\Delta_x^2}{12} = \frac{\Delta^2}{12\,g'(x)^2} \tag{2.4}\]</div></div>
-        <div class="step"><div class="why">\(x^2/D(x)\) constante</div><div class="m">\[ \begin{aligned} \frac{x^2}{D(x)} &= \frac{12}{\Delta^2}\,\cssId{pl-xg}{x^2 g'(x)^2}\\ &\Longrightarrow\ g'(x) \propto \frac{1}{|x|} \ \Longrightarrow\ \boxed{g(x) \propto \ln |x|} \end{aligned} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="430" aria-label="Degrau no eixo vertical projetado no eixo x"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px;max-width:860px">
+      <div class="step txt">Que forma deve ter \(g(x)\) para a SQNR não depender do volume?</div>
+      <div class="step txt">O degrau \(\Delta\) no eixo vertical vira um degrau \(\Delta_x\) no eixo \(x\).</div>
+      <div class="step"><div class="why">Curva inclinada, \(\Delta_x\) estreito; curva deitada, \(\Delta_x\) largo</div><div class="m">\[ \Delta \approx \cssId{pl-gl}{g'(x)}\,\Delta_x \ \Longrightarrow\ \Delta_x \approx \cssId{pl-dx3}{\frac{\Delta}{g'(x)}} \tag{2.3} \]</div></div>
+      <div class="step"><div class="why">Erro uniforme na região de largura \(\Delta_x\)</div><div class="m">\[ D(x) \approx \frac{\cssId{pl-dx}{\Delta_x^2}}{12} = \cssId{pl-d4}{\frac{\Delta^2}{12\,g'(x)^2}} \tag{2.4} \]</div></div>
+      <div class="step"><div class="why">\(x^2/D(x)\) constante</div><div class="m">\[ \frac{x^2}{D(x)} = \frac{12}{\Delta^2}\,\cssId{pl-xg}{x^2 g'(x)^2} \]</div></div>
+      <div class="step"><div class="why">Constante só se \(|x|\,g'(x)\) for constante</div><div class="m">\[ \cssId{pl-c}{|x|\,g'(x)} = c \ \Longrightarrow\ \cssId{pl-g6}{g'(x) = \frac{c}{|x|}} \]</div></div>
+      <div class="step"><div class="why">Integra, com \(x > 0\)</div><div class="m">\[ g(x) = \cssId{pl-int}{\int \frac{c}{x}\,dx} = c\ln x + k \ \Longrightarrow\ \boxed{g(x) \propto \ln |x|} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="2-">
+      <div class="fig"><canvas data-figcanvas height="430" aria-label="Degrau no eixo vertical projetado no eixo x"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="4" data-from="pl-dx3" data-to="pl-dx">Δₓ de (2.3)</div>
+  <div class="link" data-on="5" data-from="pl-d4" data-to="pl-xg">x² dividido por D(x)</div>
+  <div class="link" data-on="6" data-from="pl-xg" data-to="pl-c">constante só se |x| g′(x) for constante</div>
+  <div class="link" data-on="7" data-from="pl-g6" data-to="pl-int">integra</div>
   <div class="note" data-on="3" data-to="pl-gl">reta tangente dentro do degrau</div>
-  <div class="note" data-on="5" data-to="pl-xg">constante só se \(|x|\,g'(x)\) for constante</div>
   <aside class="notes"></aside>
 </section>
 
@@ -655,25 +661,28 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>SQNR da lei μ</h2><div class="sub">Dedução · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
-      <div class="deriv">
-        <div class="step"><div class="why">Deriva (2.1) para \(x > 0\)</div><div class="m">\[ g'(x) = \frac{1}{\ln(1+\mu)}\cdot\cssId{sm-dl}{\frac{\mu}{1 + \mu x}} \]</div></div>
-        <div class="step"><div class="why">\(\mu x \gg 1\)</div><div class="m">\[ g'(x) \approx \frac{1}{\ln(1+\mu)}\cdot\frac{1}{\cssId{sm-xx}{x}} \]</div></div>
-        <div class="step"><div class="why">Leva em (2.3) e (2.4)</div><div class="m">\[ \Delta_x \approx \Delta\,\ln(1+\mu)\,|x| \ \Rightarrow\ D \approx \frac{\Delta^2 \ln^2(1+\mu)}{12}\,\cssId{sm-ex}{E[X^2]} \]</div></div>
-        <div class="step"><div class="why">Divide \(E[X^2]\) por \(D\)</div><div class="m">\[ \text{SQNR} = \frac{E[X^2]}{D} \approx \frac{12}{\cssId{sm-dd}{\Delta^2}\ln^2(1+\mu)} \]</div></div>
-        <div class="step"><div class="why">\(\Delta = 2/2^\nu\)</div><div class="m">\[ \text{SQNR} \approx \frac{\cssId{sm-34}{3\cdot 4^\nu}}{\ln^2(1+\mu)} \tag{2.5}\]</div></div>
-        <div class="step"><div class="why">\(\nu = 8\), \(\mu = 255\)</div><div class="m">\[ \begin{aligned} \text{SQNR}_{\text{dB}} &\approx 4{,}77 + 48{,}16 - 20\log_{10}\ln 256\\ &= 52{,}93 - 14{,}88 = \boxed{38{,}05 \text{ dB}} \end{aligned} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="430" aria-label="Derivada da lei mu e largura das regiões"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:16px;max-width:860px">
+      <div class="step"><div class="why">Deriva (2.1) para \(x > 0\)</div><div class="m">\[ g'(x) = \frac{1}{\ln(1+\mu)}\cdot\cssId{sm-dl}{\frac{\mu}{1 + \mu x}} \]</div></div>
+      <div class="step"><div class="why">\(\mu x \gg 1\)</div><div class="m">\[ \cssId{sm-g2}{g'(x) \approx \frac{1}{\ln(1+\mu)}\cdot\cssId{sm-xx}{\frac{1}{x}}} \]</div></div>
+      <div class="step"><div class="why">Leva em (2.3)</div><div class="m">\[ \Delta_x \approx \frac{\Delta}{g'(x)} = \cssId{sm-dx3}{\Delta\,\ln(1+\mu)\,|x|} \]</div></div>
+      <div class="step"><div class="why">Leva em (2.4) e tira a média sobre as amostras</div><div class="m">\[ D \approx E\!\left[\frac{\cssId{sm-dx4}{\Delta_x^2}}{12}\right] = \frac{\Delta^2 \ln^2(1+\mu)}{12}\,\cssId{sm-ex}{E[X^2]} \]</div></div>
+      <div class="step"><div class="why">Divide \(E[X^2]\) por \(D\)</div><div class="m">\[ \text{SQNR} = \frac{E[X^2]}{D} \approx \cssId{sm-q}{\frac{12}{\cssId{sm-dd}{\Delta^2}\ln^2(1+\mu)}} \]</div></div>
+      <div class="step"><div class="why">\(\Delta = 2/2^\nu\)</div><div class="m">\[ \text{SQNR} \approx \frac{\cssId{sm-34}{3\cdot 4^\nu}}{\ln^2(1+\mu)} \tag{2.5} \]</div></div>
+      <div class="step"><div class="why">\(\nu = 8\), \(\mu = 255\)</div><div class="m">\[ \begin{aligned} \text{SQNR}_{\text{dB}} &\approx \cssId{sm-db}{\underbrace{10\log_{10}3}_{4{,}77} + \underbrace{10\log_{10}4^{8}}_{48{,}16} - \underbrace{20\log_{10}\ln 256}_{14{,}88}}\\ &= 52{,}93 - 14{,}88 = \boxed{38{,}05 \text{ dB}} \end{aligned} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="430" aria-label="Derivada da lei mu e largura das regiões"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="2" data-from="sm-dl" data-to="sm-xx">μx ≫ 1: 1 + μx ≈ μx</div>
+  <div class="link" data-on="3" data-from="sm-g2" data-to="sm-dx3">g′(x) em (2.3)</div>
+  <div class="link" data-on="4" data-from="sm-dx3" data-to="sm-dx4">Δₓ em (2.4)</div>
+  <div class="link" data-on="5" data-from="sm-ex" data-to="sm-q">E[X²] cancela: não depende do volume</div>
+  <div class="link" data-on="6" data-from="sm-dd" data-to="sm-34">Δ = 2/2^ν: 12/Δ² = 3·4^ν</div>
+  <div class="link" data-on="7" data-from="sm-34" data-to="sm-db">10 log₁₀ com ν = 8, μ = 255</div>
   <div class="note" data-on="1" data-to="sm-dl">regra da cadeia em \(\ln(1 + \mu x)\)</div>
-  <div class="note" data-on="2" data-to="sm-xx">\(\mu x \gg 1\): com \(\mu = 255\), \(x\) acima de uns 0,02</div>
-  <div class="note" data-on="3" data-to="sm-ex">média de \(x^2\) sobre todas as amostras</div>
-  <div class="note" data-on="4" data-to="sm-dd">\(E[X^2]\) cancelou: não depende do volume</div>
-  <div class="note" data-on="5" data-to="sm-34">\(\Delta^2 = 4/4^\nu\), logo \(12/\Delta^2 = 3\cdot 4^\nu\)</div>
+  <div class="note" data-on="2" data-to="sm-xx">com \(\mu = 255\), vale para \(x\) acima de uns 0,02</div>
+  <div class="note" data-on="4" data-to="sm-ex">média de \(x^2\) sobre todas as amostras</div>
   <aside class="notes"></aside>
 </section>
 
@@ -740,22 +749,22 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Potência da diferença</h2><div class="sub">Processo estacionário com potência \(\sigma^2\), amostrado de \(T_s\) em \(T_s\)</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
-      <div class="deriv">
-        <div class="step"><div class="why">Expande o quadrado</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \cssId{pd-a1}{E[X_n^2]} - 2\,\cssId{pd-a2}{E[X_n X_{n-1}]} + \cssId{pd-a3}{E[X_{n-1}^2]} \]</div></div>
-        <div class="step"><div class="why">Estacionário</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \cssId{pd-b1}{2\sigma^2} - \cssId{pd-b2}{2R_X(T_s)} \]</div></div>
-        <div class="step"><div class="why">Define \(\rho\)</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \boxed{2\sigma^2(1 - \cssId{pd-rho}{\rho})} \tag{3.1}\]</div></div>
-        <div class="step"><div class="why">Amostras parecidas, \(\rho = 0{,}95\)</div><div class="m">\[ 2\sigma^2(1 - 0{,}95) = 0{,}1\,\sigma^2 \ \to\ \cssId{pd-10}{10\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Espectro plano em \(|f| < W\), \(f_s = 2W\)</div><div class="m">\[ R_X(T_s) = \sigma^2\,\operatorname{sinc}(2W T_s) = \cssId{pd-s1}{\sigma^2\operatorname{sinc}(1) = 0} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="440" aria-label="Pares de amostras vizinhas e potência da diferença"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:26px;max-width:860px">
+      <div class="step"><div class="why">Expande o quadrado</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \cssId{pd-a1}{E[X_n^2]} - 2\,\cssId{pd-a2}{E[X_n X_{n-1}]} + \cssId{pd-a3}{E[X_{n-1}^2]} \]</div></div>
+      <div class="step"><div class="why">Estacionário</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \cssId{pd-b1}{\sigma^2} - 2\,\cssId{pd-b2}{R_X(T_s)} + \cssId{pd-b3}{\sigma^2} = \cssId{pd-c2}{2\sigma^2 - 2R_X(T_s)} \]</div></div>
+      <div class="step"><div class="why">Define \(\rho\)</div><div class="m">\[ E\big[(X_n - X_{n-1})^2\big] = \boxed{\cssId{pd-31}{2\sigma^2(1 - \cssId{pd-rho}{\rho})}} \tag{3.1} \]</div></div>
+      <div class="step"><div class="why">Amostras parecidas, \(\rho = 0{,}95\)</div><div class="m">\[ 2\sigma^2(1 - \cssId{pd-95}{0{,}95}) = 0{,}1\,\sigma^2 \ \to\ \cssId{pd-10}{10\ \text{dB}} \]</div></div>
+      <div class="step"><div class="why">Espectro plano em \(|f| < W\), \(f_s = 2W\)</div><div class="m">\[ R_X(T_s) = \sigma^2\,\operatorname{sinc}(\underbrace{2W T_s}_{=\,1}) = \cssId{pd-s1}{\sigma^2\operatorname{sinc}(1) = 0} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="Pares de amostras vizinhas e potência da diferença"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="pd-b1">\(E[X_n^2] = E[X_{n-1}^2] = \sigma^2\)</div>
-  <div class="note" data-on="2" data-to="pd-b2">\(R_X(T_s)\), autocorrelação no atraso \(T_s\)</div>
-  <div class="note" data-on="3" data-to="pd-rho">\(\rho = R_X(T_s)/\sigma^2\)</div>
+  <div class="link" data-on="2" data-from="pd-a1" data-to="pd-b1">estacionário</div>
+  <div class="link" data-on="2" data-from="pd-a2" data-to="pd-b2"></div>
+  <div class="link" data-on="2" data-from="pd-a3" data-to="pd-b3"></div>
+  <div class="link" data-on="3" data-from="pd-c2" data-to="pd-31">2σ² em evidência, ρ = R_X(Tₛ)/σ²</div>
+  <div class="link" data-on="4" data-from="pd-rho" data-to="pd-95">ρ = 0,95</div>
   <div class="note" data-on="4" data-to="pd-10">10 dB a menos, ou \(10/6{,}02 \approx 1{,}7\) bit a menos por amostra</div>
   <div class="note" data-on="5" data-to="pd-s1">\(\rho = 0\): a diferença tem o dobro da potência e o DPCM não ajuda</div>
   <aside class="notes"></aside>
@@ -767,11 +776,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="body">
     <div class="fig"><canvas data-figcanvas height="250" aria-label="Reconstrução ingênua e do DPCM"></canvas><div class="figcap"></div></div>
     <div class="cols" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:36px">
-      <div class="deriv" style="gap:2px">
+      <div class="deriv board" style="gap:12px">
         <div class="step txt" style="padding:2px 0 2px 14px">Primeira tentativa: quantizar \(d_n = x_n - x_{n-1}\) com erro \(q_n\) e somar no receptor.</div>
-        <div class="step"><div class="why">Diferença quantizada recebida</div><div class="m">\[ \hat{x}_n = \hat{x}_{n-1} + \cssId{ac-dq}{d_n + q_n} \]</div></div>
-        <div class="step"><div class="why">Subtrai \(x_n = x_{n-1} + d_n\)</div><div class="m">\[ \hat{x}_n - x_n = (\hat{x}_{n-1} - x_{n-1}) + q_n \]</div></div>
-        <div class="step"><div class="why">Abre a recursão</div><div class="m">\[ \hat{x}_n - x_n = \cssId{ac-soma}{\sum_{i=1}^{n} q_i} \tag{3.2}\]</div></div>
+        <div class="step"><div class="why">Diferença quantizada recebida</div><div class="m">\[ \hat{x}_n = \cssId{ac-r2}{\hat{x}_{n-1} + \cssId{ac-dq}{d_n + q_n}} \]</div></div>
+        <div class="step"><div class="why">Subtrai \(x_n = x_{n-1} + d_n\)</div><div class="m">\[ \hat{x}_n - x_n = \cssId{ac-r3}{\cssId{ac-e3}{(\hat{x}_{n-1} - x_{n-1})} + q_n} \]</div></div>
+        <div class="step"><div class="why">Abre a recursão</div><div class="m">\[ \hat{x}_n - x_n = \cssId{ac-soma}{\sum_{i=1}^{n} q_i} \tag{3.2} \]</div></div>
       </div>
       <div class="solo">
         <div class="step txt">Com \(\Delta = 0{,}1\), depois de 60 amostras o erro já passa de seis degraus.</div>
@@ -779,7 +788,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ac-dq" style="left:1000px;top:560px">diferença quantizada recebida</div>
+  <div class="link" data-on="3" data-from="ac-r2" data-to="ac-r3">− xₙ = − xₙ₋₁ − dₙ</div>
+  <div class="link" data-on="4" data-from="ac-e3" data-to="ac-soma">o mesmo para n − 1, n − 2, …</div>
+  <div class="note" data-on="2" data-to="ac-dq">diferença quantizada recebida</div>
   <div class="note" data-on="4" data-to="ac-soma" style="left:1000px;top:640px">cada erro fica para sempre e o próximo soma em cima</div>
   <aside class="notes"></aside>
 </section>
@@ -804,24 +815,25 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Erro do DPCM</h2><div class="sub">Dedução · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
-      <div class="deriv">
-        <div class="step"><div class="why">Codificador</div><div class="m">\[ y_n = x_n - \hat{y}'_{n-1} \qquad \cssId{ed-11}{\hat{y}'_n = \hat{y}_n + \hat{y}'_{n-1}} \tag{7.4.11}\]</div></div>
-        <div class="step"><div class="why">Decodificador</div><div class="m">\[ \cssId{ed-13}{\hat{x}_n = \hat{y}_n + \hat{x}_{n-1}} \tag{7.4.13}\]</div></div>
-        <div class="step txt">As duas recursões têm a mesma forma.</div>
-        <div class="step"><div class="why">Mesma entrada, mesmo início</div><div class="m">\[ \hat{x}_n = \hat{y}'_n \quad\text{para todo } n \]</div></div>
-        <div class="step"><div class="why">Erro do quantizador</div><div class="m">\[ \hat{y}_n - y_n = \hat{y}_n - (x_n - \hat{y}'_{n-1}) \]</div></div>
-        <div class="step"><div class="why">Junta \(\hat{y}_n + \hat{y}'_{n-1}\)</div><div class="m">\[ \hat{y}_n - y_n = \cssId{ed-ys}{\hat{y}'_n} - x_n \]</div></div>
-        <div class="step"><div class="why">Usa \(\hat{x}_n = \hat{y}'_n\)</div><div class="m">\[ \hat{y}_n - y_n = \boxed{\hat{x}_n - x_n} \]</div></div>
-        <div class="step txt">O erro da reconstrução é o erro de um só passo do quantizador. Não acumula, e a faixa a quantizar é a de \(y_n\), bem menor que a de \(x_n\).</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="As duas recursões lado a lado"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:20px;max-width:860px">
+      <div class="step"><div class="why">Codificador</div><div class="m">\[ y_n = x_n - \hat{y}'_{n-1} \qquad \cssId{ed-11}{\hat{y}'_n = \hat{y}_n + \hat{y}'_{n-1}} \tag{7.4.11} \]</div></div>
+      <div class="step"><div class="why">Decodificador</div><div class="m">\[ \cssId{ed-13}{\hat{x}_n = \hat{y}_n + \hat{x}_{n-1}} \tag{7.4.13} \]</div></div>
+      <div class="step"><div class="why">As duas recursões têm a mesma forma e partem de 0</div><div class="m">\[ \cssId{ed-0}{\hat{y}'_{-1} = \hat{x}_{-1} = 0} \]</div></div>
+      <div class="step"><div class="why">Mesma entrada, mesmo início</div><div class="m">\[ \cssId{ed-eq}{\hat{x}_n = \hat{y}'_n} \quad\text{para todo } n \]</div></div>
+      <div class="step"><div class="why">Erro do quantizador, com \(y_n\) de (7.4.11)</div><div class="m">\[ \hat{y}_n - y_n = \hat{y}_n - \cssId{ed-sub}{(x_n - \hat{y}'_{n-1})} = \cssId{ed-s5}{\hat{y}_n + \hat{y}'_{n-1}} - x_n \]</div></div>
+      <div class="step"><div class="why">Junta \(\hat{y}_n + \hat{y}'_{n-1}\)</div><div class="m">\[ \hat{y}_n - y_n = \cssId{ed-ys}{\hat{y}'_n} - x_n \]</div></div>
+      <div class="step"><div class="why">Usa \(\hat{x}_n = \hat{y}'_n\)</div><div class="m">\[ \hat{y}_n - y_n = \boxed{\cssId{ed-xh}{\hat{x}_n} - x_n} \]</div></div>
+      <div class="step txt">O erro da reconstrução é o erro de um só passo do quantizador. Não acumula, e a faixa a quantizar é a de \(y_n\), bem menor que a de \(x_n\).</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="As duas recursões lado a lado"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="ed-11 ed-13">mesma recursão com a mesma entrada \(\hat{y}_n\) e as duas partindo de 0</div>
-  <div class="note" data-on="6" data-to="ed-ys">\(\hat{y}_n + \hat{y}'_{n-1}\) juntos</div>
+  <div class="link" data-on="2" data-from="ed-11" data-to="ed-13">a mesma recursão, com a mesma entrada ŷₙ</div>
+  <div class="link" data-on="4" data-from="ed-0" data-to="ed-eq">mesmo início e mesma entrada: iguais em todo n</div>
+  <div class="link" data-on="6" data-from="ed-s5" data-to="ed-ys">(7.4.11): ŷₙ + ŷ′ₙ₋₁ = ŷ′ₙ</div>
+  <div class="link" data-on="7" data-from="ed-ys" data-to="ed-xh">ŷ′ₙ = x̂ₙ</div>
+  <div class="note" data-on="5" data-to="ed-sub">\(y_n\) de (7.4.11)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -861,19 +873,17 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exemplo: voz em PCM e DPCM</h2><div class="sub">Exemplo 7.4.2 do Proakis · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Voz limitada a 3 kHz, amostrada a 8 kHz. Para a mesma distorção, o PCM precisa de 8 bits por amostra e o DPCM de 4.</div>
-        <div class="step"><div class="why">PCM, por (1.5)</div><div class="m">\[ R = \cssId{ex-nu}{8} \times \cssId{ex-fs}{8000} = 64\,000 \text{ bits/s} \]</div></div>
-        <div class="step"><div class="why">DPCM</div><div class="m">\[ R = 4 \times 8000 = 32\,000 \text{ bits/s} \]</div></div>
-        <div class="step txt">Metade da taxa e, por (1.6), metade da banda.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="380" aria-label="Taxas do PCM e do DPCM"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:22px;max-width:860px">
+      <div class="step txt">Voz limitada a 3 kHz, amostrada a 8 kHz. Para a mesma distorção, o PCM precisa de 8 bits por amostra e o DPCM de 4.</div>
+      <div class="step"><div class="why">PCM, por (1.5)</div><div class="m">\[ R = \cssId{ex-nu}{\underbrace{8}_{\nu}} \times \underbrace{\cssId{ex-fs}{8000}}_{f_s} = 64\,000 \text{ bits/s} \]</div></div>
+      <div class="step"><div class="why">DPCM</div><div class="m">\[ R = \cssId{ex-4}{4} \times 8000 = 32\,000 \text{ bits/s} \]</div></div>
+      <div class="step txt">Metade da taxa e, por (1.6), metade da banda.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="380" aria-label="Taxas do PCM e do DPCM"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ex-nu">bits por amostra</div>
+  <div class="link" data-on="3" data-from="ex-nu" data-to="ex-4">DPCM: 4 bits por amostra</div>
   <div class="note" data-on="2" data-to="ex-fs">\(f_s > 2W = 6\) kHz</div>
   <aside class="notes"></aside>
 </section>
@@ -893,17 +903,22 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="330" aria-label="Diagrama do modulador delta"></canvas><div class="figcap"></div></div>
       </div>
-      <div class="deriv">
+      <div class="deriv board" style="gap:26px">
         <div class="step txt">O DM é o DPCM com o quantizador mais simples possível.</div>
         <div class="step txt">Quantizador de 1 bit: a saída é \(\hat{y}_n = \Delta e_n\), com \(e_n = \pm 1\).</div>
         <div class="step txt">O bit é \(e_n = \operatorname{sgn}(x_n - \hat{x}_{n-1})\): a escada sobe ou desce \(\Delta\).</div>
-        <div class="step"><div class="why">No receptor</div><div class="m">\[ \hat{x}_n - \hat{x}_{n-1} = \hat{y}_n \tag{7.4.15}\]</div></div>
-        <div class="step"><div class="why">Abre a recursão com \(\hat{x}_{-1} = 0\)</div><div class="m">\[ \hat{x}_n = \hat{y}_n + \hat{y}_{n-1} + \hat{x}_{n-2} = \cdots = \cssId{dm-acc}{\sum_{i=0}^{n} \hat{y}_i} \tag{4.1}\]</div></div>
+        <div class="step"><div class="why">No receptor</div><div class="m">\[ \cssId{dm-15}{\hat{x}_n - \hat{x}_{n-1} = \hat{y}_n} \tag{7.4.15} \]</div></div>
+        <div class="step"><div class="why">Isola \(\hat{x}_n\)</div><div class="m">\[ \cssId{dm-l5}{\hat{x}_n = \hat{y}_n + \cssId{dm-x1}{\hat{x}_{n-1}}} \]</div></div>
+        <div class="step"><div class="why">A mesma conta para \(\hat{x}_{n-1}\)</div><div class="m">\[ \hat{x}_n = \hat{y}_n + \cssId{dm-x2}{\hat{y}_{n-1} + \hat{x}_{n-2}} \]</div></div>
+        <div class="step"><div class="why">Abre a recursão com \(\hat{x}_{-1} = 0\)</div><div class="m">\[ \hat{x}_n = \hat{y}_n + \cssId{dm-x3}{\hat{y}_{n-1} + \cdots + \hat{y}_0} = \cssId{dm-acc}{\sum_{i=0}^{n} \hat{y}_i} \tag{4.1} \]</div></div>
         <div class="step txt">Com um bit, a diferença tem que ser muito pequena: amostras quase iguais, \(\rho \approx 1\). Por isso o DM amostra muito acima da taxa de Nyquist.</div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="5" data-to="dm-acc">acumulador; com impulsos, integrador</div>
+  <div class="link" data-on="5" data-from="dm-15" data-to="dm-l5">isola x̂ₙ</div>
+  <div class="link" data-on="6" data-from="dm-x1" data-to="dm-x2">x̂ₙ₋₁ = ŷₙ₋₁ + x̂ₙ₋₂</div>
+  <div class="link" data-on="7" data-from="dm-x2" data-to="dm-x3">repete até x̂₋₁ = 0</div>
+  <div class="note" data-on="7" data-to="dm-acc">acumulador; com impulsos, integrador</div>
   <aside class="notes"></aside>
 </section>
 
@@ -956,19 +971,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Limite da sobrecarga</h2><div class="sub">Inclinação da escada contra a do sinal · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">A escada sobe no máximo \(\Delta\) a cada \(T_s\)</div><div class="m">\[ \text{inclinação máxima da escada} = \frac{\Delta}{T_s} = \Delta f_s \]</div></div>
-        <div class="step"><div class="why">Senoide \(x(t) = A\sin(2\pi f_m t)\)</div><div class="m">\[ \left|\frac{dx}{dt}\right| = \cssId{li-dv}{2\pi f_m A}\,|\cos(2\pi f_m t)| \le 2\pi f_m A \]</div></div>
-        <div class="step"><div class="why">Sem sobrecarga</div><div class="m">\[ \boxed{\;\Delta f_s \ge 2\pi f_m A\;} \tag{4.2}\]</div></div>
-        <div class="step"><div class="why">No exemplo, \(A = 1\) e \(f_s = 40 f_m\)</div><div class="m">\[ \Delta \ge \frac{2\pi}{40} = 0{,}157 \]</div></div>
-        <div class="step txt">Máximo de 22,1 dB em \(\Delta = 0{,}13\), um pouco abaixo do limite: alguma sobrecarga custa menos que ruído granular.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="440" aria-label="Inclinações e SNR contra o passo"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:18px;max-width:860px">
+      <div class="step"><div class="why">A escada sobe no máximo \(\Delta\) a cada \(T_s\)</div><div class="m">\[ \text{inclinação máxima da escada} = \frac{\Delta}{T_s} = \Delta f_s \]</div></div>
+      <div class="step"><div class="why">Senoide \(x(t) = A\sin(2\pi f_m t)\)</div><div class="m">\[ \frac{dx}{dt} = \cssId{li-dv}{2\pi f_m A}\,\cssId{li-cos}{\cos(2\pi f_m t)} \]</div></div>
+      <div class="step"><div class="why">\(|\cos| \le 1\)</div><div class="m">\[ \left|\frac{dx}{dt}\right| \le \cssId{li-max}{2\pi f_m A} \]</div></div>
+      <div class="step"><div class="why">Sem sobrecarga</div><div class="m">\[ \boxed{\;\cssId{li-box}{\Delta f_s \ge \cssId{li-max2}{2\pi f_m A}}\;} \tag{4.2} \]</div></div>
+      <div class="step"><div class="why">No exemplo, \(A = 1\) e \(f_s = 40 f_m\)</div><div class="m">\[ \Delta \ge \cssId{li-5}{\frac{2\pi f_m\cdot 1}{40 f_m}} = \frac{2\pi}{40} = 0{,}157 \]</div></div>
+      <div class="step txt">Máximo de 22,1 dB em \(\Delta = 0{,}13\), um pouco abaixo do limite: alguma sobrecarga custa menos que ruído granular.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="Inclinações e SNR contra o passo"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="li-cos" data-to="li-max">|cos| ≤ 1</div>
+  <div class="link" data-on="4" data-from="li-max" data-to="li-max2">a escada, Δfₛ, tem que ser mais íngreme</div>
+  <div class="link" data-on="5" data-from="li-box" data-to="li-5">divide por fₛ = 40fₘ, com A = 1</div>
   <div class="note" data-on="2" data-to="li-dv">a derivada traz \(2\pi f_m\) para fora</div>
   <aside class="notes"></aside>
 </section>
@@ -1202,26 +1219,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício: PCM de um canal de voz</h2><div class="sub">Contas no quadro · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Voz de banda \(W = 3{,}6\) kHz, amostrada a \(f_s = 9\) kHz com \(\nu = 9\) bits por amostra. Qual a taxa de bits do canal, a banda mínima e a SQNR máxima?</div>
-        <div class="step"><div class="why">Confere a taxa de Nyquist</div><div class="m">\[ f_s = 9 \text{ kHz} > \cssId{tl-2w}{2W} = 7{,}2 \text{ kHz} \]</div></div>
-        <div class="step"><div class="why">\(\nu\) bits por amostra, por (1.5)</div><div class="m">\[ R_b = \nu f_s = 9 \times 9000 = \boxed{81\,000 \text{ bits/s}} \]</div></div>
-        <div class="step"><div class="why">\(R\) bits/s ocupam no mínimo \(R/2\) Hz</div><div class="m">\[ \text{BW} = \frac{\cssId{tl-rb}{R_b}}{2} = \boxed{40{,}5 \text{ kHz}} \]</div></div>
-        <div class="step"><div class="why">Senoide de amplitude \(x_{\max}\)</div><div class="m">\[ P_X = \cssId{tl-px}{\frac{x_{\max}^2}{2}} \]</div></div>
-        <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} = 3\cdot 4^{9}\cdot\frac{1}{2} = 1{,}5\cdot 4^{9} = 393\,216 \]</div></div>
-        <div class="step"><div class="why">Em dB</div><div class="m">\[ \cssId{tl-176}{1{,}76} + \cssId{tl-54}{54{,}19} = \boxed{55{,}95 \text{ dB}} \]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Voz amostrada, bits de cada amostra, banda e SQNR"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:16px;max-width:860px">
+      <div class="step txt">Voz de banda \(W = 3{,}6\) kHz, amostrada a \(f_s = 9\) kHz com \(\nu = 9\) bits por amostra. Qual a taxa de bits do canal, a banda mínima e a SQNR máxima?</div>
+      <div class="step"><div class="why">Confere a taxa de Nyquist</div><div class="m">\[ f_s = \cssId{tl-fs}{9 \text{ kHz}} > 2W = 2\times 3{,}6 = 7{,}2 \text{ kHz} \]</div></div>
+      <div class="step"><div class="why">\(\nu\) bits por amostra, por (1.5)</div><div class="m">\[ R_b = \nu f_s = 9 \times \cssId{tl-fs3}{9000} = \boxed{\cssId{tl-rb3}{81\,000} \text{ bits/s}} \]</div></div>
+      <div class="step"><div class="why">\(R\) bits/s ocupam no mínimo \(R/2\) Hz</div><div class="m">\[ \text{BW} = \frac{\cssId{tl-rb}{R_b}}{2} = \frac{81\,000}{2} = \boxed{40{,}5 \text{ kHz}} \]</div></div>
+      <div class="step"><div class="why">Senoide de amplitude \(x_{\max}\)</div><div class="m">\[ P_X = x_{\max}^2\,\underbrace{\overline{\sin^2(2\pi f_0 t)}}_{=\,1/2} = \cssId{tl-px}{\frac{x_{\max}^2}{2}} \]</div></div>
+      <div class="step"><div class="why">Leva em (1.3)</div><div class="m">\[ \text{SQNR} = 3\cdot 4^{9}\cdot\cssId{tl-h}{\frac{1}{2}} = \cssId{tl-15}{1{,}5\cdot 4^{9}} = 393\,216 \]</div></div>
+      <div class="step"><div class="why">Em dB</div><div class="m">\[ \cssId{tl-db}{10\log_{10}(1{,}5\cdot 4^9)} = \underbrace{10\log_{10}1{,}5}_{=\,1{,}76} + \underbrace{9\times 10\log_{10}4}_{=\,9\,\times\,6{,}02\,=\,54{,}19} = \boxed{55{,}95 \text{ dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Voz amostrada, bits de cada amostra, banda e SQNR"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="tl-2w">\(2\times 3{,}6\) kHz: a taxa de Nyquist da voz</div>
-  <div class="note" data-on="4" data-to="tl-rb">sinal binário: um bit por símbolo</div>
-  <div class="note" data-on="5" data-to="tl-px">a média de \(\sin^2\) vale \(1/2\)</div>
-  <div class="note" data-on="7" data-to="tl-176">\(10\log_{10}1{,}5\)</div>
-  <div class="note" data-on="7" data-to="tl-54">\(9 \times 6{,}02\)</div>
+  <div class="link" data-on="3" data-from="tl-fs" data-to="tl-fs3">fₛ = 9000 amostras/s</div>
+  <div class="link" data-on="4" data-from="tl-rb3" data-to="tl-rb">um bit por símbolo: R/2 Hz</div>
+  <div class="link" data-on="6" data-from="tl-px" data-to="tl-h">P_X/x²ₘₐₓ = 1/2</div>
+  <div class="link" data-on="7" data-from="tl-15" data-to="tl-db">em dB</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1230,18 +1244,20 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercício: tronco TDM</h2><div class="sub">Os canais do slide anterior num quadro · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body" style="gap:6px">
     <div class="fig"><canvas data-figcanvas height="220" aria-label="Quadro TDM com 23 intervalos e os 9 bits de um intervalo"></canvas></div>
-    <div class="deriv" style="gap:2px">
+    <div class="deriv board" style="gap:8px">
       <div class="step txt">A cada \(T_s\), um quadro leva uma amostra de 20 canais de voz e 3 de serviço, todos a 81 kbit/s. Taxa e banda do tronco?</div>
-      <div class="step"><div class="why">Intervalos por quadro</div><div class="m">\[ N = \cssId{td-n}{20 + 3} = 23 \text{ intervalos} \]</div></div>
-      <div class="step"><div class="why">9 bits em cada intervalo</div><div class="m">\[ 23 \times 9 = 207 \text{ bits por quadro} \]</div></div>
-      <div class="step"><div class="why">Um quadro a cada \(T_s = 1/f_s\)</div><div class="m">\[ R = 207 \times \cssId{td-fs}{9000} = 1\,863\,000 \text{ bits/s} = \boxed{1{,}863 \text{ Mbit/s}} \]</div></div>
-      <div class="step"><div class="why">Confere pelos canais</div><div class="m">\[ R = 23 \times \cssId{td-81}{81 \text{ kbit/s}} = 1\,863 \text{ kbit/s} \]</div></div>
-      <div class="step"><div class="why">Banda mínima, \(R/2\)</div><div class="m">\[ \text{BW} = \frac{1\,863\,000}{2} = \boxed{931{,}5 \text{ kHz}} \]</div></div>
+      <div class="step"><div class="why">Intervalos por quadro</div><div class="m">\[ N = \cssId{td-n}{20 + 3} = \cssId{td-23}{23} \text{ intervalos} \]</div></div>
+      <div class="step"><div class="why">9 bits em cada intervalo</div><div class="m">\[ \cssId{td-23b}{23} \times 9 = \cssId{td-207}{207} \text{ bits por quadro} \]</div></div>
+      <div class="step"><div class="why">Um quadro a cada \(T_s = 1/f_s\)</div><div class="m">\[ R = \cssId{td-207b}{207} \times 9000 = 1\,863\,000 \text{ bits/s} = \boxed{1{,}863 \text{ Mbit/s}} \]</div></div>
+      <div class="step"><div class="why">Confere pelos canais</div><div class="m">\[ R = 23 \times \cssId{td-81}{81 \text{ kbit/s}} = \cssId{td-1863}{1\,863 \text{ kbit/s}} \]</div></div>
+      <div class="step"><div class="why">Banda mínima, \(R/2\)</div><div class="m">\[ \text{BW} = \frac{\cssId{td-bwn}{1\,863\,000}}{2} = \boxed{931{,}5 \text{ kHz}} \]</div></div>
       <div class="step txt">O E1 da telefonia segue a mesma conta: \(32 \times 8 \times 8000 = 2{,}048\) Mbit/s, com 30 canais de voz e 2 de serviço.</div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="td-23" data-to="td-23b">× 9 bits</div>
+  <div class="link" data-on="4" data-from="td-207" data-to="td-207b">× fₛ quadros por segundo</div>
+  <div class="link" data-on="6" data-from="td-1863" data-to="td-bwn">R/2</div>
   <div class="note" data-on="2" data-to="td-n">uma amostra de cada canal por quadro</div>
-  <div class="note" data-on="4" data-to="td-fs">quadros por segundo \(= f_s\)</div>
   <div class="note" data-on="5" data-to="td-81">\(R_b\) do slide anterior</div>
   <aside class="notes"></aside>
 </section>
@@ -1250,25 +1266,27 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício: assinante que fala baixo</h2><div class="sub">PCM uniforme contra lei μ · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Uma senoide 28 dB abaixo do fundo de escala, com \(x_{\max} = 1\) e \(\nu = 8\) bits. Qual a SQNR com PCM uniforme e com a lei μ de \(\mu = 255\)?</div>
-        <div class="step"><div class="why">28 dB abaixo da amplitude 1</div><div class="m">\[ A = 10^{-28/20} = 0{,}0398 \]</div></div>
-        <div class="step"><div class="why">Passo do uniforme, (1.1)</div><div class="m">\[ \Delta = \frac{2}{2^8} = 0{,}0078 \ \Rightarrow\ \cssId{fr-2a}{\frac{2A}{\Delta}} = 10{,}2 \]</div></div>
-        <div class="step"><div class="why">\(P_X = A^2/2\) em (1.4)</div><div class="m">\[ \text{SQNR}_{\text{unif}} = \cssId{fr-px}{-31{,}01} + 52{,}93 = \boxed{21{,}92 \text{ dB}} \]</div></div>
-        <div class="step"><div class="why">Patamar da lei μ, (2.5)</div><div class="m">\[ \text{SQNR}_\mu = 52{,}93 - \cssId{fr-ln}{20\log_{10}\ln 256} = \boxed{38{,}05 \text{ dB}} \]</div></div>
-        <div class="step"><div class="why">Ganho do companding</div><div class="m">\[ G = 38{,}05 - 21{,}92 = 16{,}13 \text{ dB} \]</div></div>
-        <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{16{,}13}{6{,}02} = 2{,}68 \ \Rightarrow\ \cssId{fr-3}{3 \text{ bits a mais}} \]</div></div>
-        <div class="step txt">O uniforme precisaria de 11 bits para tratar esse assinante como a lei μ trata com 8. Por isso a telefonia usa 8 bits com companding.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Senoide fraca quantizada pelo uniforme e pela lei mu, e SQNR contra o nível"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:16px;max-width:860px">
+      <div class="step txt">Uma senoide 28 dB abaixo do fundo de escala, com \(x_{\max} = 1\) e \(\nu = 8\) bits. Qual a SQNR com PCM uniforme e com a lei μ de \(\mu = 255\)?</div>
+      <div class="step"><div class="why">28 dB abaixo da amplitude 1</div><div class="m">\[ A = 10^{-28/20} = \cssId{fr-A}{0{,}0398} \]</div></div>
+      <div class="step"><div class="why">Passo do uniforme, (1.1)</div><div class="m">\[ \Delta = \frac{2}{2^8} = 0{,}0078 \ \Rightarrow\ \cssId{fr-2a}{\frac{2A}{\Delta}} = \cssId{fr-fr3}{\frac{2\times\cssId{fr-A3}{0{,}0398}}{0{,}0078}} = 10{,}2 \]</div></div>
+      <div class="step"><div class="why">\(P_X = A^2/2\) em (1.4)</div><div class="m">\[ \text{SQNR}_{\text{unif}} = \underbrace{\cssId{fr-a2}{10\log_{10}\tfrac{A^2}{2}}}_{-28\,-\,3{,}01} + \cssId{fr-5293}{52{,}93} = \boxed{21{,}92 \text{ dB}} \]</div></div>
+      <div class="step"><div class="why">Patamar da lei μ, (2.5)</div><div class="m">\[ \text{SQNR}_\mu = \cssId{fr-5293b}{52{,}93} - \underbrace{\cssId{fr-ln}{20\log_{10}\ln 256}}_{14{,}88} = \boxed{\cssId{fr-mu}{38{,}05} \text{ dB}} \]</div></div>
+      <div class="step"><div class="why">Ganho do companding</div><div class="m">\[ G = \cssId{fr-mu2}{38{,}05} - 21{,}92 = \cssId{fr-g}{16{,}13} \text{ dB} \]</div></div>
+      <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{\cssId{fr-g2}{16{,}13}}{6{,}02} = 2{,}68 \ \Rightarrow\ \cssId{fr-3}{3 \text{ bits a mais}} \]</div></div>
+      <div class="step txt">O uniforme precisaria de 11 bits para tratar esse assinante como a lei μ trata com 8. Por isso a telefonia usa 8 bits com companding.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Senoide fraca quantizada pelo uniforme e pela lei mu, e SQNR contra o nível"></canvas><div class="figcap"></div></div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="fr-A" data-to="fr-A3">A</div>
+  <div class="link" data-on="4" data-from="fr-fr3" data-to="fr-a2">P_X = A²/2</div>
+  <div class="link" data-on="5" data-from="fr-5293" data-to="fr-5293b">o mesmo 10 log₁₀(3·4⁸)</div>
+  <div class="link" data-on="6" data-from="fr-mu" data-to="fr-mu2">lei μ menos uniforme</div>
+  <div class="link" data-on="7" data-from="fr-g" data-to="fr-g2">÷ 6,02 dB por bit</div>
   <div class="note" data-on="3" data-to="fr-2a">\(2A\) cobre só 10 degraus dos 256</div>
-  <div class="note" data-on="4" data-to="fr-px">\(10\log_{10}(A^2/2) = -28 - 3{,}01\)</div>
-  <div class="note" data-on="5" data-to="fr-ln">\(14{,}88\) dB; vale com \(\mu A = 10{,}2\) grande</div>
+  <div class="note" data-on="5" data-to="fr-ln">vale com \(\mu A = 10{,}2\) grande</div>
   <div class="note" data-on="7" data-to="fr-3">arredonda para cima</div>
   <aside class="notes"></aside>
 </section>
@@ -1277,25 +1295,27 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício: preditor ótimo do DPCM</h2><div class="sub">Primeira ordem, \(\hat{x}_n = a\,x_{n-1}\) · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step txt">Sinal estacionário com \(\sigma^2 = 3\) e \(\rho = 0{,}92\), preditor \(\hat{x}_n = a\,x_{n-1}\). Qual \(a\) minimiza a potência do erro de predição e quantos bits o DPCM economiza?</div>
-        <div class="step"><div class="why">Expande o quadrado</div><div class="m">\[ \sigma_e^2(a) = E[X_n^2] - 2a\,\cssId{pr-r}{E[X_nX_{n-1}]} + a^2 E[X_{n-1}^2] \]</div></div>
-        <div class="step"><div class="why">Estacionário</div><div class="m">\[ \sigma_e^2(a) = \sigma^2\,(1 - 2a\rho + a^2) \]</div></div>
-        <div class="step"><div class="why">Derivada nula</div><div class="m">\[ \frac{d\sigma_e^2}{da} = \sigma^2(\cssId{pr-d}{2a - 2\rho}) = 0 \ \Rightarrow\ \boxed{a = \rho = 0{,}92} \]</div></div>
-        <div class="step"><div class="why">Leva \(a = \rho\)</div><div class="m">\[ \sigma_e^2 = \sigma^2(\cssId{pr-1r}{1 - \rho^2}) = 3 \times 0{,}1536 = 0{,}4608 \]</div></div>
-        <div class="step"><div class="why">Ganho de predição</div><div class="m">\[ G_p = \frac{\sigma^2}{\sigma_e^2} = \frac{1}{0{,}1536} = 6{,}51 \ \to\ 8{,}14 \text{ dB} \]</div></div>
-        <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{8{,}14}{6{,}02} = \boxed{1{,}35 \text{ bit a menos por amostra}} \]</div></div>
-        <div class="step txt">Com \(a = 1\), a diferença simples do slide da potência da diferença, \(\sigma_e^2 = 2\sigma^2(1 - \rho) = 0{,}48\): só 0,18 dB pior. Perto de \(\rho = 1\) a diferença simples já é quase ótima.</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="420" aria-label="Pares de amostras com a reta do preditor e a parábola do erro"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:20px;max-width:860px">
+      <div class="step txt">Sinal estacionário com \(\sigma^2 = 3\) e \(\rho = 0{,}92\), preditor \(\hat{x}_n = a\,x_{n-1}\). Qual \(a\) minimiza a potência do erro de predição e quantos bits o DPCM economiza?</div>
+      <div class="step"><div class="why">Expande o quadrado</div><div class="m">\[ \sigma_e^2(a) = \cssId{pr-a1}{E[X_n^2]} - 2a\,\cssId{pr-a2}{E[X_nX_{n-1}]} + a^2 \cssId{pr-a3}{E[X_{n-1}^2]} \]</div></div>
+      <div class="step"><div class="why">Estacionário</div><div class="m">\[ \sigma_e^2(a) = \cssId{pr-b1}{\sigma^2} - 2a\,\cssId{pr-b2}{\rho\sigma^2} + a^2\cssId{pr-b3}{\sigma^2} = \sigma^2\cssId{pr-poly}{(1 - 2a\rho + a^2)} \]</div></div>
+      <div class="step"><div class="why">Derivada nula</div><div class="m">\[ \frac{d\sigma_e^2}{da} = \sigma^2(\cssId{pr-d}{2a - 2\rho}) = 0 \ \Rightarrow\ \boxed{\cssId{pr-a}{a = \rho} = 0{,}92} \]</div></div>
+      <div class="step"><div class="why">Leva \(a = \rho\)</div><div class="m">\[ \sigma_e^2 = \sigma^2(\cssId{pr-1r}{1 - \rho^2}) = 3\times(1 - \underbrace{0{,}8464}_{0{,}92^2}) = 3\times\cssId{pr-15}{0{,}1536} = 0{,}4608 \]</div></div>
+      <div class="step"><div class="why">Ganho de predição</div><div class="m">\[ G_p = \frac{\sigma^2}{\sigma_e^2} = \frac{1}{\cssId{pr-152}{0{,}1536}} = 6{,}51 \ \to\ \cssId{pr-814}{8{,}14} \text{ dB} \]</div></div>
+      <div class="step"><div class="why">6,02 dB por bit</div><div class="m">\[ \frac{\cssId{pr-8142}{8{,}14}}{6{,}02} = \boxed{1{,}35 \text{ bit a menos por amostra}} \]</div></div>
+      <div class="step txt">Com \(a = 1\), a diferença simples do slide da potência da diferença, \(\sigma_e^2 = 2\sigma^2(1 - \rho) = 0{,}48\): só 0,18 dB pior. Perto de \(\rho = 1\) a diferença simples já é quase ótima.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="420" aria-label="Pares de amostras com a reta do preditor e a parábola do erro"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="pr-r">\(R_X(T_s) = \rho\sigma^2\)</div>
-  <div class="note" data-on="4" data-to="pr-d">derivada de \(a^2 - 2a\rho\)</div>
-  <div class="note" data-on="5" data-to="pr-1r">\(0{,}92^2 = 0{,}8464\)</div>
+  <div class="link" data-on="3" data-from="pr-a1" data-to="pr-b1"></div>
+  <div class="link" data-on="3" data-from="pr-a2" data-to="pr-b2">estacionário: R_X(Tₛ) = ρσ²</div>
+  <div class="link" data-on="3" data-from="pr-a3" data-to="pr-b3"></div>
+  <div class="link" data-on="4" data-from="pr-poly" data-to="pr-d">derivada em a</div>
+  <div class="link" data-on="5" data-from="pr-a" data-to="pr-1r">a = ρ em 1 − 2aρ + a²</div>
+  <div class="link" data-on="6" data-from="pr-15" data-to="pr-152">σ²/σₑ²</div>
+  <div class="link" data-on="7" data-from="pr-814" data-to="pr-8142">÷ 6,02 dB por bit</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1777,6 +1797,7 @@ function figPcmChain(ctx, w, h, s, t) {
   return ["Fig. 7.7 do Proakis: x(t) passa por quatro blocos até virar bits.", "Saída do filtro: a curva cinza, com componentes acima de W, vira a preta.", "Saída do amostrador: x_n = x(nT_s), seis amostras.", "Saída do quantizador: cada amostra vai ao nível mais próximo, 8 níveis tracejados.", "Saída do codificador: índice do nível em binário natural, 3 bits por amostra."][s - 1];
 }
 function figPcmUnif(ctx, w, h, s, t) {
+  s = [1, 2, 3, 6, 4, 5, 7][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), D = 0.25, Q = (x) => Math.min(0.875, Math.max(-0.875, D * (Math.floor(x / D) + 0.5)));
   const r1 = { x: 70, y: 10, w: w - 86, h: 160 }, r2 = { x: 70, y: 222, w: w - 86, h: 136 };
   const { X, Y } = frame(ctx, r1, { xmin: -1, xmax: 1, ymin: -1, ymax: 1, xt: [-1, -0.5, 0, 0.5, 1], yt: [-1, 0, 1], yl: "Q(x)", ylo: 48 });
@@ -1891,6 +1912,7 @@ function figLeiMu(ctx, w, h, s, t) {
   return ["Curva ímpar, aqui com μ = 20: os negativos espelham os positivos.", "μ → 0: a reta g(x) = x, sem compressão.", "μ = 5: inclinação maior perto de zero.", "μ = 255, o padrão: quase vertical perto da origem."][s - 1];
 }
 function figLeiA(ctx, w, h, s, t) {
+  s = [1, 3, 4][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), r = { x: 70, y: 14, w: w - 90, h: h - 70 };
   const { X, Y } = frame(ctx, r, { xmin: 0, xmax: 1.05, ymin: 0, ymax: 1.08, xt: [0, 0.5, 1], yt: [0, 0.5, 1], xl: "x", yl: "g(x)", ylo: 50 });
   const xs = range(0, 1, 801); curve(ctx, xs, xs, X, Y, "#808a92", 2.4); txt(ctx, "A = 1", X(0.62), Y(0.5), { size: 17, c: c.M });
@@ -1900,6 +1922,7 @@ function figLeiA(ctx, w, h, s, t) {
   return ["A = 1 é a reta, sem compressão.", "A = 2: reta até 1/A = 0,5, logaritmo depois.", "Junção em |x| = 1/A: as duas partes valem 1/(1 + ln A).", "A = 87,6: a reta só vai até 0,011."][s - 1];
 }
 function figPorLog(ctx, w, h, s, t) {
+  s = [1, 2, 3, 4, 5, 5, 5][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), r = { x: 60, y: 14, w: w - 76, h: h - 62 };
   const { X, Y } = frame(ctx, r, { xmin: 0, xmax: 0.42, ymin: 0, ymax: 0.75, xl: "x", yl: "g(x)", ylo: 30 });
   const reg = (a, b, col, k) => { ctx.save(); ctx.fillStyle = tint(col, 0.12); ctx.fillRect(X(0), Y(b), X(G20I(b)) - X(0), Y(a) - Y(b)); ctx.fillStyle = tint(col, 0.28); ctx.fillRect(X(G20I(a)), Y(b), X(G20I(b)) - X(G20I(a)), Y(0) - Y(b)); ctx.restore();
@@ -1912,6 +1935,7 @@ function figPorLog(ctx, w, h, s, t) {
   return ["Curva do compressor perto da origem.", "Azul: na parte inclinada, o degrau Δ vira um Δ_x estreito.", "Vermelho: na parte deitada, o mesmo Δ vira um Δ_x largo; tracejado, a tangente.", "D(x) cresce com Δ_x², isto é, com 1/g'(x)².", "Para x²/D constante, Δ_x tem que crescer na proporção de |x|."][s - 1];
 }
 function figSqnrMu(ctx, w, h, s, t) {
+  s = [1, 2, 3, 3, 4, 5, 6][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), mu = 255, L = Math.log(256), r1 = { x: 72, y: 12, w: w - 90, h: 160 }, r2 = { x: 72, y: 236, w: w - 90, h: 130 };
   const lf = (v) => ({ "-3": "0,001", "-2": "0,01", "-1": "0,1", "0": "1", "1": "10", "2": "100" })[v] || af(v);
   const { X, Y } = frame(ctx, r1, { xmin: -3, xmax: 0, ymin: -1, ymax: 2.6, xt: [-3, -2, -1, 0], yt: [0, 1, 2], xf: lf, yf: lf, yl: "g'(x)", ylo: 56 });
@@ -2045,6 +2069,7 @@ function figEx742(ctx, w, h, s, t) {
   return ["f_s = 8 kHz para voz de 3 kHz.", "PCM: 8 bits por amostra.", "DPCM: 4 bits por amostra.", "Metade da taxa, metade da banda pela Eq. (1.6)."][s - 1];
 }
 function figDmDiag(ctx, w, h, s, t) {
+  s = [1, 2, 3, 4, 5, 5, 5, 6][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), sc = Math.min((w - 40) / 6.0, 98), ox = 20 + 0.3 * sc, oy = 28 + 0.85 * sc, el = since("dmd", s, t), K = c.K;
   const P = (x, y) => [ox + x * sc, oy - y * sc], rs = 0.26 * sc, it = { size: 19, italic: true };
   const S1 = P(1.1, 0), Qb = P(2.6, 0), AC = P(2.6, -1.6);
@@ -2094,6 +2119,7 @@ function figGran(ctx, w, h, s, t) {
   return s < 5 ? "Senoide com 40 amostras por período e a escada do DM." : `Com Δ = 0,16 a SNR é ${fmtc(snrDb(SEN, DM16.xh), 1)} dB, melhor que as duas.`;
 }
 function figLimite(ctx, w, h, s, t) {
+  s = [1, 2, 2, 3, 4, 5][s - 1] || s;   // passo da dedução no quadro -> passo da figura
   const c = C(), r1 = { x: 70, y: 12, w: w - 88, h: 170 }, r2 = { x: 70, y: 236, w: w - 88, h: 140 };
   const { X, Y } = frame(ctx, r1, { xmin: 0, xmax: 12, ymin: -0.1, ymax: 1.2, xt: [0, 2, 4, 6, 8, 10, 12], yt: [0, 0.5, 1], yl: "x_n", ylo: 50 });
   const xs = range(0, 12, 200); curve(ctx, xs, xs.map((v) => Math.sin(TAU * v / 40)), X, Y, LG, 2.4);
@@ -2467,14 +2493,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
