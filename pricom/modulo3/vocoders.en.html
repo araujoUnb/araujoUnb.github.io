@@ -221,6 +221,11 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -392,9 +397,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Limit of waveform coding</h2><div class="sub">A waveform coder sends at least one bit per sample</div><div class="bar"></div></div>
   <div class="body" style="gap:14px">
-    <div class="deriv">
-      <div class="step"><div class="why">One bit per sample, samples at the Nyquist rate</div><div class="m">\[ R\ \ge\ 1\times\cssId{lf-fs}{2B}\ \ \text{bits/s} \tag{1.1}\]</div></div>
-      <div class="step"><div class="why">Telephone speech, \(B=4\) kHz</div><div class="m">\[ R\ \ge\ 1\times 2\cdot 4000=8000\ \text{bits/s}=8\ \text{kbit/s} \tag{1.2}\]</div></div>
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">One bit per sample, samples at the Nyquist rate</div><div class="m">\[ R\ \ge\ \cssId{lf-1}{1}\times\cssId{lf-fs}{2B}\ \ \text{bits/s} \tag{1.1} \]</div></div>
+        <div class="step"><div class="why">Telephone speech, \(B=4\) kHz</div><div class="m">\[ R\ \ge\ 1\times \cssId{lf-b}{2\cdot 4000}=8000\ \text{bits/s}=8\ \text{kbit/s} \tag{1.2} \]</div></div>
     </div>
     <div class="step txt" style="margin-top:34px">The LPC-10 vocoder sends intelligible speech at \(2.4\) kbit/s, less than one bit per sample. How? It does not send the waveform; it sends the recipe to rebuild it.</div>
     <div class="cols" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;flex:0 0 auto">
@@ -403,7 +408,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="block example step"><span class="bt">Vocoder</span><p>It ships only the recipe. Everything is bought and cooked at the destination, without the chef's touch.</p></div>
     </div>
   </div>
+  <div class="note" data-on="1" data-to="lf-1">one bit per sample</div>
   <div class="note" data-on="1" data-to="lf-fs">at least the Nyquist rate</div>
+  <div class="link" data-on="2" data-from="lf-fs" data-to="lf-b">B = 4 kHz</div>
   <aside class="notes"></aside>
 </section>
 
@@ -468,30 +475,33 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>All-pole filter</h2><div class="sub">The vocal tract as a difference equation, Eq. 7.5.1 of Proakis</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv">
-        <div class="step"><div class="why">Current sample: past plus innovation</div><div class="m">\[ x_n=\cssId{fp-pas}{\sum_{i=1}^{p}a_i\,x_{n-i}}+\cssId{fp-inov}{G\,w_n} \tag{2.1}\]</div></div>
-        <div class="step"><div class="why">\(z\) transform of both sides</div><div class="m">\[ X(z)=\sum_{i=1}^{p}a_i\,\cssId{fp-z}{z^{-i}}X(z)+G\,W(z) \tag{2.2}\]</div></div>
-        <div class="step"><div class="why">Move the sum to the left and factor out \(X(z)\)</div><div class="m">\[ X(z)\underbrace{\Big(1-\sum_{i=1}^{p}a_i\,z^{-i}\Big)}_{A(z)}=G\,W(z) \tag{2.3}\]</div></div>
-        <div class="step"><div class="why">Divide by \(A(z)\,W(z)\)</div><div class="m">\[ \boxed{H(z)=\frac{X(z)}{W(z)}=\frac{G}{A(z)}} \tag{2.4}\]</div></div>
+    <div class="deriv board" style="gap:22px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Current sample: past plus innovation</div><div class="m">\[ \cssId{fp-x}{x_n}=\cssId{fp-pas}{\sum_{i=1}^{p}a_i\,\cssId{fp-xd}{x_{n-i}}}+\cssId{fp-inov}{G\,w_n} \tag{2.1} \]</div></div>
+        <div class="step"><div class="why">\(z\) transform of both sides: a delay of \(i\) samples becomes \(z^{-i}\)</div><div class="m">\[ \cssId{fp-X}{X(z)}=\cssId{fp-s2}{\sum_{i=1}^{p}a_i\,\cssId{fp-z}{z^{-i}X(z)}}+G\,W(z) \tag{2.2} \]</div></div>
+        <div class="step"><div class="why">Move the sum to the left</div><div class="m">\[ \cssId{fp-l3}{X(z)\cssId{fp-m}{-\sum_{i=1}^{p}a_i\,z^{-i}X(z)}}=G\,W(z) \]</div></div>
+        <div class="step"><div class="why">Factor out \(X(z)\)</div><div class="m">\[ \cssId{fp-l4}{X(z)\underbrace{\Big(1-\sum_{i=1}^{p}a_i\,z^{-i}\Big)}_{A(z)}}=\cssId{fp-gw}{G\,W(z)} \tag{2.3} \]</div></div>
+        <div class="step"><div class="why">Divide by \(A(z)\,W(z)\)</div><div class="m">\[ \boxed{H(z)=\frac{X(z)}{W(z)}=\cssId{fp-h}{\frac{G}{A(z)}}} \tag{2.4} \]</div></div>
         <div class="step"><div class="why">Poles only</div><div class="m" style="font-size:21px;line-height:1.35">Each complex pair near the unit circle is a formant. With \(p=10\), five formants.</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="330" aria-label="Impulse response and poles of the filter"></canvas><div class="figcap"></div></div>
-        <dl class="syms">
+    </div>
+    <div class="figfloat" data-show="1-1,5-6">
+      <div class="fig"><canvas data-figcanvas height="300" aria-label="Impulse response and poles of the filter"></canvas><div class="figcap"></div></div>
+      <dl class="syms">
           <div data-from="1"><dt>\(x_n,\ p\)</dt><dd>speech sample; filter order</dd></div>
           <div data-from="1"><dt>\(a_i\)</dt><dd>vocal tract coefficients</dd></div>
           <div data-from="1"><dt>\(w_n,\ G\)</dt><dd>unit-power excitation; gain</dd></div>
           <div data-from="2"><dt>\(X(z),\ W(z)\)</dt><dd>\(z\) transforms of \(x_n\) and \(w_n\)</dd></div>
-          <div data-from="3"><dt>\(A(z)\)</dt><dd>predictor polynomial, \(1-\sum_i a_i z^{-i}\)</dd></div>
-          <div data-from="4"><dt>\(H(z)\)</dt><dd>transfer function of the vocal tract</dd></div>
+          <div data-from="4"><dt>\(A(z)\)</dt><dd>predictor polynomial, \(1-\sum_i a_i z^{-i}\)</dd></div>
+          <div data-from="5"><dt>\(H(z)\)</dt><dd>transfer function of the vocal tract</dd></div>
         </dl>
-      </div>
     </div>
   </div>
   <div class="note" data-on="1" data-to="fp-pas">the signal's own past</div>
   <div class="note" data-on="1" data-to="fp-inov">innovation: what the past does not explain</div>
-  <div class="note" data-on="2" data-to="fp-z">a delay of \(i\) samples becomes \(z^{-i}\)</div>
+  <div class="link" data-on="2" data-from="fp-x" data-to="fp-X">z transform</div>
+  <div class="link" data-on="2" data-from="fp-xd" data-to="fp-z">delay of i samples: z⁻ⁱ</div>
+  <div class="link" data-on="3" data-from="fp-s2" data-to="fp-m">moves to the left: sign flips</div>
+  <div class="link" data-on="4" data-from="fp-l3" data-to="fp-l4">factor out X(z)</div>
+  <div class="link" data-on="5" data-from="fp-gw" data-to="fp-h">divide by A(z)·W(z)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -591,32 +601,54 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ Yule-Walker ============ -->
-<section class="slide" data-sec="3 Linear prediction · Yule-Walker" data-fig="yw">
+<section class="slide" data-sec="3 Linear prediction · Yule-Walker">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Yule-Walker equations</h2><div class="sub">Differentiating \(\mathcal E_p\) with respect to each \(a_i\)</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);gap:30px">
-      <div class="deriv">
-        <div class="step"><div class="why">Chain rule on 3.3</div><div class="m">\[ \frac{\partial\mathcal E_p}{\partial a_i}=\frac1N\sum_n 2\,e_n\,\cssId{yw-de}{\frac{\partial e_n}{\partial a_i}} \tag{3.4}\]</div></div>
-        <div class="step"><div class="why">The derivative is \(-x_{n-i}\); set it to zero</div><div class="m">\[ \frac{\partial\mathcal E_p}{\partial a_i}=-\frac2N\sum_n e_n\,x_{n-i}=0 \tag{3.5}\]</div></div>
-        <div class="step"><div class="why">Replace \(e_n\) using 3.1 and 3.2</div><div class="m">\[ \frac1N\sum_n\Big(x_n-\sum_{k=1}^{p}a_k\,x_{n-k}\Big)x_{n-i}=0 \tag{3.6}\]</div></div>
-        <div class="step"><div class="why">Split the two sums and swap the order</div><div class="m">\[ \frac1N\sum_n x_n\,x_{n-i}=\sum_{k=1}^{p}a_k\,\cssId{yw-rr}{\frac1N\sum_n x_{n-i}\,x_{n-k}} \tag{3.7}\]</div></div>
-        <div class="step"><div class="why">Autocorrelation \(R_m\), Eq. 7.5.8</div><div class="m">\[ \sum_{k=1}^{p}a_k\,R_{i-k}=R_i,\qquad 1\le i\le p \tag{3.8}\]</div></div>
-        <div class="step"><div class="why">The \(p\) equations together</div><div class="m">\[ \begin{bmatrix}R_0&R_1&\cdots\\R_1&R_0&\cdots\\\vdots&&\ddots\end{bmatrix}\begin{bmatrix}a_1\\a_2\\\vdots\end{bmatrix}=\begin{bmatrix}R_1\\R_2\\\vdots\end{bmatrix} \tag{3.9}\]</div></div>
-        <div class="step"><div class="why">Structure</div><div class="m" style="font-size:21px">Toeplitz matrix: Levinson-Durbin solves it in \(p^2\) operations.</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="300" aria-label="Autocorrelation of a speech block"></canvas><div class="figcap"></div></div>
-        <dl class="syms">
+    <div class="deriv board" style="gap:22px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Chain rule on 3.3</div><div class="m">\[ \frac{\partial\mathcal E_p}{\partial a_i}=\frac1N\sum_n 2\,e_n\,\cssId{yw-de}{\frac{\partial e_n}{\partial a_i}} \tag{3.4} \]</div></div>
+        <div class="step"><div class="why">\(e_n\) from 3.1 and 3.2: only the term \(k=i\) depends on \(a_i\)</div><div class="m">\[ \cssId{yw-de2}{\frac{\partial e_n}{\partial a_i}}=\frac{\partial}{\partial a_i}\Big(\cssId{yw-g1}{\color{#9a9a9a}{x_n-a_1x_{n-1}-\cdots}}-{\color[RGB]{176,58,46}a_i\,x_{n-i}}-\cssId{yw-g2}{\color{#9a9a9a}{\cdots-a_p\,x_{n-p}}}\Big)=\cssId{yw-xi}{{\color[RGB]{176,58,46}-x_{n-i}}} \]</div></div>
+        <div class="step"><div class="why">Substitute into 3.4; at the minimum the derivative is zero</div><div class="m">\[ \frac{\partial\mathcal E_p}{\partial a_i}=-\frac2N\sum_n \cssId{yw-e3}{e_n}\,\cssId{yw-x3}{x_{n-i}}=\cssId{yw-z}{0} \tag{3.5} \]</div></div>
+        <div class="step"><div class="why">Replace \(e_n\) using 3.1 and 3.2 and divide by \(-2\)</div><div class="m">\[ \frac1N\sum_n\cssId{yw-e4}{\Big(x_n-\sum_{k=1}^{p}a_k\,x_{n-k}\Big)}x_{n-i}=0 \tag{3.6} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-4">
+      <dl class="syms">
           <div data-from="1"><dt>\(\mathcal E_p,\ e_n\)</dt><dd>mean squared error; prediction error</dd></div>
           <div data-from="1"><dt>\(N,\ i\)</dt><dd>samples in the block; coefficient being differentiated</dd></div>
-          <div data-from="5"><dt>\(R_m\)</dt><dd>\(\frac1N\sum_n x_n x_{n-m}\), autocorrelation at lag \(m\); \(R_{-m}=R_m\)</dd></div>
         </dl>
-      </div>
     </div>
   </div>
-  <div class="note" data-on="1" data-to="yw-de">\(e_n=x_n-\sum_k a_k x_{n-k}\): only the term \(k=i\) depends on \(a_i\), and the derivative is \(-x_{n-i}\)</div>
-  <div class="note" data-on="4" data-to="yw-rr">depends only on \(i-k\): autocorrelation \(R_{i-k}\)</div>
+  <div class="link" data-on="2" data-from="yw-de" data-to="yw-de2">eₙ = xₙ − Σ aₖxₙ₋ₖ</div>
+  <div class="note" data-on="2" data-to="yw-g1 yw-g2">do not depend on \(a_i\): zero derivative</div>
+  <div class="link" data-on="3" data-from="yw-xi" data-to="yw-x3">substitute the derivative</div>
+  <div class="note" data-on="3" data-to="yw-z">minimum: zero derivative</div>
+  <div class="link" data-on="4" data-from="yw-e3" data-to="yw-e4">eₙ from 3.1 and 3.2</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ Yule-Walker (cont.) ============ -->
+<section class="slide" data-sec="3 Linear prediction · Yule-Walker (cont.)" data-fig="yw">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Yule-Walker equations (cont.)</h2><div class="sub">From the sums to the autocorrelation</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:22px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Eq. 3.6</div><div class="m">\[ \frac1N\sum_n\Big(x_n-\cssId{yw-s1}{\sum_{k=1}^{p}a_k\,x_{n-k}}\Big)x_{n-i}=0 \tag{3.6} \]</div></div>
+        <div class="step"><div class="why">Split the two sums and swap the order</div><div class="m">\[ \cssId{yw-l2}{\frac1N\sum_n x_n\,x_{n-i}}=\cssId{yw-r2}{\sum_{k=1}^{p}a_k\,\cssId{yw-rr}{\frac1N\sum_n x_{n-i}\,x_{n-k}}} \tag{3.7} \]</div></div>
+        <div class="step"><div class="why">Autocorrelation \(R_m\), Eq. 7.5.8</div><div class="m">\[ \cssId{yw-Ri}{R_i}=\sum_{k=1}^{p}a_k\,\cssId{yw-Rik}{R_{i-k}},\qquad 1\le i\le p \tag{3.8} \]</div></div>
+        <div class="step"><div class="why">The \(p\) equations together</div><div class="m">\[ \cssId{yw-M}{\begin{bmatrix}R_0&R_1&\cdots\\R_1&R_0&\cdots\\\vdots&&\ddots\end{bmatrix}}\begin{bmatrix}a_1\\a_2\\\vdots\end{bmatrix}=\begin{bmatrix}R_1\\R_2\\\vdots\end{bmatrix} \tag{3.9} \]</div></div>
+        <div class="step"><div class="why">Structure</div><div class="m" style="font-size:21px">Toeplitz matrix: Levinson-Durbin solves it in \(p^2\) operations.</div></div>
+    </div>
+    <div class="figfloat" data-show="2-5">
+      <div class="fig"><canvas data-figcanvas height="300" aria-label="Autocorrelation of a speech block"></canvas><div class="figcap"></div></div>
+      <dl class="syms">
+          <div data-from="2"><dt>\(R_m\)</dt><dd>\(\frac1N\sum_n x_n x_{n-m}\), autocorrelation at lag \(m\); \(R_{-m}=R_m\)</dd></div>
+        </dl>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="yw-s1" data-to="yw-r2">split the sums and swap the order</div>
+  <div class="link" data-on="3" data-from="yw-l2" data-to="yw-Ri">lag i: Rᵢ</div>
+  <div class="link" data-on="3" data-from="yw-rr" data-to="yw-Rik">depends only on i − k: Rᵢ₋ₖ</div>
+  <div class="link" data-on="4" data-from="yw-Rik" data-to="yw-M">i = 1, …, p stacked</div>
   <aside class="notes"></aside>
 </section>
 
@@ -625,26 +657,30 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Minimum error and gain</h2><div class="sub">The error is orthogonal to the past</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:30px">
-      <div class="deriv">
-        <div class="step"><div class="why">Eq. 3.5: orthogonality</div><div class="m">\[ \frac1N\sum_n e_n\,x_{n-k}=0,\qquad k=1,\ldots,p \tag{3.10}\]</div></div>
-        <div class="step"><div class="why">Write \(e_n^2=e_n\,e_n\) and replace one of the \(e_n\) using 3.2</div><div class="m">\[ \mathcal E_{\min}=\frac1N\sum_n e_n\,x_n-\sum_k a_k\,\cssId{em-zero}{\frac1N\sum_n e_n\,x_{n-k}} \tag{3.11}\]</div></div>
-        <div class="step"><div class="why">The first term remains; replace \(e_n\)</div><div class="m">\[ \begin{aligned}\mathcal E_{\min}&=\frac1N\sum_n\Big(x_n-\sum_k a_k\,x_{n-k}\Big)x_n\\&=\boxed{R_0-\sum_{k=1}^{p}a_k\,\cssId{em-rk}{R_k}}\end{aligned} \tag{3.12}\]</div></div>
-        <div class="step"><div class="why">\(e_n=G\,w_n\) and the excitation has unit power</div><div class="m">\[ G=\sqrt{\mathcal E_{\min}} \tag{3.13}\]</div></div>
+    <div class="deriv board" style="gap:16px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Eq. 3.5 divided by \(-2\): orthogonality</div><div class="m">\[ \frac1N\sum_n e_n\,x_{n-k}=0,\qquad k=1,\ldots,p \tag{3.10} \]</div></div>
+        <div class="step"><div class="why">Minimum error: write \(e_n^2=e_n\,e_n\)</div><div class="m">\[ \mathcal E_{\min}=\frac1N\sum_n e_n^2=\frac1N\sum_n e_n\,\cssId{em-e2}{e_n} \]</div></div>
+        <div class="step"><div class="why">Replace one of the \(e_n\) using 3.2 and distribute</div><div class="m">\[ \mathcal E_{\min}=\frac1N\sum_n \cssId{em-e3}{e_n}\,\cssId{em-sub}{x_n-\sum_k a_k\,\underbrace{\cssId{em-zero}{\frac1N\sum_n e_n\,x_{n-k}}}_{=\,0}} \tag{3.11} \]</div></div>
+        <div class="step"><div class="why">The first term remains; replace the other \(e_n\) and distribute</div><div class="m">\[ \mathcal E_{\min}=\cssId{em-a}{\frac1N\sum_n x_n\,x_n}-\sum_k a_k\,\cssId{em-b}{\frac1N\sum_n x_{n-k}\,x_n} \]</div></div>
+        <div class="step"><div class="why">Autocorrelations at lags \(0\) and \(k\)</div><div class="m">\[ \cssId{em-box}{\boxed{\mathcal E_{\min}=\cssId{em-r0}{R_0}-\sum_{k=1}^{p}a_k\,\cssId{em-rk}{R_k}}} \tag{3.12} \]</div></div>
+        <div class="step"><div class="why">\(e_n=G\,w_n\) and the excitation has unit power</div><div class="m">\[ \mathcal E_{\min}=\frac1N\sum_n G^2w_n^2=G^2\ \Rightarrow\ \cssId{em-g}{G=\sqrt{\mathcal E_{\min}}} \tag{3.13} \]</div></div>
         <div class="step txt" style="font-size:21px">From \(R_0,\ldots,R_p\) come the \(a_k\) and \(G\).</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="340" aria-label="Orthogonal projection: the error is perpendicular to the past"></canvas><div class="figcap"></div></div>
-        <dl class="syms">
+    </div>
+    <div class="figfloat" data-show="1-6">
+      <div class="fig"><canvas data-figcanvas height="300" aria-label="Orthogonal projection: the error is perpendicular to the past"></canvas><div class="figcap"></div></div>
+      <dl class="syms">
           <div data-from="1"><dt>\(k\)</dt><dd>lag of each past sample, from \(1\) to \(p\)</dd></div>
           <div data-from="2"><dt>\(\mathcal E_{\min}\)</dt><dd>mean squared error with the optimal \(a_k\)</dd></div>
-          <div data-from="4"><dt>\(G\)</dt><dd>synthesizer gain</dd></div>
+          <div data-from="6"><dt>\(G\)</dt><dd>synthesizer gain</dd></div>
         </dl>
-      </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="em-zero">\(=0\) by orthogonality 3.10</div>
-  <div class="note" data-on="3" data-to="em-rk">\(\frac1N\sum_n x_{n-k}\,x_n=R_k\)</div>
+  <div class="link" data-on="3" data-from="em-e2" data-to="em-sub">eₙ = xₙ − Σ aₖxₙ₋ₖ</div>
+  <div class="note" data-on="3" data-to="em-zero">orthogonality, Eq. 3.10</div>
+  <div class="link" data-on="4" data-from="em-e3" data-to="em-a">replace the other eₙ</div>
+  <div class="link" data-on="5" data-from="em-a" data-to="em-r0">lag 0: R₀</div>
+  <div class="link" data-on="5" data-from="em-b" data-to="em-rk">lag k: Rₖ</div>
+  <div class="link" data-on="6" data-from="em-box" data-to="em-g">eₙ = G wₙ, wₙ of unit power</div>
   <aside class="notes"></aside>
 </section>
 
@@ -653,25 +689,50 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Example: order-2 predictor</h2><div class="sub">A block with \(R_0=1\), \(R_1=0.8\) and \(R_2=0.5\)</div><div class="bar"></div></div>
   <div class="body">
-    <div class="cols" style="grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:28px">
-      <div class="col deriv narrowwhy" style="gap:4px">
-        <div class="step"><div class="why">Eq. 3.9 with \(p=2\)</div><div class="m">\[ \begin{bmatrix}1&0.8\\0.8&1\end{bmatrix}\begin{bmatrix}a_1\\a_2\end{bmatrix}=\begin{bmatrix}0.8\\0.5\end{bmatrix} \tag{3.14}\]</div></div>
-        <div class="step"><div class="why">Cramer for \(a_1\)</div><div class="m">\[ a_1=\cssId{ex-n1}{\frac{\begin{vmatrix}0.8&0.8\\0.5&1\end{vmatrix}}{0.36}}=\frac{0.8-0.8\cdot0.5}{0.36}=1.111 \tag{3.15}\]</div></div>
-        <div class="step"><div class="why">Cramer for \(a_2\)</div><div class="m">\[ a_2=\cssId{ex-n2}{\frac{\begin{vmatrix}1&0.8\\0.8&0.5\end{vmatrix}}{0.36}}=\frac{0.5-0.8^2}{0.36}=-0.389 \tag{3.16}\]</div></div>
-        <div class="step"><div class="why">Eq. 3.12</div><div class="m">\[ \mathcal E_{\min}=1-\cssId{ex-t1}{1.111\cdot0.8}-\cssId{ex-t2}{(-0.389)\cdot0.5}=0.306 \tag{3.17}\]</div></div>
-        <div class="step"><div class="why">Eq. 3.13</div><div class="m">\[ G=\sqrt{0.306}=0.553 \tag{3.18}\]</div></div>
-      </div>
-      <div class="col" style="gap:8px">
-        <div class="step txt" style="font-size:21px">The prediction error has \(30.6\%\) of the signal power: \[ 10\log_{10}\frac{1}{0.306}=5.15\ \text{dB} \tag{3.19}\] of prediction gain.</div>
-        <div class="step txt" style="font-size:21px">Poles: roots of \(z^2-1.111z+0.389\), with discriminant \(1.235-1.556=-0.321\): \[ z=\frac{1.111\pm j\sqrt{0.321}}{2}=0.556\pm j\,0.283 \tag{3.20}\] with \(|z|=\sqrt{0.389}=0.624\), inside the unit circle: the synthesizer is stable.</div>
-        <div class="fig"><canvas data-figcanvas height="210" aria-label="Autocorrelation, error power and poles of the example"></canvas></div>
-      </div>
+    <div class="deriv board" style="gap:18px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Eq. 3.9 with \(p=2\)</div><div class="m">\[ \cssId{ex-A}{\begin{bmatrix}1&0.8\\0.8&1\end{bmatrix}}\begin{bmatrix}a_1\\a_2\end{bmatrix}={\color[RGB]{176,58,46}\begin{bmatrix}0.8\\0.5\end{bmatrix}} \tag{3.14} \]</div></div>
+        <div class="step"><div class="why">Determinant of the matrix</div><div class="m">\[ D=\cssId{ex-D0}{\begin{vmatrix}1&0.8\\0.8&1\end{vmatrix}}=1-0.8^2=\cssId{ex-D}{0.36} \]</div></div>
+        <div class="step"><div class="why">Cramer for \(a_1\): 1st column replaced by the right-hand side</div><div class="m">\[ a_1=\cssId{ex-f1}{\frac{\cssId{ex-n1}{\begin{vmatrix}{\color[RGB]{176,58,46}0.8}&0.8\\{\color[RGB]{176,58,46}0.5}&1\end{vmatrix}}}{0.36}}=\frac{0.8-0.8\cdot0.5}{0.36}=1.111 \tag{3.15} \]</div></div>
+        <div class="step"><div class="why">Cramer for \(a_2\): 2nd column replaced by the right-hand side</div><div class="m">\[ a_2=\frac{\cssId{ex-n2}{\begin{vmatrix}1&{\color[RGB]{176,58,46}0.8}\\0.8&{\color[RGB]{176,58,46}0.5}\end{vmatrix}}}{0.36}=\frac{0.5-0.8^2}{0.36}=\cssId{ex-a2}{-0.389} \tag{3.16} \]</div></div>
+        <div class="step"><div class="why">Eq. 3.12 with \(p=2\)</div><div class="m">\[ \mathcal E_{\min}=R_0-a_1R_1-a_2R_2=1-\cssId{ex-t1}{1.111\cdot0.8}-\cssId{ex-t2}{(-0.389)\cdot0.5} \]</div></div>
+        <div class="step"><div class="why">Compute the products; minus times minus is plus</div><div class="m">\[ \mathcal E_{\min}=\phantom{R_0-a_1R_1-a_2R_2=}1-\cssId{ex-u1}{0.889}+\cssId{ex-u2}{0.194}=\cssId{ex-E}{0.306} \tag{3.17} \]</div></div>
+        <div class="step"><div class="why">Eq. 3.13</div><div class="m">\[ G=\sqrt{\cssId{ex-E2}{0.306}}=0.553 \tag{3.18} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-1,5-5">
+      <div class="fig"><canvas data-figcanvas height="240" aria-label="Autocorrelation, error power and poles of the example"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="ex-n1">1st column replaced by the right-hand side; below, the determinant \(1-0.8^2=0.36\)</div>
-  <div class="note" data-on="3" data-to="ex-n2">2nd column replaced by the right-hand side</div>
-  <div class="note" data-on="4" data-to="ex-t1">\(0.889\)</div>
-  <div class="note" data-on="4" data-to="ex-t2">\(-0.194\): subtracted, it becomes \(+0.194\)</div>
+  <div class="link" data-on="2" data-from="ex-A" data-to="ex-D0">determinant</div>
+  <div class="note" data-on="3" data-to="ex-f1">1st column replaced by the right-hand side; below, \(D=0.36\)</div>
+  <div class="link" data-on="4" data-from="ex-n1" data-to="ex-n2">now the 2nd column</div>
+  <div class="link" data-on="5" data-from="ex-a2" data-to="ex-t2">a₂ = −0.389</div>
+  <div class="link" data-on="6" data-from="ex-t1" data-to="ex-u1">product</div>
+  <div class="link" data-on="6" data-from="ex-t2" data-to="ex-u2">−(−0.194) = +0.194</div>
+  <div class="link" data-on="7" data-from="ex-E" data-to="ex-E2">G = √ℰ, Eq. 3.13</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exemplo de ordem 2 (cont.) ============ -->
+<section class="slide" data-sec="3 Linear prediction · example p = 2 (cont.)" data-fig="ex2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Example: order-2 predictor (cont.)</h2><div class="sub">Prediction gain and synthesizer poles</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:22px;padding-right:clamp(0px, (100vw - 761px) * 1000, 540px)">
+        <div class="step"><div class="why">Error power relative to the signal power</div><div class="m">\[ \frac{\mathcal E_{\min}}{R_0}=\cssId{eb-f}{\frac{0.306}{1}}=30.6\% \]</div></div>
+        <div class="step"><div class="why">Prediction gain, in dB</div><div class="m">\[ 10\log_{10}\cssId{eb-g}{\frac{1}{0.306}}=5.15\ \text{dB} \tag{3.19} \]</div></div>
+        <div class="step"><div class="why">Poles: roots of \(z^2A(z)\)</div><div class="m">\[ z^2-a_1z-a_2=z^2-\cssId{eb-a1}{1.111}\,z+0.389=0 \]</div></div>
+        <div class="step"><div class="why">Discriminant</div><div class="m">\[ \cssId{eb-D}{1.111^2-4\cdot0.389}=1.235-1.556=\cssId{eb-Dv}{-0.321} \]</div></div>
+        <div class="step"><div class="why">Quadratic formula</div><div class="m">\[ z=\frac{1.111\pm \cssId{eb-j}{j\sqrt{0.321}}}{2}=\cssId{eb-z}{0.556\pm j\,0.283} \tag{3.20} \]</div></div>
+        <div class="step"><div class="why">Pole magnitude: inside the unit circle</div><div class="m">\[ |z|=\sqrt{\cssId{eb-m}{0.556^2+0.283^2}}=\sqrt{0.389}=0.624\lt 1\ \Rightarrow\ \text{stable} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-2,5-6">
+      <div class="fig"><canvas data-figcanvas data-part="2" height="260" aria-label="Autocorrelation, error power and poles of the example"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="eb-f" data-to="eb-g">invert: signal over error</div>
+  <div class="link" data-on="4" data-from="eb-a1" data-to="eb-D">b² − 4c</div>
+  <div class="link" data-on="5" data-from="eb-Dv" data-to="eb-j">Δ < 0: imaginary root</div>
+  <div class="link" data-on="6" data-from="eb-z" data-to="eb-m">|z|² = Re² + Im²</div>
   <aside class="notes"></aside>
 </section>
 
@@ -765,11 +826,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Reflection coefficients</h2><div class="sub">What is quantized instead of the \(a_k\)</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:36px">
-      <div class="col deriv" style="gap:8px">
+      <div class="col deriv narrowwhy" style="gap:18px">
         <div class="step txt" style="font-size:21px">Sending quantized \(a_k\) is risky: a small error in one coefficient can push a pole outside the unit circle, and the synthesizer becomes unstable.</div>
         <div class="step"><div class="why">Levinson-Durbin also yields the \(r_k\) of the lattice filter; stable if and only if</div><div class="m">\[ |r_k|\lt 1\quad\text{for all }k \tag{4.1}\]</div></div>
-        <div class="step txt" style="font-size:21px">In the order-\(2\) example: \(r_1=R_1/R_0=0.8\) and \(r_2=a_2=-0.389\). Both inside \((-1,1)\).</div>
-        <div class="step"><div class="why">In practice the log-area ratio is sent</div><div class="m">\[ \begin{aligned}o_k&=\ln\frac{1+r_k}{1-r_k}\\ o_1&=\ln\frac{1.8}{0.2}=\ln 9=2.20\end{aligned} \tag{4.2}\]</div></div>
+        <div class="step"><div class="why">In the order-\(2\) example; both inside \((-1,1)\)</div><div class="m">\[ r_1=\tfrac{R_1}{R_0}=0.8,\quad r_2=a_2=-0.389 \]</div></div>
+        <div class="step"><div class="why">In practice the log-area ratio is sent</div><div class="m">\[ o_k=\ln\cssId{lr-p}{\frac{1+r_k}{1-r_k}} \tag{4.2} \]</div></div>
+        <div class="step"><div class="why">With \(r_1=0.8\)</div><div class="m">\[ o_1=\ln\cssId{lr-p1}{\frac{1+0.8}{1-0.8}}=\ln\tfrac{1.8}{0.2}=\ln 9=2.20 \]</div></div>
       </div>
       <div class="col" style="gap:8px">
         <div class="fig"><canvas data-figcanvas height="400" aria-label="Poles with rounded coefficients and log-area ratio"></canvas><div class="figcap"></div></div>
@@ -777,6 +839,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
+  <div class="link" data-on="5" data-from="lr-p" data-to="lr-p1">r₁ = 0.8</div>
   <aside class="notes"></aside>
 </section>
 
@@ -803,13 +866,15 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="col deriv" style="gap:8px">
         <div class="step txt" style="font-size:21px">Unvoiced sound has no marked formants: \(4\) coefficients are enough.</div>
         <div class="step txt" style="font-size:21px">Adding up the column: \(6+1+5+20+16+5=53\) bits in the voiced block and \(6+1+5+20=32\) in the unvoiced one.</div>
-        <div class="step"><div class="why">With control bits, \(54\) bits per block</div><div class="m">\[ R=\frac{54}{\cssId{lp-t}{22.5\ \text{ms}}}=2400\ \text{bits/s} \tag{4.3}\]</div></div>
-        <div class="step"><div class="why">Against \(64\) kbit/s for PCM: \(27\) times less</div><div class="m">\[ \frac{64\,000}{2400}=26.7\approx 27 \tag{4.4}\]</div></div>
+        <div class="step"><div class="why">Duration of one block: \(180\) samples at \(8\) kHz</div><div class="m">\[ T_b=\frac{180}{8000}\ \text{s}=\cssId{lp-t0}{22.5\ \text{ms}} \]</div></div>
+        <div class="step"><div class="why">With control bits, \(54\) bits per block</div><div class="m">\[ R=\frac{54}{\cssId{lp-t}{22.5\ \text{ms}}}=\cssId{lp-r0}{2400}\ \text{bits/s} \tag{4.3} \]</div></div>
+        <div class="step"><div class="why">Against \(64\) kbit/s for PCM: \(27\) times less</div><div class="m">\[ \cssId{lp-r}{\frac{64\,000}{2400}}=26.7\approx 27 \tag{4.4} \]</div></div>
         <div class="step txt" style="font-size:21px">Standard FS-1015 of 1984, secure telephony of the US government. Intelligible but robotic speech: low score in opinion tests.</div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="4" data-to="lp-t">\(180/8000\) s</div>
+  <div class="link" data-on="5" data-from="lp-t0" data-to="lp-t">one block: 22.5 ms</div>
+  <div class="link" data-on="6" data-from="lp-r0" data-to="lp-r">LPC-10 rate</div>
   <aside class="notes"></aside>
 </section>
 
@@ -861,13 +926,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 1: rate of a CELP coder</h2><div class="sub">Speech at \(8\) kHz, \(20\) ms frames with \(4\) subframes · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
-      <div class="col deriv narrowwhy exv" style="gap:4px">
+      <div class="col deriv narrowwhy exv" style="gap:12px">
         <div class="step txt" style="font-size:21px">In every frame the CELP coder sends \(27\) bits of LSP coefficients and \(5\) of synchronization and protection. In every subframe it sends the index and gain of the adaptive codebook, with \(9\) and \(3\) bits, and of the fixed codebook, with \(14\) and \(6\) bits. What is the bit rate, and how many bits go per sample?</div>
-        <div class="step"><div class="why">Add the fields of one subframe</div><div class="m">\[ b_{\text{sub}}=\cssId{v1-ad}{9+3}+\cssId{v1-fx}{14+6}=32\ \text{bits} \tag{5.1}\]</div></div>
-        <div class="step"><div class="why">Frame: LSP, \(4\) subframes and sync</div><div class="m">\[ b_{\text{f}}=\cssId{v1-lsp}{27}+\cssId{v1-4s}{4\times 32}+5=160\ \text{bits} \tag{5.2}\]</div></div>
-        <div class="step"><div class="why">Samples in one frame</div><div class="m">\[ N=20\ \text{ms}\times 8\ \tfrac{\text{samples}}{\text{ms}}=160 \tag{5.3}\]</div></div>
-        <div class="step"><div class="why">Frame bits over its duration</div><div class="m">\[ R_{\text{CELP}}=\frac{160\ \text{bits}}{\cssId{v1-T}{20\times10^{-3}\ \text{s}}}=\boxed{8000\ \text{bit/s}} \tag{5.4}\]</div></div>
-        <div class="step"><div class="why">Frame bits over its samples</div><div class="m">\[ \frac{160\ \text{bits}}{\cssId{v1-N}{160\ \text{samples}}}=\boxed{1\ \text{bit per sample}} \tag{5.5}\]</div></div>
+        <div class="step"><div class="why">Add the fields of one subframe</div><div class="m">\[ b_{\text{sub}}=\cssId{v1-ad}{9+3}+\cssId{v1-fx}{14+6}=\cssId{v1-32}{32}\ \text{bits} \tag{5.1} \]</div></div>
+        <div class="step"><div class="why">Frame: LSP, \(4\) subframes and sync</div><div class="m">\[ b_{\text{f}}=\cssId{v1-lsp}{27}+\cssId{v1-4s}{4\times 32}+5=160\ \text{bits} \tag{5.2} \]</div></div>
+        <div class="step"><div class="why">Samples in one frame</div><div class="m">\[ N=\cssId{v1-20}{20\ \text{ms}}\times 8\ \tfrac{\text{samples}}{\text{ms}}=160 \tag{5.3} \]</div></div>
+        <div class="step" style="margin-top:14px"><div class="why">Frame bits over its duration</div><div class="m">\[ R_{\text{CELP}}=\cssId{v1-b5}{\frac{160\ \text{bits}}{\cssId{v1-T}{20\times10^{-3}\ \text{s}}}}=\boxed{8000\ \text{bit/s}} \tag{5.4} \]</div></div>
+        <div class="step" style="margin-top:14px"><div class="why">Frame bits over its samples</div><div class="m">\[ \cssId{v1-b6}{\frac{160\ \text{bits}}{\cssId{v1-N}{160\ \text{samples}}}}=\boxed{1\ \text{bit per sample}} \tag{5.5} \]</div></div>
       </div>
       <div class="col" style="gap:6px">
         <div class="fig"><canvas data-figcanvas height="500" aria-label="CELP frame: subframes, bit fields and samples"></canvas><div class="figcap"></div></div>
@@ -876,10 +941,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   </div>
   <div class="note" data-on="2" data-to="v1-ad">adaptive: repeats the past, gives the pitch</div>
   <div class="note" data-on="2" data-to="v1-fx">fixed: the new part of the excitation</div>
+  <div class="link" data-on="3" data-from="v1-32" data-to="v1-4s">4 subframes: new excitation every 5 ms</div>
   <div class="note" data-on="3" data-to="v1-lsp">vocal tract envelope, once per frame</div>
-  <div class="note" data-on="3" data-to="v1-4s">new excitation every \(5\) ms</div>
+  <div class="link" data-on="5" data-from="v1-20" data-to="v1-b5">20 ms = 20×10⁻³ s</div>
   <div class="note" data-on="5" data-to="v1-T">\(50\) frames per second</div>
-  <div class="note" data-on="6" data-to="v1-N">Eq. 5.3</div>
+  <div class="link" data-on="6" data-from="v1-b5" data-to="v1-b6">the same 160 bits</div>
+  <div class="note" data-on="6" data-to="v1-N">\(N\) from Eq. 5.3</div>
   <aside class="notes"></aside>
 </section>
 
@@ -889,21 +956,25 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 1: how many channels fit</h2><div class="sub">A \(64\) kbit/s trunk · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
-      <div class="col deriv narrowwhy exv" style="gap:4px">
-        <div class="step txt" style="font-size:21px">The same speech goes over PCM with \(8\) bits per sample, over ADPCM with \(4\) bits per sample, over the CELP of Eq. 5.4 or over the LPC-10 of Eq. 4.3. How many channels of each fit in a \(64\) kbit/s trunk?</div>
-        <div class="step"><div class="why">Waveform coder: bits per sample times \(f_s\)</div><div class="m">\[ R_{\text{PCM}}=8\times 8000=64\,000\ \text{bit/s} \tag{5.6}\]</div></div>
-        <div class="step"><div class="why">ADPCM sends half the bits</div><div class="m">\[ R_{\text{ADPCM}}=4\times 8000=32\,000\ \text{bit/s} \tag{5.7}\]</div></div>
-        <div class="step"><div class="why">CELP compression</div><div class="m">\[ \begin{aligned}\frac{R_{\text{PCM}}}{\cssId{v2-c}{R_{\text{CELP}}}}&=\frac{64\,000}{8000}=8\\ \frac{R_{\text{ADPCM}}}{R_{\text{CELP}}}&=\frac{32\,000}{8000}=4\end{aligned} \tag{5.8}\]</div></div>
-        <div class="step"><div class="why">LPC-10 channels: integer part of the ratio</div><div class="m">\[ \Big\lfloor\frac{64\,000}{\cssId{v2-l}{2400}}\Big\rfloor=\lfloor 26.7\rfloor=\boxed{26} \tag{5.9}\]</div></div>
-        <div class="step txt" style="font-size:21px">CELP spends \(8000/2400=3.3\) times the bits of LPC-10. In return it sends the best excitation in the codebook instead of pulses or noise, and the speech no longer sounds robotic.</div>
+      <div class="col deriv narrowwhy exv" style="gap:5px">
+        <div class="step txt" style="font-size:20px">The same speech goes over PCM with \(8\) bits per sample, over ADPCM with \(4\) bits per sample, over the CELP of Eq. 5.4 or over the LPC-10 of Eq. 4.3. How many channels of each fit in a \(64\) kbit/s trunk?</div>
+        <div class="step"><div class="why">Waveform coder: bits per sample times \(f_s\)</div><div class="m">\[ R_{\text{PCM}}=\cssId{v2-8}{8}\times 8000=64\,000\ \text{bit/s} \tag{5.6} \]</div></div>
+        <div class="step"><div class="why">ADPCM sends half the bits</div><div class="m">\[ R_{\text{ADPCM}}=\cssId{v2-4}{4}\times 8000=\cssId{v2-32}{32\,000}\ \text{bit/s} \tag{5.7} \]</div></div>
+        <div class="step"><div class="why">CELP compression</div><div class="m">\[ \begin{aligned}\frac{R_{\text{ADPCM}}}{R_{\text{CELP}}}&=\frac{\cssId{v2-32b}{32\,000}}{8000}=4\\ \frac{R_{\text{PCM}}}{\cssId{v2-c}{R_{\text{CELP}}}}&=\frac{64\,000}{8000}=8\end{aligned} \tag{5.8} \]</div></div>
+        <div class="step"><div class="why">LPC-10 channels: integer part of the ratio</div><div class="m">\[ \Big\lfloor\frac{64\,000}{\cssId{v2-l}{2400}}\Big\rfloor=\lfloor 26.7\rfloor=\boxed{\cssId{v2-26}{26}} \tag{5.9} \]</div></div>
+        <div class="step"><div class="why">What is left in the trunk</div><div class="m">\[ 64\,000-\cssId{v2-26b}{26}\times2400=1600\ \text{bit/s} \]</div></div>
+        <div class="step txt" style="font-size:20px">CELP spends \(8000/2400=3.3\) times the bits of LPC-10. In return it sends the best excitation in the codebook instead of pulses or noise, and the speech no longer sounds robotic.</div>
       </div>
       <div class="col" style="gap:6px">
         <div class="fig"><canvas data-figcanvas height="500" aria-label="64 kbit/s trunk split into channels of each coder"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
+  <div class="link" data-on="3" data-from="v2-8" data-to="v2-4">half the bits per sample</div>
+  <div class="link" data-on="4" data-from="v2-32" data-to="v2-32b">R_ADPCM, Eq. 5.7</div>
   <div class="note" data-on="4" data-to="v2-c">\(8000\) bit/s, Eq. 5.4</div>
-  <div class="note" data-on="5" data-to="v2-l">Eq. 4.3; left over: \(64\,000-26\times2400=1600\) bit/s</div>
+  <div class="note" data-on="5" data-to="v2-l">LPC-10, Eq. 4.3</div>
+  <div class="link" data-on="6" data-from="v2-26" data-to="v2-26b">26 channels take 62 400 bit/s</div>
   <aside class="notes"></aside>
 </section>
 
@@ -913,23 +984,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 2: from reflection coefficients to \(a_k\)</h2><div class="sub">Levinson-Durbin recursion with \(p=2\) · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
-      <div class="col deriv narrowwhy exv" style="gap:4px">
+      <div class="col deriv narrowwhy exv" style="gap:8px">
         <div class="step txt" style="font-size:21px">An order-\(2\) LPC receives \(r_1=0.5\) and \(r_2=-0.75\) for a block with \(R_0=4\). Find \(a_1\), \(a_2\), the error of each order and the gain \(G\).</div>
-        <div class="step"><div class="why">Order \(1\): the predictor is \(r_1\) itself</div><div class="m">\[ \begin{aligned}a_1^{(1)}&=r_1=0.5\\ \mathcal E_1&=R_0\cssId{v3-f1}{(1-r_1^2)}=4\times0.75=3\end{aligned} \tag{5.10}\]</div></div>
-        <div class="step"><div class="why">Order \(2\): \(a_2=r_2\) and \(a_1\) is corrected</div><div class="m">\[ \begin{aligned}a_2&=r_2=-0.75\\ a_1&=a_1^{(1)}\cssId{v3-c}{(1-r_2)}=0.5\times1.75=0.875\end{aligned} \tag{5.11}\]</div></div>
-        <div class="step"><div class="why">Stage \(2\) multiplies the error by \(1-r_2^2\)</div><div class="m">\[ \mathcal E_2=\mathcal E_1\cssId{v3-f2}{(1-r_2^2)}=3\times0.4375=1.3125 \tag{5.12}\]</div></div>
-        <div class="step"><div class="why">Synthesizer gain, Eq. 3.13</div><div class="m">\[ G=\sqrt{\mathcal E_2}=\sqrt{1.3125}=\boxed{1.146} \tag{5.13}\]</div></div>
-        <div class="step"><div class="why">Prediction gain</div><div class="m">\[ 10\log_{10}\frac{R_0}{\cssId{v3-e2}{\mathcal E_2}}=10\log_{10}3.048=\boxed{4.84\ \text{dB}} \tag{5.14}\]</div></div>
+        <div class="step"><div class="why">Order \(1\)</div><div class="m">\[ a_1^{(1)}=r_1=\cssId{v3-r1}{0.5} \]</div></div>
+        <div class="step"><div class="why">Order-\(1\) error</div><div class="m">\[ \mathcal E_1=R_0\,(1-r_1^2)=4\,(1-\cssId{v3-r1b}{0.5^2})=4\times0.75=3 \tag{5.10} \]</div></div>
+        <div class="step"><div class="why">Order \(2\): \(a_2=r_2\)</div><div class="m">\[ a_2=r_2=\cssId{v3-r2}{-0.75} \]</div></div>
+        <div class="step"><div class="why">\(a_1\) corrected</div><div class="m">\[ a_1=a_1^{(1)}\,(1-r_2)=0.5\times\cssId{v3-c2}{1.75}=0.875 \tag{5.11} \]</div></div>
+        <div class="step"><div class="why">Stage \(2\): factor \(1-r_2^2\)</div><div class="m">\[ \mathcal E_2=\mathcal E_1\,(1-r_2^2)=3\times\cssId{v3-sq}{0.4375}=\cssId{v3-E2}{1.3125} \tag{5.12} \]</div></div>
+        <div class="step"><div class="why">Gain, Eq. 3.13</div><div class="m">\[ G=\sqrt{\cssId{v3-E2b}{1.3125}}=\boxed{1.146} \tag{5.13} \]</div></div>
+        <div class="step"><div class="why">Prediction gain</div><div class="m">\[ 10\log_{10}\frac{R_0}{\mathcal E_2}=10\log_{10}\cssId{v3-E2c}{3.048}=\boxed{4.84\ \text{dB}} \tag{5.14} \]</div></div>
       </div>
       <div class="col" style="gap:6px">
         <div class="fig"><canvas data-figcanvas height="500" aria-label="Prediction error at each stage of the recursion"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="v3-f1">\(1-0.5^2=1-0.25=0.75\)</div>
-  <div class="note" data-on="3" data-to="v3-c">\(1-(-0.75)=1.75\)</div>
-  <div class="note" data-on="4" data-to="v3-f2">\(1-0.75^2=1-0.5625\)</div>
-  <div class="note" data-on="6" data-to="v3-e2">stage 2 alone: \(-10\log_{10}0.4375=3.59\) dB</div>
+  <div class="link" data-on="3" data-from="v3-r1" data-to="v3-r1b">r₁ = 0.5</div>
+  <div class="link" data-on="5" data-from="v3-r2" data-to="v3-c2">1 − (−0.75) = 1.75</div>
+  <div class="link" data-on="6" data-from="v3-c2" data-to="v3-sq">1 − 0.75² = 1 − 0.5625</div>
+  <div class="link" data-on="7" data-from="v3-E2" data-to="v3-E2b">G = √ℰ₂</div>
+  <div class="link" data-on="8" data-from="v3-E2b" data-to="v3-E2c">R₀/ℰ₂ = 4/1.3125</div>
   <aside class="notes"></aside>
 </section>
 
@@ -939,22 +1013,47 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 2: stability and formant</h2><div class="sub">\(x_n=0.875\,x_{n-1}-0.75\,x_{n-2}+G\,w_n\), \(f_s=8\) kHz · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
-      <div class="col deriv narrowwhy exv" style="gap:4px">
+      <div class="col deriv narrowwhy exv" style="gap:12px">
         <div class="step txt" style="font-size:21px">Is the synthesizer of the previous slide stable? At what frequency is the formant? Which log-area ratios would be quantized?</div>
         <div class="step"><div class="why">From the \(r_k\), Eq. 4.1</div><div class="m">\[ |r_1|=0.5\lt1,\quad |r_2|=0.75\lt 1\ \Rightarrow\ \text{stable} \tag{5.15}\]</div></div>
-        <div class="step"><div class="why">Poles: roots of \(z^2-a_1z-a_2\)</div><div class="m">\[ \begin{aligned}&z^2-0.875\,z+0.75=0\\ &\cssId{v4-d}{a_1^2+4a_2}=0.766-3=-2.234\end{aligned} \tag{5.16}\]</div></div>
-        <div class="step"><div class="why">Quadratic formula</div><div class="m">\[ \begin{aligned}z&=\frac{0.875\pm j\sqrt{2.234}}{2}=0.4375\pm j\,0.747\\ |z|&=\cssId{v4-m}{\sqrt{-a_2}}=\sqrt{0.75}=0.866\end{aligned} \tag{5.17}\]</div></div>
-        <div class="step"><div class="why">Pole angle becomes frequency</div><div class="m">\[ \begin{aligned}\theta&=\arctan\frac{0.747}{0.4375}=59.7^\circ\\ f&=\cssId{v4-f}{\frac{\theta}{360^\circ}}\,f_s=0.1657\times8000=1326\ \text{Hz}\end{aligned} \tag{5.18}\]</div></div>
-        <div class="step"><div class="why">Log-area ratios, Eq. 4.2</div><div class="m">\[ \begin{aligned}o_1&=\ln\frac{1+r_1}{1-r_1}=\ln\frac{1.5}{0.5}=\ln 3=1.10\\ o_2&=\ln\frac{0.25}{1.75}=\ln\tfrac17=-1.95\end{aligned} \tag{5.19}\]</div></div>
+        <div class="step"><div class="why">Poles: roots of \(z^2-a_1z-a_2\)</div><div class="m">\[ z^2-\cssId{v4-a1}{0.875}\,z+0.75=0 \]</div></div>
+        <div class="step"><div class="why">Discriminant \(\Delta=a_1^2+4a_2\)</div><div class="m">\[ \Delta=\cssId{v4-d0}{0.875^2}+4\,(-0.75)=0.766-3=\cssId{v4-d}{-2.234} \tag{5.16} \]</div></div>
+        <div class="step"><div class="why">Quadratic formula</div><div class="m">\[ z=\frac{0.875\pm \cssId{v4-j}{j\sqrt{2.234}}}{2}=\cssId{v4-z}{0.4375\pm j\,0.747} \]</div></div>
+        <div class="step"><div class="why">Magnitude: the product of the poles is \(-a_2\)</div><div class="m">\[ |z|=\cssId{v4-m}{\sqrt{-a_2}}=\sqrt{0.75}=0.866 \tag{5.17} \]</div></div>
       </div>
       <div class="col" style="gap:6px">
         <div class="fig"><canvas data-figcanvas height="500" aria-label="Reflection coefficients, poles, envelope and log-area ratios"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="v4-d">negative: complex-conjugate poles</div>
-  <div class="note" data-on="4" data-to="v4-m">the product of the poles is \(-a_2=0.75\)</div>
-  <div class="note" data-on="5" data-to="v4-f">a full turn of the circle is \(f_s\)</div>
+  <div class="link" data-on="4" data-from="v4-a1" data-to="v4-d0">a₁²</div>
+  <div class="note" data-on="4" data-to="v4-d">negative: complex-conjugate poles</div>
+  <div class="link" data-on="5" data-from="v4-d" data-to="v4-j">√Δ = j√2.234</div>
+  <div class="link" data-on="6" data-from="v4-z" data-to="v4-m">z·z* = |z|² = −a₂</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercício 2: formante e log-áreas ============ -->
+<section class="slide" id="vx4b" data-sec="5 Exercises · stability and formant (cont.)" data-fig="vx4">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 2: stability and formant (cont.)</h2><div class="sub">\(x_n=0.875\,x_{n-1}-0.75\,x_{n-2}+G\,w_n\), \(f_s=8\) kHz · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="cols" style="grid-template-columns:minmax(0,1.22fr) minmax(0,1fr);gap:28px">
+      <div class="col deriv narrowwhy exv" style="gap:20px">
+        <div class="step"><div class="why">Pole from Eq. 5.17</div><div class="m">\[ z=\cssId{v4b-z}{0.4375\pm j\,0.747},\qquad |z|=0.866 \]</div></div>
+        <div class="step"><div class="why">Pole angle</div><div class="m">\[ \theta=\arctan\cssId{v4b-f}{\frac{0.747}{0.4375}}=\cssId{v4b-th}{59.7^\circ} \]</div></div>
+        <div class="step"><div class="why">Pole angle becomes frequency</div><div class="m">\[ f=\frac{\cssId{v4b-th2}{59.7^\circ}}{360^\circ}\,f_s=0.1657\times8000=1326\ \text{Hz} \tag{5.18} \]</div></div>
+        <div class="step"><div class="why">Log-area ratios, Eq. 4.2</div><div class="m">\[ o_1=\ln\cssId{v4b-p}{\frac{1+r_1}{1-r_1}}=\ln\frac{1.5}{0.5}=\ln 3=1.10 \]</div></div>
+        <div class="step"><div class="why">With \(r_2=-0.75\)</div><div class="m">\[ o_2=\ln\cssId{v4b-p2}{\frac{1-0.75}{1+0.75}}=\ln\frac{0.25}{1.75}=\ln\tfrac17=-1.95 \tag{5.19} \]</div></div>
+      </div>
+      <div class="col" style="gap:6px">
+        <div class="fig"><canvas data-figcanvas data-part="2" height="500" aria-label="Reflection coefficients, poles, envelope and log-area ratios"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="v4b-z" data-to="v4b-f">arctan(Im/Re)</div>
+  <div class="link" data-on="3" data-from="v4b-th" data-to="v4b-th2">a full turn is fₛ</div>
+  <div class="link" data-on="5" data-from="v4b-p" data-to="v4b-p2">r₂ = −0.75</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1418,7 +1517,7 @@ function figFonteFiltro(ctx, w, h, s) {
 }
 function figPolos(ctx, w, h, s) {
   const c = C();
-  if (s <= 3) {
+  if (s <= 4) {
     const d = new Float64Array(240); d[0] = 1; const hn = allpole(d, VOC.a), mx = Math.max(...hn.map(Math.abs));
     const P = panel(ctx, 50, 18, w - 66, h - 64, { xmin: 0, xmax: 30.5, ymin: -1.1, ymax: 1.1, xticks: msTicks, xlabel: "ms", ylabel: "h_n", zero: true });
     P.clip(); curve(ctx, TMS, Array.from(hn, (v) => v / mx), P.X, P.Y, c.R, 2); P.unclip();
@@ -1436,7 +1535,7 @@ function figPolos(ctx, w, h, s) {
     const lr = Rr * (k ? 1.3 : 1.18);
     txt(ctx, `${f} Hz, |z| = ${fmtc(r, 3)}`, cx + lr * Math.cos(th) + 4, cy - lr * Math.sin(th), { c: col, size: 15 });
   });
-  if (s === 4) return "Poles of G/A(z): radius e^{−πB/f_s} and angle 2πF/f_s, one conjugate pair per formant.";
+  if (s === 5) return "Poles of G/A(z): radius e^{−πB/f_s} and angle 2πF/f_s, one conjugate pair per formant.";
   return "Each pair near the unit circle gives a peak in |H(f)|: a formant.";
 }
 function figEspectro(ctx, w, h, s) {
@@ -1457,6 +1556,7 @@ function figEspectro(ctx, w, h, s) {
   return null;
 }
 function figYW(ctx, w, h, s, t) {
+  s = [0, 3, 4, 5, 6, 7][Math.min(s, 5)];   // slide (cont.): passos 3.6 a 3.9
   const c = C(), x = VOC.blk, R = VOC.R, mx = Math.max(...x.map(Math.abs));
   if (s <= 4) {
     const m = 1 + Math.floor(Math.max(t, 0) / 1.3) % 4, ph = 130;
@@ -1496,14 +1596,15 @@ function figOrtog(ctx, w, h, s) {
   arrowTo(ctx, O[0], O[1], Xh[0], Xh[1], c.P, 2.6); txt(ctx, "x̂_n", (O[0] + Xh[0]) / 2, Xh[1] + 18, { c: c.P, size: 18, italic: true, align: "center" });
   arrowTo(ctx, Xh[0], Xh[1], Xv[0], Xv[1] + 2, c.R, 2.6); txt(ctx, "e_n", Xv[0] + 10, (Xh[1] + Xv[1]) / 2, { c: c.R, size: 18, italic: true });
   const q = 14; ctx.save(); ctx.strokeStyle = c.R; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(Xh[0] - q, Xh[1]); ctx.lineTo(Xh[0] - q, Xh[1] - q); ctx.lineTo(Xh[0], Xh[1] - q); ctx.stroke(); ctx.restore();
-  if (s === 1) return "The error e_n is perpendicular to every past sample x_{n−k}: zero mean of the products.";
-  if (s === 2) { txt(ctx, "e_n ⟂ x_{n−k}", w * 0.72, h * 0.42, { c: c.R, size: 16 }); return "That is why the term with e_n x_{n−k} drops out of ℰ_{min}."; }
+  if (s <= 2) return "The error e_n is perpendicular to every past sample x_{n−k}: zero mean of the products.";
+  if (s <= 4) { txt(ctx, "e_n ⟂ x_{n−k}", w * 0.72, h * 0.42, { c: c.R, size: 16 }); return "That is why the term with e_n x_{n−k} drops out of ℰ_{min}."; }
   txt(ctx, "‖e‖^2 = ‖x‖^2 − ⟨x̂, x⟩", w * 0.04, 20, { c: c.K, size: 17 });
-  if (s === 3) return "Pythagoras: ℰ_{min} = R_0 − Σ a_k R_k is the power of x_n minus the part the past explains.";
+  if (s === 5) return "Pythagoras: ℰ_{min} = R_0 − Σ a_k R_k is the power of x_n minus the part the past explains.";
   txt(ctx, "G = ‖e‖", w * 0.70, h * 0.52, { c: c.R, size: 17 });
   return "The length of the error is the gain G of the unit-power excitation.";
 }
 function figEx2(ctx, w, h, s) {
+  if (ctx.canvas.dataset.part === "2") s = s <= 2 ? 6 : 7;   // slide (cont.): ganho e polos
   const c = C();
   if (s <= 5) {
     const P = panel(ctx, 50, 10, w - 70, h - 50, { xmin: -0.5, xmax: 2.5, ymin: 0, ymax: 1.1, xticks: [0, 1, 2], xfmt: (t) => "R" + "₀₁₂"[t], yticks: [0, 0.5, 1], yfmt: decFmt(1) });
@@ -1561,10 +1662,10 @@ function figLar(ctx, w, h, s) {
   }
   const P = panel(ctx, 50, 12, w - 64, h - 60, { xmin: -1, xmax: 1, ymin: -4.5, ymax: 4.5, xticks: [-1, -0.5, 0, 0.5, 1], xfmt: decFmt(1), yticks: [-4, -2, 0, 2, 4], xlabel: "r_k", ylabel: "o_k", ylw: 18 });
   const rs = range(-0.985, 0.985, 300);
-  if (s >= 5) for (let o = -4; o <= 4.01; o += 0.5) { const r = Math.tanh(o / 2); line(ctx, P.X(-1), P.Y(o), P.X(r), P.Y(o), tint(c.M, 0.45), 1); line(ctx, P.X(r), P.Y(o), P.X(r), P.Y(-4.5), tint(c.R, 0.5), 1); }
+  if (s >= 6) for (let o = -4; o <= 4.01; o += 0.5) { const r = Math.tanh(o / 2); line(ctx, P.X(-1), P.Y(o), P.X(r), P.Y(o), tint(c.M, 0.45), 1); line(ctx, P.X(r), P.Y(o), P.X(r), P.Y(-4.5), tint(c.R, 0.5), 1); }
   curve(ctx, rs, rs.map((r) => Math.log((1 + r) / (1 - r))), P.X, P.Y, c.P, 2.6);
   dot(ctx, P.X(0.8), P.Y(Math.log(9)), 6, c.R); txt(ctx, "(0.8, 2.20)", P.X(0.8) - 10, P.Y(Math.log(9)), { c: c.R, size: 14, align: "right" });
-  return s === 4 ? "Log-area ratio: it stretches the scale near r_k = ±1." : "Steps of 0.5 in o_k, mapped to the r_k axis: they get dense near ±1.";
+  return s <= 5 ? "Log-area ratio: it stretches the scale near r_k = ±1." : "Steps of 0.5 in o_k, mapped to the r_k axis: they get dense near ±1.";
 }
 const CB = (() => {   // dicionário de 16 resíduos de 40 amostras e um alvo sintetizado com a entrada 11
   const r = makeRng(7), cb = Array.from({ length: 16 }, () => Float64Array.from({ length: 40 }, () => r.gauss()[0]));
@@ -1645,6 +1746,7 @@ function figVx1(ctx, w, h, s) {   // CELP frame: subframes, bit fields, samples
   return ["A 20 ms frame split into 4 subframes of 5 ms.", "Subframe 1 enlarged: the four fields of the excitation.", "The whole frame: LSP, four subframes and sync.", "160 samples fit in the same 20 ms frame.", "50 frames per second.", "1 bit per sample, against 8 for PCM."][Math.min(s, 6) - 1];
 }
 function figVx2(ctx, w, h, s) {   // 64 kbit/s trunk shared among channels
+  if (s >= 6) s -= 1;   // passo 6: o que sobra no tronco
   const c = C(), x0 = 92, x1 = w - 16, W = x1 - x0, sc = W / 64000;
   line(ctx, x0, 34, x1, 34, c.K, 1.4);
   [0, 16, 32, 48, 64].forEach((v) => { const x = x0 + v * 1000 * sc; line(ctx, x, 29, x, 39, c.K, 1.4); txt(ctx, String(v), x, 16, { c: c.M, size: 13, align: "center", mono: true }); });
@@ -1670,6 +1772,7 @@ function figVx2(ctx, w, h, s) {   // 64 kbit/s trunk shared among channels
   return ["The 64 kbit/s trunk, still empty.", "A single PCM channel fills the whole trunk.", "ADPCM fits twice.", "Each CELP channel takes 8 kbit/s: one eighth of the trunk.", "8 CELP channels and 26 LPC-10 channels.", "In red, the room taken by one CELP channel."][Math.min(s, 6) - 1];
 }
 function figVx3(ctx, w, h, s) {   // prediction error at each lattice stage
+  s = [0, 1, 2, 2, 3, 3, 4, 5, 6][Math.min(s, 8)];   // passos do quadro -> estados da figura
   const c = C(), yb = 300, k = 52, bw = 50, xs = [w * 0.1, w * 0.5, w * 0.9], E = [4, 3, 1.3125];
   ["order 0", "order 1", "order 2"].forEach((t, i) => txt(ctx, t, xs[i], 16, { c: c.M, size: 15, align: "center" }));
   line(ctx, 14, yb, w - 14, yb, c.RU, 1);
@@ -1696,6 +1799,7 @@ function figVx3(ctx, w, h, s) {   // prediction error at each lattice stage
   return ["Each lattice stage receives one reflection coefficient.", "Stage 1 leaves 75 % of the error.", "The order-2 a_k come from the order-1 ones and r_2.", "Stage 2 leaves 43.75 % of what was left.", "G is the square root of the final error.", "The dB gains of the stages add up."][Math.min(s, 6) - 1];
 }
 function figVx4(ctx, w, h, s) {   // r_k on the line, poles in the z-plane, envelope and log-areas
+  s = ctx.canvas.dataset.part === "2" ? [0, 4, 5, 5, 6, 6][Math.min(s, 5)] : [0, 1, 2, 3, 3, 4, 4][Math.min(s, 6)];
   const c = C(), a = [0.875, -0.75], G = Math.sqrt(1.3125);
   const X = (r) => 30 + (r + 1.15) / 2.3 * (w - 60), ly = 44;
   ctx.save(); ctx.fillStyle = tint(c.G, 0.14); ctx.fillRect(X(-1), ly - 18, X(1) - X(-1), 36); ctx.restore();
@@ -1896,14 +2000,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
