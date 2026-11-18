@@ -499,6 +499,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 
 <!-- ============ exemplo gaussiano ============ -->
 <section class="slide" id="gauss" data-sec="2 Distorção e SQNR · exemplo gaussiano" data-fig="gauss">
+  <style>#gauss .fig { position: relative; } #gauss .figanchor { position: absolute; display: none; pointer-events: none; }</style>
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1 · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
@@ -506,18 +507,118 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt" style="font-size:20px;max-width:840px">Fonte gaussiana de média nula com \(S_X(f)=2\) em \(|f|&lt;100\) Hz, amostrada na taxa de Nyquist e quantizada com o quantizador de 8 níveis.</div>
         <div class="step"><div class="why">Potência da amostra: área da PSD, que vale \(2\) só em \(|f|&lt;100\) Hz</div><div class="m">\[ \sigma^2=R_X(0)=\int_{-100}^{100}\underbrace{2}_{S_X(f)}\,df=2\times 200=400 \]</div></div>
         <div class="step"><div class="why">Leva os níveis em (3)</div><div class="m">\[ D=\cssId{ga-sum}{\sum_{k=1}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \]</div></div>
-        <div class="step"><div class="why">Por simetria, dobra o lado positivo; as integrais da gaussiana saem com a função \(Q\)</div><div class="m">\[ D=\cssId{ga-sum2}{2\sum_{k=5}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx\cssId{ga-d}{\approx 33{,}38} \]</div></div>
-        <div class="step"><div class="why">Leva em (4)</div><div class="m">\[ \text{SQNR}=\cssId{ga-db}{\frac{400}{33{,}38}}=11{,}98\ \to\ \boxed{10{,}78\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Por simetria, dobra o lado positivo: quatro parcelas \(T_k\)</div><div class="m">\[ D=\cssId{ga-sum2}{2\sum_{k=5}^{8}}\underbrace{\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx}_{T_k} \]</div></div>
+        <div class="step"><div class="why">Níveis do lado positivo: os pontos vermelhos da figura</div><div class="m">\[ D=2\Big[\int_{0}^{\cssId{ga-u1}{20}}(x-\cssId{ga-x5}{10})^2f_X\,dx+\int_{20}^{\cssId{ga-u2}{40}}(x-\cssId{ga-x6}{30})^2f_X\,dx \]</div></div>
+        <div class="step"><div class="why">Continua com as duas últimas parcelas: níveis 50 e 70, fronteiras 40, 60 e \(\infty\)</div><div class="m">\[ \qquad+\int_{40}^{\cssId{ga-u3}{60}}(x-\cssId{ga-x7}{50})^2f_X\,dx+\int_{60}^{\infty}(x-\cssId{ga-x8}{70})^2f_X\,dx\Big] \]</div></div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD da fonte e densidade com as regiões do quantizador"></canvas><div class="figcap"></div></div>
+      <div class="fig"><span class="figanchor" id="ga-p5"></span><span class="figanchor" id="ga-p6"></span><span class="figanchor" id="ga-p7"></span><span class="figanchor" id="ga-p8"></span><span class="figanchor" id="ga-t0"></span><span class="figanchor" id="ga-t1"></span><span class="figanchor" id="ga-t2"></span><span class="figanchor" id="ga-t3"></span><canvas data-figcanvas height="430" aria-label="PSD da fonte e densidade com as regiões do quantizador"></canvas><div class="figcap"></div></div>
     </div>
   </div>
   <div class="link" data-on="4" data-from="ga-sum" data-to="ga-sum2">simetria: dobra o lado positivo</div>
-  <div class="link" data-on="5" data-from="ga-d" data-to="ga-db">leva em (4)</div>
-  <div class="note" data-on="4" data-to="ga-d">8 integrais da gaussiana, feitas com a função \(Q\)</div>
+  <div class="link" data-on="5" data-from="ga-p5" data-to="ga-x5"></div>
+  <div class="link" data-on="5" data-from="ga-p6" data-to="ga-x6"></div>
+  <div class="link" data-on="5" data-from="ga-t1" data-to="ga-u1"></div>
+  <div class="link" data-on="5" data-from="ga-t2" data-to="ga-u2"></div>
+  <div class="link" data-on="6" data-from="ga-p7" data-to="ga-x7"></div>
+  <div class="link" data-on="6" data-from="ga-p8" data-to="ga-x8"></div>
+  <div class="link" data-on="6" data-from="ga-t3" data-to="ga-u3"></div>
   <aside class="notes"></aside>
 </section>
+
+<section class="slide" id="gaussd" data-sec="2 Distorção e SQNR · exemplo gaussiano, cada parcela">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, cada parcela · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:30px">
+        <div class="step"><div class="why">Muda a variável \(u=x/\sigma\); \(\varphi\) é a densidade normal padrão</div><div class="m">\[ T_k=\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx=\sigma^2 \int_{\alpha}^{\beta}(u-\gamma)^2\varphi(u)\,du=\sigma^2 I_k,\qquad \alpha=\tfrac{a_{k-1}}{\sigma},\ \beta=\tfrac{a_k}{\sigma},\ \gamma=\tfrac{\hat x_k}{\sigma} \]</div></div>
+        <div class="step"><div class="why">Abre o quadrado: três integrais da normal padrão</div><div class="m">\[ I_k=\cssId{gd-i2}{\int_\alpha^\beta u^2\varphi\,du}-2\gamma\cssId{gd-i1}{\int_\alpha^\beta u\varphi\,du}+\gamma^2\cssId{gd-i0}{\int_\alpha^\beta\varphi\,du} \]</div></div>
+        <div class="step"><div class="why">Por partes, com \(\varphi'=-u\varphi\), e pela definição de \(Q\)</div><div class="m">\[ I_k=\cssId{gd-r2}{\big[\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}+\alpha\color[RGB]{0,59,92}{\varphi(\alpha)}-\beta\color[RGB]{176,58,46}{\varphi(\beta)}\big]}-2\gamma\cssId{gd-r1}{\big[\color[RGB]{0,59,92}{\varphi(\alpha)}-\color[RGB]{176,58,46}{\varphi(\beta)}\big]}+\gamma^2\cssId{gd-r0}{\big[\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}\big]} \]</div></div>
+        <div class="step"><div class="why">Junta os termos iguais</div><div class="m">\[ I_k=\cssId{gd-c}{(1+\gamma^2)\color[RGB]{0,102,51}{\big[Q(\alpha)-Q(\beta)\big]}}+(\alpha-2\gamma)\color[RGB]{0,59,92}{\varphi(\alpha)}-(\beta-2\gamma)\color[RGB]{176,58,46}{\varphi(\beta)} \]</div></div>
+        <div class="step"><div class="why">Valores tabelados da função \(Q\) e da densidade \(\varphi\)</div><div class="m">\[ \begin{array}{c|cccc} z & 0 & 1 & 2 & 3\\ \hline \color[RGB]{0,102,51}{Q(z)} & 0{,}5 & 0{,}158655 & 0{,}022750 & 0{,}001350\\ \varphi(z) & 0{,}398942 & 0{,}241971 & 0{,}053991 & 0{,}004432 \end{array} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="gd-i2" data-to="gd-r2">por partes</div>
+  <div class="link" data-on="3" data-from="gd-i1" data-to="gd-r1">φ′ = −uφ</div>
+  <div class="link" data-on="3" data-from="gd-i0" data-to="gd-r0">área: Q</div>
+  <div class="link" data-on="4" data-from="gd-r0" data-to="gd-c">junta os Q</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gaussd2" data-sec="2 Distorção e SQNR · exemplo gaussiano, parcelas 5 e 6">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, parcelas k = 5 e 6 · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:30px">
+        <div class="step"><div class="why">Fronteiras 0 e 20, nível 10, divididos por σ = 20</div><div class="m">\[ k=5:\quad \alpha=\tfrac{0}{20}=\cssId{r5-a}{0},\quad \beta=\tfrac{20}{20}=\cssId{r5-b}{1},\quad \gamma=\tfrac{10}{20}=\cssId{r5-g}{0{,}5} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_5=\cssId{r5-c}{(1+\cssId{r5-g2}{0{,}5}^2)}\cssId{r5-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r5-a2}{0})-Q(\cssId{r5-b2}{1})\big]}}+\cssId{r5-fa}{(\cssId{r5-a3}{0}-2\cdot \cssId{r5-g3}{0{,}5})\color[RGB]{0,59,92}{\varphi(0)}}\cssId{r5-fb}{-(\cssId{r5-b3}{1}-2\cdot \cssId{r5-g4}{0{,}5})\color[RGB]{176,58,46}{\varphi(1)}} \]</div></div>
+        <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r5-c2}{1{,}25}\times\cssId{r5-q2}{0{,}341345}\cssId{r5-fa2}{-0{,}398942}\cssId{r5-fb2}{-0\times0{,}241971}=0{,}426681-0{,}398942-0=\boxed{0{,}027739} \]</div></div>
+        <div class="step"><div class="why">Fronteiras 20 e 40, nível 30, divididos por σ = 20</div><div class="m">\[ k=6:\quad \alpha=\tfrac{20}{20}=\cssId{r6-a}{1},\quad \beta=\tfrac{40}{20}=\cssId{r6-b}{2},\quad \gamma=\tfrac{30}{20}=\cssId{r6-g}{1{,}5} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_6=\cssId{r6-c}{(1+\cssId{r6-g2}{1{,}5}^2)}\cssId{r6-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r6-a2}{1})-Q(\cssId{r6-b2}{2})\big]}}+\cssId{r6-fa}{(\cssId{r6-a3}{1}-2\cdot \cssId{r6-g3}{1{,}5})\color[RGB]{0,59,92}{\varphi(1)}}\cssId{r6-fb}{-(\cssId{r6-b3}{2}-2\cdot \cssId{r6-g4}{1{,}5})\color[RGB]{176,58,46}{\varphi(2)}} \]</div></div>
+        <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r6-c2}{3{,}25}\times\cssId{r6-q2}{0{,}135905}\cssId{r6-fa2}{-2\times0{,}241971}\cssId{r6-fb2}{+0{,}053991}=0{,}441691-0{,}483942+0{,}053991=\boxed{0{,}011740} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="r5-a" data-to="r5-a2">α</div>
+  <div class="link" data-on="2" data-from="r5-b" data-to="r5-b2">β</div>
+  <div class="link" data-on="2" data-from="r5-g" data-to="r5-g2">γ</div>
+  <div class="link" data-on="3" data-from="r5-c" data-to="r5-c2"></div>
+  <div class="link" data-on="3" data-from="r5-q" data-to="r5-q2"></div>
+  <div class="link" data-on="3" data-from="r5-fa" data-to="r5-fa2"></div>
+  <div class="link" data-on="3" data-from="r5-fb" data-to="r5-fb2"></div>
+  <div class="link" data-on="5" data-from="r6-a" data-to="r6-a2">α</div>
+  <div class="link" data-on="5" data-from="r6-b" data-to="r6-b2">β</div>
+  <div class="link" data-on="5" data-from="r6-g" data-to="r6-g2">γ</div>
+  <div class="link" data-on="6" data-from="r6-c" data-to="r6-c2"></div>
+  <div class="link" data-on="6" data-from="r6-q" data-to="r6-q2"></div>
+  <div class="link" data-on="6" data-from="r6-fa" data-to="r6-fa2"></div>
+  <div class="link" data-on="6" data-from="r6-fb" data-to="r6-fb2"></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gaussd3" data-sec="2 Distorção e SQNR · exemplo gaussiano, parcelas 7 e 8">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, parcelas k = 7 e 8 · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:30px">
+        <div class="step"><div class="why">Fronteiras 40 e 60, nível 50, divididos por σ = 20</div><div class="m">\[ k=7:\quad \alpha=\tfrac{40}{20}=\cssId{r7-a}{2},\quad \beta=\tfrac{60}{20}=\cssId{r7-b}{3},\quad \gamma=\tfrac{50}{20}=\cssId{r7-g}{2{,}5} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_7=\cssId{r7-c}{(1+\cssId{r7-g2}{2{,}5}^2)}\cssId{r7-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r7-a2}{2})-Q(\cssId{r7-b2}{3})\big]}}+\cssId{r7-fa}{(\cssId{r7-a3}{2}-2\cdot \cssId{r7-g3}{2{,}5})\color[RGB]{0,59,92}{\varphi(2)}}\cssId{r7-fb}{-(\cssId{r7-b3}{3}-2\cdot \cssId{r7-g4}{2{,}5})\color[RGB]{176,58,46}{\varphi(3)}} \]</div></div>
+        <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r7-c2}{7{,}25}\times\cssId{r7-q2}{0{,}021400}\cssId{r7-fa2}{-3\times0{,}053991}\cssId{r7-fb2}{+2\times0{,}004432}=0{,}155150-0{,}161973+0{,}008864=\boxed{0{,}002041} \]</div></div>
+        <div class="step"><div class="why">Fronteiras 60 e ∞, nível 70, divididos por σ = 20</div><div class="m">\[ k=8:\quad \alpha=\tfrac{60}{20}=\cssId{r8-a}{3},\quad \beta=\cssId{r8-b}{\infty},\quad \gamma=\tfrac{70}{20}=\cssId{r8-g}{3{,}5} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_8=\cssId{r8-c}{(1+\cssId{r8-g2}{3{,}5}^2)}\cssId{r8-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r8-a2}{3})-Q(\cssId{r8-b2}{\infty})\big]}}+\cssId{r8-fa}{(\cssId{r8-a3}{3}-2\cdot \cssId{r8-g3}{3{,}5})\color[RGB]{0,59,92}{\varphi(3)}}-\underbrace{(\beta-2\gamma)\varphi(\beta)}_{\to\,0} \]</div></div>
+        <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r8-c2}{13{,}25}\times\cssId{r8-q2}{0{,}001350}\cssId{r8-fa2}{-4\times0{,}004432}=0{,}017888-0{,}017728=\boxed{0{,}000160} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="r7-a" data-to="r7-a2">α</div>
+  <div class="link" data-on="2" data-from="r7-b" data-to="r7-b2">β</div>
+  <div class="link" data-on="2" data-from="r7-g" data-to="r7-g2">γ</div>
+  <div class="link" data-on="3" data-from="r7-c" data-to="r7-c2"></div>
+  <div class="link" data-on="3" data-from="r7-q" data-to="r7-q2"></div>
+  <div class="link" data-on="3" data-from="r7-fa" data-to="r7-fa2"></div>
+  <div class="link" data-on="3" data-from="r7-fb" data-to="r7-fb2"></div>
+  <div class="link" data-on="5" data-from="r8-a" data-to="r8-a2">α</div>
+  <div class="link" data-on="5" data-from="r8-b" data-to="r8-b2">β</div>
+  <div class="link" data-on="5" data-from="r8-g" data-to="r8-g2">γ</div>
+  <div class="link" data-on="6" data-from="r8-c" data-to="r8-c2"></div>
+  <div class="link" data-on="6" data-from="r8-q" data-to="r8-q2"></div>
+  <div class="link" data-on="6" data-from="r8-fa" data-to="r8-fa2"></div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gaussd4" data-sec="2 Distorção e SQNR · exemplo gaussiano, soma e SQNR">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, soma e SQNR · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:20px">
+        <div class="step"><div class="why">Cada parcela é \(T_k=\sigma^2 I_k\)</div><div class="m">\[ D=2\sum_{k=5}^{8}T_k=2\sigma^2\cssId{gs-sum}{\sum_{k=5}^{8} I_k} \]</div></div>
+        <div class="step"><div class="why">Soma as quatro parcelas e dobra</div><div class="m">\[ D=2\times 400\times\cssId{gs-n}{(0{,}027739+0{,}011740+0{,}002041+0{,}000160)}=800\times 0{,}041680=\cssId{gs-d}{33{,}34} \]</div></div>
+        <div class="step"><div class="why">Leva em (4)</div><div class="m">\[ \text{SQNR}=\frac{\sigma^2}{D}=\cssId{gs-db}{\frac{400}{33{,}34}}=12{,}00\ \to\ \boxed{10{,}79\ \text{dB}} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="gs-sum" data-to="gs-n">I₅ + I₆ + I₇ + I₈</div>
+  <div class="link" data-on="3" data-from="gs-d" data-to="gs-db">leva em (4)</div>
+  <aside class="notes">O livro arredonda e dá \(D\approx 33{,}38\) e 10,78 dB; com seis casas a conta dá 33,34 e 10,79 dB.</aside>
+</section>
+
 
 <section class="slide" id="gauss2" data-sec="2 Distorção e SQNR · exemplo gaussiano, taxa de bits" data-fig="gauss2">
   <img class="logo-head" alt="">
@@ -823,7 +924,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="body" style="gap:10px">
     <div class="fig"><canvas data-figcanvas height="360" aria-label="Gaussiana com as regiões e os níveis dos três quantizadores de 8 níveis"></canvas><div class="figcap"></div></div>
     <div class="col" style="gap:10px;max-width:1400px">
-      <div class="step txt">O Proakis compara o quantizador do exemplo com o ótimo: \(14{,}62-10{,}78=3{,}84\) dB de ganho.</div>
+      <div class="step txt">O Proakis compara o quantizador do exemplo com o ótimo: \(14{,}62-10{,}79=3{,}83\) dB de ganho.</div>
       <div class="step txt">Mas quase todo esse ganho vem de escolher bem \(\Delta\): o melhor quantizador uniforme, tabela 7.1, já chega a \(14{,}27\) dB.</div>
       <div class="step txt">Para a gaussiana, a não uniformidade rende só mais \(0{,}35\) dB. O ganho é bem maior para densidades concentradas em zero, como a da voz: é a ideia do companding, no PCM.</div>
     </div>
@@ -1001,7 +1102,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="plots" style="gap:6px">
         <div class="plot"><canvas id="lm-state" height="250" aria-label="Densidade com as fronteiras e os níveis da iteração"></canvas></div>
         <div class="plot"><canvas id="lm-curve" height="210" aria-label="SQNR a cada iteração"></canvas></div>
-        <div class="legend"><span>Partida: uniforme com \(\Delta=1\).</span><span><i style="border-color:var(--unb-primary)"></i>SQNR por iteração</span><span><i class="dash" style="border-color:var(--unb-alert)"></i>ponto fixo</span><span class="try">Gaussiana com \(N=8\): de \(10{,}78\) dB a \(14{,}62\) dB, a tabela do slide de Lloyd-Max na prática.</span></div>
+        <div class="legend"><span>Partida: uniforme com \(\Delta=1\).</span><span><i style="border-color:var(--unb-primary)"></i>SQNR por iteração</span><span><i class="dash" style="border-color:var(--unb-alert)"></i>ponto fixo</span><span class="try">Gaussiana com \(N=8\): de \(10{,}79\) dB a \(14{,}62\) dB, a tabela do slide de Lloyd-Max na prática.</span></div>
       </div>
     </div>
   </div>
@@ -1669,7 +1770,7 @@ const FIGS = {
   },
   // ---------- 2. exemplo gaussiano ----------
   gauss2(ctx, w, h, s, t) { return this.gauss(ctx, w, h, -3, t); },
-  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 4, 4, 4, 4][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.36;
     const A = frame(w, h, { xmin: -160, xmax: 170, ymin: 0, ymax: 3, ml: 20, mr: 20, mt: 22, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: -4.3, xmax: 4.5, ymin: 0, ymax: 0.47, ml: 20, mr: 20, mt: 30, mb: 30, top: h1, h: h - h1 });
@@ -1681,12 +1782,14 @@ const FIGS = {
     const cuts = [-4.2, -3, -2, -1, 0, 1, 2, 3, 4.2];
     for (let k = 0; k < 8; k++) fillUnder(ctx, B.X, B.Y, gpdf, cuts[k], cuts[k + 1], tint(k % 2 ? OR : c.P, k % 2 ? 0.28 : 0.2), 60);
     xAxis(ctx, B.X, B.Y, -4.3, 4.5, c.K, "x");
-    tickX(ctx, B.X, B.Y, [-3, -2, -1, 1, 2, 3], (v) => (v < 0 ? "−" : "") + Math.abs(20 * v), c.M);
+    tickX(ctx, B.X, B.Y, [-3, -2, -1, 0, 1, 2, 3], (v) => (v < 0 ? "−" : "") + Math.abs(20 * v), c.M);
     fplot(ctx, B.X, B.Y, gpdf, -4.1, 4.1, c.K, 2.4);
     txt(ctx, "f_X(x), σ = 20", B.X(0.7), B.Y(0.43), { size: 16, italic: true });
     if (s >= 4) for (const v of [-3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5]) dot(ctx, B.X(v), B.Y(0), 6, c.R);
+    [0.5, 1.5, 2.5, 3.5].forEach((v, n) => figAnchor(ctx, w, "ga-p" + (n + 5), B.X(v) - 9, B.Y(0) - 9, 18, 18, s >= 4));
+    [0, 1, 2, 3].forEach((v, n) => figAnchor(ctx, w, "ga-t" + n, B.X(v) - 12, B.Y(0) + 6, 24, 18, s >= 4));
     return ["Fonte gaussiana: PSD plana até 100 Hz; embaixo, as 8 regiões do quantizador.", "A potência é a área da PSD: σ² = 400, σ = 20.",
-      "200 amostras por segundo, 3 bits cada.", "Faixas coloridas: regiões. Pontos vermelhos: níveis ±10, ±30, ±50, ±70.", "SQNR de 10,78 dB com 3 bits."][s - 1];
+      "200 amostras por segundo, 3 bits cada.", "Faixas coloridas: regiões. Pontos vermelhos: níveis ±10, ±30, ±50, ±70.", "SQNR de 10,79 dB com 3 bits."][s - 1];
   },
   // ---------- 2. erro quase uniforme ----------
   unif(ctx, w, h, s) {
@@ -1810,7 +1913,7 @@ const FIGS = {
   // ---------- 3. não uniforme ----------
   lmganho(ctx, w, h, s) {
     // três faixas: a gaussiana com as regiões e os níveis de cada quantizador de 8 níveis, SQNR à direita
-    const c = C(), DL = ["D = 0,0835 σ²", "D = 0,0374 σ²", "D = 0,0345 σ²  (menor)"], Lb = {"n": ["uniforme, Δ = σ", "uniforme, Δ = 0,586σ", "Lloyd-Max"], "db": ["10,78 dB", "14,27 dB", "14,62 dB"], "g1": "+3,49 dB: escolher bem Δ", "g2": "+0,35 dB: não uniforme", "cap": ["Uniforme do exemplo: Δ = σ, níveis até ±3,5σ, muito além de onde a gaussiana tem massa.", "Melhor uniforme, tabela 7.1: Δ = 0,586σ aperta os níveis onde a densidade está.", "Lloyd-Max, tabela 7.2: regiões estreitas no centro e largas nas bordas; quase igual ao melhor uniforme."]}, rows = [
+    const c = C(), DL = ["D = 0,0834 σ²", "D = 0,0374 σ²", "D = 0,0345 σ²  (menor)"], Lb = {"n": ["uniforme, Δ = σ", "uniforme, Δ = 0,586σ", "Lloyd-Max"], "db": ["10,79 dB", "14,27 dB", "14,62 dB"], "g1": "+3,48 dB: escolher bem Δ", "g2": "+0,35 dB: não uniforme", "cap": ["Uniforme do exemplo: Δ = σ, níveis até ±3,5σ, muito além de onde a gaussiana tem massa.", "Melhor uniforme, tabela 7.1: Δ = 0,586σ aperta os níveis onde a densidade está.", "Lloyd-Max, tabela 7.2: regiões estreitas no centro e largas nas bordas; quase igual ao melhor uniforme."]}, rows = [
       { ab: [0, 1, 2, 3], lv: [0.5, 1.5, 2.5, 3.5], col: "#8a8a8a" },
       { ab: [0, 0.586, 1.172, 1.758], lv: [0.293, 0.879, 1.465, 2.051], col: c.P },
       { ab: [0, 0.5006, 1.050, 1.748], lv: [0.2451, 0.7560, 1.344, 2.152], col: OR } ];
