@@ -505,7 +505,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="deriv board" style="gap:20px">
         <div class="step txt" style="font-size:20px;max-width:840px">Fonte gaussiana de média nula com \(S_X(f)=2\) em \(|f|&lt;100\) Hz, amostrada na taxa de Nyquist e quantizada com o quantizador de 8 níveis.</div>
         <div class="step"><div class="why">Potência da amostra: área da PSD, que vale \(2\) só em \(|f|&lt;100\) Hz</div><div class="m">\[ \sigma^2=R_X(0)=\int_{-100}^{100}\underbrace{2}_{S_X(f)}\,df=2\times 200=400 \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:840px">Taxa de bits \(R\): quantos bits por segundo saem do quantizador. Cada amostra vira \(\nu=\log_2 N\) bits e chegam \(f_s\) amostras por segundo, logo \(R=\nu f_s\). É a taxa que o canal precisa transmitir, ou a memória guardar, a cada segundo.</div>
         <div class="step"><div class="why">Taxa de bits: \(\nu=\log_2 8\) bits por amostra e \(f_s=2W\) amostras por segundo</div><div class="m">\[ R=\nu\,f_s=\underbrace{3}_{\log_2 8}\times\underbrace{200}_{2W}=600\ \text{bits/s} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD da fonte e densidade com as regiões do quantizador"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gauss2" data-sec="2 Distorção e SQNR · exemplo gaussiano" data-fig="gauss2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, continuação · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:20px">
         <div class="step"><div class="why">Leva os níveis em (3)</div><div class="m">\[ D=\cssId{ga-sum}{\sum_{k=1}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \]</div></div>
         <div class="step"><div class="why">Por simetria, dobra o lado positivo; as integrais da gaussiana saem com a função \(Q\)</div><div class="m">\[ D=\cssId{ga-sum2}{2\sum_{k=5}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx\cssId{ga-d}{\approx 33{,}38} \]</div></div>
         <div class="step"><div class="why">Leva em (4)</div><div class="m">\[ \text{SQNR}=\cssId{ga-db}{\frac{400}{33{,}38}}=11{,}98\ \to\ \boxed{10{,}78\ \text{dB}} \]</div></div>
@@ -514,9 +528,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD da fonte e densidade com as regiões do quantizador"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="link" data-on="5" data-from="ga-sum" data-to="ga-sum2">simetria: dobra o lado positivo</div>
-  <div class="link" data-on="6" data-from="ga-d" data-to="ga-db">leva em (4)</div>
-  <div class="note" data-on="5" data-to="ga-d">8 integrais da gaussiana, feitas com a função \(Q\)</div>
+  <div class="link" data-on="2" data-from="ga-sum" data-to="ga-sum2">simetria: dobra o lado positivo</div>
+  <div class="link" data-on="3" data-from="ga-d" data-to="ga-db">leva em (4)</div>
+  <div class="note" data-on="2" data-to="ga-d">8 integrais da gaussiana, feitas com a função \(Q\)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1552,7 +1566,8 @@ const FIGS = {
       "Uma parcela de (3) por região: a área de cada faixa colorida.", "D é a área total sob a curva vermelha, a ser comparada com a potência E[X²].", "SQNR: potência do sinal dividida pela área vermelha."][s - 1];
   },
   // ---------- 2. exemplo gaussiano ----------
-  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  gauss2(ctx, w, h, s, t) { return this.gauss(ctx, w, h, -([0, 4, 4, 5][s] || 5), t); },
+  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 3][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.36;
     const A = frame(w, h, { xmin: -160, xmax: 170, ymin: 0, ymax: 3, ml: 20, mr: 20, mt: 22, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: -4.3, xmax: 4.5, ymin: 0, ymax: 0.47, ml: 20, mr: 20, mt: 30, mb: 30, top: h1, h: h - h1 });
