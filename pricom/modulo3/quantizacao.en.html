@@ -505,21 +505,6 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="deriv board" style="gap:20px">
         <div class="step txt" style="font-size:20px;max-width:840px">Zero-mean Gaussian source with \(S_X(f)=2\) for \(|f|&lt;100\) Hz, sampled at the Nyquist rate and quantized with the 8-level quantizer.</div>
         <div class="step"><div class="why">Power of the sample: area under the PSD, which equals \(2\) only for \(|f|&lt;100\) Hz</div><div class="m">\[ \sigma^2=R_X(0)=\int_{-100}^{100}\underbrace{2}_{S_X(f)}\,df=2\times 200=400 \]</div></div>
-        <div class="step txt" style="font-size:20px;max-width:840px">Bit rate \(R\): how many bits per second leave the quantizer. Each sample becomes \(\nu=\log_2 N\) bits and \(f_s\) samples arrive per second, so \(R=\nu f_s\). It is the rate the channel must carry, or the memory must store, every second.</div>
-        <div class="step"><div class="why">Bit rate: \(\nu=\log_2 8\) bits per sample and \(f_s=2W\) samples per second</div><div class="m">\[ R=\nu\,f_s=\underbrace{3}_{\log_2 8}\times\underbrace{200}_{2W}=600\ \text{bits/s} \]</div></div>
-    </div>
-    <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD of the source and density with the quantizer regions"></canvas><div class="figcap"></div></div>
-    </div>
-  </div>
-  <aside class="notes"></aside>
-</section>
-
-<section class="slide" id="gauss2" data-sec="2 Distortion and SQNR · Gaussian example" data-fig="gauss2">
-  <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Example: Gaussian source</h2><div class="sub">Example 7.2.1, continued · press → to advance</div><div class="bar"></div></div>
-  <div class="body">
-    <div class="deriv board" style="gap:20px">
         <div class="step"><div class="why">Take the levels into (3)</div><div class="m">\[ D=\cssId{ga-sum}{\sum_{k=1}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx \]</div></div>
         <div class="step"><div class="why">By symmetry, double the positive side; the Gaussian integrals come out with the \(Q\) function</div><div class="m">\[ D=\cssId{ga-sum2}{2\sum_{k=5}^{8}}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx\cssId{ga-d}{\approx 33.38} \]</div></div>
         <div class="step"><div class="why">Take into (4)</div><div class="m">\[ \text{SQNR}=\cssId{ga-db}{\frac{400}{33.38}}=11.98\ \to\ \boxed{10.78\ \text{dB}} \]</div></div>
@@ -528,9 +513,24 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD of the source and density with the quantizer regions"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="link" data-on="2" data-from="ga-sum" data-to="ga-sum2">symmetry: double the positive side</div>
-  <div class="link" data-on="3" data-from="ga-d" data-to="ga-db">take into (4)</div>
-  <div class="note" data-on="2" data-to="ga-d">8 integrals of the Gaussian, done with the \(Q\) function</div>
+  <div class="link" data-on="4" data-from="ga-sum" data-to="ga-sum2">symmetry: double the positive side</div>
+  <div class="link" data-on="5" data-from="ga-d" data-to="ga-db">take into (4)</div>
+  <div class="note" data-on="4" data-to="ga-d">8 integrals of the Gaussian, done with the \(Q\) function</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gauss2" data-sec="2 Distortion and SQNR · Gaussian example, bit rate" data-fig="gauss2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Example: Gaussian source</h2><div class="sub">Example 7.2.1, bit rate · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:20px">
+        <div class="step txt" style="font-size:20px;max-width:840px">Bit rate \(R\): how many bits per second leave the quantizer. Each sample becomes \(\nu=\log_2 N\) bits and \(f_s\) samples arrive per second, so \(R=\nu f_s\). It is the rate the channel must carry, or the memory must store, every second.</div>
+        <div class="step"><div class="why">Bit rate: \(\nu=\log_2 8\) bits per sample and \(f_s=2W\) samples per second</div><div class="m">\[ R=\nu\,f_s=\underbrace{3}_{\log_2 8}\times\underbrace{200}_{2W}=600\ \text{bits/s} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="430" aria-label="PSD of the source and density with the quantizer regions"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
   <aside class="notes"></aside>
 </section>
 
@@ -1566,8 +1566,8 @@ const FIGS = {
       "One term of (3) per region: the area of each colored strip.", "D is the total area under the red curve, to be compared with the power E[X²].", "SQNR: signal power divided by the red area."][s - 1];
   },
   // ---------- 2. exemplo gaussiano ----------
-  gauss2(ctx, w, h, s, t) { return this.gauss(ctx, w, h, -([0, 4, 4, 5][s] || 5), t); },
-  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 3][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  gauss2(ctx, w, h, s, t) { return this.gauss(ctx, w, h, -3, t); },
+  gauss(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 4, 4, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), h1 = h * 0.36;
     const A = frame(w, h, { xmin: -160, xmax: 170, ymin: 0, ymax: 3, ml: 20, mr: 20, mt: 22, mb: 30, top: 0, h: h1 });
     const B = frame(w, h, { xmin: -4.3, xmax: 4.5, ymin: 0, ymax: 0.47, ml: 20, mr: 20, mt: 30, mb: 30, top: h1, h: h - h1 });
