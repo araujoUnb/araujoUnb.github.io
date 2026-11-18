@@ -221,6 +221,11 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -425,12 +430,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Ideal sampling</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv" style="gap:12px">
+      <div class="deriv board" style="gap:16px">
         <div class="step txt">A continuous signal \(x(t)\), in the top panel of the figure.</div>
-        <div class="step"><div class="why">Impulse train with period \(T_s\)</div><div class="m">\[ \delta_{T_s}(t)=\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \tag{1}\]</div></div>
-        <div class="step"><div class="why">The sampler multiplies</div><div class="m">\[ x_\delta(t)=x(t)\,\delta_{T_s}(t)=\sum_{n}\cssId{am-pen}{x(t)\,\delta(t-nT_s)} \]</div></div>
-        <div class="step"><div class="why">Each term depends only on \(x\) at the instant of the impulse</div><div class="m">\[ \cssId{am-pen2}{x(t)\,\delta(t-nT_s)}=x(nT_s)\,\delta(t-nT_s) \]</div></div>
-        <div class="step"><div class="why">Back into the sum</div><div class="m">\[ x_\delta(t)=\sum_{n}\cssId{am-amo}{x(nT_s)}\,\delta(t-nT_s) \tag{2}\]</div></div>
+        <div class="step"><div class="why">Impulse train with period \(T_s\)</div><div class="m">\[ \delta_{T_s}(t)=\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \tag{1} \]</div></div>
+        <div class="step"><div class="why">The sampler multiplies \(x(t)\) by the train</div><div class="m">\[ x_\delta(t)=x(t)\,\cssId{am-d}{\delta_{T_s}(t)} \]</div></div>
+        <div class="step"><div class="why">Substitute (1)</div><div class="m">\[ x_\delta(t)=\cssId{am-x}{x(t)}\,\cssId{am-tr}{\sum_{n}\delta(t-nT_s)} \]</div></div>
+        <div class="step"><div class="why">\(x(t)\) does not depend on \(n\): it goes inside the sum</div><div class="m">\[ x_\delta(t)=\sum_{n}\cssId{am-pen}{x(t)\,\delta(t-nT_s)} \]</div></div>
+        <div class="step"><div class="why">Each impulse only sees \(x\) at the instant \(t=nT_s\)</div><div class="m">\[ x_\delta(t)=\sum_{n}\cssId{am-amo}{x(nT_s)}\,\delta(t-nT_s) \tag{2} \]</div></div>
         <div class="step txt">The samples sit in the areas of the impulses. What about the spectrum?</div>
       </div>
       <div class="figcol">
@@ -439,12 +445,14 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
           <div data-from="1"><dt>\(x(t)\)</dt><dd>continuous signal to be sampled</dd></div>
           <div data-from="2"><dt>\(T_s,\ \delta_{T_s}(t)\)</dt><dd>sampling interval, in s; impulse train of unit area</dd></div>
           <div data-from="3"><dt>\(x_\delta(t)\)</dt><dd>ideally sampled signal</dd></div>
-          <div data-from="5"><dt>\(x(nT_s)\)</dt><dd>samples: the areas of the impulses</dd></div>
+          <div data-from="6"><dt>\(x(nT_s)\)</dt><dd>samples: the areas of the impulses</dd></div>
         </dl>
       </div>
     </div>
   </div>
-  <div class="note" data-on="4" data-to="am-pen2">the impulse only sees \(x\) at \(t=nT_s\)</div>
+  <div class="link" data-on="4" data-from="am-d" data-to="am-tr">substitute (1)</div>
+  <div class="link" data-on="5" data-from="am-x" data-to="am-pen">x(t) goes inside the sum</div>
+  <div class="link" data-on="6" data-from="am-pen" data-to="am-amo">δ only sees t = nTₛ</div>
   <aside class="notes"></aside>
 </section>
 
@@ -452,28 +460,28 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Impulse train: Fourier series</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv" style="gap:4px">
-        <div class="step"><div class="why">\(\delta_{T_s}(t)\) is periodic with period \(T_s\), so it has a Fourier series</div><div class="m">\[ \delta_{T_s}(t)=\sum_{k=-\infty}^{\infty}c_k\,e^{j2\pi k f_s t},\quad f_s=\frac{1}{T_s} \]</div></div>
-        <div class="step"><div class="why">Series coefficients, over one period</div><div class="m">\[ c_k=\frac{1}{T_s}\int_{-T_s/2}^{T_s/2}\cssId{sf-dts}{\delta_{T_s}(t)}\,e^{-j2\pi k f_s t}\,dt \]</div></div>
-        <div class="step"><div class="why">Replace \(\delta_{T_s}(t)\) by the only impulse in the interval</div><div class="m">\[ c_k=\frac{1}{T_s}\int_{-T_s/2}^{T_s/2}\cssId{sf-d0}{\delta(t)}\,e^{-j2\pi k f_s t}\,dt \]</div></div>
-        <div class="step"><div class="why">Integral of \(\delta(t)\) times a function</div><div class="m">\[ c_k=\frac{1}{T_s}\,\cssId{sf-e0}{e^{0}} \]</div></div>
-        <div class="step"><div class="why">\(e^0=1\)</div><div class="m">\[ c_k=\cssId{sf-ck}{\cb{\frac{1}{T_s}}} \]</div></div>
-        <div class="step"><div class="why">Substituting \(c_k\)</div><div class="m">\[ \delta_{T_s}(t)=\cssId{sf-ck2}{\cb{\frac{1}{T_s}}}\sum_{k=-\infty}^{\infty}e^{j2\pi k f_s t} \tag{3}\]</div></div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="300" aria-label="Impulse train with one period highlighted"></canvas><div class="figcap"></div></div>
-        <dl class="syms">
+    <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">\(\delta_{T_s}(t)\) is periodic with period \(T_s\), so it has a Fourier series</div><div class="m">\[ \delta_{T_s}(t)=\sum_{k=-\infty}^{\infty}\cssId{sf-c0}{c_k}\,e^{j2\pi k f_s t},\qquad f_s=\frac{1}{T_s} \]</div></div>
+        <div class="step"><div class="why">Series coefficients, over one period</div><div class="m">\[ \cssId{sf-c1}{c_k}=\frac{1}{T_s}\int_{-T_s/2}^{T_s/2}\cssId{sf-dts}{\delta_{T_s}(t)}\,e^{-j2\pi k f_s t}\,dt \]</div></div>
+        <div class="step"><div class="why">The train written impulse by impulse; none outside \([-T_s/2,\,T_s/2]\) contributes</div><div class="m">\[ c_k=\frac{1}{T_s}\int_{-T_s/2}^{T_s/2}\cssId{sf-exp}{\Big[\cssId{sf-o1}{\color{#9a9a9a}{\cdots+\delta(t+T_s)}}+\cssId{sf-da}{\cr{\delta(t)}}+\cssId{sf-o2}{\color{#9a9a9a}{\delta(t-T_s)+\cdots}}\Big]}\,e^{-j2\pi k f_s t}\,dt \]</div></div>
+        <div class="step"><div class="why">Only the \(n=0\) impulse fits in the interval</div><div class="m">\[ c_k=\frac{1}{T_s}\int_{-T_s/2}^{T_s/2}\cssId{sf-d0}{\cr{\delta(t)}}\,\cssId{sf-g}{e^{-j2\pi k f_s t}}\,dt \]</div></div>
+        <div class="step"><div class="why">Sifting: evaluate the exponential at \(t=0\); \(e^0=1\), the same for every \(k\)</div><div class="m">\[ c_k=\frac{1}{T_s}\,\underbrace{\cssId{sf-e0}{e^{-j2\pi k f_s\cdot 0}}}_{=\,1}=\cssId{sf-ck}{\cb{\frac{1}{T_s}}} \]</div></div>
+        <div class="step"><div class="why">Substituting \(c_k\) into the series</div><div class="m">\[ \delta_{T_s}(t)=\cssId{sf-ck2}{\cb{\frac{1}{T_s}}}\sum_{k=-\infty}^{\infty}e^{j2\pi k f_s t} \tag{3}\]</div></div>
+    </div>
+    <div class="figfloat" data-show="2-4">
+      <div class="fig"><canvas data-figcanvas height="260" aria-label="Impulse train with one period highlighted"></canvas><div class="figcap"></div></div>
+      <dl class="syms">
           <div data-from="1"><dt>\(f_s\)</dt><dd>sampling rate, in Hz: \(1/T_s\)</dd></div>
           <div data-from="1"><dt>\(c_k\)</dt><dd>coefficient of the frequency component \(kf_s\)</dd></div>
         </dl>
-      </div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="sf-d0">only the \(n=0\) impulse fits in the interval</div>
-  <div class="note" data-on="4" data-to="sf-e0">sifting: evaluate at \(t=0\)</div>
-  <div class="note" data-on="5" data-to="sf-ck">the same for every \(k\)</div>
-  <div class="note" data-on="6" data-to="sf-ck2">the same for every \(k\)</div>
+  <div class="link" data-on="2" data-from="sf-c0" data-to="sf-c1">how to find cₖ?</div>
+  <div class="link" data-on="3" data-from="sf-dts" data-to="sf-exp">impulse by impulse</div>
+  <div class="note" data-on="3" data-to="sf-o1 sf-o2">outside the interval: no contribution</div>
+  <div class="link" data-on="4" data-from="sf-da" data-to="sf-d0">only this one lies in [−Tₛ/2, Tₛ/2]</div>
+  <div class="link" data-on="5" data-from="sf-g" data-to="sf-e0">sifting: t = 0</div>
+  <div class="link" data-on="6" data-from="sf-ck" data-to="sf-ck2">back into the series: the same weight for every k</div>
   <aside class="notes"></aside>
 </section>
 
@@ -482,10 +490,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Impulse train in the spectrum</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv" style="gap:14px">
+      <div class="deriv board" style="gap:22px">
         <div class="step"><div class="why">Fourier series from (3)</div><div class="m">\[ \delta_{T_s}(t)=\frac{1}{T_s}\sum_{k}\cssId{te-exk}{e^{j2\pi k f_s t}} \]</div></div>
-        <div class="step"><div class="why">Transform term by term</div><div class="m">\[ \Delta(f)=\frac{1}{T_s}\sum_{k}\cssId{te-dk}{\delta(f-kf_s)} \tag{4}\]</div></div>
-        <div class="step txt" style="margin-top:70px">An impulse train in time becomes an impulse train in frequency, with area \(1/T_s\).</div>
+        <div class="step"><div class="why">Transform term by term</div><div class="m">\[ \Delta(f)=\frac{1}{T_s}\sum_{k}\cssId{te-F}{\mathcal{F}\{e^{j2\pi k f_s t}\}} \]</div></div>
+        <div class="step"><div class="why">Transform pair: \(e^{j2\pi f_0 t}\leftrightarrow\delta(f-f_0)\), with \(f_0=kf_s\)</div><div class="m">\[ \Delta(f)=\frac{1}{T_s}\sum_{k}\cssId{te-dk}{\delta(f-kf_s)} \tag{4} \]</div></div>
+        <div class="step txt">An impulse train in time becomes an impulse train in frequency, with area \(1/T_s\).</div>
         <div class="step txt">Sampling faster, with a smaller \(T_s\), pushes the impulses apart in \(f\): spacing \(f_s=1/T_s\).</div>
       </div>
       <div class="figcol">
@@ -493,7 +502,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2-4" data-to="te-dk" style="left:420px;top:350px">\(\mathcal{F}\{e^{j2\pi f_0 t}\}=\delta(f-f_0)\), with \(f_0=kf_s\)</div>
+  <div class="link" data-on="2" data-from="te-exk" data-to="te-F">transform term by term</div>
+  <div class="link" data-on="3" data-from="te-F" data-to="te-dk">exponential at kfₛ → δ(f − kfₛ)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -502,11 +512,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Spectrum of the sampled signal</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)">
-      <div class="deriv" style="gap:8px">
+      <div class="deriv board" style="gap:22px">
         <div class="step"><div class="why">Transform of (2), written as a product</div><div class="m">\[ X_\delta(f)=\mathcal{F}\{\cssId{es-prod}{x(t)\,\delta_{T_s}(t)}\} \]</div></div>
-        <div class="step"><div class="why">Use (4) for \(\mathcal{F}\{\delta_{T_s}\}\)</div><div class="m">\[ X_\delta(f)=X(f)\cssId{es-star}{\,*\,}\frac{1}{T_s}\sum_{k}\delta(f-kf_s) \]</div></div>
+        <div class="step"><div class="why">A product in time becomes a convolution in frequency</div><div class="m">\[ X_\delta(f)=\cssId{es-c2}{X(f)*\cssId{es-D}{\Delta(f)}} \]</div></div>
+        <div class="step"><div class="why">Use (4) for \(\Delta(f)\)</div><div class="m">\[ X_\delta(f)=\cssId{es-x3}{X(f)}*\cssId{es-sum}{\frac{1}{T_s}\sum_{k}\delta(f-kf_s)} \]</div></div>
         <div class="step"><div class="why">The convolution goes inside the sum</div><div class="m">\[ X_\delta(f)=\frac{1}{T_s}\sum_{k}\cssId{es-conv}{X(f)*\delta(f-kf_s)} \]</div></div>
-        <div class="step"><div class="why">Each term is a shifted \(X\)</div><div class="m">\[ X_\delta(f)=\cb{\frac{1}{T_s}\sum_{k}X(f-kf_s)} \tag{5}\]</div></div>
+        <div class="step"><div class="why">Convolving with \(\delta(f-f_0)\) shifts \(X\) to \(f_0\)</div><div class="m">\[ X_\delta(f)=\cb{\frac{1}{T_s}\sum_{k}\cssId{es-sh}{X(f-kf_s)}} \tag{5} \]</div></div>
         <div class="step txt">For each \(k\), a copy of \(X(f)\) centered at \(kf_s\). Sampling in time replicates the spectrum with period \(f_s\).</div>
       </div>
       <div class="figcol">
@@ -519,8 +530,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="es-star">a product in time becomes a convolution in frequency</div>
-  <div class="note" data-on="3" data-to="es-conv">convolving with \(\delta(f-f_0)\) shifts \(X\) to \(f_0\)</div>
+  <div class="link" data-on="2" data-from="es-prod" data-to="es-c2">product in time → convolution</div>
+  <div class="link" data-on="3" data-from="es-D" data-to="es-sum">substitute (4)</div>
+  <div class="link" data-on="4" data-from="es-x3" data-to="es-conv">X(f) goes inside the sum</div>
+  <div class="link" data-on="5" data-from="es-conv" data-to="es-sh">δ(f − kfₛ) shifts X to kfₛ</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="replicas" data-sec="1 Ideal sampling · replicas in the spectrum" data-fig="replicas">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Replicas in the spectrum</h2><div class="sub">Eq. (5) drawn · press → to advance</div><div class="bar"></div></div>
+  <div class="body" style="gap:10px">
+    <div class="fig"><canvas data-figcanvas height="440" aria-label="Spectrum at the input and at the output of the sampler, with the replicas"></canvas></div>
+    <div class="deriv solo">
+      <div class="step txt">Input: \(X(f)\), limited to the band from \(-W\) to \(W\).</div>
+      <div class="step txt">The \(k=0\) replica is \(X(f)\) itself, with its height multiplied by \(1/T_s\).</div>
+      <div class="step txt">The \(k=\pm 1\) replicas are \(X(f)\) shifted by \(\pm f_s\).</div>
+      <div class="step txt">The other replicas repeat every \(f_s\). Between neighboring replicas a gap of \(f_s-2W\) is left.</div>
+      <div class="step txt">Sampling in time replicates the spectrum with period \(f_s\). If \(f_s&gt;2W\), the replicas do not touch and \(X(f)\) can be recovered: this is the theorem of section 2.</div>
+    </div>
+  </div>
   <aside class="notes"></aside>
 </section>
 
@@ -536,20 +565,19 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>When the replicas touch</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body" style="gap:12px">
     <div class="fig"><canvas data-figcanvas height="250" aria-label="Spectrum replicas for three sampling rates"></canvas></div>
-    <div class="deriv">
+    <div class="deriv board" style="gap:20px">
       <div class="solo">
         <div class="step txt">Large \(f_s\): between \(W\) and \(f_s-W\) an empty band is left. The \(k=0\) replica is intact.</div>
         <div class="step txt">\(f_s=2W\): the replicas touch, still without overlap.</div>
       </div>
       <div class="step txt">\(f_s&lt;2W\): the replicas add up. The central copy is distorted and no filter can separate it. This is aliasing.</div>
-      <div class="srow">
-        <div class="step"><div class="why">No overlap</div><div class="m">\[ \cssId{en-ini}{f_s-W}\;\ge\;\cssId{en-fim}{W} \]</div></div>
-        <div class="step cont"><div class="m">\[ \Longrightarrow\quad\boxed{f_s\ge 2W} \tag{6}\]</div></div>
-      </div>
+      <div class="step"><div class="why">No overlap: the start of the \(k=1\) replica lies after the end of the \(k=0\) replica</div><div class="m">\[ \cssId{en-ini}{f_s-W}\;\ge\;\cssId{en-fim}{W} \]</div></div>
+      <div class="step"><div class="why">Add \(W\) to both sides</div><div class="m">\[ \boxed{\cssId{en-res}{f_s\ge 2W}} \tag{6} \]</div></div>
     </div>
   </div>
-  <div class="note" data-on="4-5" data-to="en-ini" style="left:180px;top:640px">start of the \(k=1\) replica</div>
-  <div class="note" data-on="4-5" data-to="en-fim" style="left:560px;top:640px">end of the \(k=0\) replica</div>
+  <div class="note" data-on="4" data-to="en-ini">start of the \(k=1\) replica</div>
+  <div class="note" data-on="4" data-to="en-fim">end of the \(k=0\) replica</div>
+  <div class="link" data-on="5" data-from="en-ini" data-to="en-res">add W to both sides</div>
   <aside class="notes"></aside>
 </section>
 
@@ -581,19 +609,19 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Reconstruction filter</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body" style="gap:8px">
-    <div class="fig"><canvas data-figcanvas height="250" aria-label="Spectrum replicas and the lowpass filter"></canvas></div>
-    <div class="deriv" style="gap:2px">
+    <div class="fig"><canvas data-figcanvas height="190" aria-label="Spectrum replicas and the lowpass filter"></canvas></div>
+    <div class="deriv board" style="gap:15px">
       <div class="step txt">The sampled spectrum with \(f_s&gt;2W\). How do we keep only the central copy?</div>
-      <div class="step"><div class="why">Ideal lowpass filter</div><div class="m">\[ H(f)=T_s\,\Pi\!\left(\frac{f}{2W'}\right) \tag{7}\]</div></div>
-      <div class="step"><div class="why">The cutoff lies between replica 0 and replica 1</div><div class="m">\[ W\le W'\le f_s-W \tag{8}\]</div></div>
-      <div class="srow">
-        <div class="step"><div class="why">Filter (5)</div><div class="m">\[ X_\delta(f)\,H(f)=\cssId{fr-k0}{\frac{1}{T_s}X(f)}\cdot\cssId{fr-ts}{T_s} \]</div></div>
-        <div class="step cont"><div class="m">\[ =\cg{X(f)} \]</div></div>
-      </div>
+      <div class="step"><div class="why">Ideal lowpass filter</div><div class="m">\[ H(f)=T_s\,\Pi\!\left(\frac{f}{2W'}\right) \tag{7} \]</div></div>
+      <div class="step"><div class="why">The cutoff lies between replica 0 and replica 1</div><div class="m">\[ W\le W'\le f_s-W \tag{8} \]</div></div>
+      <div class="step"><div class="why">Filter (5)</div><div class="m">\[ X_\delta(f)\,H(f)=\cssId{fr-sum}{\frac{1}{T_s}\sum_{k}X(f-kf_s)}\cdot\cssId{fr-h}{T_s\,\Pi\!\left(\frac{f}{2W'}\right)} \]</div></div>
+      <div class="step"><div class="why">Only the \(k=0\) replica falls in \(|f|&lt;W'\), where \(H=T_s\)</div><div class="m">\[ X_\delta(f)\,H(f)=\cssId{fr-k0}{\frac{1}{T_s}X(f)}\cdot\cssId{fr-ts}{T_s} \]</div></div>
+      <div class="step"><div class="why">\(T_s\) cancels the \(1/T_s\)</div><div class="m">\[ X_\delta(f)\,H(f)=\cssId{fr-x}{\cg{X(f)}} \]</div></div>
     </div>
   </div>
-  <div class="note" data-on="4-5" data-to="fr-k0" style="left:300px;top:745px">only the \(k=0\) replica passes</div>
-  <div class="note" data-on="4-5" data-to="fr-ts" style="left:700px;top:745px">cancels the \(1/T_s\)</div>
+  <div class="link" data-on="5" data-from="fr-sum" data-to="fr-k0">only k = 0</div>
+  <div class="link" data-on="5" data-from="fr-h" data-to="fr-ts">H = Tₛ for |f| < W′</div>
+  <div class="link" data-on="6" data-from="fr-ts" data-to="fr-x">Tₛ · 1/Tₛ = 1</div>
   <aside class="notes"></aside>
 </section>
 
@@ -621,47 +649,74 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Impulse response of the filter</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
-    <div class="dlayout">
-      <div class="deriv" style="gap:2px">
-        <div class="step"><div class="why">Inverse transform of (7)</div><div class="m">\[ h(t)=\int_{-\infty}^{\infty}H(f)\,e^{j2\pi f t}\,df \]</div></div>
-        <div class="step"><div class="why">Outside \(|f|&lt;W'\) the integrand is zero</div><div class="m">\[ h(t)=\cssId{hi-lim}{T_s\int_{-W'}^{W'}}e^{j2\pi f t}\,df \]</div></div>
-        <div class="step"><div class="why">Integrate in \(f\)</div><div class="m">\[ h(t)=T_s\,\cssId{hi-prim}{\left[\frac{e^{j2\pi f t}}{j2\pi t}\right]_{-W'}^{W'}} \]</div></div>
-        <div class="step"><div class="why">Apply the limits</div><div class="m">\[ h(t)=T_s\,\frac{\cssId{hi-eul}{e^{j2\pi W' t}-e^{-j2\pi W' t}}}{j2\pi t} \]</div></div>
-        <div class="step"><div class="why">Euler, and the \(j\) cancels</div><div class="m">\[ h(t)=T_s\,\frac{\sin(2\pi W' t)}{\pi t} \]</div></div>
-        <div class="step"><div class="why">Sinc form</div><div class="m">\[ h(t)=\cssId{hi-res}{\cb{2W'T_s\,\operatorname{sinc}(2W't)}} \tag{9}\]</div></div>
-        <div class="step txt">Zeros at \(t=m/(2W')\), \(m\ne 0\).</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="400" aria-label="Filter H(f) and its impulse response h(t)"></canvas><div class="figcap"></div></div>
-      </div>
+    <div class="deriv board" style="gap:26px;max-width:860px">
+      <div class="step"><div class="why">Inverse transform of (7)</div><div class="m">\[ h(t)=\int_{-\infty}^{\infty}\cssId{hi-H}{H(f)}\,e^{j2\pi f t}\,df \]</div></div>
+      <div class="step"><div class="why">Outside \(|f|&lt;W'\) the integrand is zero</div><div class="m">\[ h(t)=\cssId{hi-lim}{T_s\int_{-W'}^{W'}}\cssId{hi-int}{e^{j2\pi f t}\,df} \]</div></div>
+      <div class="step"><div class="why">Integrate in \(f\); \(t\) is constant</div><div class="m">\[ h(t)=T_s\,\cssId{hi-prim}{\left[\frac{e^{j2\pi f t}}{j2\pi t}\right]_{-W'}^{W'}} \]</div></div>
+      <div class="step"><div class="why">Apply the limits</div><div class="m">\[ h(t)=T_s\,\cssId{hi-eul}{\frac{e^{j2\pi W' t}-e^{-j2\pi W' t}}{j2\pi t}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="1-2">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Filter H(f) and its impulse response h(t)"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="hi-lim">\(H=T_s\) only for \(|f|&lt;W'\)</div>
-  <div class="note" data-on="3" data-to="hi-prim">antiderivative in \(f\); \(t\) is constant</div>
-  <div class="note" data-on="4-5" data-to="hi-eul" style="left:600px;top:400px">\(e^{j\theta}-e^{-j\theta}=2j\sin\theta\)</div>
-  <div class="note" data-on="6-7" data-to="hi-res" style="left:440px;top:610px">multiply and divide by \(2W'\); \(\operatorname{sinc}(u)=\frac{\sin\pi u}{\pi u}\)</div>
+  <div class="link" data-on="2" data-from="hi-H" data-to="hi-lim">H = Tₛ only for |f| < W′</div>
+  <div class="link" data-on="3" data-from="hi-int" data-to="hi-prim">antiderivative in f; t is constant</div>
+  <div class="link" data-on="4" data-from="hi-prim" data-to="hi-eul">f = W′ minus f = −W′</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="hfilt2" data-sec="3 Reconstruction · impulse response of the filter, continued" data-fig="hfilt2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Impulse response of the filter</h2><div class="sub">Derivation, continued · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:26px;max-width:860px">
+      <div class="step"><div class="why">Result from the previous slide</div><div class="m">\[ h(t)=T_s\,\cssId{hi-eul2}{\frac{e^{j2\pi W' t}-e^{-j2\pi W' t}}{j2\pi t}} \]</div></div>
+      <div class="step"><div class="why">Euler: \(e^{j\theta}-e^{-j\theta}=2j\sin\theta\)</div><div class="m">\[ h(t)=T_s\,\cssId{hi-2j}{\frac{2j\,\sin(2\pi W' t)}{j2\pi t}} \]</div></div>
+      <div class="step"><div class="why">The \(2j\) in the numerator cancels the \(j2\) in the denominator</div><div class="m">\[ h(t)=T_s\,\cssId{hi-sin}{\frac{\sin(2\pi W' t)}{\pi t}} \]</div></div>
+      <div class="step"><div class="why">Multiply and divide by \(2W'\); \(\operatorname{sinc}(u)=\frac{\sin\pi u}{\pi u}\)</div><div class="m">\[ h(t)=\cssId{hi-res}{\cb{2W'T_s\,\operatorname{sinc}(2W't)}} \tag{9} \]</div></div>
+      <div class="step txt">Zeros at \(t=m/(2W')\), \(m\ne 0\).</div>
+    </div>
+    <div class="figfloat" data-show="4-5">
+      <div class="fig"><canvas data-figcanvas height="400" aria-label="Filter H(f) and its impulse response h(t)"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="hi-eul2" data-to="hi-2j">Euler: eʲᶿ − e⁻ʲᶿ = 2j sin θ</div>
+  <div class="link" data-on="3" data-from="hi-2j" data-to="hi-sin">2j / (j2πt) = 1 / (πt)</div>
+  <div class="link" data-on="4" data-from="hi-sin" data-to="hi-res">× 2W′/2W′; sinc u = sin(πu)/(πu)</div>
   <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="interp" data-sec="3 Reconstruction · interpolation formula" data-fig="interp">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Interpolation formula</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
-  <div class="body">
-    <div class="dlayout" style="grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
-      <div class="deriv" style="gap:8px">
-        <div class="step"><div class="why">In time, filtering is convolving</div><div class="m">\[ x(t)=x_\delta(t)*h(t) \]</div></div>
-        <div class="step"><div class="why">Use (2)</div><div class="m">\[ x(t)=\Big[\sum_{n}x(nT_s)\,\delta(t-nT_s)\Big]*h(t) \]</div></div>
-        <div class="step"><div class="why">Convolution term by term</div><div class="m">\[ x(t)=\sum_{n}x(nT_s)\,\cssId{if-hn}{h(t-nT_s)} \]</div></div>
-        <div class="step"><div class="why">Use (9) with \(t\to t-nT_s\)</div><div class="m">\[ x(t)=\cssId{if-form}{\sum_{n}2W'T_s\,x(nT_s)\operatorname{sinc}\!\big(2W'(t-nT_s)\big)} \tag{10}\]</div></div>
-        <div class="step txt" style="margin-top:64px">Each sample multiplies a copy of \(h(t)\) shifted to its own instant. Adding these copies recovers \(x(t)\).</div>
-      </div>
-      <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="360" aria-label="Impulses of the samples and copies of h(t)"></canvas><div class="figcap"></div></div>
-      </div>
+ <style>#interp svg.sysd { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+#interp svg.sysd .bx { fill: #fff; stroke: var(--unb-muted); stroke-width: 1.6; }
+#interp svg.sysd .bx.m3 { stroke: var(--unb-primary); stroke-width: 2.2; }
+#interp svg.sysd .t1 { font-size: 21px; fill: var(--unb-muted); text-anchor: middle; }
+#interp svg.sysd .t1.m3t { fill: var(--unb-primary); font-weight: 600; }
+#interp svg.sysd .t2 { font-size: 18px; fill: var(--unb-muted); text-anchor: middle; }
+#interp svg.sysd .ar { fill: none; stroke: var(--unb-muted); stroke-width: 1.8; }
+#interp svg.sysd .sig { font-size: 17px; fill: var(--unb-text); font-style: italic; }
+@media (max-width: 560px) { #interp .sysdwrap { overflow-x: auto; } #interp .sysdwrap svg.sysd { min-width: 760px; } }</style>
+  <div class="body" style="gap:10px">
+    <div class="sysdwrap"><svg class="sysd" viewBox="0 20 1400 165" role="img" aria-label="Diagram: sampled signal passing through the reconstruction filter h(t), with output x(t)"><defs><marker id="ip-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878"/></marker></defs><text class="sig" x="270" y="52" text-anchor="middle" style="font-size:21px">x<tspan style="font-size:14px" dy="5">δ</tspan><tspan dy="-5">(t) = Σ</tspan><tspan style="font-size:14px" dy="5">n</tspan><tspan dy="-5"> x(nT</tspan><tspan style="font-size:14px" dy="5">s</tspan><tspan dy="-5">) δ(t − nT</tspan><tspan style="font-size:14px" dy="5">s</tspan><tspan dy="-5">)</tspan></text><path class="ar" d="M20,75 H587" marker-end="url(#ip-ah)"/><path class="ar" d="M30,168 H520" style="stroke-width:1.2"/><path class="ar" d="M50,168 V131.8" marker-end="url(#ip-ah)"/><path class="ar" d="M90,168 V147.6" marker-end="url(#ip-ah)"/><path class="ar" d="M130,168 V157.0" marker-end="url(#ip-ah)"/><path class="ar" d="M170,168 V153.6" marker-end="url(#ip-ah)"/><path class="ar" d="M210,168 V140.3" marker-end="url(#ip-ah)"/><path class="ar" d="M250,168 V126.9" marker-end="url(#ip-ah)"/><path class="ar" d="M290,168 V121.5" marker-end="url(#ip-ah)"/><path class="ar" d="M330,168 V123.5" marker-end="url(#ip-ah)"/><path class="ar" d="M370,168 V125.6" marker-end="url(#ip-ah)"/><path class="ar" d="M410,168 V121.4" marker-end="url(#ip-ah)"/><path class="ar" d="M450,168 V112.2" marker-end="url(#ip-ah)"/><path class="ar" d="M490,168 V106.4" marker-end="url(#ip-ah)"/><g id="if-blk"><rect class="bx m3" x="590" y="30" width="300" height="125" rx="8"/><text class="t1 m3t" x="740" y="56">reconstruction filter</text><text class="t2" x="740" y="80" style="font-style:italic">h(t) ↔ H(f)</text><path d="M620,140 H740 M765,140 H875" style="stroke:var(--unb-muted);stroke-width:1"/><polyline points="625.0,140.0 625.9,140.6 626.8,141.2 627.8,141.8 628.7,142.3 629.6,142.7 630.5,143.0 631.4,143.2 632.3,143.3 633.2,143.2 634.2,143.0 635.1,142.6 636.0,142.1 636.9,141.5 637.8,140.8 638.8,140.0 639.7,139.2 640.6,138.4 641.5,137.6 642.4,136.9 643.3,136.3 644.2,135.8 645.2,135.5 646.1,135.4 647.0,135.5 647.9,135.7 648.8,136.2 649.8,136.9 650.7,137.8 651.6,138.8 652.5,140.0 653.4,141.2 654.3,142.5 655.2,143.7 656.2,144.9 657.1,146.0 658.0,146.8 658.9,147.4 659.8,147.8 660.8,147.8 661.7,147.4 662.6,146.7 663.5,145.6 664.4,144.1 665.3,142.2 666.2,140.0 667.2,137.4 668.1,134.6 669.0,131.6 669.9,128.4 670.8,125.1 671.8,121.8 672.7,118.6 673.6,115.6 674.5,112.8 675.4,110.2 676.3,108.1 677.2,106.3 678.2,105.0 679.1,104.3 680.0,104.0 680.9,104.3 681.8,105.0 682.8,106.3 683.7,108.1 684.6,110.2 685.5,112.8 686.4,115.6 687.3,118.6 688.2,121.8 689.2,125.1 690.1,128.4 691.0,131.6 691.9,134.6 692.8,137.4 693.8,140.0 694.7,142.2 695.6,144.1 696.5,145.6 697.4,146.7 698.3,147.4 699.2,147.8 700.2,147.8 701.1,147.4 702.0,146.8 702.9,146.0 703.8,144.9 704.8,143.7 705.7,142.5 706.6,141.2 707.5,140.0 708.4,138.8 709.3,137.8 710.2,136.9 711.2,136.2 712.1,135.7 713.0,135.5 713.9,135.4 714.8,135.5 715.8,135.8 716.7,136.3 717.6,136.9 718.5,137.6 719.4,138.4 720.3,139.2 721.2,140.0 722.2,140.8 723.1,141.5 724.0,142.1 724.9,142.6 725.8,143.0 726.8,143.2 727.7,143.3 728.6,143.2 729.5,143.0 730.4,142.7 731.3,142.3 732.2,141.8 733.2,141.2 734.1,140.6 735.0,140.0" style="fill:none;stroke:var(--unb-primary);stroke-width:2"/><path d="M770,140 H795 V108 H845 V140 H870" style="fill:none;stroke:var(--unb-primary);stroke-width:2"/></g><path class="ar" d="M890,75 H1330" marker-end="url(#ip-ah)"/><text class="sig" x="1355" y="81" text-anchor="middle" style="font-size:22px">x(t)</text><polyline points="970.0,131.8 973.3,133.5 976.6,135.3 979.9,137.1 983.2,138.9 986.5,140.7 989.8,142.4 993.1,144.2 996.4,145.8 999.7,147.5 1003.0,149.0 1006.3,150.4 1009.6,151.8 1012.9,153.0 1016.2,154.1 1019.5,155.0 1022.8,155.8 1026.1,156.5 1029.4,157.0 1032.7,157.3 1036.0,157.4 1039.3,157.4 1042.6,157.2 1045.9,156.8 1049.2,156.3 1052.5,155.6 1055.8,154.8 1059.1,153.9 1062.4,152.8 1065.7,151.6 1069.0,150.2 1072.3,148.8 1075.6,147.3 1078.9,145.8 1082.2,144.2 1085.5,142.5 1088.8,140.9 1092.1,139.2 1095.4,137.6 1098.7,136.0 1102.0,134.4 1105.3,132.8 1108.6,131.4 1111.9,130.0 1115.2,128.7 1118.5,127.5 1121.8,126.3 1125.1,125.3 1128.4,124.5 1131.7,123.7 1135.0,123.0 1138.3,122.5 1141.6,122.1 1144.9,121.7 1148.2,121.5 1151.5,121.4 1154.8,121.4 1158.1,121.5 1161.4,121.7 1164.7,121.9 1168.0,122.2 1171.3,122.5 1174.6,122.8 1177.9,123.2 1181.2,123.6 1184.5,124.0 1187.8,124.3 1191.1,124.7 1194.4,125.0 1197.7,125.2 1201.0,125.4 1204.3,125.5 1207.6,125.6 1210.9,125.5 1214.2,125.4 1217.5,125.2 1220.8,124.9 1224.1,124.5 1227.4,124.0 1230.7,123.4 1234.0,122.8 1237.3,122.0 1240.6,121.2 1243.9,120.3 1247.2,119.4 1250.5,118.4 1253.8,117.4 1257.1,116.3 1260.4,115.3 1263.7,114.2 1267.0,113.1 1270.3,112.1 1273.6,111.2 1276.9,110.2 1280.2,109.4 1283.5,108.6 1286.8,107.9 1290.1,107.4 1293.4,106.9 1296.7,106.6 1300.0,106.4" style="fill:none;stroke:var(--unb-text);stroke-width:2.6"/><path class="ar" d="M960,168 H1310" style="stroke-width:1.2"/></svg></div>
+    <div class="deriv board" style="gap:16px;max-width:860px">
+        <div class="step"><div class="why">In time, filtering is convolving</div><div class="m">\[ x(t)=\cssId{if-xd}{x_\delta(t)}*\cssId{if-h1}{h(t)} \]</div></div>
+        <div class="step"><div class="why">Use (2)</div><div class="m">\[ x(t)=\cssId{if-br}{\cssId{if-sum}{\Big[\sum_{n}x(nT_s)\,\delta(t-nT_s)\Big]}*h(t)} \]</div></div>
+        <div class="step"><div class="why">The convolution goes inside the sum</div><div class="m">\[ x(t)=\sum_{n}x(nT_s)\,\cssId{if-dh}{\big[\delta(t-nT_s)*h(t)\big]} \]</div></div>
+        <div class="step"><div class="why">Convolving with \(\delta(t-t_0)\) shifts \(h\) to \(t_0\)</div><div class="m">\[ x(t)=\sum_{n}x(nT_s)\,\cssId{if-hn}{h(t-nT_s)} \]</div></div>
+        <div class="step"><div class="why">Use (9) with \(t\to t-nT_s\); holds for any \(W\le W'\le f_s-W\)</div><div class="m">\[ x(t)=\sum_{n}2W'T_s\,x(nT_s)\cssId{if-sinc}{\operatorname{sinc}\!\big(2W'(t-nT_s)\big)} \tag{10} \]</div></div>
+        <div class="step txt">Each sample multiplies a copy of \(h(t)\) shifted to its own instant. Adding these copies recovers \(x(t)\).</div>
+    </div>
+    <div class="figfloat" data-show="4-6" style="top:200px">
+      <div class="fig"><canvas data-figcanvas height="300" aria-label="Impulses of the samples and copies of h(t)"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="note" data-on="3" data-to="if-hn">\(\delta(t-t_0)*h(t)=h(t-t_0)\)</div>
-  <div class="note" data-on="4-5" data-to="if-form" style="left:400px;top:452px">holds for any \(W\le W'\le f_s-W\)</div>
+  <div class="link" data-on="1-1" data-from="if-blk" data-to="if-h1">the filter output is the convolution</div>
+  <div class="link" data-on="2" data-from="if-xd" data-to="if-sum">substitute (2)</div>
+  <div class="link" data-on="3" data-from="if-br" data-to="if-dh">the convolution goes inside the sum</div>
+  <div class="link" data-on="4" data-from="if-dh" data-to="if-hn">δ(t − t₀) * h(t) = h(t − t₀)</div>
+  <div class="link" data-on="5" data-from="if-hn" data-to="if-sinc">(9) with t → t − nTₛ</div>
   <aside class="notes"></aside>
 </section>
 
@@ -670,18 +725,13 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Interpolation at the Nyquist rate</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout">
-      <div class="deriv" style="gap:2px">
-        <div class="step"><div class="why">At the Nyquist rate there is no slack between the replicas</div><div class="m">\[ W\le W'\le f_s-W\quad\text{with}\quad f_s=2W \]</div></div>
-        <div class="step"><div class="why">The two limits coincide</div><div class="m">\[ W'=W=\frac{f_s}{2}=\frac{1}{2T_s} \]</div></div>
-        <div class="srow">
-          <div class="step"><div class="why">Gain in (10)</div><div class="m">\[ \cssId{ny-g}{2W'T_s} \]</div></div>
-          <div class="step cont"><div class="m">\[ =2\cdot\frac{1}{2T_s}\cdot T_s=1 \]</div></div>
-        </div>
-        <div class="srow" style="margin-top:56px">
-          <div class="step"><div class="why">Argument in (10)</div><div class="m">\[ \cssId{ny-a}{2W'(t-nT_s)} \]</div></div>
-          <div class="step cont"><div class="m">\[ =\frac{t-nT_s}{T_s}=\frac{t}{T_s}-n \]</div></div>
-        </div>
-        <div class="step" style="margin-top:56px"><div class="why">Take both into (10)</div><div class="m">\[ \boxed{\,x(t)=\sum_{n=-\infty}^{\infty}x(nT_s)\,\operatorname{sinc}\!\left(\frac{t}{T_s}-n\right)\,} \tag{11}\]</div></div>
+      <div class="deriv board" style="gap:22px">
+        <div class="step"><div class="why">At the Nyquist rate there is no slack between the replicas</div><div class="m">\[ W\le W'\le \cssId{ny-fs}{f_s-W}\quad\text{with}\quad f_s=2W \]</div></div>
+        <div class="step"><div class="why">The two limits coincide</div><div class="m">\[ W'=W=\cssId{ny-w}{\frac{f_s}{2}=\frac{1}{2T_s}} \]</div></div>
+        <div class="step"><div class="why">Gain in (10), with \(W'=1/(2T_s)\)</div><div class="m">\[ \cssId{ny-g}{2W'T_s=\cssId{ny-2w}{2\cdot\frac{1}{2T_s}}\cdot T_s=1} \]</div></div>
+        <div class="step"><div class="why">Argument in (10), with \(2W'=1/T_s\)</div><div class="m">\[ 2W'(t-nT_s)=\cssId{ny-a}{\frac{t-nT_s}{T_s}=\frac{t}{T_s}-n} \]</div></div>
+        <div class="step"><div class="why">Take both into (10)</div><div class="m">\[ x(t)=\sum_{n}\underbrace{2W'T_s}_{=\,1}\,x(nT_s)\,\operatorname{sinc}\!\big(\cssId{ny-a5}{\underbrace{2W'(t-nT_s)}_{=\,t/T_s-n}}\big) \]</div></div>
+        <div class="step"><div class="why">Gain \(1\) and argument \(t/T_s-n\)</div><div class="m">\[ \boxed{\,x(t)=\sum_{n=-\infty}^{\infty}x(nT_s)\,\operatorname{sinc}\!\left(\cssId{ny-arg}{\frac{t}{T_s}-n}\right)\,} \tag{11} \]</div></div>
         <div class="step txt">Only the samples and one fixed function, the sinc. No other information about \(x(t)\) is needed.</div>
       </div>
       <div class="figcol">
@@ -689,8 +739,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="3-4" data-to="ny-g" style="left:300px;top:412px">gain that multiplies the sinc</div>
-  <div class="note" data-on="5-6" data-to="ny-a" style="left:300px;top:536px">argument of the sinc</div>
+  <div class="link" data-on="2" data-from="ny-fs" data-to="ny-w">fₛ = 2W: fₛ − W = W</div>
+  <div class="link" data-on="3" data-from="ny-w" data-to="ny-g">substitute W′</div>
+  <div class="link" data-on="4" data-from="ny-2w" data-to="ny-a">2W′ = 1/Tₛ</div>
+  <div class="link" data-on="5" data-from="ny-a" data-to="ny-a5">argument of the sinc</div>
+  <div class="link" data-on="6" data-from="ny-a5" data-to="ny-arg">gain 1, argument t/Tₛ − n</div>
   <aside class="notes"></aside>
 </section>
 
@@ -743,21 +796,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Aliasing in time</h2><div class="sub">Derivation · press → to advance</div><div class="bar"></div></div>
   <div class="body" style="gap:8px">
     <div class="fig"><canvas data-figcanvas height="250" aria-label="7 kHz sinusoid, samples at 8 kHz and 1 kHz sinusoid"></canvas></div>
-    <div class="deriv" style="gap:4px">
+    <div class="deriv board" style="gap:16px">
       <div class="solo">
         <div class="step txt">A \(7\) kHz sinusoid over \(1\) ms.</div>
         <div class="step txt">Sinusoid of \(f_0=7\) kHz sampled with \(f_s=8\) kHz, below \(2f_0=14\) kHz.</div>
         <div class="step txt">In red, a \(1\) kHz sinusoid passes through the same samples.</div>
       </div>
-      <div class="srow">
-        <div class="step"><div class="why">Add and subtract \(2\pi f_s nT_s\)</div><div class="m">\[ \cos(2\pi f_0 nT_s)=\cos\big(2\pi\cssId{al-dif}{(f_0-f_s)}nT_s+\cssId{al-per}{2\pi f_s nT_s}\big) \]</div></div>
-        <div class="step cont"><div class="m">\[ =\cssId{al-fim}{\cos\big(2\pi\,(1\text{ kHz})\,nT_s\big)} \tag{12}\]</div></div>
-      </div>
-      <div class="step txt" style="margin-top:62px">The samples cannot tell the two sinusoids apart: the \(7\) kHz component shows up at \(f_s-f_0=1\) kHz.</div>
+      <div class="step"><div class="why">Add and subtract \(2\pi f_s nT_s\)</div><div class="m">\[ \cos(2\pi f_0 nT_s)=\cos\big(2\pi\cssId{al-dif}{(f_0-f_s)}nT_s+\cssId{al-per}{2\pi f_s nT_s}\big) \]</div></div>
+      <div class="step"><div class="why">\(f_sT_s=1\), so the term equals \(2\pi n\)</div><div class="m">\[ \phantom{\cos(2\pi f_0 nT_s)}=\cos\big(2\pi(f_0-f_s)nT_s+\cssId{al-2pn}{2\pi n}\big) \]</div></div>
+      <div class="step"><div class="why">Adding \(2\pi n\) does not change the cosine</div><div class="m">\[ \phantom{\cos(2\pi f_0 nT_s)}=\cssId{al-c6}{\cos\big(2\pi\cssId{al-dif6}{(f_0-f_s)}nT_s\big)} \]</div></div>
+      <div class="step"><div class="why">\(7-8=-1\) kHz, and the cosine is even</div><div class="m">\[ \phantom{\cos(2\pi f_0 nT_s)}=\cssId{al-fim}{\cos\big(2\pi\,(1\text{ kHz})\,nT_s\big)} \tag{12} \]</div></div>
+      <div class="step txt">The samples cannot tell the two sinusoids apart: the \(7\) kHz component shows up at \(f_s-f_0=1\) kHz.</div>
     </div>
   </div>
-  <div class="note" data-on="4" data-to="al-per" style="left:820px;top:588px">\(f_sT_s=1\), so it equals \(2\pi n\)</div>
-  <div class="note" data-on="5" data-to="al-fim" style="left:1080px;top:588px">\(7-8=-1\) kHz and the cosine is even</div>
+  <div class="note" data-on="4" data-to="al-dif al-per">add and subtract \(2\pi f_s nT_s\)</div>
+  <div class="link" data-on="5" data-from="al-per" data-to="al-2pn">fₛTₛ = 1</div>
+  <div class="link" data-on="6" data-from="al-2pn" data-to="al-c6">period 2π: the 2πn drops out</div>
+  <div class="link" data-on="7" data-from="al-dif6" data-to="al-fim">7 − 8 = −1 kHz; even cosine</div>
   <aside class="notes"></aside>
 </section>
 
@@ -785,23 +840,26 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Guard band</h2><div class="sub">Example · press → to advance</div><div class="bar"></div></div>
   <div class="body" style="gap:6px">
-    <div class="fig"><canvas data-figcanvas height="230" aria-label="Replicas of voice sampled at 8 kHz and the guard band"></canvas></div>
-    <div class="deriv" style="gap:2px">
+    <div class="fig"><canvas data-figcanvas height="210" aria-label="Replicas of voice sampled at 8 kHz and the guard band"></canvas></div>
+    <div class="deriv board" style="gap:16px">
       <div class="solo">
         <div class="step txt">Telephony: voice limited to \(W=3.4\) kHz and sampled at \(f_s=8\) kHz, above the Nyquist rate.</div>
         <div class="step txt">Between \(W\) and \(f_s-W\) there is an empty band, the guard band \(W_G=f_s-2W\).</div>
       </div>
       <div class="step txt">A real filter does not cut vertically. The guard band leaves room for the transition between the passband and the stopband.</div>
       <div class="step txt">Which \(f_s\) guarantees a guard band of \(1200\) Hz for \(W=3400\) Hz?</div>
-      <div class="srow">
-        <div class="step"><div class="why">Solve \(W_G=f_s-2W\) for \(f_s\)</div><div class="m">\[ f_s=\cssId{bg-nyq}{2W}+\cssId{bg-wg}{W_G} \]</div></div>
-        <div class="step cont"><div class="m">\[ =2\times 3400+1200 \]</div></div>
-        <div class="step cont"><div class="m">\[ =\boxed{8000\text{ Hz}} \tag{13}\]</div></div>
-      </div>
+      <div class="step"><div class="why">Guard band</div><div class="m">\[ W_G=\cssId{bg-fs0}{f_s}-2W \]</div></div>
+      <div class="step"><div class="why">Solve for \(f_s\)</div><div class="m">\[ \cssId{bg-fs}{f_s}=\cssId{bg-nyq}{2W}+\cssId{bg-wg}{W_G} \]</div></div>
+      <div class="step"><div class="why">Substitute \(W=3400\) Hz and \(W_G=1200\) Hz</div><div class="m">\[ f_s=\cssId{bg-sum}{\cssId{bg-n2}{2\times 3400}+\cssId{bg-w2}{1200}} \]</div></div>
+      <div class="step"><div class="why">\(6800+1200\)</div><div class="m">\[ f_s=\cssId{bg-res}{\boxed{8000\text{ Hz}}} \tag{13} \]</div></div>
     </div>
   </div>
-  <div class="note" data-on="5-7" data-to="bg-nyq" style="left:250px;top:700px">Nyquist rate</div>
-  <div class="note" data-on="5-7" data-to="bg-wg" style="left:560px;top:700px">margin for the filter</div>
+  <div class="link" data-on="6" data-from="bg-fs0" data-to="bg-fs">solve for fₛ</div>
+  <div class="note" data-on="6" data-to="bg-nyq">Nyquist rate</div>
+  <div class="note" data-on="6" data-to="bg-wg">margin for the filter</div>
+  <div class="link" data-on="7" data-from="bg-nyq" data-to="bg-n2">W = 3400 Hz, W_G = 1200 Hz</div>
+  <div class="link" data-on="7" data-from="bg-wg" data-to="bg-w2"></div>
+  <div class="link" data-on="8" data-from="bg-sum" data-to="bg-res">6800 + 1200</div>
   <aside class="notes"></aside>
 </section>
 
@@ -856,50 +914,69 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 1: Nyquist rate of sinc signals</h2><div class="sub">Items a and b · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
-      <div class="deriv" style="gap:5px">
+      <div class="deriv board" style="gap:9px">
         <div class="step txt">Find the Nyquist rate of \(g_a(t)=4\operatorname{sinc}(800\,t)\) and of \(g_b(t)=2\operatorname{sinc}^2(2000\,t)\), with \(t\) in seconds.</div>
-        <div class="step"><div class="why">Transform pair</div><div class="m">\[ \operatorname{sinc}(at)\;\Longleftrightarrow\;\frac{1}{a}\,\cssId{n1-rect}{\operatorname{rect}\!\left(\frac{f}{a}\right)} \]</div></div>
-        <div class="step"><div class="why">Item a: \(a=800\) Hz, gain \(4\)</div><div class="m">\[ G_a(f)=\frac{4}{800}\operatorname{rect}\!\left(\frac{f}{800}\right)=0.005\operatorname{rect}\!\left(\frac{f}{800}\right) \]</div></div>
+        <div class="step"><div class="why">Transform pair</div><div class="m">\[ \operatorname{sinc}(at)\;\Longleftrightarrow\;\cssId{n1-pair}{\frac{1}{a}\operatorname{rect}\!\left(\frac{f}{a}\right)} \]</div></div>
+        <div class="step"><div class="why">Item a: \(a=800\) Hz, gain \(4\)</div><div class="m">\[ G_a(f)=\cssId{n1-ga}{\frac{4}{800}\operatorname{rect}\!\left(\frac{f}{800}\right)}=0.005\,\cssId{n1-r800}{\operatorname{rect}\!\left(\frac{f}{800}\right)} \]</div></div>
         <div class="srow">
-          <div class="step"><div class="why">Edge of the rectangle</div><div class="m">\[ B_a=\cssId{n1-ba}{\frac{800}{2}}=400\text{ Hz} \]</div></div>
+          <div class="step"><div class="why">Edge of the rectangle: half of the width \(a\)</div><div class="m">\[ B_a=\cssId{n1-ba}{\frac{800}{2}}=400\text{ Hz} \]</div></div>
           <div class="step cont"><div class="m">\[ \Rightarrow\; f_N=2\times 400=\boxed{800\text{ Hz}} \]</div></div>
         </div>
-        <div class="step"><div class="why">Item b: \(\operatorname{sinc}^2\) is a product</div><div class="m">\[ \operatorname{sinc}^2(2000t)=\operatorname{sinc}(2000t)\cdot\operatorname{sinc}(2000t) \]</div></div>
-        <div class="step"><div class="why">Product becomes convolution</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\operatorname{rect}\!\left(\frac{f}{2000}\right)\cssId{n1-conv}{\,*\,}\operatorname{rect}\!\left(\frac{f}{2000}\right) \]</div></div>
-        <div class="step"><div class="why">Common area of two rectangles</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\cdot\cssId{n1-area}{2000\,\Lambda(f/2000)}=0.001\,\Lambda(f/2000) \]</div></div>
-        <div class="step"><div class="why">Base of the triangle</div><div class="m">\[ B_b=\cssId{n1-bb}{1000+1000}=2000\text{ Hz} \]</div></div>
-        <div class="step"><div class="why">Nyquist rate</div><div class="m">\[ f_N=2B_b=2\times 2000=\boxed{4000\text{ Hz}} \]</div></div>
+        <div class="step"><div class="why">Item b: \(\operatorname{sinc}^2\) is a product</div><div class="m">\[ \operatorname{sinc}^2(2000t)=\cssId{n1-prod}{\operatorname{sinc}(2000t)\cdot\operatorname{sinc}(2000t)} \]</div></div>
+        <div class="step"><div class="why">Product in time becomes convolution in frequency</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\cssId{n1-rr}{\operatorname{rect}\!\left(\frac{f}{2000}\right)*\operatorname{rect}\!\left(\frac{f}{2000}\right)} \]</div></div>
+        <div class="step"><div class="why">Common area of two rectangles: maximum, \(2000\), at \(f=0\), and zero at \(|f|=2000\)</div><div class="m">\[ G_b(f)=\frac{2}{2000^2}\cdot\cssId{n1-area}{2000\,\Lambda(f/2000)}=0.001\,\cssId{n1-L}{\Lambda(f/2000)} \]</div></div>
+        <div class="step"><div class="why">Base of the triangle: the edges add up</div><div class="m">\[ B_b=\cssId{n1-bb}{1000+1000}=2000\text{ Hz} \]</div></div>
+        <div class="step"><div class="why">Nyquist rate</div><div class="m">\[ f_N=\cssId{n1-fn}{2B_b}=2\times 2000=\boxed{4000\text{ Hz}} \]</div></div>
       </div>
       <div class="figcol">
         <div class="fig"><canvas data-figcanvas height="500" aria-label="Spectra of g_a and g_b, the latter built by convolving two rectangles"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="n1-rect">occupies \(|f|\le a/2\)</div>
-  <div class="note" data-on="4-5" data-to="n1-ba">half of the total width \(a\)</div>
-  <div class="note" data-on="7" data-to="n1-conv">product in time becomes convolution in frequency</div>
-  <div class="note" data-on="8" data-to="n1-area">maximum overlap \(2000\) at \(f=0\), falling to zero at \(|f|=2000\)</div>
-  <div class="note" data-on="9" data-to="n1-bb">the edge widths add up</div>
+  <div class="link" data-on="3" data-from="n1-pair" data-to="n1-ga">a = 800, gain 4</div>
+  <div class="link" data-on="4-5" data-from="n1-r800" data-to="n1-ba">edge at |f| = a/2</div>
+  <div class="link" data-on="7" data-from="n1-prod" data-to="n1-rr">product → convolution</div>
+  <div class="link" data-on="8" data-from="n1-rr" data-to="n1-area">peak 2000 at f = 0, zero at |f| = 2000</div>
+  <div class="link" data-on="9" data-from="n1-L" data-to="n1-bb">edges 1000 + 1000</div>
+  <div class="link" data-on="10" data-from="n1-bb" data-to="n1-fn">twice the bandwidth</div>
   <aside class="notes"></aside>
 </section>
 
-<section class="slide" id="exnyq2" data-sec="5 Exercise 1 · sum and product" data-fig="exnyq2">
+<section class="slide" id="exnyq2" data-sec="5 Exercise 1 · sum" data-fig="exnyq2">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exercise 1: sum and product of sincs</h2><div class="sub">Items c and d · press → to advance</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>Exercise 1: sum of sincs</h2><div class="sub">Item c · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
-      <div class="deriv" style="gap:5px">
-        <div class="step txt">Find the Nyquist rate of \(g_c(t)=\operatorname{sinc}(1600\,t)+\operatorname{sinc}^2(700\,t)\) and of \(g_d(t)=3\operatorname{sinc}(600\,t)\operatorname{sinc}(1400\,t)\).</div>
-        <div class="step"><div class="why">Item c: sum in time is sum in frequency</div><div class="m">\[ G_c(f)=\cssId{n2-r}{\frac{1}{1600}\operatorname{rect}\!\left(\frac{f}{1600}\right)}+\cssId{n2-t}{\frac{1}{700}\Lambda\!\left(\frac{f}{700}\right)} \]</div></div>
+      <div class="deriv board" style="gap:34px">
+        <div class="step txt">Find the Nyquist rate of \(g_c(t)=\operatorname{sinc}(1600\,t)+\operatorname{sinc}^2(700\,t)\).</div>
+        <div class="step"><div class="why">Item c: sum in time is sum in frequency</div><div class="m">\[ G_c(f)=\frac{1}{1600}\cssId{n2-r}{\operatorname{rect}\!\left(\frac{f}{1600}\right)}+\frac{1}{700}\cssId{n2-t}{\Lambda\!\left(\frac{f}{700}\right)} \]</div></div>
         <div class="srow">
-          <div class="step"><div class="why">The farthest edge counts</div><div class="m">\[ B_c=\max(\cssId{n2-800}{800},\,\cssId{n2-700}{700})=800\text{ Hz} \]</div></div>
-          <div class="step cont"><div class="m">\[ \Rightarrow\; f_N=\boxed{1600\text{ Hz}} \]</div></div>
+          <div class="step"><div class="why">The farthest edge counts</div><div class="m">\[ B_c=\max(\cssId{n2-800}{800},\,\cssId{n2-700}{700})=\cssId{n2-bc}{800}\text{ Hz} \]</div></div>
+          <div class="step cont"><div class="m">\[ \Rightarrow\; f_N=2\times 800=\boxed{1600\text{ Hz}} \]</div></div>
         </div>
-        <div class="step"><div class="why">Item d: product becomes convolution</div><div class="m">\[ G_d(f)=\frac{3}{600\cdot 1400}\,\cssId{n2-r1}{\operatorname{rect}\!\left(\frac{f}{600}\right)}*\cssId{n2-r2}{\operatorname{rect}\!\left(\frac{f}{1400}\right)} \]</div></div>
+      </div>
+      <div class="figcol">
+        <div class="fig"><canvas data-figcanvas height="500" aria-label="Spectrum of g_c as a sum and spectrum of g_d as the convolution of two rectangles"></canvas><div class="figcap"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="link" data-on="3-4" data-from="n2-r" data-to="n2-800"></div>
+  <div class="link" data-on="3-4" data-from="n2-t" data-to="n2-700">edges: 1600/2 and 700</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exnyq2b" data-sec="5 Exercise 1 · product" data-fig="exnyq2b">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 1: product of sincs</h2><div class="sub">Item d · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="dlayout" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="deriv board" style="gap:32px">
+        <div class="step txt">Find the Nyquist rate of \(g_d(t)=3\operatorname{sinc}(600\,t)\operatorname{sinc}(1400\,t)\).</div>
+        <div class="step"><div class="why">Item d: product in time becomes convolution in frequency</div><div class="m">\[ G_d(f)=\frac{3}{600\cdot 1400}\,\cssId{n2-r1}{\operatorname{rect}\!\left(\frac{f}{600}\right)}\cssId{n2-star}{*}\cssId{n2-r2}{\operatorname{rect}\!\left(\frac{f}{1400}\right)} \]</div></div>
         <div class="step"><div class="why">The narrow rectangle fits entirely inside the wide one</div><div class="m">\[ G_d(0)=\frac{3}{600\cdot1400}\cdot\cssId{n2-600}{600}=\frac{3}{1400}\approx 2.14\times10^{-3} \]</div></div>
-        <div class="step"><div class="why">Trapezoid: flat up to \(700-300\)</div><div class="m">\[ G_d(f)\;\text{flat for }|f|\le\cssId{n2-400}{400}\text{ Hz, zero for }|f|\ge 1000\text{ Hz} \]</div></div>
+        <div class="step"><div class="why">Trapezoid: flat up to \(700-300\)</div><div class="m">\[ G_d(f)\;\text{flat for }|f|\le\cssId{n2-400}{400}\text{ Hz, zero for }|f|\ge \cssId{n2-1000}{1000}\text{ Hz} \]</div></div>
         <div class="step"><div class="why">The edges add up</div><div class="m">\[ B_d=\cssId{n2-bd}{300+700}=1000\text{ Hz} \]</div></div>
-        <div class="step"><div class="why">Nyquist rate</div><div class="m">\[ f_N=2B_d=2\times1000=\boxed{2000\text{ Hz}} \]</div></div>
+        <div class="step"><div class="why">Nyquist rate</div><div class="m">\[ f_N=\cssId{n2-fn}{2B_d}=2\times1000=\boxed{2000\text{ Hz}} \]</div></div>
         <div class="step txt">For a sum, the larger bandwidth counts. For a product, the bandwidths add, even when each factor alone would need much less.</div>
       </div>
       <div class="figcol">
@@ -907,13 +984,11 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="n2-t">\(\operatorname{sinc}^2(bt)\) gives a triangle with base \(|f|\le b\)</div>
-  <div class="note" data-on="3-4" data-to="n2-800">\(1600/2\)</div>
-  <div class="note" data-on="5" data-to="n2-r1">occupies \(|f|\le 300\)</div>
-  <div class="note" data-on="5" data-to="n2-r2">occupies \(|f|\le 700\)</div>
-  <div class="note" data-on="6" data-to="n2-600">common area is the width of the narrow one</div>
-  <div class="note" data-on="7" data-to="n2-400">the narrow one is still entirely inside</div>
-  <div class="note" data-on="8" data-to="n2-bd">the width of a convolution is the sum of the widths</div>
+  <div class="note" data-on="2" data-to="n2-r1 n2-r2">product becomes convolution; the rectangles occupy \(|f|\le 300\) and \(|f|\le 700\)</div>
+  <div class="link" data-on="3" data-from="n2-r1" data-to="n2-600">common area = width of the narrow one</div>
+  <div class="link" data-on="4" data-from="n2-600" data-to="n2-400">the narrow one stays fully inside up to 700 − 300</div>
+  <div class="link" data-on="5" data-from="n2-1000" data-to="n2-bd">widths add: 300 + 700</div>
+  <div class="link" data-on="6" data-from="n2-bd" data-to="n2-fn">twice the bandwidth</div>
   <aside class="notes"></aside>
 </section>
 
@@ -922,12 +997,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 2: zero-order hold in the D/A</h2><div class="sub">Frequency response · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="dlayout" style="grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)">
-      <div class="deriv" style="gap:8px">
+      <div class="deriv board" style="gap:20px">
         <div class="step txt">An audio D/A holds each sample for \(T_s\). The audio has bandwidth \(W=20\) kHz. How much does the hold attenuate at \(f=W\) with \(f_s=48\text{ kHz}\) and with \(f_s=192\text{ kHz}\), and what gain must the equalizer provide?</div>
-        <div class="step"><div class="why">Each sample becomes a step of width \(T_s\)</div><div class="m">\[ h(t)=\cssId{z1-h}{\operatorname{rect}\!\left(\frac{t-T_s/2}{T_s}\right)} \]</div></div>
-        <div class="step"><div class="why">Transform pair</div><div class="m">\[ \operatorname{rect}\!\left(\frac{t}{T_s}\right)\;\Longleftrightarrow\;T_s\operatorname{sinc}(fT_s) \]</div></div>
-        <div class="step"><div class="why">Delay of \(T_s/2\)</div><div class="m">\[ H(f)=T_s\operatorname{sinc}(fT_s)\,\cssId{z1-fase}{e^{-j\pi fT_s}} \]</div></div>
-        <div class="step"><div class="why">Magnitude</div><div class="m">\[ |H(f)|=\boxed{T_s\,|\operatorname{sinc}(fT_s)|} \]</div></div>
+        <div class="step"><div class="why">Each sample becomes a step of width \(T_s\), from \(0\) to \(T_s\)</div><div class="m">\[ h(t)=\cssId{z1-h}{\operatorname{rect}\!\left(\frac{t-T_s/2}{T_s}\right)} \]</div></div>
+        <div class="step"><div class="why">Transform pair, without the delay</div><div class="m">\[ \cssId{z1-r}{\operatorname{rect}\!\left(\frac{t}{T_s}\right)}\;\Longleftrightarrow\;\cssId{z1-ts}{T_s\operatorname{sinc}(fT_s)} \]</div></div>
+        <div class="step"><div class="why">Delay of \(T_s/2\): multiply by \(e^{-j2\pi f T_s/2}\)</div><div class="m">\[ H(f)=\cssId{z1-ts2}{T_s\operatorname{sinc}(fT_s)}\,\cssId{z1-fase}{e^{-j\pi fT_s}} \]</div></div>
+        <div class="step"><div class="why">Magnitude: \(|e^{-j\theta}|=1\)</div><div class="m">\[ |H(f)|=T_s|\operatorname{sinc}(fT_s)|\,\underbrace{\cssId{z1-mod}{|e^{-j\pi fT_s}|}}_{=\,1}=\boxed{T_s\,|\operatorname{sinc}(fT_s)|} \]</div></div>
         <div class="step txt">The factor \(T_s\) is only a scale. The distortion comes from the sinc droop inside the band, measured relative to \(f=0\).</div>
       </div>
       <div class="figcol">
@@ -935,40 +1010,54 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
   </div>
-  <div class="note" data-on="2" data-to="z1-h">pulse from \(0\) to \(T_s\)</div>
-  <div class="note" data-on="4-5" data-to="z1-fase">\(|e^{-j\theta}|=1\): only the phase changes</div>
+  <div class="link" data-on="3" data-from="z1-h" data-to="z1-r">without the Tₛ/2 delay</div>
+  <div class="link" data-on="4" data-from="z1-ts" data-to="z1-ts2">delay of Tₛ/2: × e^(−jπfTₛ)</div>
+  <div class="link" data-on="5" data-from="z1-fase" data-to="z1-mod">|e^(−jθ)| = 1: only the phase changes</div>
   <aside class="notes"></aside>
 </section>
 
 <section class="slide" id="exzoh2" data-sec="5 Exercise 2 · attenuation and equalizer" data-fig="exzoh2">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exercise 2: droop at the band edge</h2><div class="sub">\(W=20\) kHz, \(f_s=48\) and \(192\) kHz · press → to advance</div><div class="bar"></div></div>
-  <div class="body" style="gap:6px">
-    <div class="fig"><canvas data-figcanvas height="205" aria-label="Magnitude of the normalized sinc for f_s of 48 and 192 kHz with the band edge W"></canvas></div>
-    <div class="deriv" style="gap:3px">
+  <div class="frametitle"><h2>Exercise 2: droop at the band edge</h2><div class="sub">\(W=20\) kHz, \(f_s=48\) kHz · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:24px;max-width:860px">
       <div class="step txt">At \(f=W\) the sinc argument is \(WT_s=W/f_s\). The attenuation relative to \(f=0\) is \(-20\log_{10}\operatorname{sinc}(W/f_s)\).</div>
+      <div class="step"><div class="why">\(f_s=48\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{48}\right)=\frac{\sin(\cssId{z2-75}{\pi\cdot 20/48})}{\pi\cdot 20/48} \]</div></div>
+      <div class="step"><div class="why">In degrees, \(180^\circ\times 20/48=75^\circ\)</div><div class="m">\[ \phantom{\operatorname{sinc}\!\left(\frac{20}{48}\right)}=\frac{\sin\cssId{z2-a75}{75^\circ}}{1.3090}=\frac{0.9659}{1.3090}=\cssId{z2-v1}{0.7379} \]</div></div>
       <div class="srow">
-        <div class="step"><div class="why">\(f_s=48\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{48}\right)=\frac{\sin(\cssId{z2-75}{\pi\cdot 20/48})}{\pi\cdot 20/48} \]</div></div>
-        <div class="step cont"><div class="m">\[ =\frac{\sin 75^\circ}{1.3090}=\frac{0.9659}{1.3090}=\cssId{z2-v1}{0.7379} \]</div></div>
+        <div class="step"><div class="why">In dB and gain</div><div class="m">\[ -20\log_{10}\cssId{z2-v1b}{0.7379}=\boxed{2.64\text{ dB}} \]</div></div>
+        <div class="step cont"><div class="m">\[ \qquad G_{eq}=\frac{1}{0.7379}=1.355\;\to\;\cssId{z2-g1}{+2.64\text{ dB}} \]</div></div>
       </div>
+    </div>
+    <div class="figfloat" data-show="1-5">
+      <div class="fig"><canvas data-figcanvas height="330" aria-label="Magnitude of the normalized sinc for f_s of 48 and 192 kHz with the band edge W"></canvas></div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="z2-75" data-to="z2-a75">180° × 20/48 = 75°</div>
+  <div class="link" data-on="4" data-from="z2-v1" data-to="z2-v1b">in dB</div>
+  <div class="note" data-on="5" data-to="z2-g1">the equalizer undoes the droop</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="exzoh2b" data-sec="5 Exercise 2 · attenuation and equalizer, continued" data-fig="exzoh2b">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 2: droop at the band edge</h2><div class="sub">\(W=20\) kHz, \(f_s=192\) kHz · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:24px;max-width:860px">
+      <div class="step"><div class="why">\(f_s=192\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{192}\right)=\frac{\sin(\cssId{z2-18}{\pi\cdot 20/192})}{\pi\cdot 20/192} \]</div></div>
+      <div class="step"><div class="why">In degrees, \(180^\circ\times 20/192=18.75^\circ\)</div><div class="m">\[ \phantom{\operatorname{sinc}\!\left(\frac{20}{192}\right)}=\frac{\sin\cssId{z2-a18}{18.75^\circ}}{0.3272}=\frac{0.3214}{0.3272}=\cssId{z2-v2}{0.9822} \]</div></div>
       <div class="srow">
-        <div class="step"><div class="why">In dB and gain</div><div class="m">\[ -20\log_{10}0.7379=\boxed{2.64\text{ dB}} \]</div></div>
-        <div class="step cont"><div class="m">\[ G_{eq}=\frac{1}{0.7379}=1.355\;\to\;\cssId{z2-g1}{+2.64\text{ dB}} \]</div></div>
-      </div>
-      <div class="srow">
-        <div class="step"><div class="why">\(f_s=192\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{192}\right)=\frac{\sin\cssId{z2-18}{18.75^\circ}}{\pi\cdot 20/192}=\frac{0.3214}{0.3272} \]</div></div>
-        <div class="step cont"><div class="m">\[ =\cssId{z2-v2}{0.9822} \]</div></div>
-      </div>
-      <div class="srow">
-        <div class="step"><div class="why">In dB and gain</div><div class="m">\[ -20\log_{10}0.9822=\boxed{0.16\text{ dB}} \]</div></div>
-        <div class="step cont"><div class="m">\[ G_{eq}=\frac{1}{0.9822}=1.018\;\to\;+0.16\text{ dB} \]</div></div>
+        <div class="step"><div class="why">In dB and gain</div><div class="m">\[ -20\log_{10}\cssId{z2-v2b}{0.9822}=\boxed{0.16\text{ dB}} \]</div></div>
+        <div class="step cont"><div class="m">\[ \qquad G_{eq}=\frac{1}{0.9822}=1.018\;\to\;+0.16\text{ dB} \]</div></div>
       </div>
       <div class="step txt">With \(f_s\) four times higher, \(W\) lands on the nearly flat top of the sinc: the droop goes from \(2.64\) to \(0.16\) dB.</div>
     </div>
+    <div class="figfloat" data-show="1-5">
+      <div class="fig"><canvas data-figcanvas height="330" aria-label="Magnitude of the normalized sinc for f_s of 48 and 192 kHz with the band edge W"></canvas></div>
+    </div>
   </div>
-  <div class="note" data-on="2" data-to="z2-75" style="left:800px;top:445px">\(180^\circ\times 20/48=75^\circ\)</div>
-  <div class="note" data-on="5" data-to="z2-g1">the equalizer undoes the droop</div>
-  <div class="note" data-on="6" data-to="z2-18" style="left:820px;top:600px">\(180^\circ\times 20/192=18.75^\circ\)</div>
+  <div class="link" data-on="2" data-from="z2-18" data-to="z2-a18">180° × 20/192 = 18.75°</div>
+  <div class="link" data-on="3" data-from="z2-v2" data-to="z2-v2b">in dB</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1401,51 +1490,83 @@ function figSerie(ctx, w, h, s) {
   }
   taxis(ctx, B, "t"); mlab(ctx, DTS, B.x + 4, B.y - 18);
   for (const n of [-3, -2, -1, 1, 2, 3]) imp(ctx, B, n, 0.85, c.K, 2.4);
-  imp(ctx, B, 0, 0.85, s >= 3 ? c.R : c.K, s >= 3 ? 3.2 : 2.4);
+  imp(ctx, B, 0, 0.85, s >= 4 ? c.R : c.K, s >= 4 ? 3.2 : 2.4);
   if (s === 1) return "Impulse train: period T_s, unit area in each impulse.";
-  if (s === 2) return "One period, from −T_s/2 to T_s/2, shaded.";
+  if (s <= 3) return "One period, from −T_s/2 to T_s/2, shaded.";
   if (s <= 4) return "Inside the period there is only the n = 0 impulse, in red.";
   return "c_k = 1/T_s for every k: the frequency components kf_s have the same weight.";
 }
 
 function figTrem(ctx, w, h, s, t) {
   const c = C(), gap = 60, hh = (h - 40 - gap) / 2;
-  const Ts = s >= 4 ? 1 + 0.32 * Math.sin(0.9 * t) : 1, fs = 1 / Ts;
+  const Ts = s >= 5 ? 1 + 0.32 * Math.sin(0.9 * t) : 1, fs = 1 / Ts;
   const Bt = tbox(40, 30, w - 100, hh, -3.5, 3.8, 0, 1.3), Bf = tbox(40, 30 + hh + gap, w - 100, hh, -3.5, 3.8, 0, 1.3);
   taxis(ctx, Bt, "t"); mlab(ctx, DTS, Bt.x + 4, Bt.y - 14);
   for (let n = -6; n <= 6; n++) if (Math.abs(n * Ts) < 3.45) imp(ctx, Bt, n * Ts, 0.8, c.K, 2.4);
   spanH(ctx, Bt.X(0), Bt.X(Ts), Bt.Y(1.05), ORG, "T_s", false);
   txt(ctx, "1", Bt.X(0) - 8, Bt.Y(0.8), { align: "right", size: 17 });
-  if (s >= 2) {
+  if (s >= 3) {
     taxis(ctx, Bf, "f"); txt(ctx, "Δ(f)", Bf.x + 4, Bf.y - 14, { italic: true, size: 18 });
     for (let k = -8; k <= 8; k++) if (Math.abs(k * fs) < 3.45) imp(ctx, Bf, k * fs, Math.min(0.8 * fs, 1.25), c.P, 2.4);
     spanH(ctx, Bf.X(0), Bf.X(fs), Bf.Y(Math.min(0.8 * fs, 1.12) + 0.1), ORG, "f_s = 1/T_s", false);
     txt(ctx, "1/T_s", Bf.X(0) - 8, Bf.Y(Math.min(0.8 * fs, 1.25)), { align: "right", size: 17, c: c.P, italic: true });
   }
-  if (s === 1) return "δ_{Ts}(t) in time: impulses of unit area.";
-  if (s <= 3) return "Δ(f): impulses of area 1/T_s, spaced f_s = 1/T_s apart.";
+  if (s <= 2) return "δ_{Ts}(t) in time: impulses of unit area.";
+  if (s <= 4) return "Δ(f): impulses of area 1/T_s, spaced f_s = 1/T_s apart.";
   return `T_s = ${fmtc(Ts, 2)} and f_s = ${fmtc(fs, 2)}, normalized: with a smaller T_s the impulses in f move apart.`;
 }
 
 function figEspec(ctx, w, h, s) {
   const c = C(), B = tbox(14, 40, w - 50, h - 100, -11, 11, 0, 1.35);
   taxis(ctx, B, "f");
-  if (s <= 3) {
+  if (s <= 4) {
     trifill(ctx, B, 0, 2, 1, "#8a8a8a", 0.18);
     txt(ctx, "A", B.X(0), B.Y(1) - 12, { align: "center", italic: true });
     txt(ctx, "X(f), bandwidth W", B.X(2.3), B.Y(0.7), { italic: true });
     ftick(ctx, B, 2, "W"); ftick(ctx, B, -2, "−W");
     return "X(f): spectrum of bandwidth W and height A.";
   }
-  replicas(ctx, B, 6, 2, s >= 5 ? 1 : 0, c.P, 0.16);
+  replicas(ctx, B, 6, 2, s >= 6 ? 1 : 0, c.P, 0.16);
   txt(ctx, "A/T_s", B.X(0), B.Y(1) - 13, { align: "center", italic: true, c: c.P });
   ftick(ctx, B, 0, "0");
-  if (s >= 5) {
+  if (s >= 6) {
     ftick(ctx, B, 6, "f_s"); ftick(ctx, B, -6, "−f_s");
     txt(ctx, "⋯", B.X(10), B.Y(0.4), { align: "center", size: 24 }); txt(ctx, "⋯", B.X(-10), B.Y(0.4), { align: "center", size: 24 });
     return "One copy of X(f) at each kf_s: the spectrum repeats with period f_s.";
   }
   return "For k = 0: X(f) itself, scaled by 1/T_s.";
+}
+
+function figReplicas(ctx, w, h, s) {
+  const c = C(), L = { inp: "input", out: "output: X_δ(f), eq. (5)", mul: "× 1/T_s", sh: "shift by f_s", ok: "X(f) separable" }, fs = 4.5, W = 1.6, hy = 1.1;
+  const Bx = tbox(60, 34, w - 150, 130, -11, 11, 0, 1.3), By = tbox(60, 252, w - 150, 140, -11, 11, 0, 1.3);
+  taxis(ctx, Bx, "f"); txt(ctx, L.inp, Bx.x, Bx.y - 14, { c: c.M, size: 17 });
+  trifill(ctx, Bx, 0, W, 0.8, "#8a8a8a", 0.18);
+  txt(ctx, "X(f)", Bx.X(0.25), Bx.Y(0.8) - 4, { italic: true });
+  ftick(ctx, Bx, W, "W"); ftick(ctx, Bx, -W, "−W");
+  if (s < 2) return null;
+  taxis(ctx, By, "f"); txt(ctx, L.out, By.x, By.y - 18, { c: c.M, size: 17 });
+  const K = s >= 4 ? 2 : s >= 3 ? 1 : 0;
+  clipB(ctx, By, () => { for (let k = -K; k <= K; k++) trifill(ctx, By, k * fs, W, hy, k ? c.P : (s >= 5 ? c.G : c.P), k ? 0.16 : (s >= 5 ? 0.24 : 0.16), k || s < 5 ? 2.2 : 3); });
+  txt(ctx, "A/T_s", By.X(0.3), By.Y(hy) - 2, { italic: true, c: s >= 5 ? c.G : c.P, size: 17 });
+  txt(ctx, "A", Bx.X(-0.3), Bx.Y(0.8) - 4, { italic: true, align: "right", size: 17 });
+  if (s === 2) {
+    arrowTo(ctx, Bx.X(0), Bx.Y(0) + 26, Bx.X(0), By.Y(hy) - 8, c.R, 2.4, 12);
+    txt(ctx, L.mul, Bx.X(0) + 12, (Bx.Y(0) + By.Y(hy)) / 2 + 6, { c: c.R, size: 18, italic: true });
+  }
+  if (s === 3) for (const sg of [-1, 1]) {
+    arrowTo(ctx, By.X(0), By.Y(0.55), By.X(sg * fs), By.Y(0.55), c.R, 2.4, 12);
+    if (sg > 0) txt(ctx, L.sh, By.X(fs / 2), By.Y(hy) - 2, { c: c.R, size: 17, align: "center", italic: true });
+  }
+  if (s >= 3) { ftick(ctx, By, fs, "f_s"); ftick(ctx, By, -fs, "−f_s"); }
+  if (s >= 4) {
+    ftick(ctx, By, 2 * fs, "2f_s"); ftick(ctx, By, -2 * fs, "−2f_s");
+    spanH(ctx, By.X(0), By.X(fs), By.Y(1.27), ORG, "f_s", false);
+    spanH(ctx, By.X(W), By.X(fs - W), By.Y(0.22), c.R, "f_s − 2W", false, 15);
+    txt(ctx, "⋯", By.X(10.6), By.Y(0.4), { align: "center", size: 24 }); txt(ctx, "⋯", By.X(-10.6), By.Y(0.4), { align: "center", size: 24 });
+  }
+  if (s >= 5) txt(ctx, L.ok, By.X(-0.3), By.Y(hy) - 2, { c: c.G, size: 17, align: "right" });
+  return null;
 }
 
 function figEncosta(ctx, w, h, s) {
@@ -1498,30 +1619,30 @@ function figH(ctx, w, h, s) {
   taxis(ctx, Bh, "f"); txt(ctx, "H(f)", Bh.x + 4, Bh.y - 16, { italic: true });
   poly(ctx, Bh, [[-2, 0], [-1, 0], [-1, 1], [1, 1], [1, 0], [2, 0]], s === 2 ? c.R : c.P, 2.8);
   ftick(ctx, Bh, -1, "−W′"); ftick(ctx, Bh, 1, "W′"); txt(ctx, "T_s", Bh.X(-1) - 8, Bh.Y(1), { align: "right", italic: true });
-  if (s >= 6) {
+  if (s >= 7) {
     taxis(ctx, Bt, "t"); txt(ctx, "h(t)", Bt.x + 4, Bt.y - 6, { italic: true });
     trace(ctx, Bt, sinc, c.P, 2.8, null, 600, 4.2, -4.2);
     ftick(ctx, Bt, 1, "1/(2W′)", { size: 15, y: Bt.y + Bt.h + 14 }); ftick(ctx, Bt, 2, "2/(2W′)", { size: 15, y: Bt.y + Bt.h + 14 });
     txt(ctx, "2W′T_s", Bt.X(0) - 24, Bt.Y(1) - 10, { align: "right", italic: true, c: c.P });
-    if (s >= 7) for (const m of [-4, -3, -2, -1, 1, 2, 3, 4]) dot(ctx, Bt.X(m), Bt.Y(0), 5, c.R);
+    if (s >= 8) for (const m of [-4, -3, -2, -1, 1, 2, 3, 4]) dot(ctx, Bt.X(m), Bt.Y(0), 5, c.R);
   }
   if (s === 1) return "H(f) from (7): gain T_s between −W′ and W′.";
   if (s === 2) return "Only the band |f| < W′ contributes to the integral.";
-  if (s <= 5) return "H(f) from (7): gain T_s between −W′ and W′.";
-  if (s === 6) return "h(t): a sinc with peak 2W′T_s at t = 0.";
+  if (s <= 6) return "H(f) from (7): gain T_s between −W′ and W′.";
+  if (s === 7) return "h(t): a sinc with peak 2W′T_s at t = 0.";
   return "Zeros, in red, at the multiples of 1/(2W′).";
 }
 
 function figInterp(ctx, w, h, s) {
   const c = C(), B = tbox(24, 30, w - 80, h - 80, -4.5, 4.5, -0.35, 1.1), cols = SCOL();
   taxis(ctx, B, "t/T_s"); for (let n = -4; n <= 4; n++) ftick(ctx, B, n, String(n).replace("-", "−"), { size: 15, italic: false, y: B.y + B.h + 14 });
-  if (s <= 2) {
+  if (s <= 3) {
     trace(ctx, B, xsig, "#a8a8a8", 1.6, [5, 4], 400);
     for (let n = -4; n <= 4; n++) imp(ctx, B, n, xsig(n), c.P, 2.6);
     txt(ctx, "x_δ(t)", B.x + 4, B.y - 12, { italic: true });
     return "x_δ(t): impulses of area x(nT_s); t in units of T_s.";
   }
-  if (s === 3) {
+  if (s === 4) {
     for (let n = -4; n <= 4; n++) if (n) imp(ctx, B, n, xsig(n), tint(c.P, 0.3), 2.2);
     clipB(ctx, B, () => trace(ctx, B, (x) => xsig(0) * sinc(x), c.R, 2.8, null, 500));
     imp(ctx, B, 0, xsig(0), c.R, 2.8);
@@ -1546,7 +1667,7 @@ function figNyq(ctx, w, h, s) {
   }
   if (s >= 3) {
     taxis(ctx, Bt, "t/T_s"); trace(ctx, Bt, sinc, c.P, 2.8, null, 600, 4.3, -4.3);
-    txt(ctx, s >= 4 ? "2W′T_s = 1" : "2W′T_s", Bt.X(0) + 10, Bt.Y(1) - 4, { c: c.P, italic: true, base: "bottom" });
+    txt(ctx, s >= 3 ? "2W′T_s = 1" : "2W′T_s", Bt.X(0) + 10, Bt.Y(1) - 4, { c: c.P, italic: true, base: "bottom" });
     if (s >= 6) for (let m = -4; m <= 4; m++) { ftick(ctx, Bt, m, String(m).replace("-", "−"), { size: 15, italic: false, y: Bt.y + Bt.h + 14 }); if (m) dot(ctx, Bt.X(m), Bt.Y(0), 5, c.R); }
   }
   if (s <= 2) return "At the Nyquist rate the replicas touch: the cutoff can only be at W.";
@@ -1767,7 +1888,7 @@ function figExZoh2(ctx, w, h, s) {
   return null;
 }
 
-const FIGS = { motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, guarda: figGuarda, exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
+const FIGS = { exzoh2b: (ctx, w, h, s, t) => figExZoh2(ctx, w, h, s + 5, t), exnyq2b: (ctx, w, h, s, t) => figExNyq2(ctx, w, h, s + 3, t), hfilt2: (ctx, w, h, s, t) => figH(ctx, w, h, s + 3, t), motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, replicas: figReplicas, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, guarda: figGuarda, exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
 
 // ---------- (c) instrumentos ----------
 const wFmt = (t) => t === 0 ? "0" : (fmtc(t, 0) + "W").replace("1W", "W");
@@ -1936,14 +2057,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição
