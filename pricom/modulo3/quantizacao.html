@@ -428,20 +428,24 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <section class="slide" id="escalar" data-sec="1 Quantizador escalar · regiões e níveis" data-fig="escalar">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Quantizador escalar</h2><div class="sub">Exemplo 7.2.1 · pressione → para avançar</div><div class="bar"></div></div>
+  <style>#escalar .fig { position: relative; } #escalar .figanchor { position: absolute; display: block; width: 18px; height: 18px; pointer-events: none; }</style>
   <div class="body">
     <div class="dlayout">
       <div class="deriv" style="gap:14px">
         <div class="step"><div class="why">A reta é dividida em \(N\) regiões; cada região tem um nível</div><div class="m">\[ Q(x)=\hat x_k\quad\text{se}\quad x\in\mathcal R_k=(a_{k-1},a_k] \tag{1}\]</div></div>
-        <div class="step"><div class="why">Exemplo 7.2.1, região 6</div><div class="m">\[ \mathcal R_6=(20,40]\ \longrightarrow\ \cssId{es-x6}{\hat x_6=30} \]</div></div>
+        <div class="step"><div class="why">Exemplo 7.2.1, região 6</div><div class="m">\[ \mathcal R_6=(\cssId{es-a5}{a_5},\cssId{es-a6}{a_6}]=(20,40]\ \longrightarrow\ \cssId{es-x6}{\hat x_6=30} \]</div></div>
         <div class="step txt">Quantizador uniforme: regiões internas de mesmo tamanho, \(\Delta=20\).</div>
-        <div class="step txt">\(N=8\) níveis \(\Rightarrow\) \(\log_2 8=3\) bits por amostra.</div>
+        <div class="step txt">\(\cssId{es-N}{N=8}\) níveis \(\Rightarrow\) \(\log_2 8=3\) bits por amostra.</div>
       </div>
       <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="470" aria-label="Função escada do quantizador de 8 níveis"></canvas><div class="figcap"></div></div>
+        <div class="fig"><span class="figanchor" id="es-pa5"></span><span class="figanchor" id="es-pa6"></span><span class="figanchor" id="es-pN"></span><canvas data-figcanvas height="470" aria-label="Função escada do quantizador de 8 níveis"></canvas><div class="figcap"></div></div>
       </div>
     </div>
   </div>
   <div class="note" data-on="2" data-to="es-x6">nível no meio da região</div>
+  <div class="link" data-on="2-2" data-from="es-a5" data-to="es-pa5"></div>
+  <div class="link" data-on="2-2" data-from="es-a6" data-to="es-pa6"></div>
+  <div class="link" data-on="4" data-from="es-N" data-to="es-pN"></div>
   <aside class="notes"></aside>
 </section>
 
@@ -1449,22 +1453,53 @@ const FIGS = {
   },
   // ---------- 1. função escada ----------
   escalar(ctx, w, h, s) {
-    const c = C(), { X, Y } = frame(w, h, { xmin: -9.6, xmax: 9.9, ymin: -8.6, ymax: 8.9, ml: 14, mr: 30, mt: 26, mb: 14, top: 0 });
+    const c = C(), z = s === 2, R = z ? { xmin: -1.2, xmax: 6.2, ymin: -1.6, ymax: 6.2 } : { xmin: -9.6, xmax: 9.9, ymin: -8.6, ymax: 8.9 };
+    const { X, Y } = frame(w, h, { ...R, ml: 14, mr: 30, mt: 26, mb: 14, top: 0 });
+    const x0 = R.xmin, x1 = R.xmax, y0 = R.ymin, y1 = R.ymax;
     if (s >= 2) {
-      ctx.save(); ctx.fillStyle = tint(OR, 0.2); ctx.fillRect(X(2), Y(8.6), X(4) - X(2), Y(-8.6) - Y(8.6)); ctx.restore();
+      ctx.save(); ctx.fillStyle = tint(OR, 0.2); ctx.fillRect(X(2), Y(y1), X(4) - X(2), Y(y0) - Y(y1)); ctx.restore();
       line(ctx, X(0), Y(3), X(4), Y(3), OR, 2.2, [6, 4]);
-      txt(ctx, "R_6", X(3), Y(-7.6), { c: OR, size: 19, align: "center", italic: true });
+      txt(ctx, "R_6", X(3), z ? Y(5.6) : Y(-7.6), { c: OR, size: 19, align: "center", italic: true });
     }
-    arrowTo(ctx, X(-9.6), Y(0), X(9.9), Y(0), c.K, 1.4, 10); arrowTo(ctx, X(0), Y(-8.6), X(0), Y(8.9), c.K, 1.4, 10);
-    txt(ctx, "x", X(9.9), Y(0) - 14, { c: c.K, size: 18, italic: true, align: "right" });
-    txt(ctx, "Q(x)", X(0) + 10, Y(8.9) + 4, { c: c.K, size: 18, italic: true, base: "top" });
-    for (const v of [-6, -4, -2, 2, 4, 6]) { line(ctx, X(v), Y(0) - 5, X(v), Y(0) + 5, c.K, 1.2); txt(ctx, (v < 0 ? "−" : "") + Math.abs(10 * v), X(v), Y(0) + (v < 0 ? -14 : 16), { size: 14, c: c.M, align: "center" }); }
-    for (const v of [-7, -5, -3, -1, 1, 3, 5, 7]) { line(ctx, X(0) - 5, Y(v), X(0) + 5, Y(v), c.K, 1.2); txt(ctx, (v < 0 ? "−" : "") + Math.abs(10 * v), v > 0 ? X(0) - 9 : X(0) + 9, Y(v), { size: 14, c: c.M, align: v > 0 ? "right" : "left" }); }
-    line(ctx, X(-8.6), Y(-8.6), X(8.9), Y(8.9), c.M, 1.4, [6, 5]);
+    arrowTo(ctx, X(x0), Y(0), X(x1), Y(0), c.K, 1.4, 10); arrowTo(ctx, X(0), Y(y0), X(0), Y(y1), c.K, 1.4, 10);
+    txt(ctx, "x", X(x1), Y(0) - 14, { c: c.K, size: 18, italic: true, align: "right" });
+    txt(ctx, "Q(x)", X(0) + 10, Y(y1) + 4, { c: c.K, size: 18, italic: true, base: "top" });
+    for (const v of (z ? [6] : [-6, -4, -2, 2, 4, 6])) { line(ctx, X(v), Y(0) - 5, X(v), Y(0) + 5, c.K, 1.2); txt(ctx, (v < 0 ? "−" : "") + Math.abs(10 * v), X(v), Y(0) + (v < 0 ? -14 : 16), { size: 14, c: c.M, align: "center" }); }
+    for (const v of (z ? [1, 5] : [-7, -5, -3, -1, 1, 3, 5, 7])) { line(ctx, X(0) - 5, Y(v), X(0) + 5, Y(v), c.K, 1.2); txt(ctx, (v < 0 ? "−" : "") + Math.abs(10 * v), v > 0 ? X(0) - 9 : X(0) + 9, Y(v), { size: 14, c: c.M, align: v > 0 ? "right" : "left" }); }
+    line(ctx, X(Math.max(x0, y0)), Y(Math.max(x0, y0)), X(Math.min(x1, y1)), Y(Math.min(x1, y1)), c.M, 1.4, [6, 5]);
     const P = [[-9.6, -7], [-6, -5], [-4, -3], [-2, -1], [0, 1], [2, 3], [4, 5], [6, 7], [9.6, 7]];
-    ctx.save(); ctx.strokeStyle = c.P; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(X(P[0][0]), Y(P[0][1]));
+    ctx.save(); ctx.beginPath(); ctx.rect(X(x0), Y(y1), X(x1) - X(x0), Y(y0) - Y(y1)); ctx.clip(); ctx.strokeStyle = c.P; ctx.lineWidth = 3.4; ctx.beginPath(); ctx.moveTo(X(P[0][0]), Y(P[0][1]));
     for (let i = 1; i < P.length; i++) { ctx.lineTo(X(P[i][0]), Y(P[i - 1][1])); if (i < P.length - 1) ctx.lineTo(X(P[i][0]), Y(P[i][1])); }
     ctx.stroke(); ctx.restore();
+    if (z) {
+      // região 6 em zoom: (a_5, a_6] = (20, 40], aberta em a_5 e fechada em a_6
+      line(ctx, X(2), Y(0), X(2), Y(3), OR, 1.4, [4, 4]); line(ctx, X(4), Y(0), X(4), Y(3), OR, 1.4, [4, 4]);
+      ctx.save(); ctx.lineWidth = 2.6; ctx.strokeStyle = OR; ctx.fillStyle = css("--bg") || "#fff"; ctx.beginPath(); ctx.arc(X(2), Y(0), 7, 0, TAU); ctx.fill(); ctx.stroke(); ctx.restore();
+      dot(ctx, X(4), Y(0), 7, OR); line(ctx, X(2) + 7, Y(0), X(4) - 7, Y(0), OR, 4);
+      txt(ctx, "a_5 = 20", X(2), Y(0) + 26, { c: OR, size: 19, align: "center", italic: true });
+      txt(ctx, "a_6 = 40", X(4), Y(0) + 26, { c: OR, size: 19, align: "center", italic: true });
+      txt(ctx, "a_{k−1}", X(2), Y(0) + 54, { c: c.M, size: 17, align: "center", italic: true });
+      txt(ctx, "a_k", X(4), Y(0) + 54, { c: c.M, size: 17, align: "center", italic: true });
+      txt(ctx, "x̂_6 = 30", X(0) - 10, Y(3), { c: OR, size: 19, align: "right", italic: true });
+    }
+    { // âncoras das setas: sobre a_5 e a_6 no eixo, só no zoom
+      const cv = ctx.canvas, sc = cv.clientWidth / w;
+      [["es-pa5", 2], ["es-pa6", 4]].forEach(([id, v]) => { const a = cv.parentElement.querySelector(`[id="${id}"]`); if (!a) return;
+        a.style.display = z ? "block" : "none"; a.style.left = (cv.offsetLeft + X(v) * sc - 9) + "px"; a.style.top = (cv.offsetTop + Y(0) * sc - 9) + "px"; });
+    }
+    const bx = X(0) - 40, LBN = "N = 8 níveis";
+    if (s >= 4) {
+      // os 8 níveis: guias de cada degrau até o eixo Q(x), pontos no eixo e uma chave com N = 8
+      const pl = { 1: 0, 3: 2, 5: 4, 7: 6, "-1": -2, "-3": -4, "-5": -6, "-7": -6 };
+      for (const v of [-7, -5, -3, -1, 1, 3, 5, 7]) { line(ctx, X(0), Y(v), X(pl[v]), Y(v), c.G, 1.4, [4, 4]); dot(ctx, X(0), Y(v), 6, c.G); }
+      const t = Y(7), b2 = Y(-7), m = Y(0), d = 12; for (const [col, lw] of [["#fff", 7], [c.G, 2.4]]) { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); const _t = Y(7);
+      ctx.moveTo(bx + d, t); ctx.quadraticCurveTo(bx, t, bx, t + d); ctx.lineTo(bx, m - d); ctx.quadraticCurveTo(bx, m, bx - d, m);
+      ctx.quadraticCurveTo(bx, m, bx, m + d); ctx.lineTo(bx, b2 - d); ctx.quadraticCurveTo(bx, b2, bx + d, b2); ctx.stroke(); ctx.restore(); }
+      txt(ctx, LBN, bx - 18, Y(3.2), { c: c.G, size: 19, align: "right" });
+    }
+    { const cv = ctx.canvas, sc = cv.clientWidth / w, a = cv.parentElement.querySelector('[id="es-pN"]');
+      if (a) { a.style.display = s >= 4 ? "block" : "none"; ctx.save(); ctx.font = "19px " + css("--font-sans"); const lw2 = ctx.measureText(LBN).width; ctx.restore();
+        a.style.width = (lw2 * sc + 8) + "px"; a.style.height = 26 * sc + "px"; a.style.left = (cv.offsetLeft + (bx - 18 - lw2) * sc - 4) + "px"; a.style.top = (cv.offsetTop + Y(3.2) * sc - 13 * sc) + "px"; } }
     if (s >= 3) dimH(ctx, X(4), X(6), Y(-1.8), c.R, "Δ", { dy: 16, italic: true });
     return ["Função escada do Exemplo 7.2.1: 8 níveis, de −70 a 70; reta tracejada Q(x) = x.", "Região 6: todo x em (20, 40] sai como 30.",
       "Regiões internas de largura Δ = 20; as duas externas vão até ±∞.", "8 níveis: índices de 0 a 7, palavras de 3 bits."][s - 1];
