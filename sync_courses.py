@@ -74,11 +74,14 @@ COURSES = {
                 m("Modulo2", "desempenho_fm", "Desempenho de FM e PM", "Performance of FM and PM"),
             ]),
             ("modulo3", ("Módulo 3 — Conversão analógico-digital", "Module 3 — Analog-to-digital conversion"), [
-                m("Modulo3", "amostragem", "Amostragem e reconstrução", "Sampling and reconstruction"),
-                m("Modulo3", "quantizacao", "Quantização", "Quantization"),
-                m("Modulo3", "forma_de_onda", "Codificação de forma de onda", "Waveform coding"),
-                m("Modulo3", "vocoders", "Vocoders: análise e síntese", "Vocoders: analysis and synthesis"),
-                m("Modulo3", "video", "Compressão de vídeo", "Video compression"),
+                (("Conversão analógico-digital", "Analog-to-digital conversion"),
+                 {"html": "Modulo3/html/modulo3.html", "parts": [
+                     ("amostragem.html", "Amostragem e reconstrução", "Sampling and reconstruction"),
+                     ("quantizacao.html", "Quantização", "Quantization"),
+                     ("forma_de_onda.html", "Codificação de forma de onda", "Waveform coding"),
+                     ("vocoders.html", "Vocoders: análise e síntese", "Vocoders: analysis and synthesis"),
+                     ("video.html", "Compressão de vídeo", "Video compression"),
+                 ]}),
             ]),
         ],
     ),
@@ -245,11 +248,14 @@ for name, c in COURSES.items():
                 row = names(pt, en, rel["pdf"]) + ' <span class="muted">(PDF)</span>'
             if files.get("parts"):  # an HTML deck split into one file per section
                 base = (src / files["html"]).parent
-                for f, *_ in files["parts"]:
+                items = []
+                for f, p, e in files["parts"]:
                     copy_deck(base / f, dst / mdir / f, seen)
-                row += "\n      <ol>\n" + "\n".join(
-                    f'        <li>{names(p, e, f"{mdir}/{f}")}</li>' for f, p, e in files["parts"]
-                ) + "\n      </ol>\n    "
+                    tw = (base / f).with_name(pathlib.Path(f).stem + ".en.html")
+                    if tw.exists():  # English twin of the part (PriCom decks)
+                        copy_deck(tw, dst / mdir / tw.name, seen)
+                    items.append(f'        <li>{names(p, e, f"{mdir}/{f}", f"{mdir}/{tw.name}" if tw.exists() else None)}</li>')
+                row += "\n      <ol>\n" + "\n".join(items) + "\n      </ol>\n    "
             rows.append(f"    <li>{row}</li>")
         sections.append(f'<h2>{html.escape(hpt)} <span class="sep">·</span> <span lang="en" class="en">{html.escape(hen)}</span></h2>\n'
                         "<ol>\n" + "\n".join(rows) + "\n</ol>")
