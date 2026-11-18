@@ -271,7 +271,8 @@ for name, c in COURSES.items():
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{c["code"]} — {html.escape(tpt)} · {html.escape(ten)}</title>
   <meta name="description" content="{c["code"]} {html.escape(tpt)} ({html.escape(ten)}), UnB/FCTE, Prof. Daniel Costa Araújo: descrição e slides por tópico, em português e em inglês.">
-  <link rel="stylesheet" href="../style.css?v=7">
+  <link rel="stylesheet" href="../style.css?v=9">
+  <script>try {{ if (localStorage.getItem("theme") === "light") document.documentElement.dataset.theme = "light"; }} catch (e) {{}}</script>
   <style>
     .course {{ max-width: 820px; margin: 0 auto; padding: 2rem 16px 3rem; }}
     .course ol {{ padding-left: 1.4rem; }}

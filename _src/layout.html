@@ -5,8 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Daniel Costa Araújo — University of Brasília</title>
   <meta name="description" content="{{description}}">
-  <link rel="stylesheet" href="style.css?v=8">
-  <script>document.documentElement.classList.add('js');</script>
+  <link rel="stylesheet" href="style.css?v=9">
+  <script>
+  // Theme (dark by default) and language (English by default; ?lang=pt forces Portuguese),
+  // applied before the first paint. The choice is remembered in localStorage.
+  (function () {
+    var d = document.documentElement, t, l;
+    d.classList.add('js');
+    try { t = localStorage.getItem('theme'); l = localStorage.getItem('lang'); } catch (e) {}
+    var q = /[?&]lang=(pt|en)\b/.exec(location.search);
+    if (q) l = q[1];
+    d.dataset.theme = t === 'light' ? 'light' : 'dark';
+    d.dataset.lang = l === 'pt' ? 'pt' : 'en';
+    d.lang = d.dataset.lang === 'pt' ? 'pt-BR' : 'en';
+  })();
+  </script>
   <link rel="icon" href="assets/unb.png">
 </head>
 <body>
@@ -14,20 +27,26 @@
 <header class="masthead">
   <div class="container">
     <a class="site-title" href="#about">Daniel Costa Araújo</a>
+    <div class="right">
     <nav>
       <ul>
-        <li><a href="#about" data-view="about">About</a></li>
-        <li><a href="#experience" data-view="experience">Experience</a></li>
-        <li><a href="#publications" data-view="publications">Publications</a></li>
-        <li><a href="#talks" data-view="talks">Talks</a></li>
-        <li><a href="#projects" data-view="projects">Projects</a></li>
-        <li><a href="#teaching" data-view="teaching">Teaching</a></li>
-        <li><a href="#students" data-view="students">Students</a></li>
-        <li><a href="#service" data-view="service">Service</a></li>
-        <li><a href="#contact" data-view="contact">Contact</a></li>
+        <li><a href="#about" data-view="about">{{About || Sobre}}</a></li>
+        <li><a href="#experience" data-view="experience">{{Experience || Experiência}}</a></li>
+        <li><a href="#publications" data-view="publications">{{Publications || Publicações}}</a></li>
+        <li><a href="#talks" data-view="talks">{{Talks || Palestras}}</a></li>
+        <li><a href="#projects" data-view="projects">{{Projects || Projetos}}</a></li>
+        <li><a href="#teaching" data-view="teaching">{{Teaching || Ensino}}</a></li>
+        <li><a href="#students" data-view="students">{{Students || Orientações}}</a></li>
+        <li><a href="#service" data-view="service">{{Service || Atividades}}</a></li>
+        <li><a href="#contact" data-view="contact">{{Contact || Contato}}</a></li>
         <li><a href="assets/cv_daniel_araujo.pdf">CV</a></li>
       </ul>
     </nav>
+    <div class="toggles">
+      <button type="button" id="lang-toggle"></button>
+      <button type="button" id="theme-toggle"></button>
+    </div>
+    </div>
   </div>
 </header>
 
@@ -36,22 +55,22 @@
     <img class="avatar" src="assets/profile.jpg" alt="Daniel Costa Araújo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="avatar-fallback" aria-hidden="true">DA</div>
     <div class="name">Daniel Costa Araújo</div>
-    <div class="bio">Adjunct Professor of Electronic Engineering · Array signal processing &amp; wireless communications</div>
+    <div class="bio">{{Adjunct Professor of Electronic Engineering · Array signal processing &amp; wireless communications || Professor Adjunto de Engenharia Eletrônica · Processamento de sinais em arranjos e comunicações sem fio}}</div>
     <ul class="links">
-      <li><span class="ico">🏛</span><a href="https://fcte.unb.br/">University of Brasília (FCTE / Gama)</a></li>
-      <li><span class="ico">🎛</span><a href="https://eletronica.unb.br/">Electronic Engineering</a></li>
+      <li><span class="ico">🏛</span><a href="https://fcte.unb.br/">{{University of Brasília (FCTE / Gama) || Universidade de Brasília (FCTE / Gama)}}</a></li>
+      <li><span class="ico">🎛</span><a href="https://eletronica.unb.br/">{{Electronic Engineering || Engenharia Eletrônica}}</a></li>
       <li><span class="ico">📡</span><a href="https://lab-telecom.unb.br/">LabTelecom</a></li>
-      <li><span class="ico">📍</span>Brasília, Brazil</li>
+      <li><span class="ico">📍</span>{{Brasília, Brazil || Brasília, Brasil}}</li>
       <li><span class="ico">✉</span><a href="mailto:daniel.araujo@unb.br">daniel.araujo@unb.br</a></li>
       <li><span class="ico">🆔</span><a href="https://orcid.org/0000-0002-9107-1300" rel="me">ORCID</a></li>
-      <li><span class="ico">📚</span><a href="http://lattes.cnpq.br/4333596254925501">Lattes CV</a></li>
+      <li><span class="ico">📚</span><a href="http://lattes.cnpq.br/4333596254925501">{{Lattes CV || Currículo Lattes}}</a></li>
       <li><span class="ico">🎓</span><a href="https://sigaa.unb.br/sigaa/public/docente/portal.jsf?siape=3157968">SIGAA (UnB)</a></li>
       <li><span class="ico">💼</span><a href="https://www.linkedin.com/in/araujo0686/">LinkedIn</a></li>
       <li><span class="ico">🐙</span><a href="https://github.com/araujoUnb">GitHub</a></li>
-      <li><span class="ico">📄</span><a href="assets/cv_daniel_araujo.pdf">Curriculum Vitae (PDF)</a></li>
+      <li><span class="ico">📄</span><a href="assets/cv_daniel_araujo.pdf">{{Curriculum Vitae (PDF) || Currículo (PDF, em inglês)}}</a></li>
     </ul>
     <div class="logos">
-      <a class="logo-card" href="https://lab-telecom.unb.br/" title="LabTelecom — Shared Teaching and Research Laboratory in Telecommunications">
+      <a class="logo-card" href="https://lab-telecom.unb.br/" title="LabTelecom — Shared Teaching and Research Laboratory in Telecommunications" data-pt-title="LabTelecom — Laboratório Compartilhado de Ensino e Pesquisa em Telecomunicações">
         <img src="assets/labtelecom_mark.png" alt="LabTelecom">
         <span class="caption">LabTelecom · lab-telecom.unb.br</span>
       </a>
@@ -69,9 +88,60 @@
 
 <footer class="footer">
   <div class="container">
-    © Daniel Costa Araújo · FCTE, Universidade de Brasília · Last updated {{updated}}.
+    © Daniel Costa Araújo · FCTE, Universidade de Brasília · {{Last updated {{updated}}. || Atualizado em {{updated_pt}}.}}
   </div>
 </footer>
+
+<script>
+// Theme and language toggles. Text that cannot hold both languages as markup
+// (placeholders, aria-labels, titles, <option> text) carries the Portuguese in
+// data-pt-placeholder / data-pt-aria-label / data-pt-title / data-pt.
+(function () {
+  var d = document.documentElement;
+  var themeBtn = document.getElementById('theme-toggle');
+  var langBtn = document.getElementById('lang-toggle');
+  var ATTRS = ['placeholder', 'aria-label', 'title'];
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function pt() { return d.dataset.lang === 'pt'; }
+  function paintTheme() {
+    var dark = d.dataset.theme !== 'light';
+    themeBtn.textContent = dark ? '☀' : '☾';
+    var label = dark ? (pt() ? 'Mudar para o tema claro' : 'Switch to light mode')
+                     : (pt() ? 'Mudar para o tema escuro' : 'Switch to dark mode');
+    themeBtn.title = label; themeBtn.setAttribute('aria-label', label);
+  }
+  function applyLang() {
+    var p = pt();
+    d.lang = p ? 'pt-BR' : 'en';
+    langBtn.textContent = p ? 'EN' : 'PT';
+    langBtn.title = p ? 'Read in English' : 'Ler em português';
+    langBtn.setAttribute('aria-label', langBtn.title);
+    langBtn.lang = p ? 'en' : 'pt-BR';
+    document.querySelectorAll('[data-pt]').forEach(function (el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.textContent;
+      el.textContent = p ? el.dataset.pt : el.dataset.en;
+    });
+    ATTRS.forEach(function (a) {
+      document.querySelectorAll('[data-pt-' + a + ']').forEach(function (el) {
+        var k = 'data-en-' + a;
+        if (!el.hasAttribute(k)) el.setAttribute(k, el.getAttribute(a) || '');
+        el.setAttribute(a, el.getAttribute(p ? 'data-pt-' + a : k));
+      });
+    });
+    paintTheme();
+    document.dispatchEvent(new Event('langchange'));
+  }
+  themeBtn.addEventListener('click', function () {
+    d.dataset.theme = d.dataset.theme === 'light' ? 'dark' : 'light';
+    save('theme', d.dataset.theme); paintTheme();
+  });
+  langBtn.addEventListener('click', function () {
+    d.dataset.lang = pt() ? 'en' : 'pt';
+    save('lang', d.dataset.lang); applyLang();
+  });
+  applyLang();
+})();
+</script>
 
 <script>
 (function () {
@@ -82,12 +152,17 @@
     views.forEach(function (v) { var on = v.dataset.view === name; v.classList.toggle('active', on); if (on) found = true; });
     if (!found) { return show('about', scroll); }
     links.forEach(function (a) { a.classList.toggle('active', a.dataset.view === name); });
-    var h = document.querySelector('.view.active .page-title');
-    document.title = (h ? h.textContent + ' — ' : '') + 'Daniel Costa Araújo';
+    setTitle();
     if (scroll) window.scrollTo(0, 0);
+  }
+  function setTitle() {
+    var h = Array.prototype.find.call(document.querySelectorAll('.view.active .page-title'),
+      function (e) { return e.offsetParent !== null; });
+    document.title = (h ? h.innerText.trim() + ' — ' : '') + 'Daniel Costa Araújo';
   }
   function route(scroll) { show((location.hash || '#about').slice(1), scroll); }
   window.addEventListener('hashchange', function () { route(true); });
+  document.addEventListener('langchange', setTitle);
   route(false);
 })();
 </script>
@@ -128,9 +203,11 @@
       ol.hidden = empty;
       ol.previousElementSibling.hidden = empty;
     });
-    count.textContent = !shown ? 'No publications found' :
-      (shown === items.length ? shown : shown + ' of ' + items.length) + ' publications';
+    var pt = document.documentElement.dataset.lang === 'pt';
+    count.textContent = !shown ? (pt ? 'Nenhuma publicação encontrada' : 'No publications found') :
+      (shown === items.length ? shown : shown + (pt ? ' de ' : ' of ') + items.length) + (pt ? ' publicações' : ' publications');
   }
+  document.addEventListener('langchange', apply);
   search.addEventListener('input', apply);
   type.addEventListener('change', apply);
   year.addEventListener('change', apply);
@@ -142,7 +219,8 @@
 document.getElementById('contact-form').addEventListener('submit', function (e) {
   e.preventDefault();
   var f = e.target.elements;
-  location.href = 'mailto:daniel.araujo@unb.br?subject=' + encodeURIComponent('Message from ' + f.name.value) +
+  var pt = document.documentElement.dataset.lang === 'pt';
+  location.href = 'mailto:daniel.araujo@unb.br?subject=' + encodeURIComponent((pt ? 'Mensagem de ' : 'Message from ') + f.name.value) +
     '&body=' + encodeURIComponent(f.message.value + '\n\n' + f.name.value + '\n' + f.email.value);
 });
 </script>

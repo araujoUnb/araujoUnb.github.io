@@ -14,6 +14,18 @@ Layout inspired by the [Academic Pages](https://academicpages.github.io/) templa
   client-side (`#about`, `#publications`, ...) so navigation is instant. The other
   top-level `*.html` files are tiny redirects kept for old links.
 
+## Theme and language
+
+- Dark mode is the default; the ☀/☾ button in the masthead switches to light mode.
+  The choice is saved in the visitor's browser (the course pages follow it too).
+- The site is bilingual (English default; the PT/EN button switches, `?lang=pt` opens in Portuguese):
+  - `_src/pages/<page>.pt.html` is the full Portuguese version of a page (About, Experience,
+    Projects, Teaching, Students, Service). **When you edit the English page, edit its `.pt.html` too.**
+  - Publications, Talks and Contact have no `.pt.html`: their short labels are written inline as
+    `{{English || Português}}` (also used in `_src/layout.html`), so the publication list is kept only once.
+  - Placeholders, aria-labels, titles and `<option>` text use `data-pt`, `data-pt-placeholder`,
+    `data-pt-aria-label`, `data-pt-title`.
+
 ## Assets
 
 - `assets/cv_daniel_araujo.pdf` — CV linked from the menu and sidebar

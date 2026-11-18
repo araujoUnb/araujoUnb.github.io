@@ -1,5 +1,21 @@
 /* Layout inspired by the Academic Pages / Minimal Mistakes template */
+/* Dark is the default theme; the toggle in the masthead sets data-theme="light" on <html>. */
 :root {
+  color-scheme: dark;
+  --bg: #1a1d21;
+  --text: #d6d9dc;
+  --heading: #f0f2f4;
+  --muted: #9aa3ab;
+  --accent: #6cc1db;
+  --link: #7fc4e6;
+  --border: #2b3035;
+  --border-strong: #3a4046;
+  --masthead: #1f2327;
+  --sidebar-w: 240px;
+  --max: 1200px;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
   --bg: #ffffff;
   --text: #494e52;
   --heading: #2f3437;
@@ -9,21 +25,6 @@
   --border: #f2f3f3;
   --border-strong: #d9dbdc;
   --masthead: #ffffff;
-  --sidebar-w: 240px;
-  --max: 1200px;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1d21;
-    --text: #d6d9dc;
-    --heading: #f0f2f4;
-    --muted: #9aa3ab;
-    --accent: #6cc1db;
-    --link: #7fc4e6;
-    --border: #2b3035;
-    --border-strong: #3a4046;
-    --masthead: #1f2327;
-  }
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -54,6 +55,16 @@ p { margin: 0 0 1rem; }
 .masthead nav ul { list-style: none; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .2rem 1.2rem; margin: 0; padding: 0; }
 .masthead nav a { color: var(--text); font-size: .95rem; white-space: nowrap; padding: .3rem 0; border-bottom: 2px solid transparent; }
 .masthead nav a:hover, .masthead nav a.active { color: var(--heading); border-bottom-color: var(--accent); text-decoration: none; }
+.masthead .right { display: flex; align-items: center; gap: 1.2rem; }
+.toggles { display: flex; gap: .35rem; flex: none; }
+.toggles button {
+  font: inherit; font-size: .8rem; font-weight: 600; line-height: 1; cursor: pointer;
+  min-width: 2.1rem; height: 2rem; padding: 0 .5rem; border-radius: 4px;
+  color: var(--text); background: transparent; border: 1px solid var(--border-strong);
+}
+.toggles button:hover { color: var(--heading); border-color: var(--accent); }
+.toggles button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+html:not(.js) .toggles { display: none; }
 
 /* Two-column body */
 .page { display: grid; grid-template-columns: var(--sidebar-w) 1fr; gap: 2.5rem; padding: 2rem 0 3rem; }
@@ -179,6 +190,7 @@ dl.students dd { margin: .1rem 0 0; color: var(--muted); font-size: .92rem; }
   .sidebar .logo-card img { max-height: 44px; width: auto; }
   .sidebar .logo-card .caption { display: none; }
   .masthead .site-title { display: none; }
+  .masthead .right { width: 100%; justify-content: space-between; align-items: flex-start; }
   table, thead, tbody, tr, th, td { display: block; }
   thead { display: none; }
   tr { border-bottom: 1px solid var(--border-strong); padding: .5rem 0; }
@@ -190,3 +202,6 @@ dl.students dd { margin: .1rem 0 0; color: var(--muted); font-size: .92rem; }
 html.js .view { display: none; }
 html.js .view.active { display: block; }
 html:not(.js) .view + .view { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-strong); }
+
+/* Language: content exists in both languages; data-lang on <html> picks one (English without JS). */
+html:not([data-lang="pt"]) .l-pt, html[data-lang="pt"] .l-en { display: none !important; }
