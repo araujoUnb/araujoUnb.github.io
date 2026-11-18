@@ -839,14 +839,44 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ exemplo de Lloyd-Max ============ -->
-<section class="slide" id="lmex" data-sec="4 Lloyd-Max · laplaciana" data-fig="lmex">
+<section class="slide" id="lmenun" data-sec="4 Lloyd-Max · enunciado" data-fig="lmenun">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exemplo de Lloyd-Max</h2><div class="sub">Densidade laplaciana · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>Exemplo de Lloyd-Max</h2><div class="sub">Enunciado · pressione → para avançar</div><div class="bar"></div></div>
+  <style>
+.miniflow { width: 500px; margin-top: 10px; }
+.miniflow svg { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+.miniflow .mb rect { fill: #fff; stroke: #b9c2cc; stroke-width: 1.6; transition: all .3s; }
+.miniflow .mb text { font-size: 17px; fill: #7a8794; text-anchor: middle; dominant-baseline: middle; transition: all .3s; }
+.miniflow .mb.hlon rect { fill: #fbe9e7; stroke: var(--unb-alert); stroke-width: 3; filter: drop-shadow(0 0 7px rgba(190, 40, 30, .55)); }
+.miniflow .mb.hlon text { fill: var(--unb-alert); font-weight: 700; }
+.miniflow path { fill: none; stroke: #b9c2cc; stroke-width: 2; transition: stroke .3s; }
+.miniflow path.hlon { stroke: var(--unb-alert); stroke-width: 3; }
+.miniflow .al { font-size: 15px; fill: #7a8794; }
+.miniflow marker path { fill: #b9c2cc; stroke: none; }
+</style>
   <div class="body">
     <div class="deriv board" style="gap:16px">
+        <div class="step txt" style="font-size:20px;max-width:840px">Problema: projetar o quantizador ótimo de \(N=4\) níveis para uma fonte com densidade laplaciana, parecida com a da voz.</div>
         <div class="step"><div class="why">Densidade laplaciana, parecida com a da voz</div><div class="m">\[ f_X(x)=\cssId{lx-f}{\tfrac12\,e^{-|x|}} \]</div></div>
         <div class="step"><div class="why">Potência: a densidade é par, dobra o lado positivo; \(\int_0^\infty x^n e^{-x}dx=n!\)</div><div class="m">\[ E[X^2]=2\int_0^\infty x^2\,\cssId{lx-f2}{\tfrac12e^{-x}}\,dx=\underbrace{\int_0^\infty x^2e^{-x}\,dx}_{=\,2!}=2 \]</div></div>
         <div class="step"><div class="why">\(N=4\) níveis; pela simetria bastam três números</div><div class="m">\[ \text{fronteiras } 0,\ \pm a\qquad\text{níveis } \pm\hat x_1,\ \pm\hat x_2 \]</div></div>
+        <div class="step"><div class="why">O que queremos: a fronteira e os dois níveis que minimizam \(D\), e a SQNR que eles dão</div><div class="m">\[ \min_{a,\ \hat x_1,\ \hat x_2}\ D\qquad\text{e}\qquad \text{SQNR}=\frac{E[X^2]}{D} \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:840px">Não há fórmula fechada para os três ao mesmo tempo: resolvemos com o algoritmo de Lloyd-Max, partindo do uniforme.</div>
+    </div>
+    <div class="figfloat" data-show="1-">
+      <div class="fig"><canvas data-figcanvas height="320" aria-label="Densidade laplaciana com as regiões e os níveis do quantizador de 4 níveis"></canvas><div class="figcap"></div></div>
+      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-lmex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-lmex)"/><path d="M322,25 H352" marker-end="url(#mf-lmex)"/><path d="M427,50 V109" marker-end="url(#mf-lmex)"/><path d="M355,137 H325" marker-end="url(#mf-lmex)"/><path d="M250,112 V53" marker-end="url(#mf-lmex)"/><path d="M177,137 H148" marker-end="url(#mf-lmex)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb" data-hl="6-6"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="lx-f" data-to="lx-f2">par: dobra o lado x ≥ 0</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="lmex" data-sec="4 Lloyd-Max · laplaciana" data-fig="lmex">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo de Lloyd-Max</h2><div class="sub">Ponto de partida · pressione → para avançar</div><div class="bar"></div></div>
+    <div class="body">
+    <div class="deriv board" style="gap:16px">
         <div class="step"><div class="why">Ponto de partida: o uniforme com \(\Delta=1\)</div><div class="m">\[ \cssId{lx-v1}{\hat x_1=0{,}5},\quad \cssId{lx-v2}{\hat x_2=1{,}5},\quad a=1 \]</div></div>
         <div class="step"><div class="why">Leva em (3), dobrando o lado positivo</div><div class="m">\[ D=2\Big[\cssId{lx-in}{\int_0^1(x-0{,}5)^2\tfrac12e^{-x}dx}+\cssId{lx-out}{\int_1^\infty(x-1{,}5)^2\tfrac12e^{-x}dx}\Big] \]</div></div>
         <div class="step"><div class="why">Integra cada parcela: a cauda pesa quase tudo</div><div class="m">\[ D=2\,[\,\cssId{lx-n1}{0{,}0272}+\cssId{lx-n2}{0{,}2299}\,]=\cssId{lx-D}{0{,}514} \]</div></div>
@@ -854,15 +884,15 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt" style="font-size:20px;max-width:840px">A densidade cai rápido: a região externa, de \(a\) até \(\infty\), é longa e seu nível em \(1{,}5\) parece perto demais do centro.</div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="400" aria-label="Densidade laplaciana com as regiões e os níveis do quantizador de 4 níveis"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="320" aria-label="Densidade laplaciana com as regiões e os níveis do quantizador de 4 níveis"></canvas><div class="figcap"></div></div>
+      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-lmex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-lmex)"/><path d="M322,25 H352" marker-end="url(#mf-lmex)"/><path d="M427,50 V109" marker-end="url(#mf-lmex)"/><path d="M355,137 H325" marker-end="url(#mf-lmex)"/><path d="M250,112 V53" marker-end="url(#mf-lmex)"/><path d="M177,137 H148" marker-end="url(#mf-lmex)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb" data-hl="1-1"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb" data-hl="2-4"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb" data-hl="5-5"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
     </div>
   </div>
-  <div class="link" data-on="2" data-from="lx-f" data-to="lx-f2">par: dobra o lado x ≥ 0</div>
-  <div class="link" data-on="5" data-from="lx-v1" data-to="lx-in">região interna</div>
-  <div class="link" data-on="5" data-from="lx-v2" data-to="lx-out">região externa</div>
-  <div class="link" data-on="6" data-from="lx-in" data-to="lx-n1">integra</div>
-  <div class="link" data-on="6" data-from="lx-out" data-to="lx-n2">a cauda pesa quase tudo</div>
-  <div class="link" data-on="7" data-from="lx-D" data-to="lx-D2">leva em (4)</div>
+  <div class="link" data-on="2" data-from="lx-v1" data-to="lx-in">região interna</div>
+  <div class="link" data-on="2" data-from="lx-v2" data-to="lx-out">região externa</div>
+  <div class="link" data-on="3" data-from="lx-in" data-to="lx-n1">integra</div>
+  <div class="link" data-on="3" data-from="lx-out" data-to="lx-n2">a cauda pesa quase tudo</div>
+  <div class="link" data-on="4" data-from="lx-D" data-to="lx-D2">leva em (4)</div>
   <aside class="notes"></aside>
 </section>
 
@@ -882,7 +912,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt" style="font-size:20px;max-width:840px">Junto com a fronteira no ponto médio, \(a=(\hat x_1+\hat x_2)/2\), são as três fórmulas da iteração.</div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="400" aria-label="Metade positiva da laplaciana com as regiões interna e externa e seus centroides"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="320" aria-label="Metade positiva da laplaciana com as regiões interna e externa e seus centroides"></canvas><div class="figcap"></div></div>
+      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-centroides" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-centroides)"/><path d="M322,25 H352" marker-end="url(#mf-centroides)"/><path d="M427,50 V109" marker-end="url(#mf-centroides)"/><path d="M355,137 H325" marker-end="url(#mf-centroides)"/><path d="M250,112 V53" marker-end="url(#mf-centroides)"/><path d="M177,137 H148" marker-end="url(#mf-centroides)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb" data-hl="1-8"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="ce-f1" data-to="ce-f2">por partes: ∫x e⁻ˣdx = −(x+1)e⁻ˣ</div>
@@ -909,7 +940,8 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt" style="font-size:20px;max-width:840px">Os níveis mudaram, então as fronteiras deixaram de estar nos pontos médios: nova fronteira em \(a=(0{,}418+2)/2=1{,}209\), e repete.</div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="400" aria-label="Estado do quantizador antes e depois da primeira iteração"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="320" aria-label="Estado do quantizador antes e depois da primeira iteração"></canvas><div class="figcap"></div></div>
+      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-iter1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-iter1)"/><path d="M322,25 H352" marker-end="url(#mf-iter1)"/><path d="M427,50 V109" marker-end="url(#mf-iter1)"/><path d="M355,137 H325" marker-end="url(#mf-iter1)"/><path d="M250,112 V53" marker-end="url(#mf-iter1)" data-hl="7-7"/><path d="M177,137 H148" marker-end="url(#mf-iter1)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb" data-hl="1-1"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb" data-hl="2-2"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb" data-hl="3-5"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb" data-hl="6-6"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb" data-hl="7-7"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="it-v" data-to="it-m">(7): ponto médio</div>
@@ -937,15 +969,18 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
           <tr data-show="5-"><td>⋮</td><td class="num">⋮</td><td class="num">⋮</td><td class="num">⋮</td><td class="num">⋮</td></tr>
           <tr data-show="5-"><td>\(\infty\)</td><td class="num">1,594</td><td class="num">0,594</td><td class="num">2,594</td><td class="num" style="color:var(--unb-alert)">7,54 dB</td></tr>
         </tbody></table></div>
-      <div class="fig"><canvas data-figcanvas height="330" aria-label="Estado do quantizador a cada iteração"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="280" aria-label="Estado do quantizador a cada iteração"></canvas><div class="figcap"></div></div>
     </div>
-    <div class="solo" style="margin-top:6px">
+    <div style="display:flex;gap:30px;align-items:flex-start;margin-top:6px">
+    <div class="solo" style="flex:1">
       <div class="step txt">A cada iteração a fronteira e o nível externo andam para fora e \(D\) cai. Os passos ficam cada vez menores.</div>
       <div class="step txt">A cada iteração a fronteira e o nível externo andam para fora e \(D\) cai. Os passos ficam cada vez menores.</div>
       <div class="step txt">A cada iteração a fronteira e o nível externo andam para fora e \(D\) cai. Os passos ficam cada vez menores.</div>
       <div class="step txt">A cada iteração a fronteira e o nível externo andam para fora e \(D\) cai. Os passos ficam cada vez menores.</div>
       <div class="step txt">No limite, \(a=1{,}594\): a região interna é estreita, onde a densidade é alta, e a externa é larga. O ganho sobre o ponto de partida uniforme é de \(7{,}54-5{,}90=1{,}64\) dB.</div>
       <div class="step txt">Repare que no ponto fixo \(\hat x_2=a+1\) e \(a=(\hat x_1+\hat x_2)/2\) dão \(\hat x_1=a-1\): as três fórmulas valem ao mesmo tempo, então nenhum passo muda mais nada.</div>
+    </div>
+      <div class="miniflow" style="width:430px;flex:0 0 430px;margin-top:0"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-conv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-conv)"/><path d="M322,25 H352" marker-end="url(#mf-conv)"/><path d="M427,50 V109" marker-end="url(#mf-conv)"/><path d="M355,137 H325" marker-end="url(#mf-conv)"/><path d="M250,112 V53" marker-end="url(#mf-conv)" data-hl="1-4"/><path d="M177,137 H148" marker-end="url(#mf-conv)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb" data-hl="1-4"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb" data-hl="5-6"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
     </div>
   </div>
   <aside class="notes"></aside>
@@ -1775,7 +1810,7 @@ const FIGS = {
   // ---------- 3. não uniforme ----------
   lmganho(ctx, w, h, s) {
     // três faixas: a gaussiana com as regiões e os níveis de cada quantizador de 8 níveis, SQNR à direita
-    const c = C(), Lb = {"n": ["uniforme, Δ = σ", "uniforme, Δ = 0,586σ", "Lloyd-Max"], "db": ["10,78 dB", "14,27 dB", "14,62 dB"], "g1": "+3,49 dB: escolher bem Δ", "g2": "+0,35 dB: não uniforme", "cap": ["Uniforme do exemplo: Δ = σ, níveis até ±3,5σ, muito além de onde a gaussiana tem massa.", "Melhor uniforme, tabela 7.1: Δ = 0,586σ aperta os níveis onde a densidade está.", "Lloyd-Max, tabela 7.2: regiões estreitas no centro e largas nas bordas; quase igual ao melhor uniforme."]}, rows = [
+    const c = C(), DL = ["D = 0,0835 σ²", "D = 0,0374 σ²", "D = 0,0345 σ²  (menor)"], Lb = {"n": ["uniforme, Δ = σ", "uniforme, Δ = 0,586σ", "Lloyd-Max"], "db": ["10,78 dB", "14,27 dB", "14,62 dB"], "g1": "+3,49 dB: escolher bem Δ", "g2": "+0,35 dB: não uniforme", "cap": ["Uniforme do exemplo: Δ = σ, níveis até ±3,5σ, muito além de onde a gaussiana tem massa.", "Melhor uniforme, tabela 7.1: Δ = 0,586σ aperta os níveis onde a densidade está.", "Lloyd-Max, tabela 7.2: regiões estreitas no centro e largas nas bordas; quase igual ao melhor uniforme."]}, rows = [
       { ab: [0, 1, 2, 3], lv: [0.5, 1.5, 2.5, 3.5], col: "#8a8a8a" },
       { ab: [0, 0.586, 1.172, 1.758], lv: [0.293, 0.879, 1.465, 2.051], col: c.P },
       { ab: [0, 0.5006, 1.050, 1.748], lv: [0.2451, 0.7560, 1.344, 2.152], col: OR } ];
@@ -1788,8 +1823,9 @@ const FIGS = {
       for (const v of [...r.ab, ...r.ab.map((x) => -x)]) line(ctx, F.X(v), F.Y(0), F.X(v), F.Y(0.42), r.col, 2);
       for (const v of [...r.lv, ...r.lv.map((x) => -x)]) dot(ctx, F.X(v), F.Y(0), 6, c.R);
       fplot(ctx, F.X, F.Y, gpdf, -3.9, 3.9, c.K, 2);
-      txt(ctx, Lb.n[k], wl + 20, k * rh + rh * 0.38, { c: r.col === "#8a8a8a" ? c.K : r.col, size: 19 });
-      txt(ctx, Lb.db[k], wl + 20, k * rh + rh * 0.62, { c: k === 2 ? c.R : c.K, size: 24, bold: true });
+      txt(ctx, Lb.n[k], wl + 20, k * rh + rh * 0.30, { c: r.col === "#8a8a8a" ? c.K : r.col, size: 19 });
+      txt(ctx, DL[k], wl + 20, k * rh + rh * 0.52, { c: k === 2 ? c.R : c.K, size: 19, bold: k === 2 });
+      txt(ctx, "SQNR " + Lb.db[k], wl + 20, k * rh + rh * 0.74, { c: k === 2 ? c.R : c.K, size: 21, bold: true });
       if (k >= 1) txt(ctx, k === 1 ? Lb.g1 : Lb.g2, wl + 20, k * rh + 4, { c: c.G, size: 16 });
     });
     return Lb.cap[Math.min(s, 3) - 1];
@@ -1877,7 +1913,8 @@ const FIGS = {
       "Mínimo em x̂_k = " + fmtc(cst, 3) + ": o centroide da região [1,050, 1,748].", "O centroide, 1,344, fica à esquerda do meio, 1,399: a densidade pesa mais à esquerda."][s - 1];
   },
   // ---------- 4. exemplo laplaciano ----------
-  lmex(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 1, 2, 3, 4, 4, 5, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  lmenun(ctx, w, h, s, t) { return this.lmex(ctx, w, h, -([0, 1, 1, 1, 2, 2, 2][s] || 2), t); },
+  lmex(ctx, w, h, s) { s = s < 0 ? -s : ([0, 3, 4, 4, 5, 5][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), { X, Y } = frame(w, h, { xmin: -4.7, xmax: 5.0, ymin: 0, ymax: 0.62, ml: 16, mr: 16, mt: 24, mb: 40, top: 0 });
     if (s >= 3) lapState(ctx, X, Y, 1, 0.5, 1.5);
     else if (s === 2) { for (const v of [-1, 0, 1]) line(ctx, X(v), Y(0), X(v), Y(0.55), v ? OR : c.M, 2.4); txt(ctx, "a", X(1), Y(0.55) - 12, { c: OR, size: 18, italic: true, align: "center" }); txt(ctx, "−a", X(-1), Y(0.55) - 12, { c: OR, size: 18, italic: true, align: "center" }); }
