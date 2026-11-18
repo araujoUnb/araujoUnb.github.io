@@ -788,27 +788,41 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <section class="slide" id="lmpratica" data-sec="3 Lloyd-Max · in practice">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Lloyd-Max in practice</h2><div class="sub">Examples 7.2.1 and 7.2.3 · press → to advance</div><div class="bar"></div></div>
-  <div class="body">
-    <div class="cols" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:44px; flex:0 0 auto">
-      <div class="col" style="gap:4px">
-        <p style="font-size:22px">The two conditions, (7) and (8), depend on each other, so the design is iterative:</p>
-        <div class="step txt"><span class="bn">1.</span> Choose initial levels, for example those of the uniform quantizer.</div>
-        <div class="step txt"><span class="bn">2.</span> Boundaries at the midpoints between neighboring levels, by (7).</div>
-        <div class="step txt"><span class="bn">3.</span> Levels at the centroids of the new regions, by (8).</div>
-        <div class="step txt"><span class="bn">4.</span> Repeat 2 and 3 until \(D\) stops decreasing.</div>
-      </div>
-      <div class="col" data-show="5-">
-        <p style="font-size:22px">Gaussian with \(N=8\) levels:</p>
-        <div class="table-wrap"><table style="font-size:22px">
-          <thead><tr><th>Quantizer</th><th class="num">\(D/\sigma^2\)</th><th class="num">SQNR</th></tr></thead>
-          <tbody>
-            <tr><td>uniform, \(\Delta=\sigma\)</td><td class="num">0.0835</td><td class="num">10.78 dB</td></tr>
-            <tr data-show="6-"><td>uniform, \(\Delta=0.586\sigma\)</td><td class="num">0.0374</td><td class="num">14.27 dB</td></tr>
-            <tr data-show="7-"><td>Lloyd-Max</td><td class="num">0.0345</td><td class="num" style="color:var(--unb-alert)">14.62 dB</td></tr>
-          </tbody></table></div>
-      </div>
+  <style>
+#lmpratica .flow { position: relative; width: 1400px; height: 540px; margin-top: 6px; }
+#lmpratica .fb { position: absolute; width: 400px; height: 210px; border: 2px solid var(--unb-primary); border-radius: 10px; background: #fff; padding: 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 22px; text-align: center; }
+#lmpratica .fb .ft { font-weight: 600; color: var(--unb-primary); font-size: 22px; }
+#lmpratica .fb.test { border-color: var(--unb-alert); border-radius: 40px; }
+#lmpratica .fb.test .ft { color: var(--unb-alert); }
+#lmpratica .fb.end { border-color: var(--unb-secondary, #00733c); }
+#lmpratica .fb.end .ft { color: var(--unb-secondary, #00733c); }
+#lmpratica .flow svg.fa { position: absolute; left: 0; top: 0; width: 1400px; height: 540px; overflow: visible; pointer-events: none; }
+#lmpratica .flow svg.fa path { fill: none; stroke: #787878; stroke-width: 2.4; }
+#lmpratica .flow svg.fa marker path { fill: #787878; stroke: none; }
+#lmpratica .flow svg.fa text { font: 20px "Source Sans 3", sans-serif; fill: var(--unb-alert); }
+@media (max-width: 760px) { #lmpratica .flow { width: auto; height: auto; } #lmpratica .fb { position: static; width: auto; height: auto; margin: 10px 0; } #lmpratica .flow svg.fa { display: none; } }
+</style>
+  <div class="body" style="gap:4px">
+    <p style="font-size:22px;margin:0">Conditions (7) and (8) depend on each other: the design is iterative.</p>
+    <div class="flow">
+      <svg class="fa" viewBox="0 0 1400 540"><defs><marker id="lm-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878" style="stroke:none"/></marker></defs><path data-show="2-" d="M400,105 H496" marker-end="url(#lm-ah)"/><path data-show="3-" d="M900,105 H996" marker-end="url(#lm-ah)"/><path data-show="4-" d="M1200,210 V326" marker-end="url(#lm-ah)"/><path data-show="5-" d="M1000,435 H904" marker-end="url(#lm-ah)"/><g data-show="5-"><path d="M700,330 V214" marker-end="url(#lm-ah)"/><text x="716" y="278">yes: i ← i + 1</text></g><g data-show="6-"><path d="M500,435 H404" marker-end="url(#lm-ah)"/><text x="430" y="420">no</text></g></svg>
+      <div class="fb step" id="lm-b1" style="left:0px;top:0px"><div class="ft">1. Start</div><div>\[ \hat x_k^{(0)},\quad i=0 \]</div><div style="font-size:19px">levels of the uniform quantizer</div></div>
+      <div class="fb step" id="lm-b2" style="left:500px;top:0px"><div class="ft">2. Boundaries, by (7)</div><div>\[ a_k^{(i)}=\frac{\hat x_k^{(i)}+\hat x_{k+1}^{(i)}}{2} \]</div></div>
+      <div class="fb step" id="lm-b3" style="left:1000px;top:0px"><div class="ft">3. Levels, by (8)</div><div>\[ \hat x_k^{(i+1)}=\frac{\int_{a_{k-1}^{(i)}}^{a_k^{(i)}}x\,f_X(x)\,dx}{\int_{a_{k-1}^{(i)}}^{a_k^{(i)}}f_X(x)\,dx} \]</div></div>
+      <div class="fb step" id="lm-b4" style="left:1000px;top:330px"><div class="ft">4. Distortion, by (3)</div><div style="font-size:20px">\[ D^{(i+1)}=\sum_{k}\int_{a_{k-1}^{(i)}}^{a_k^{(i)}}\big(x-\hat x_k^{(i+1)}\big)^2 f_X(x)\,dx \]</div></div>
+      <div class="fb step test" id="lm-b5" style="left:500px;top:330px"><div class="ft">5. Is \(D\) still falling?</div><div>\[ D^{(i)}-D^{(i+1)}>\varepsilon \]</div><div style="font-size:18px">\(\varepsilon\): small threshold</div></div>
+      <div class="fb step end" id="lm-b6" style="left:0px;top:330px"><div class="ft">End</div><div style="font-size:20px">optimal quantizer: \(a_k\) and \(\hat x_k\) of the last iteration</div></div>
     </div>
-    <div class="solo" style="margin-top:18px">
+  </div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="lmganho" data-fig="lmganho" data-sec="3 Lloyd-Max · gain">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Lloyd-Max: how much is gained</h2><div class="sub">Examples 7.2.1 and 7.2.3 · press → to advance</div><div class="bar"></div></div>
+  <div class="body" style="gap:10px">
+    <div class="fig"><canvas data-figcanvas height="360" aria-label="Gaussian with the regions and levels of the three 8-level quantizers"></canvas><div class="figcap"></div></div>
+    <div class="col" style="gap:10px;max-width:1400px">
       <div class="step txt">Proakis compares the quantizer of the example with the optimal one: \(14.62-10.78=3.84\) dB of gain.</div>
       <div class="step txt">But almost all of this gain comes from choosing \(\Delta\) well: the best uniform quantizer, Table 7.1, already reaches \(14.27\) dB.</div>
       <div class="step txt">For the Gaussian, nonuniformity yields only another \(0.35\) dB. The gain is much larger for densities concentrated around zero, such as that of speech: this is the idea behind companding, in PCM.</div>
@@ -1759,6 +1773,27 @@ const FIGS = {
       "x_{max} = 4σ: Δ = σ and overload with probability 2Q(4) ≈ " + fmtc(po * 1e5, 1) + "·10^{−5}.", "Probability of each region with x_{max} = 4σ; the outer ones include overload."][s - 1];
   },
   // ---------- 3. não uniforme ----------
+  lmganho(ctx, w, h, s) {
+    // três faixas: a gaussiana com as regiões e os níveis de cada quantizador de 8 níveis, SQNR à direita
+    const c = C(), Lb = {"n": ["uniform, Δ = σ", "uniform, Δ = 0.586σ", "Lloyd-Max"], "db": ["10.78 dB", "14.27 dB", "14.62 dB"], "g1": "+3.49 dB: choosing Δ well", "g2": "+0.35 dB: non-uniform", "cap": ["Example's uniform quantizer: Δ = σ, levels up to ±3.5σ, far beyond where the Gaussian has mass.", "Best uniform, table 7.1: Δ = 0.586σ packs the levels where the density is.", "Lloyd-Max, table 7.2: narrow regions in the center and wide at the edges; almost the same as the best uniform."]}, rows = [
+      { ab: [0, 1, 2, 3], lv: [0.5, 1.5, 2.5, 3.5], col: "#8a8a8a" },
+      { ab: [0, 0.586, 1.172, 1.758], lv: [0.293, 0.879, 1.465, 2.051], col: c.P },
+      { ab: [0, 0.5006, 1.050, 1.748], lv: [0.2451, 0.7560, 1.344, 2.152], col: OR } ];
+    const rh = h / 3, wl = w - 230;
+    rows.forEach((r, k) => {
+      if (s < k + 1) return;
+      const F = frame(wl, h, { xmin: -4, xmax: 4.1, ymin: 0, ymax: 0.45, ml: 16, mr: 10, mt: 18, mb: 26, top: k * rh, h: rh });
+      fillUnder(ctx, F.X, F.Y, gpdf, -3.9, 3.9, tint(r.col, 0.12));
+      xAxis(ctx, F.X, F.Y, -4, 4.1, c.K, k === 2 ? "x/σ" : "");
+      for (const v of [...r.ab, ...r.ab.map((x) => -x)]) line(ctx, F.X(v), F.Y(0), F.X(v), F.Y(0.42), r.col, 2);
+      for (const v of [...r.lv, ...r.lv.map((x) => -x)]) dot(ctx, F.X(v), F.Y(0), 6, c.R);
+      fplot(ctx, F.X, F.Y, gpdf, -3.9, 3.9, c.K, 2);
+      txt(ctx, Lb.n[k], wl + 20, k * rh + rh * 0.38, { c: r.col === "#8a8a8a" ? c.K : r.col, size: 19 });
+      txt(ctx, Lb.db[k], wl + 20, k * rh + rh * 0.62, { c: k === 2 ? c.R : c.K, size: 24, bold: true });
+      if (k >= 1) txt(ctx, k === 1 ? Lb.g1 : Lb.g2, wl + 20, k * rh + 4, { c: c.G, size: 16 });
+    });
+    return Lb.cap[Math.min(s, 3) - 1];
+  },
   naounif(ctx, w, h, s) {
     const c = C(), { X, Y } = frame(w, h, { xmin: -3.9, xmax: 4.2, ymin: 0, ymax: 0.47, ml: 16, mr: 16, mt: 20, mb: 32, top: 0 });
     const ab = [0.5006, 1.050, 1.748], lv = [0.2451, 0.7560, 1.344, 2.152];
