@@ -1073,22 +1073,75 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <section class="slide" id="exzoh2b" data-sec="5 Exercício 2 · atenuação e equalizador, continuação" data-fig="exzoh2b">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exercício 2: queda na borda da banda</h2><div class="sub">\(W=20\) kHz, \(f_s=192\) kHz · pressione → para avançar</div><div class="bar"></div></div>
+ <style>#exzoh2b svg.sysd { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+#exzoh2b svg.sysd .bx { fill: #fff; stroke: var(--unb-muted); stroke-width: 1.6; }
+#exzoh2b svg.sysd .bx.m3 { stroke: var(--unb-primary); stroke-width: 2.2; }
+#exzoh2b svg.sysd .t1 { font-size: 21px; fill: var(--unb-muted); text-anchor: middle; }
+#exzoh2b svg.sysd .t1.m3t { fill: var(--unb-primary); font-weight: 600; }
+#exzoh2b svg.sysd .t2 { font-size: 18px; fill: var(--unb-muted); text-anchor: middle; }
+#exzoh2b svg.sysd .ar { fill: none; stroke: var(--unb-muted); stroke-width: 1.8; }
+#exzoh2b svg.sysd .sig { font-size: 17px; fill: var(--unb-text); font-style: italic; }
+#exzoh2b .zd { margin-top: 10px; width: 1120px; max-width: 100%; align-self: center; }
+@media (max-width: 560px) { #exzoh2b .sysdwrap { overflow-x: auto; } #exzoh2b .sysdwrap svg.sysd { min-width: 760px; } }</style>
   <div class="body">
-    <div class="deriv board" style="gap:24px;max-width:860px">
+    <div class="deriv board" style="gap:16px;max-width:860px">
       <div class="step"><div class="why">\(f_s=192\) kHz</div><div class="m">\[ \operatorname{sinc}\!\left(\frac{20}{192}\right)=\frac{\sin(\cssId{z2-18}{\pi\cdot 20/192})}{\pi\cdot 20/192} \]</div></div>
       <div class="step"><div class="why">Em graus, \(180^\circ\times 20/192=18{,}75^\circ\)</div><div class="m">\[ \phantom{\operatorname{sinc}\!\left(\frac{20}{192}\right)}=\frac{\sin\cssId{z2-a18}{18{,}75^\circ}}{0{,}3272}=\frac{0{,}3214}{0{,}3272}=\cssId{z2-v2}{0{,}9822} \]</div></div>
       <div class="srow">
-        <div class="step"><div class="why">Em dB e ganho</div><div class="m">\[ -20\log_{10}\cssId{z2-v2b}{0{,}9822}=\boxed{0{,}16\text{ dB}} \]</div></div>
-        <div class="step cont"><div class="m">\[ \qquad G_{eq}=\frac{1}{0{,}9822}=1{,}018\;\to\;+0{,}16\text{ dB} \]</div></div>
+        <div class="step"><div class="why">Em dB e ganho</div><div class="m">\[ \cssId{z2-db}{-20\log_{10}}\cssId{z2-v2b}{0{,}9822}=\boxed{0{,}16\text{ dB}} \]</div></div>
+        <div class="step cont"><div class="m">\[ \qquad \cssId{z2-geq}{G_{eq}}=\frac{1}{0{,}9822}=1{,}018\;\to\;+0{,}16\text{ dB} \]</div></div>
       </div>
       <div class="step txt">Com \(f_s\) quatro vezes maior, \(W\) cai no topo quase plano do sinc: a queda vai de \(2{,}64\) para \(0{,}16\) dB.</div>
+      <div class="step txt">Na cadeia, o segurador de ordem zero vem primeiro e atenua \(0{,}16\) dB em \(W\). O equalizador vem depois: devolve os \(0{,}16\) dB e corta as réplicas acima de \(W\).</div>
     </div>
-    <div class="figfloat" data-show="1-5">
-      <div class="fig"><canvas data-figcanvas height="330" aria-label="Módulo do sinc normalizado para f_s de 48 e 192 kHz com a borda da banda W"></canvas></div>
+    <div class="sysdwrap zd" data-show="6"><svg class="sysd" viewBox="0 20 1400 150" role="img" aria-label="Diagrama: amostras, segurador de ordem zero, equalizador e saída x(t)"><defs><marker id="zd-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878"/></marker></defs>
+<text class="sig" x="160" y="44" text-anchor="middle" style="font-size:20px">amostras x(nTₛ)</text><text class="t2" x="160" y="68">fₛ = 192 kHz</text>
+<path class="ar" d="M30,150 H310" style="stroke-width:1.2"/><path class="ar" d="M40,150 V102.0" marker-end="url(#zd-ah)"/><path class="ar" d="M66,150 V93.8" marker-end="url(#zd-ah)"/><path class="ar" d="M92,150 V91.3" marker-end="url(#zd-ah)"/><path class="ar" d="M118,150 V90.8" marker-end="url(#zd-ah)"/><path class="ar" d="M144,150 V88.3" marker-end="url(#zd-ah)"/><path class="ar" d="M170,150 V83.4" marker-end="url(#zd-ah)"/><path class="ar" d="M196,150 V79.2" marker-end="url(#zd-ah)"/><path class="ar" d="M222,150 V80.5" marker-end="url(#zd-ah)"/><path class="ar" d="M248,150 V90.7" marker-end="url(#zd-ah)"/><path class="ar" d="M274,150 V108.3" marker-end="url(#zd-ah)"/><path class="ar" d="M300,95 H397" marker-end="url(#zd-ah)"/>
+<g id="zd-zoh"><rect class="bx m3" x="400" y="28" width="250" height="135" rx="8"/><text class="t1 m3t" x="525" y="54">segurador de ordem zero</text><text class="t2" x="525" y="78" style="font-style:italic">Tₛ sinc(f/fₛ) · −0,16 dB em W</text><path d="M440,150 H458 V129.1 H476 V124.3 H494 V121.8 H512 V121.9 H530 V124.7 H548 V129.6 H566 V135.5 H584 V141.4 H602 V146.0 H620" style="fill:none;stroke:var(--unb-primary);stroke-width:2"/></g>
+<path class="ar" d="M650,95 H777" marker-end="url(#zd-ah)"/><text class="t2" x="713" y="85">degraus</text>
+<g id="zd-eq"><rect class="bx m3" x="780" y="28" width="300" height="135" rx="8" style="stroke:#b03a2e"/><text class="t1 m3t" x="930" y="54" style="fill:#b03a2e">equalizador</text><text class="t2" x="930" y="78" style="font-style:italic">+0,16 dB em W</text><text class="t2" x="930" y="100" style="font-size:16px">1/sinc(f/fₛ) em |f| ≤ W, zero acima</text><path d="M820,150 H1050" style="stroke:var(--unb-muted);stroke-width:1"/><path d="M830,140 Q900,139 930,126 V150 M930,150 H1045" style="fill:none;stroke:#b03a2e;stroke-width:2"/></g>
+<path class="ar" d="M1080,95 H1330" marker-end="url(#zd-ah)"/><text class="sig" x="1360" y="101" text-anchor="middle" style="font-size:22px">x(t)</text>
+<path d="M1110,150 C1160,110 1200,160 1250,120 S1300,110 1320,115" style="fill:none;stroke:var(--unb-text);stroke-width:2.4"/></svg></div>
+    <div class="figfloat" data-show="1-6">
+      <div class="fig"><canvas data-figcanvas height="330" aria-label="Módulo do sinc normalizado para f_s = 192 kHz com a borda da banda W"></canvas></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="z2-18" data-to="z2-a18">180° × 20/192 = 18,75°</div>
   <div class="link" data-on="3" data-from="z2-v2" data-to="z2-v2b">em dB</div>
+  <aside class="notes"></aside>
+</section>
+<section class="slide" id="exeq" data-sec="5 Exercício 2 · projeto do equalizador">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: projeto do equalizador</h2><div class="sub">\(W=20\) kHz, \(f_s=192\) kHz · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:20px">
+      <div class="step txt">Projeto: depois do segurador, a cadeia deve deixar só um atraso em \(|f|\le W\) e zerar as réplicas.</div>
+      <div class="step"><div class="why">Meta: ganho plano e fase linear na banda</div><div class="m">\[ \cssId{eq-h}{H(f)}\,H_{eq}(f)=T_s\,e^{-j\pi fT_s},\qquad |f|\le W \]</div></div>
+      <div class="step"><div class="why">Divide pelo \(H(f)\) do segurador; \(T_s\) e a fase cancelam</div><div class="m">\[ H_{eq}(f)=\frac{{\color{#9a9a9a}{T_s\,e^{-j\pi fT_s}}}}{\cssId{eq-h2}{{\color{#9a9a9a}{T_s}}\operatorname{sinc}(fT_s)\,{\color{#9a9a9a}{e^{-j\pi fT_s}}}}}=\cssId{eq-inv}{\frac{1}{\operatorname{sinc}(fT_s)}} \]</div></div>
+      <div class="step"><div class="why">Para \(u\) pequeno, \(\sin u\approx u-u^3/6\)</div><div class="m">\[ \frac{1}{\operatorname{sinc}(fT_s)}=\frac{\pi fT_s}{\cssId{eq-sin}{\sin(\pi fT_s)}}\approx\cssId{eq-tay}{1+\frac{(\pi fT_s)^2}{6}} \]</div></div>
+      <div class="step"><div class="why">Em \(f=W\): \(\pi WT_s=\pi\cdot 20/192=0{,}3272\)</div><div class="m">\[ H_{eq}(W)\approx 1+\frac{(0{,}3272)^2}{6}=1+\frac{0{,}1071}{6}=1+0{,}0178=\cssId{eq-res}{\boxed{1{,}018}} \tag{14} \]</div></div>
+      <div class="step txt">O equalizador é um reforço suave que cresce com \(f^2\): no máximo \(+0{,}16\) dB em \(W\).</div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="eq-h" data-to="eq-h2">divide por H(f)</div>
+  <div class="link" data-on="4" data-from="eq-inv" data-to="eq-sin">sen u ≈ u − u³/6</div>
+  <div class="link" data-on="5" data-from="eq-tay" data-to="eq-res">f = W</div>
+  <div class="note" data-on="5" data-to="eq-res">confere: 1/0,9822 = 1,018</div>
+  <aside class="notes"></aside>
+</section>
+<section class="slide" id="exeq2" data-sec="5 Exercício 2 · projeto do equalizador" data-fig="exeq2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercício 2: projeto do equalizador</h2><div class="sub">Máscara do equalizador · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body" style="gap:6px">
+    <div class="fig"><canvas data-figcanvas height="270" aria-label="Módulo do segurador, do equalizador e da cadeia completa, com a faixa de transição"></canvas></div>
+    <div class="deriv board" style="gap:14px">
+      <div class="step txt">Em azul, o segurador cai com \(|\operatorname{sinc}(fT_s)|\). A primeira réplica começa em \(f_s-W=172\) kHz.</div>
+      <div class="step"><div class="why">Máscara: \(1/\operatorname{sinc}\) na banda, zero onde começam as réplicas</div><div class="m">\[ |H_{eq}(f)|=\begin{cases}1/|\operatorname{sinc}(fT_s)|, &amp; |f|\le 20\text{ kHz}\\[2pt] 0, &amp; |f|\ge 172\text{ kHz}\end{cases} \]</div></div>
+      <div class="step"><div class="why">O que sobra entre a banda e as réplicas é a banda de guarda</div><div class="m">\[ \cssId{eq-tr}{(f_s-W)-W}=f_s-2W=192-40=\cssId{eq-wg}{152\text{ kHz}=W_G} \]</div></div>
+      <div class="step txt">A \(192\) kHz, a transição tem \(152\) kHz e o passa-baixas pode ser simples. A \(48\) kHz seriam \(+2{,}64\) dB e só \(8\) kHz de transição, e a aproximação de Taylor já erra: \(1{,}29\) contra \(1{,}355\).</div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="eq-tr" data-to="eq-wg">largura da transição</div>
   <aside class="notes"></aside>
 </section>
 
@@ -1772,6 +1825,40 @@ function figAntiAlias(ctx, w, h, s) {
   else txt(ctx, AAL.ok, B2.X(0), B2.y - 8, { c: c.G, size: 18, align: "center" });
   return null;
 }
+const EQL = {"f": "f em kHz", "zoh": "segurador |sinc(fT_s)|", "eq": "equalizador", "tot": "cadeia: plana até W", "tr": "transição = W_G = 152 kHz", "rep": "réplica"};
+function figEq(ctx, w, h, s) {
+  const c = C(), B = tbox(40, 34, w - 190, h - 90, 0, 200, 0, 1.25), Ts = 1 / 192, W = 20, fs = 192;
+  const sn = (f) => { const u = Math.PI * f * Ts; return u === 0 ? 1 : Math.abs(Math.sin(u) / u); };
+  const heq = (f) => (f <= W ? 1 / sn(f) : f >= fs - W ? 0 : (1 / sn(W)) * (fs - W - f) / (fs - 2 * W));
+  if (s >= 3) { rectFill(ctx, B, W, fs - W, 0, 1.2, tint(c.G, 0.08)); txt(ctx, EQL.tr, B.X((W + fs - W) / 2), B.Y(1.2) + 14, { c: c.G, align: "center", size: 17 }); }
+  taxis(ctx, B, EQL.f);
+  ftick(ctx, B, 0, "0", { italic: false }); ftick(ctx, B, W, "W = 20", { italic: false }); ftick(ctx, B, fs - W, "172", { italic: false }); ftick(ctx, B, fs, "192", { italic: false });
+  trace(ctx, B, sn, c.P, 2.6, null, 500, 200, 0); txt(ctx, EQL.zoh, B.X(100), B.Y(sn(100)) - 22, { c: c.P, size: 17 });
+  clipB(ctx, B, () => trifill(ctx, B, fs, W, 0.35, c.M, 0.12, 1.4)); txt(ctx, EQL.rep, B.X(fs), B.Y(0.35) - 12, { c: c.M, size: 16, align: "center" });
+  if (s >= 2) {
+    trace(ctx, B, heq, c.R, 2.6, [8, 5], 500, fs - W, 0); txt(ctx, EQL.eq, B.X(60), B.Y(heq(60)) + 20, { c: c.R, size: 17 });
+    trace(ctx, B, (f) => sn(f) * heq(f), c.G, 3, null, 500, fs - W, 0); txt(ctx, EQL.tot, B.X(2), B.Y(1) - 16, { c: c.G, size: 17 });
+  }
+  return null;
+}
+function figZoh192(ctx, w, h, s) {
+  // só f_s = 192 kHz: o sinc quase plano até W, o ponto em W e o equalizador
+  const c = C(), B = tbox(70, 30, w - 190, h - 80, 0, 200, 0, 1.3), sn = (f) => Math.abs(sinc(f / 192));
+  taxis(ctx, B, EXL.khz);
+  line(ctx, B.x, B.y, B.x, B.y + B.h, C().M, 1.3);
+  for (const f of [0, 20, 96, 192]) ftick(ctx, B, f, f === 20 ? "W = 20" : String(f), { italic: false, size: 15, c: f === 20 ? c.R : undefined });
+  for (const v of [0.5, 1]) { line(ctx, B.x - 5, B.Y(v), B.x, B.Y(v), C().M, 1.3); txt(ctx, fmtc(v, 1), B.x - 9, B.Y(v), { align: "right", size: 15, c: C().M }); line(ctx, B.x, B.Y(v), B.x + B.w, B.Y(v), C().GR, 1); }
+  rectFill(ctx, B, 0, 20, 0, 1.25, tint(c.G, 0.12));
+  line(ctx, B.X(20), B.y, B.X(20), B.Y(0), c.R, 1.6, [5, 4]);
+  trace(ctx, B, sn, c.P, 3, null, 500, 192, 0); txt(ctx, "f_s = 192 kHz", B.X(120), B.Y(sn(120)) - 18, { c: c.P, size: 17 });
+  if (s >= 2) { dot(ctx, B.X(20), B.Y(0.9822), 6, c.P); txt(ctx, fmtc(0.9822, 4) + (s >= 3 ? "  →  −" + fmtc(0.16, 2) + " dB" : ""), B.X(30), B.Y(0.78), { c: c.P, size: 17 }); }
+  if (s >= 4) {
+    trace(ctx, B, (f) => 1 / sn(f), c.R, 2.4, [7, 4], 200, 20, 0);
+    dot(ctx, B.X(20), B.Y(1.018), 5, c.R);
+    txt(ctx, EXL.eq + " " + fmtc(1.018, 3) + "  →  +" + fmtc(0.16, 2) + " dB", B.X(26), B.Y(1.13), { c: c.R, size: 17 });
+  }
+  return null;
+}
 function hbrace(ctx, x1, x2, y, col, d = 11) {
   // chave horizontal com a ponta para baixo, de x1 a x2, começando em y
   const m = (x1 + x2) / 2, r = Math.min(d, (x2 - x1) / 4);
@@ -1979,7 +2066,7 @@ function figExZoh2(ctx, w, h, s) {
   return null;
 }
 
-const FIGS = { exzoh2b: (ctx, w, h, s, t) => figExZoh2(ctx, w, h, s + 5, t), exnyq2b: (ctx, w, h, s, t) => figExNyq2(ctx, w, h, s + 3, t), hfilt2: (ctx, w, h, s, t) => figH(ctx, w, h, s + 3, t), motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, replicas: figReplicas, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, antialias: figAntiAlias, guarda: figGuarda, guarda2: (ctx, w, h, s, t) => figGuarda(ctx, w, h, s + 4, t), exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
+const FIGS = { exeq2: figEq, exzoh2b: figZoh192, exnyq2b: (ctx, w, h, s, t) => figExNyq2(ctx, w, h, s + 3, t), hfilt2: (ctx, w, h, s, t) => figH(ctx, w, h, s + 3, t), motiv: figMotiv, ideal: figIdeal, serie: figSerie, trem: figTrem, espec: figEspec, replicas: figReplicas, encosta: figEncosta, filtro: figFiltro, hfilt: figH, interp: figInterp, nyq: figNyq, sincs: figSincs, alias: figAlias, antialias: figAntiAlias, guarda: figGuarda, guarda2: (ctx, w, h, s, t) => figGuarda(ctx, w, h, s + 4, t), exnyq1: figExNyq1, exnyq2: figExNyq2, exzoh1: figExZoh1, exzoh2: figExZoh2 };
 
 // ---------- (c) instrumentos ----------
 const wFmt = (t) => t === 0 ? "0" : (fmtc(t, 0) + "W").replace("1W", "W");
