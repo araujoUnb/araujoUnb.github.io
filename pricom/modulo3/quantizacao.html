@@ -997,19 +997,37 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt" style="font-size:20px;max-width:840px">Problema: projetar o quantizador ótimo de \(N=4\) níveis para uma fonte com densidade laplaciana, parecida com a da voz.</div>
         <div class="step"><div class="why">Densidade laplaciana, parecida com a da voz</div><div class="m">\[ f_X(x)=\cssId{lx-f}{\tfrac12\,e^{-|x|}} \]</div></div>
         <div class="step"><div class="why">Potência: a densidade é par, dobra o lado positivo</div><div class="m">\[ E[X^2]=2\int_0^\infty x^2\,\cssId{lx-f2}{\tfrac12e^{-x}}\,dx=\cssId{lx-i2}{\int_0^\infty x^2e^{-x}\,dx} \]</div></div>
-        <div class="step"><div class="why">Por partes, com \(u=x^2\) e \(dv=e^{-x}dx\): \(\int u\,dv=uv-\int v\,du\)</div><div class="m">\[ \cssId{lx-i2b}{\int_0^\infty x^2e^{-x}\,dx}=\underbrace{\big[-x^2e^{-x}\big]_0^\infty}_{=\,0}+2\cssId{lx-i1}{\int_0^\infty x\,e^{-x}\,dx} \]</div></div>
-        <div class="step"><div class="why">Por partes de novo, com \(u=x\) e \(dv=e^{-x}dx\)</div><div class="m">\[ \cssId{lx-i1b}{\int_0^\infty x\,e^{-x}\,dx}=\underbrace{\big[-x\,e^{-x}\big]_0^\infty}_{=\,0}+\int_0^\infty e^{-x}\,dx=\big[-e^{-x}\big]_0^\infty=\cssId{lx-one}{1} \]</div></div>
-        <div class="step"><div class="why">Volta com o valor da integral</div><div class="m">\[ E[X^2]=2\times\cssId{lx-one2}{1}=2 \]</div></div>
     </div>
     <div class="figfloat" data-show="1-">
       <div class="fig"><canvas data-figcanvas height="320" aria-label="Densidade laplaciana com as regiões e os níveis do quantizador de 4 níveis"></canvas><div class="figcap"></div></div>
-      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-lmex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-lmex)"/><path d="M322,25 H352" marker-end="url(#mf-lmex)"/><path d="M427,50 V109" marker-end="url(#mf-lmex)"/><path d="M355,137 H325" marker-end="url(#mf-lmex)"/><path d="M250,112 V53" marker-end="url(#mf-lmex)"/><path d="M177,137 H148" marker-end="url(#mf-lmex)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb" data-hl="6-6"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
+      <div class="miniflow"><svg viewBox="0 0 500 162" role="img" aria-label="Fluxograma do Lloyd-Max com a etapa atual acesa"><defs><marker id="mf-lmex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs><path d="M145,25 H174" marker-end="url(#mf-lmex)"/><path d="M322,25 H352" marker-end="url(#mf-lmex)"/><path d="M427,50 V109" marker-end="url(#mf-lmex)"/><path d="M355,137 H325" marker-end="url(#mf-lmex)"/><path d="M250,112 V53" marker-end="url(#mf-lmex)"/><path d="M177,137 H148" marker-end="url(#mf-lmex)"/><text class="al" x="258" y="86">sim</text><text class="al" x="150" y="128">não</text><g class="mb" data-hl="3-3"><rect x="0" y="0" width="145" height="50" rx="8"/><text x="72.5" y="26">1. Início</text></g><g class="mb"><rect x="177" y="0" width="145" height="50" rx="8"/><text x="249.5" y="26">2. Fronteiras, (7)</text></g><g class="mb"><rect x="355" y="0" width="145" height="50" rx="8"/><text x="427.5" y="26">3. Níveis, (8)</text></g><g class="mb"><rect x="355" y="112" width="145" height="50" rx="8"/><text x="427.5" y="138">4. Distorção, (3)</text></g><g class="mb"><rect x="177" y="112" width="145" height="50" rx="8"/><text x="249.5" y="138">5. D ainda cai?</text></g><g class="mb"><rect x="0" y="112" width="145" height="50" rx="8"/><text x="72.5" y="138">Fim</text></g></svg></div>
     </div>
   </div>
   <div class="link" data-on="3" data-from="lx-f" data-to="lx-f2">par: dobra o lado x ≥ 0</div>
-  <div class="link" data-on="4" data-from="lx-i2" data-to="lx-i2b">por partes: u = x²</div>
-  <div class="link" data-on="5" data-from="lx-i1" data-to="lx-i1b">por partes: u = x</div>
-  <div class="link" data-on="6" data-from="lx-one" data-to="lx-one2">volta</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="lmpartes" data-sec="4 Lloyd-Max · enunciado, integral por partes">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo de Lloyd-Max</h2><div class="sub">Enunciado, integral por partes · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:20px">
+        <div class="step"><div class="why">Integração por partes: vem da regra do produto, \(d(uv)=u\,dv+v\,du\), integrada dos dois lados</div><div class="m">\[ \boxed{\ \int_a^b u\,dv=\big[\,u\,v\,\big]_a^b-\int_a^b v\,du\ } \]</div></div>
+        <div class="step txt" style="font-size:20px;max-width:1100px">\(u\) é a parte do integrando que vamos derivar, e \(du=u'(x)\,dx\) é a sua derivada; \(dv\) é a parte que vamos integrar, e \(v=\int dv\) é a sua primitiva. Escolhe-se \(u\) para que \(v\,du\) fique mais simples que \(u\,dv\).</div>
+        <div class="step"><div class="why">Primeira vez: escolhe \(u=x^2\), que simplifica ao derivar, e \(dv=e^{-x}dx\), fácil de integrar</div><div class="m">\[ \cssId{pp-u1}{u=x^2}\ \Rightarrow\ \cssId{pp-du1}{du=2x\,dx}\qquad\qquad dv=e^{-x}dx\ \Rightarrow\ \cssId{pp-v1}{v=-e^{-x}} \]</div></div>
+        <div class="step"><div class="why">Leva \(u\), \(v\) e \(du\) na fórmula; \(x^2e^{-x}\) vale 0 em \(x=0\) e vai a 0 quando \(x\to\infty\)</div><div class="m">\[ \int_0^\infty x^2e^{-x}dx=\underbrace{\big[\cssId{pp-a}{x^2}\cssId{pp-b}{(-e^{-x})}\big]_0^\infty}_{=\,0}-\int_0^\infty(-e^{-x})\,\cssId{pp-d}{2x\,dx}=2\cssId{pp-r1}{\int_0^\infty x\,e^{-x}dx} \]</div></div>
+        <div class="step"><div class="why">Segunda vez, na integral que sobrou: \(u=x\) e \(dv=e^{-x}dx\)</div><div class="m">\[ \cssId{pp-u2}{u=x}\ \Rightarrow\ \cssId{pp-du2}{du=dx}\qquad\qquad dv=e^{-x}dx\ \Rightarrow\ \cssId{pp-v2}{v=-e^{-x}} \]</div></div>
+        <div class="step"><div class="why">Leva na fórmula; \(x\,e^{-x}\) também vale 0 nos dois limites</div><div class="m">\[ \int_0^\infty x\,e^{-x}dx=\underbrace{\big[\cssId{pp-a2}{x}\cssId{pp-b2}{(-e^{-x})}\big]_0^\infty}_{=\,0}-\int_0^\infty(-e^{-x})\,\cssId{pp-d2}{dx}=\big[-e^{-x}\big]_0^\infty=\cssId{pp-one}{1} \]</div></div>
+        <div class="step"><div class="why">Volta para a primeira integral e para \(E[X^2]\)</div><div class="m">\[ \int_0^\infty x^2e^{-x}dx=2\times\cssId{pp-one2}{1}=2\qquad\Rightarrow\qquad E[X^2]=2 \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="4" data-from="pp-u1" data-to="pp-a">u</div>
+  <div class="link" data-on="4" data-from="pp-v1" data-to="pp-b">v</div>
+  <div class="link" data-on="4" data-from="pp-du1" data-to="pp-d">du</div>
+  <div class="link" data-on="6" data-from="pp-u2" data-to="pp-a2">u</div>
+  <div class="link" data-on="6" data-from="pp-v2" data-to="pp-b2">v</div>
+  <div class="link" data-on="6" data-from="pp-du2" data-to="pp-d2">du</div>
+  <div class="link" data-on="7" data-from="pp-one" data-to="pp-one2">volta</div>
   <aside class="notes"></aside>
 </section>
 
