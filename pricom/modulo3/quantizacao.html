@@ -554,9 +554,10 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <section class="slide" id="d12" data-sec="2 Distorção e SQNR · potência do ruído" data-fig="d12">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Potência do ruído de quantização</h2><div class="sub">Dedução · pressione → para avançar</div><div class="bar"></div></div>
+  <style>#d12 .fig { position: relative; } #d12 .figanchor { position: absolute; display: none; pointer-events: none; }</style>
   <div class="body">
     <div class="deriv board" style="gap:18px">
-        <div class="step"><div class="why">Erro uniforme em \((-\Delta/2,\Delta/2]\): densidade \(f_E(e)=1/\Delta\)</div><div class="m" style="max-width:850px">\[ D=E[E^2]=\int_{-\Delta/2}^{\Delta/2}\cssId{u-e2}{e^2}\,\underbrace{f_E(e)}_{1/\Delta}\,de \]</div></div>
+        <div class="step"><div class="why">Erro uniforme em \((-\Delta/2,\Delta/2]\): densidade \(f_E(e)=1/\Delta\)</div><div class="m" style="max-width:850px">\[ D=E[E^2]=\int_{-\Delta/2}^{\Delta/2}\cssId{u-int}{\cssId{u-e2}{e^2}\,\underbrace{f_E(e)}_{1/\Delta}}\,de \]</div></div>
         <div class="step"><div class="why">Integra: primitiva de \(e^2\)</div><div class="m" style="max-width:850px">\[ D=\frac{1}{\Delta}\,\cssId{u-prim}{\left[\frac{e^3}{3}\right]_{-\Delta/2}^{\Delta/2}} \]</div></div>
         <div class="step"><div class="why">Substitui os limites</div><div class="m" style="max-width:850px">\[ D=\frac{1}{3\Delta}\cssId{u-br}{\left[\frac{\Delta^3}{8}-\left(-\frac{\Delta^3}{8}\right)\right]} \]</div></div>
         <div class="step"><div class="why">\(e^3\) é ímpar: os dois termos somam</div><div class="m" style="max-width:850px">\[ D=\cssId{u-s}{\frac{1}{3\Delta}\cdot\frac{\Delta^3}{4}} \]</div></div>
@@ -564,7 +565,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step"><div class="why">De volta ao exemplo gaussiano, \(\Delta=20\): a aproximação já funciona com só 8 níveis</div><div class="m" style="max-width:850px">\[ \cssId{u-r2}{\frac{\Delta^2}{12}}=\frac{400}{12}=33{,}3\quad\text{contra}\quad\cssId{u-ex}{D\approx 33{,}38} \]</div></div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="420" aria-label="Densidade uniforme do erro, e ao quadrado e a primitiva"></canvas><div class="figcap"></div></div>
+      <div class="fig"><span class="figanchor" id="d-g"></span><span class="figanchor" id="d-G"></span><span class="figanchor" id="d-p"></span><span class="figanchor" id="d-pm"></span><span class="figanchor" id="d-dim"></span><span class="figanchor" id="d-area"></span><canvas data-figcanvas height="420" aria-label="Densidade uniforme do erro, e ao quadrado e a primitiva"></canvas><div class="figcap"></div></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="u-e2" data-to="u-prim">primitiva de e²</div>
@@ -573,6 +574,12 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="link" data-on="5" data-from="u-s" data-to="u-r">Δ³/(12Δ) = Δ²/12</div>
   <div class="link" data-on="6" data-from="u-r" data-to="u-r2">Δ = 20</div>
   <div class="note" data-on="6" data-to="u-ex">a aproximação já funciona com só 8 níveis</div>
+  <div class="link" data-on="1" data-from="u-int" data-to="d-g"></div>
+  <div class="link" data-on="2" data-from="u-prim" data-to="d-G"></div>
+  <div class="link" data-on="3" data-from="u-br" data-to="d-p"></div>
+  <div class="link" data-on="3" data-from="u-br" data-to="d-pm"></div>
+  <div class="link" data-on="4" data-from="u-s" data-to="d-dim"></div>
+  <div class="link" data-on="5" data-from="u-r" data-to="d-area"></div>
   <aside class="notes"></aside>
 </section>
 
@@ -1441,6 +1448,12 @@ function lapState(ctx, X, Y, a, x1, x2, o = {}) {
 }
 function lapAxes(ctx, X, Y, x0, x1) { const c = C(); xAxis(ctx, X, Y, x0, x1, c.K, "x"); fplot(ctx, X, Y, lpdf, x0 < -1 ? x0 + 0.05 : 0, x1 - 0.25, c.K, 2.4, 400); if (x0 > -1) line(ctx, X(0), Y(0), X(0), Y(0.5), c.K, 2.4); }
 
+// âncora HTML sobre um retângulo da figura, para as setas .link chegarem à curva
+function figAnchor(ctx, w, id, x, y, ww, hh, show) {
+  const cv = ctx.canvas, a = cv.parentElement.querySelector(`[id="${id}"]`); if (!a) return;
+  const sc = cv.clientWidth / w; a.style.display = show ? "block" : "none";
+  a.style.left = (cv.offsetLeft + x * sc) + "px"; a.style.top = (cv.offsetTop + y * sc) + "px"; a.style.width = ww * sc + "px"; a.style.height = hh * sc + "px";
+}
 const FIGS = {
   // ---------- 1. amplitude contínua ----------
   amp(ctx, w, h, s) {
@@ -1624,9 +1637,9 @@ const FIGS = {
     if (s >= 5) txt(ctx, "área = Δ²/12", A.X(0), A.Y(0.45), { c: c.R, size: 18, align: "center" });
     xAxis(ctx, A.X, A.Y, -0.8, 0.85, c.K, "e");
     tickX(ctx, A.X, A.Y, [-0.5, 0.5], (v) => v < 0 ? "−Δ/2" : "Δ/2", c.M);
+    const B = frame(w, h, { xmin: -0.8, xmax: 0.85, ymin: -0.06, ymax: 0.06, ml: 20, mr: 20, mt: 26, mb: 16, top: h1, h: h - h1 });
+    const G = (e) => e ** 3 / 3;
     if (s >= 2) {
-      const B = frame(w, h, { xmin: -0.8, xmax: 0.85, ymin: -0.06, ymax: 0.06, ml: 20, mr: 20, mt: 26, mb: 16, top: h1, h: h - h1 });
-      const G = (e) => e ** 3 / 3;
       line(ctx, B.X(-0.8), B.Y(0), B.X(0.8), B.Y(0), c.K, 1.2);
       line(ctx, B.X(0), B.Y(-0.06), B.X(0), B.Y(0.06), c.RU, 1);
       fplot(ctx, B.X, B.Y, G, -0.5, 0.5, OR, 2.6);
@@ -1638,6 +1651,12 @@ const FIGS = {
       }
       if (s >= 4) { line(ctx, B.X(-0.5), B.Y(G(-0.5)), B.X(0.62), B.Y(G(-0.5)), c.M, 1, [4, 4]); line(ctx, B.X(0.5), B.Y(G(0.5)), B.X(0.62), B.Y(G(0.5)), c.M, 1, [4, 4]); dimV(ctx, B.X(0.62), B.Y(G(0.5)), B.Y(G(-0.5)), c.R, "Δ²/12", { dx: 10, italic: true }); }
     }
+    figAnchor(ctx, w, "d-g", A.X(-0.78) - 4, A.Y(1.12) - 12, 104, 24, s === 1);
+    figAnchor(ctx, w, "d-G", B.X(-0.78) - 4, B.Y(0.05) - 12, 130, 24, s === 2);
+    figAnchor(ctx, w, "d-p", B.X(0.5) - 9, B.Y(G(0.5)) - 9, 18, 18, s === 3);
+    figAnchor(ctx, w, "d-pm", B.X(-0.5) - 9, B.Y(G(-0.5)) - 9, 18, 18, s === 3);
+    figAnchor(ctx, w, "d-dim", B.X(0.62) - 8, B.Y(G(0.5)), 16, B.Y(G(-0.5)) - B.Y(G(0.5)), s === 4);
+    figAnchor(ctx, w, "d-area", A.X(0) - 55, A.Y(0.45) - 13, 110, 26, s === 5);
     return ["Erro uniforme: densidade 1/Δ em uma região de largura Δ.", "Embaixo, a primitiva de e²/Δ.", "Nos limites ela vale ±Δ²/24: e³ é ímpar.",
       "A diferença entre os dois valores é Δ²/12.", "D é a área vermelha: Δ²/12.", "Com Δ = 20: 33,3, quase o valor exato do exemplo."][s - 1];
   },
