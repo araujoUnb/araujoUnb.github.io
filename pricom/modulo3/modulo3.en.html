@@ -221,6 +221,34 @@ svg.notelayer path.ln { fill: none; stroke: var(--unb-alert); stroke-width: 2.2;
 svg.notelayer path.ln.anim { animation: drawln .5s ease-out forwards; }
 svg.notelayer rect.hl { fill: color-mix(in srgb, var(--unb-alert) 7%, transparent); stroke: var(--unb-alert); stroke-width: 1.5; stroke-dasharray: 5 4; }
 @keyframes drawln { to { stroke-dashoffset: 0; } }
+/* dedução no quadro: largura toda, sem a coluna "por quê" (as setas explicam), figura flutuante só nos passos certos */
+html:not(.narrow) .board .step { grid-template-columns: minmax(0, 1fr) auto; padding-left: 10px; }
+html:not(.narrow) .board .step .why { display: none; }
+.board .step .m { font-size: 24px; }
+html:not(.narrow) .figfloat { position: absolute; right: 0; top: 0; width: 520px; z-index: 3; }
+/* slide "onde estamos" do mestre: cadeia do sistema de comunicação */
+svg.sysd { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+svg.sysd .bx { fill: #fff; stroke: var(--unb-muted); stroke-width: 1.6; }
+svg.sysd .bx.m3 { stroke: var(--unb-primary); stroke-width: 2.2; }
+svg.sysd .t1 { font-size: 21px; fill: var(--unb-muted); text-anchor: middle; }
+svg.sysd .t1.m3t { fill: var(--unb-primary); font-weight: 600; }
+svg.sysd .t2 { font-size: 16px; fill: var(--unb-muted); text-anchor: middle; }
+svg.sysd .ar { fill: none; stroke: var(--unb-muted); stroke-width: 1.8; }
+svg.sysd .ar.red { stroke: var(--unb-alert); }
+svg.sysd .sig { font-size: 17px; fill: var(--unb-text); font-style: italic; }
+svg.sysd .fr { fill: color-mix(in srgb, var(--unb-primary) 5%, transparent); stroke: var(--unb-primary); stroke-width: 2; stroke-dasharray: 8 5; }
+svg.sysd .frl { font-size: 18px; fill: var(--unb-primary); font-weight: 600; }
+svg.sysd .hl { fill: color-mix(in srgb, var(--unb-alert) 10%, transparent); stroke: var(--unb-alert); stroke-width: 3; }
+svg.sysd .tag { fill: #fff; stroke: var(--unb-alert); stroke-width: 1.6; }
+svg.sysd .tagt { font-size: 17px; fill: var(--unb-alert); text-anchor: middle; }
+svg.sysd .tagn { font-size: 14px; fill: var(--unb-muted); text-anchor: middle; }
+svg.sysd .m3b { font-size: 20px; fill: var(--unb-alert); font-weight: 700; }
+svg.sysd a { cursor: pointer; }
+svg.sysd a:hover .bx, svg.sysd a:hover .tag { stroke-width: 3; }
+.toc .tocg { display: flex; flex-direction: column; gap: 16px; }
+.toc .tocg h3 { margin: 0 0 4px; font-size: 22px; color: var(--unb-secondary); text-transform: uppercase; letter-spacing: .05em; border-bottom: 2px solid var(--unb-secondary); padding-bottom: 6px; }
+.toc .tocg .d { margin-left: 0; font-size: 18px; }
+html.narrow .toc .tocg h3 { font-size: 16px; }
 /* esquemático com blocos destacados por passo */
 .schem { position: relative; width: 1120px; margin: 0 auto; overflow: hidden; }
 .schem img { width: 100%; display: block; }
@@ -380,6 +408,23 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ roteiro ============ -->
+<!-- ============ onde estamos: o sistema de comunicação ============ -->
+<section class="slide" id="sistema" data-sec="Where we are">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Where Module 3 fits in the system</h2><div class="sub">Digital communication system · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <svg class="sysd" viewBox="-4 70 1408 430" role="img" aria-label="Where Module 3 fits in the system"><defs><marker id="sys-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878"/></marker><marker id="sys-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B03A2E"/></marker></defs><g data-show="2-"><rect class="fr" x="185" y="82" width="620" height="118" rx="10"/><text class="frl" x="197" y="108">A/D conversion</text></g><g data-show="2-"><rect class="fr" x="185" y="382" width="620" height="118" rx="10"/><text class="frl" x="197" y="408">D/A conversion</text></g><text class="m3b" x="805" y="74" text-anchor="end" data-show="2-">Module 3</text><rect class="hl" data-show="3" x="192" y="112" width="186" height="82" rx="9"/><rect class="hl" data-show="3" x="192" y="412" width="186" height="82" rx="9"/><rect class="hl" data-show="4" x="402" y="112" width="186" height="82" rx="9"/><rect class="hl" data-show="5" x="612" y="112" width="186" height="82" rx="9"/><rect class="hl" data-show="5" x="612" y="412" width="186" height="82" rx="9"/><rect class="bx" x="0" y="120" width="132" height="66" rx="6"/><text class="t1" x="66.0" y="149.0">Source</text><text class="t2" x="66.0" y="172.0">voice, video</text><a href="amostragem.en.html"><rect class="bx m3" x="200" y="120" width="170" height="66" rx="6"/><text class="t1 m3t" x="285.0" y="149.0">Sampling</text><text class="t2" x="285.0" y="172.0">lecture 1</text></a><a href="quantizacao.en.html"><rect class="bx m3" x="410" y="120" width="170" height="66" rx="6"/><text class="t1 m3t" x="495.0" y="149.0">Quantization</text><text class="t2" x="495.0" y="172.0">lecture 2</text></a><rect class="bx m3" x="620" y="120" width="170" height="66" rx="6"/><text class="t1 m3t" x="705.0" y="149.0">Source</text><text class="t2" x="705.0" y="172.0">coding</text><rect class="bx" x="840" y="120" width="160" height="66" rx="6"/><text class="t1" x="920.0" y="149.0">Channel</text><text class="t2" x="920.0" y="172.0">coding</text><rect class="bx" x="1040" y="120" width="150" height="66" rx="6"/><text class="t1" x="1115.0" y="160.0">Modulator</text><rect class="bx" x="1235" y="120" width="165" height="366" rx="6"/><text class="t1" x="1317.5" y="299.0">Channel</text><text class="t2" x="1317.5" y="322.0">noise</text><path class="ar" d="M132,153.0 H197" marker-end="url(#sys-ah)"/><text class="sig" x="158" y="143.0" text-anchor="middle">x(t)</text><path class="ar" d="M370,153.0 H407" marker-end="url(#sys-ah)"/><path class="ar" d="M580,153.0 H617" marker-end="url(#sys-ah)"/><path class="ar" d="M790,153.0 H837" marker-end="url(#sys-ah)"/><text class="sig" x="812" y="143.0" text-anchor="start">bits</text><path class="ar" d="M1000,153.0 H1037" marker-end="url(#sys-ah)"/><path class="ar" d="M1190,153.0 H1232" marker-end="url(#sys-ah)"/><rect class="bx" x="1040" y="420" width="150" height="66" rx="6"/><text class="t1" x="1115.0" y="460.0">Demodulator</text><rect class="bx" x="840" y="420" width="160" height="66" rx="6"/><text class="t1" x="920.0" y="449.0">Channel</text><text class="t2" x="920.0" y="472.0">decoding</text><rect class="bx m3" x="620" y="420" width="170" height="66" rx="6"/><text class="t1 m3t" x="705.0" y="449.0">Source</text><text class="t2" x="705.0" y="472.0">decoding</text><a href="amostragem.en.html"><rect class="bx m3" x="200" y="420" width="170" height="66" rx="6"/><text class="t1 m3t" x="285.0" y="449.0">Reconstruction</text><text class="t2" x="285.0" y="472.0">lecture 1</text></a><rect class="bx" x="0" y="420" width="132" height="66" rx="6"/><text class="t1" x="66.0" y="460.0">Destination</text><path class="ar" d="M1235,453.0 H1193" marker-end="url(#sys-ah)"/><path class="ar" d="M1040,453.0 H1003" marker-end="url(#sys-ah)"/><path class="ar" d="M840,453.0 H793" marker-end="url(#sys-ah)"/><text class="sig" x="812" y="443.0" text-anchor="start">bits</text><path class="ar" d="M620,453.0 H373" marker-end="url(#sys-ah)"/><path class="ar" d="M200,453.0 H135" marker-end="url(#sys-ah)"/><text class="sig" x="158" y="443.0" text-anchor="middle">x̂(t)</text><g data-show="5-"><path class="ar red" d="M705,192 C705,225.5 375.0,225.5 375.0,259" marker-end="url(#sys-ahr)"/><a href="forma_de_onda.en.html"><rect class="tag" x="250" y="262" width="250" height="56" rx="6"/><text class="tagt" x="375.0" y="286">waveform: PCM, DPCM, DM</text><text class="tagn" x="375.0" y="307">lecture 3</text></a></g><g data-show="5-"><path class="ar red" d="M705,192 C705,225.5 635.0,225.5 635.0,259" marker-end="url(#sys-ahr)"/><a href="vocoders.en.html"><rect class="tag" x="520" y="262" width="230" height="56" rx="6"/><text class="tagt" x="635.0" y="286">vocoders: LPC, CELP</text><text class="tagn" x="635.0" y="307">lecture 4</text></a></g><g data-show="5-"><path class="ar red" d="M705,192 C705,225.5 885.0,225.5 885.0,259" marker-end="url(#sys-ahr)"/><a href="video.en.html"><rect class="tag" x="770" y="262" width="230" height="56" rx="6"/><text class="tagt" x="885.0" y="286">video: DCT and motion</text><text class="tagn" x="885.0" y="307">lecture 5</text></a></g></svg>
+    <div class="solo" style="margin-top:auto">
+      <div class="step txt">The source is analog and the channel only carries waveforms. In between, the digital system works with bits.</div>
+      <div class="step txt">Module 3 handles the step from analog to digital at the transmitter and the way back at the receiver.</div>
+      <div class="step txt">Sampling: the continuous signal \(x(t)\) becomes the sequence of samples \(x(nT_s)\). At the receiver, the reconstruction filter rebuilds \(x(t)\).</div>
+      <div class="step txt">Quantization: each sample takes one of \(L\) levels. This is where the quantization error comes in.</div>
+      <div class="step txt">Source coding: the levels become bits, either copying the waveform or sending a recipe of the signal. Video combines a transform with motion estimation.</div>
+    </div>
+  </div>
+  <aside class="notes"></aside>
+</section>
+
 <section class="slide" id="roteiro" data-sec="Outline">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Outline</h2><div class="bar"></div></div>
@@ -804,9 +849,9 @@ function figSerie(ctx, w, h, s) {
   }
   taxis(ctx, B, "t"); mlab(ctx, DTS, B.x + 4, B.y - 18);
   for (const n of [-3, -2, -1, 1, 2, 3]) imp(ctx, B, n, 0.85, c.K, 2.4);
-  imp(ctx, B, 0, 0.85, s >= 3 ? c.R : c.K, s >= 3 ? 3.2 : 2.4);
+  imp(ctx, B, 0, 0.85, s >= 4 ? c.R : c.K, s >= 4 ? 3.2 : 2.4);
   if (s === 1) return "Impulse train: period T_s, unit area in each impulse.";
-  if (s === 2) return "One period, from −T_s/2 to T_s/2, shaded.";
+  if (s <= 3) return "One period, from −T_s/2 to T_s/2, shaded.";
   if (s <= 4) return "Inside the period there is only the n = 0 impulse, in red.";
   return "c_k = 1/T_s for every k: the frequency components kf_s have the same weight.";
 }
@@ -1339,14 +1384,15 @@ function drawNotes(sl, shown, animate) {
     if (!se || !te) continue;
     const sb = rel(se), tb = rel(te), pad = 4;
     for (const r of [sb, tb]) { const hl = document.createElementNS(SVGNS, "rect"); Object.entries({ class: "hl", x: r.x - pad, y: r.y - pad, width: r.w + 2 * pad, height: r.h + 2 * pad, rx: 4 }).forEach(([a2, v]) => hl.setAttribute(a2, v)); layer.appendChild(hl); }
-    const left = tb.x + tb.w < sb.x;
-    const sx = left ? sb.x - pad : sb.x + sb.w / 2, sy = left ? sb.y + sb.h / 2 : sb.y - pad;
-    const ex = tb.x + tb.w / 2, ey = tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
-    const d = left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
+    const left = tb.x + tb.w < sb.x, down = tb.y > sb.y + sb.h;   // down: termo de uma linha -> termo da linha de baixo
+    const sx = down ? sb.x + sb.w / 2 : left ? sb.x - pad : sb.x + sb.w / 2, sy = down ? sb.y + sb.h + pad : left ? sb.y + sb.h / 2 : sb.y - pad;
+    const ex = tb.x + tb.w / 2, ey = down ? tb.y - pad - 2 : tb.y + tb.h + pad + 2, desce = Math.max(60, 0.55 * (sy - ey));
+    const d = down ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`
+      : left ? `M${sx},${sy} C${ex + 0.45 * (sx - ex)},${sy} ${ex},${ey + desce} ${ex},${ey}`
       : `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}`;
     const p = document.createElementNS(SVGNS, "path"); p.setAttribute("d", d); p.setAttribute("class", "ln" + (animate ? " anim" : "")); p.setAttribute("marker-end", `url(#${mk})`); layer.appendChild(p);
     if (animate) { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; }
-    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
+    if (lk.textContent.trim()) { const tx = document.createElementNS(SVGNS, "text"); tx.setAttribute("class", "lk"); if (down) { tx.setAttribute("x", Math.max(sx, ex) + 14); tx.setAttribute("y", (sy + ey) / 2 + 5); tx.setAttribute("text-anchor", "start"); } else { tx.setAttribute("x", sx - 6); tx.setAttribute("y", sy - 10); tx.setAttribute("text-anchor", "end"); } tx.textContent = lk.textContent.trim(); layer.appendChild(tx); }
   }
   const tg = (n) => (n.dataset.to || "").split(/\s+/).map(byId).filter(Boolean).map(rel);
   // posição automática: abaixo do último passo, centrada sob o alvo, sem sobreposição

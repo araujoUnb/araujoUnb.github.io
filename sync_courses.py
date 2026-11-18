@@ -55,23 +55,35 @@ COURSES = {
                 m("Modulo0", "apresentacao", "Apresentação da disciplina", "Course introduction"),
             ]),
             ("modulo1", ("Módulo 1 — Análise e transmissão de sinais", "Module 1 — Signal analysis and transmission"), [
-                m("Modulo1", "transformada_fourier", "Transformada de Fourier", "Fourier transform"),
-                m("Modulo1", "transformadas_uteis", "Transformadas de funções úteis", "Transforms of useful functions"),
-                m("Modulo1", "propriedades_fourier", "Propriedades da transformada de Fourier", "Properties of the Fourier transform"),
-                m("Modulo1", "sistemas_lti", "Transmissão através de sistemas LTI", "Transmission through LTI systems"),
-                m("Modulo1", "energia_potencia", "Energia, potência e densidades espectrais", "Energy, power and spectral densities"),
-                m("Modulo1", "dft", "DFT e FFT", "DFT and FFT"),
-                m("Modulo1", "banda_base_passante", "Banda básica e banda passante", "Baseband and passband"),
+                (("Análise e transmissão de sinais", "Signal analysis and transmission"),
+                 {"html": "Modulo1/html/modulo1.html", "parts": [
+                     ("transformada_fourier.html", "Transformada de Fourier", "Fourier transform"),
+                     ("transformadas_uteis.html", "Transformadas de funções úteis", "Transforms of useful functions"),
+                     ("propriedades_fourier.html", "Propriedades da transformada de Fourier", "Properties of the Fourier transform"),
+                     ("sistemas_lti.html", "Transmissão através de sistemas LTI", "Transmission through LTI systems"),
+                     ("energia_potencia.html", "Energia, potência e densidades espectrais", "Energy, power and spectral densities"),
+                     ("dft.html", "DFT e FFT", "DFT and FFT"),
+                     ("banda_base_passante.html", "Banda básica e banda passante", "Baseband and passband"),
+                 ]}),
             ]),
             ("modulo2", ("Módulo 2 — Modulações analógicas e ruído", "Module 2 — Analog modulation and noise"), [
-                m("Modulo2", "am_convencional", "AM convencional", "Conventional AM"),
-                m("Modulo2", "am_dsbsc", "AM DSB-SC", "AM DSB-SC"),
-                m("Modulo2", "am_ssb_vsb", "AM SSB e VSB", "AM SSB and VSB"),
-                m("Modulo2", "modulacao_angular", "Modulação angular (PM e FM)", "Angle modulation (PM and FM)"),
-                m("Modulo2", "projeto_transmissor_fm", "Projeto de um transmissor FM", "Design of an FM transmitter"),
-                m("Modulo2", "figura_de_ruido", "Figura de ruído", "Noise figure"),
-                m("Modulo2", "desempenho_am", "Desempenho de sistemas analógicos (AM)", "Performance of analog systems (AM)"),
-                m("Modulo2", "desempenho_fm", "Desempenho de FM e PM", "Performance of FM and PM"),
+                (("Modulação em amplitude", "Amplitude modulation"),
+                 {"html": "Modulo2/html/modulo2.html#3", "parts": [
+                     ("am_convencional.html", "AM convencional", "Conventional AM"),
+                     ("am_dsbsc.html", "AM DSB-SC", "AM DSB-SC"),
+                     ("am_ssb_vsb.html", "AM SSB e VSB", "AM SSB and VSB"),
+                 ]}),
+                (("Modulação angular", "Angle modulation"),
+                 {"html": "Modulo2/html/modulo2.html#3", "parts": [
+                     ("modulacao_angular.html", "Modulação angular (PM e FM)", "Angle modulation (PM and FM)"),
+                     ("projeto_transmissor_fm.html", "Projeto de um transmissor FM", "Design of an FM transmitter"),
+                 ]}),
+                (("Ruído e desempenho", "Noise and performance"),
+                 {"html": "Modulo2/html/modulo2.html#3", "parts": [
+                     ("figura_de_ruido.html", "Figura de ruído", "Noise figure"),
+                     ("desempenho_am.html", "Desempenho de sistemas analógicos (AM)", "Performance of analog systems (AM)"),
+                     ("desempenho_fm.html", "Desempenho de FM e PM", "Performance of FM and PM"),
+                 ]}),
             ]),
             ("modulo3", ("Módulo 3 — Conversão analógico-digital", "Module 3 — Analog-to-digital conversion"), [
                 (("Conversão analógico-digital", "Analog-to-digital conversion"),
@@ -232,14 +244,17 @@ for name, c in COURSES.items():
             for kind in ("html", "pdf"):
                 if kind not in files:
                     continue
-                s = src / files[kind]
+                path, _, frag = files[kind].partition("#")   # "#3": link to a slide of the deck (e.g. the outline of a master deck)
+                frag = "#" + frag if frag else ""
+                s = src / path
                 rel[kind] = f"{mdir}/{s.stem if kind == 'html' and s.stem != 'main' else slug(pt)}.{kind}"
                 copy_deck(s, dst / rel[kind], seen)
                 n += 1
                 twin = s.with_name(s.stem + ".en.html")
                 if kind == "html" and twin.exists():
                     copy_deck(twin, dst / mdir / twin.name, seen)
-                    rel["en"] = f"{mdir}/{twin.name}"
+                    rel["en"] = f"{mdir}/{twin.name}{frag}"
+                rel[kind] += frag
             if "html" in rel:
                 row = names(pt, en, rel["html"], rel.get("en"))
                 if "pdf" in rel:
@@ -247,7 +262,7 @@ for name, c in COURSES.items():
             else:
                 row = names(pt, en, rel["pdf"]) + ' <span class="muted">(PDF)</span>'
             if files.get("parts"):  # an HTML deck split into one file per section
-                base = (src / files["html"]).parent
+                base = (src / files["html"].partition("#")[0]).parent
                 items = []
                 for f, p, e in files["parts"]:
                     copy_deck(base / f, dst / mdir / f, seen)
