@@ -18,8 +18,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <script>
   window.MathJax = {
-    loader: { load: ["[tex]/html", "[tex]/color"] },
-    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color"] } },
+    loader: { load: ["[tex]/html", "[tex]/color", "[tex]/cancel"] },
+    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color", "cancel"] } },
     svg: { fontCache: "global", displayAlign: "left", displayIndent: "0" },
     options: { enableMenu: false },
     startup: { ready() { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__mathReady && window.__mathReady()); } }
@@ -526,22 +526,77 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" id="gaussv" data-sec="2 Distorção e SQNR · exemplo gaussiano, mudança de variável">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, mudança de variável · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:12px">
+        <div class="step"><div class="why">Parcela \(k\): erro quadrático na região \(k\), pesado pela densidade</div><div class="m">\[ T_k=\int_{\cssId{gv-l0}{a_{k-1}}}^{\cssId{gv-l1}{a_k}}\cssId{gv-q0}{(x-\hat x_k)^2}\,\cssId{gv-f}{f_X(x)\,dx} \]</div></div>
+        <div class="step"><div class="why">Densidade gaussiana de média nula e variância \(\sigma^2\)</div><div class="m">\[ \cssId{gv-f2}{f_X(x)=\frac{1}{\sqrt{2\pi}\,\sigma}\,e^{-x^2/(2\sigma^2)}} \]</div></div>
+        <div class="step"><div class="why">\(f_X\) muda com \(\sigma\), mas \(Q\) e \(\varphi\) só estão tabeladas para a normal padrão. Mede \(x\) em unidades de \(\sigma\)</div><div class="m">\[ u=\frac{x}{\sigma}\quad\Longrightarrow\quad x=\sigma u,\qquad dx=\sigma\,du \]</div></div>
+        <div class="step"><div class="why">Os limites passam a ser medidos em \(\sigma\)</div><div class="m">\[ \cssId{gv-lim}{x=a_{k-1}\ \to\ u=\alpha=\frac{a_{k-1}}{\sigma},\qquad x=a_k\ \to\ u=\beta=\frac{a_k}{\sigma}} \]</div></div>
+        <div class="step"><div class="why">O nível \(\hat x_k\) também: \(\gamma=\hat x_k/\sigma\), e \(\sigma\) sai do quadrado</div><div class="m">\[ (x-\hat x_k)^2=(\sigma u-\sigma\gamma)^2=\cssId{gv-sq}{\sigma^2(u-\gamma)^2} \]</div></div>
+        <div class="step"><div class="why">Leva \(x=\sigma u\) e \(dx=\sigma\,du\) na densidade: o \(\sigma\) se cancela</div><div class="m">\[ f_X(x)\,dx=\frac{1}{\sqrt{2\pi}\,\cancel{\sigma}}\,e^{-\sigma^2u^2/(2\sigma^2)}\,\cancel{\sigma}\,du=\cssId{gv-phi}{\underbrace{\frac{1}{\sqrt{2\pi}}\,e^{-u^2/2}}_{\varphi(u)}\,du} \]</div></div>
+        <div class="step"><div class="why">Junta os três pedaços</div><div class="m">\[ T_k=\cssId{gv-s2}{\sigma^2}\int_{\cssId{gv-a}{\alpha}}^{\cssId{gv-b}{\beta}}\cssId{gv-u2}{(u-\gamma)^2}\,\cssId{gv-p2}{\varphi(u)\,du}=\sigma^2 I_k,\qquad \boxed{I_k=\int_\alpha^\beta(u-\gamma)^2\varphi(u)\,du} \]</div></div>
+        <div class="step txt">\(I_k\) é a distorção da região \(k\) para a normal padrão. Não depende de \(\sigma\): sai de \(Q\) e \(\varphi\) tabeladas, e basta multiplicar por \(\sigma^2\).</div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="gv-f" data-to="gv-f2">f_X(x) por extenso</div>
+  <div class="link" data-on="4" data-from="gv-l1" data-to="gv-lim">limites</div>
+  <div class="link" data-on="5" data-from="gv-q0" data-to="gv-sq">quadrado</div>
+  <div class="link" data-on="6" data-from="gv-f2" data-to="gv-phi">densidade</div>
+  <div class="link" data-on="7" data-from="gv-lim" data-to="gv-b">limites</div>
+  <div class="link" data-on="7" data-from="gv-sq" data-to="gv-u2">quadrado</div>
+  <div class="link" data-on="7" data-from="gv-phi" data-to="gv-p2">densidade</div>
+  <aside class="notes"></aside>
+</section>
+
 <section class="slide" id="gaussd" data-sec="2 Distorção e SQNR · exemplo gaussiano, cada parcela">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, cada parcela · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
-    <div class="deriv board" style="gap:30px">
-        <div class="step"><div class="why">Muda a variável \(u=x/\sigma\); \(\varphi\) é a densidade normal padrão</div><div class="m">\[ T_k=\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx=\sigma^2 \int_{\alpha}^{\beta}(u-\gamma)^2\varphi(u)\,du=\sigma^2 I_k,\qquad \alpha=\tfrac{a_{k-1}}{\sigma},\ \beta=\tfrac{a_k}{\sigma},\ \gamma=\tfrac{\hat x_k}{\sigma} \]</div></div>
-        <div class="step"><div class="why">Abre o quadrado: três integrais da normal padrão</div><div class="m">\[ I_k=\cssId{gd-i2}{\int_\alpha^\beta u^2\varphi\,du}-2\gamma\cssId{gd-i1}{\int_\alpha^\beta u\varphi\,du}+\gamma^2\cssId{gd-i0}{\int_\alpha^\beta\varphi\,du} \]</div></div>
-        <div class="step"><div class="why">Por partes, com \(\varphi'=-u\varphi\), e pela definição de \(Q\)</div><div class="m">\[ I_k=\cssId{gd-r2}{\big[\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}+\alpha\color[RGB]{0,59,92}{\varphi(\alpha)}-\beta\color[RGB]{176,58,46}{\varphi(\beta)}\big]}-2\gamma\cssId{gd-r1}{\big[\color[RGB]{0,59,92}{\varphi(\alpha)}-\color[RGB]{176,58,46}{\varphi(\beta)}\big]}+\gamma^2\cssId{gd-r0}{\big[\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}\big]} \]</div></div>
-        <div class="step"><div class="why">Junta os termos iguais</div><div class="m">\[ I_k=\cssId{gd-c}{(1+\gamma^2)\color[RGB]{0,102,51}{\big[Q(\alpha)-Q(\beta)\big]}}+(\alpha-2\gamma)\color[RGB]{0,59,92}{\varphi(\alpha)}-(\beta-2\gamma)\color[RGB]{176,58,46}{\varphi(\beta)} \]</div></div>
-        <div class="step"><div class="why">Valores tabelados da função \(Q\) e da densidade \(\varphi\)</div><div class="m">\[ \begin{array}{c|cccc} z & 0 & 1 & 2 & 3\\ \hline \color[RGB]{0,102,51}{Q(z)} & 0{,}5 & 0{,}158655 & 0{,}022750 & 0{,}001350\\ \varphi(z) & 0{,}398942 & 0{,}241971 & 0{,}053991 & 0{,}004432 \end{array} \]</div></div>
+    <div class="deriv board" style="gap:18px">
+        <div class="step"><div class="why">Do slide anterior: \(I_k\) é a parcela para a normal padrão</div><div class="m">\[ T_k=\sigma^2 I_k,\qquad I_k=\int_{\alpha}^{\beta}\cssId{gd-sq}{(u-\gamma)^2}\,\varphi(u)\,du,\qquad \alpha=\tfrac{a_{k-1}}{\sigma},\ \beta=\tfrac{a_k}{\sigma},\ \gamma=\tfrac{\hat x_k}{\sigma} \]</div></div>
+        <div class="step"><div class="why">Abre o quadrado</div><div class="m">\[ \cssId{gd-sq2}{(u-\gamma)^2=u^2-2\gamma u+\gamma^2} \]</div></div>
+        <div class="step"><div class="why">Leva no integrando</div><div class="m">\[ I_k=\int_\alpha^\beta\big(u^2-2\gamma u+\gamma^2\big)\varphi(u)\,du \]</div></div>
+        <div class="step"><div class="why">A integral da soma é a soma das integrais: três integrais da normal padrão</div><div class="m">\[ I_k=\underbrace{\int_\alpha^\beta u^2\varphi\,du}_{\text{(a)}}-2\gamma\underbrace{\int_\alpha^\beta u\varphi\,du}_{\text{(b)}}+\gamma^2\underbrace{\int_\alpha^\beta\varphi\,du}_{\text{(c)}} \]</div></div>
+        <div class="step txt">Cada uma das três integrais (a), (b) e (c) é resolvida no próximo slide.</div>
     </div>
   </div>
-  <div class="link" data-on="3" data-from="gd-i2" data-to="gd-r2">por partes</div>
-  <div class="link" data-on="3" data-from="gd-i1" data-to="gd-r1">φ′ = −uφ</div>
-  <div class="link" data-on="3" data-from="gd-i0" data-to="gd-r0">área: Q</div>
-  <div class="link" data-on="4" data-from="gd-r0" data-to="gd-c">junta os Q</div>
+  <div class="link" data-on="2" data-from="gd-sq" data-to="gd-sq2">abre o quadrado</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gaussi" data-sec="2 Distorção e SQNR · exemplo gaussiano, as três integrais">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, as três integrais · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:10px">
+        <div class="step"><div class="why">Função \(Q\): área da cauda direita da normal padrão, a partir de \(z\). Não confundir com o quantizador \(Q(x)\) de (1)</div><div class="m">\[ \cssId{gi-qd}{Q(z)=\int_{z}^{\infty}\varphi(u)\,du}=P(U>z),\qquad Q(0)=0{,}5,\quad Q(\infty)=0 \]</div></div>
+        <div class="step"><div class="why">Área entre \(\alpha\) e \(\beta\): cauda a partir de \(\alpha\) menos cauda a partir de \(\beta\)</div><div class="m">\[ \text{(c)}\quad\int_\alpha^\beta\varphi\,du=\int_\alpha^{\infty}\varphi\,du-\int_\beta^{\infty}\varphi\,du=\cssId{gi-c}{\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}} \]</div></div>
+        <div class="step"><div class="why">Derivada de \(\varphi\) pela regra da cadeia</div><div class="m">\[ \varphi(u)=\frac{1}{\sqrt{2\pi}}e^{-u^2/2}\ \Longrightarrow\ \varphi'(u)=\frac{1}{\sqrt{2\pi}}e^{-u^2/2}\cdot(-u)=\cssId{gi-dp}{-u\,\varphi(u)} \]</div></div>
+        <div class="step"><div class="why">Troca \(u\varphi\) por \(-\varphi'\) e integra</div><div class="m">\[ \text{(b)}\quad\int_\alpha^\beta \cssId{gi-up}{u\varphi\,du}=\int_\alpha^\beta-\varphi'(u)\,du=-\big[\varphi(u)\big]_\alpha^\beta=\cssId{gi-b}{{\color[RGB]{0,59,92}{\varphi(\alpha)}}-{\color[RGB]{176,58,46}{\varphi(\beta)}}} \]</div></div>
+        <div class="step"><div class="why">Para (a), integração por partes com \(f=u\) e \(g'=u\varphi\)</div><div class="m">\[ u^2\varphi=\underbrace{u}_{f}\cdot\underbrace{u\varphi}_{g'},\qquad f'=1,\quad g=-\varphi \]</div></div>
+        <div class="step"><div class="why">\(\int fg'=[fg]-\int f'g\), e a última integral é a (c)</div><div class="m">\[ \text{(a)}\quad\int_\alpha^\beta u^2\varphi\,du=\big[-u\varphi\big]_\alpha^\beta+\int_\alpha^\beta\varphi\,du=\cssId{gi-a}{\alpha{\color[RGB]{0,59,92}{\varphi(\alpha)}}-\beta{\color[RGB]{176,58,46}{\varphi(\beta)}}+{\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}}} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="2" data-from="gi-qd" data-to="gi-c">definição de Q</div>
+  <div class="link" data-on="4" data-from="gi-dp" data-to="gi-up">φ′ = −uφ</div>
+  <aside class="notes"></aside>
+</section>
+
+<section class="slide" id="gaussj" data-sec="2 Distorção e SQNR · exemplo gaussiano, fórmula de I_k">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: fonte gaussiana</h2><div class="sub">Exemplo 7.2.1, fórmula de \(I_k\) · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:18px">
+        <div class="step"><div class="why">Leva (a), (b) e (c) em \(I_k\)</div><div class="m">\[ I_k=\underbrace{\big[\alpha{\color[RGB]{0,59,92}{\varphi(\alpha)}}-\beta{\color[RGB]{176,58,46}{\varphi(\beta)}}+{\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}}\big]}_{\text{(a)}}-2\gamma\underbrace{\big[{\color[RGB]{0,59,92}{\varphi(\alpha)}}-{\color[RGB]{176,58,46}{\varphi(\beta)}}\big]}_{\text{(b)}}+\gamma^2\underbrace{\big[{\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}}\big]}_{\text{(c)}} \]</div></div>
+        <div class="step"><div class="why">Distribui \(-2\gamma\) e \(\gamma^2\)</div><div class="m">\[ I_k=\cssId{gj-q1}{\color[RGB]{0,102,51}{Q(\alpha)-Q(\beta)}}+\alpha{\color[RGB]{0,59,92}{\varphi(\alpha)}}-\beta{\color[RGB]{176,58,46}{\varphi(\beta)}}-2\gamma{\color[RGB]{0,59,92}{\varphi(\alpha)}}+2\gamma{\color[RGB]{176,58,46}{\varphi(\beta)}}+\cssId{gj-q2}{\gamma^2{\color[RGB]{0,102,51}{Q(\alpha)}}-\gamma^2{\color[RGB]{0,102,51}{Q(\beta)}}} \]</div></div>
+        <div class="step"><div class="why">Junta os termos em \(Q\), em \(\varphi(\alpha)\) e em \(\varphi(\beta)\)</div><div class="m">\[ I_k=\cssId{gj-c}{(1+\gamma^2){\color[RGB]{0,102,51}{\big[Q(\alpha)-Q(\beta)\big]}}}+(\alpha-2\gamma){\color[RGB]{0,59,92}{\varphi(\alpha)}}-(\beta-2\gamma){\color[RGB]{176,58,46}{\varphi(\beta)}} \]</div></div>
+        <div class="step"><div class="why">Valores tabelados da função \(Q\) e da densidade \(\varphi\)</div><div class="m">\[ \begin{array}{c|cccc} z & 0 & 1 & 2 & 3\\ \hline {\color[RGB]{0,102,51}{Q(z)}} & 0{,}5 & 0{,}158655 & 0{,}022750 & 0{,}001350\\ \varphi(z) & 0{,}398942 & 0{,}241971 & 0{,}053991 & 0{,}004432 \end{array} \]</div></div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="gj-q2" data-to="gj-c">junta os Q</div>
   <aside class="notes"></aside>
 </section>
 
@@ -551,10 +606,10 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="body">
     <div class="deriv board" style="gap:30px">
         <div class="step"><div class="why">Fronteiras 0 e 20, nível 10, divididos por σ = 20</div><div class="m">\[ k=5:\quad \alpha=\tfrac{0}{20}=\cssId{r5-a}{0},\quad \beta=\tfrac{20}{20}=\cssId{r5-b}{1},\quad \gamma=\tfrac{10}{20}=\cssId{r5-g}{0{,}5} \]</div></div>
-        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_5=\cssId{r5-c}{(1+\cssId{r5-g2}{0{,}5}^2)}\cssId{r5-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r5-a2}{0})-Q(\cssId{r5-b2}{1})\big]}}+\cssId{r5-fa}{(\cssId{r5-a3}{0}-2\cdot \cssId{r5-g3}{0{,}5})\color[RGB]{0,59,92}{\varphi(0)}}\cssId{r5-fb}{-(\cssId{r5-b3}{1}-2\cdot \cssId{r5-g4}{0{,}5})\color[RGB]{176,58,46}{\varphi(1)}} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_5=\cssId{r5-c}{(1+\cssId{r5-g2}{0{,}5}^2)}\cssId{r5-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r5-a2}{0})-Q(\cssId{r5-b2}{1})\big]}}+\cssId{r5-fa}{(\cssId{r5-a3}{0}-2\cdot \cssId{r5-g3}{0{,}5}){\color[RGB]{0,59,92}{\varphi(0)}}}\cssId{r5-fb}{-(\cssId{r5-b3}{1}-2\cdot \cssId{r5-g4}{0{,}5}){\color[RGB]{176,58,46}{\varphi(1)}}} \]</div></div>
         <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r5-c2}{1{,}25}\times\cssId{r5-q2}{0{,}341345}\cssId{r5-fa2}{-0{,}398942}\cssId{r5-fb2}{-0\times0{,}241971}=0{,}426681-0{,}398942-0=\boxed{0{,}027739} \]</div></div>
         <div class="step"><div class="why">Fronteiras 20 e 40, nível 30, divididos por σ = 20</div><div class="m">\[ k=6:\quad \alpha=\tfrac{20}{20}=\cssId{r6-a}{1},\quad \beta=\tfrac{40}{20}=\cssId{r6-b}{2},\quad \gamma=\tfrac{30}{20}=\cssId{r6-g}{1{,}5} \]</div></div>
-        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_6=\cssId{r6-c}{(1+\cssId{r6-g2}{1{,}5}^2)}\cssId{r6-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r6-a2}{1})-Q(\cssId{r6-b2}{2})\big]}}+\cssId{r6-fa}{(\cssId{r6-a3}{1}-2\cdot \cssId{r6-g3}{1{,}5})\color[RGB]{0,59,92}{\varphi(1)}}\cssId{r6-fb}{-(\cssId{r6-b3}{2}-2\cdot \cssId{r6-g4}{1{,}5})\color[RGB]{176,58,46}{\varphi(2)}} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_6=\cssId{r6-c}{(1+\cssId{r6-g2}{1{,}5}^2)}\cssId{r6-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r6-a2}{1})-Q(\cssId{r6-b2}{2})\big]}}+\cssId{r6-fa}{(\cssId{r6-a3}{1}-2\cdot \cssId{r6-g3}{1{,}5}){\color[RGB]{0,59,92}{\varphi(1)}}}\cssId{r6-fb}{-(\cssId{r6-b3}{2}-2\cdot \cssId{r6-g4}{1{,}5}){\color[RGB]{176,58,46}{\varphi(2)}}} \]</div></div>
         <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r6-c2}{3{,}25}\times\cssId{r6-q2}{0{,}135905}\cssId{r6-fa2}{-2\times0{,}241971}\cssId{r6-fb2}{+0{,}053991}=0{,}441691-0{,}483942+0{,}053991=\boxed{0{,}011740} \]</div></div>
     </div>
   </div>
@@ -581,10 +636,10 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="body">
     <div class="deriv board" style="gap:30px">
         <div class="step"><div class="why">Fronteiras 40 e 60, nível 50, divididos por σ = 20</div><div class="m">\[ k=7:\quad \alpha=\tfrac{40}{20}=\cssId{r7-a}{2},\quad \beta=\tfrac{60}{20}=\cssId{r7-b}{3},\quad \gamma=\tfrac{50}{20}=\cssId{r7-g}{2{,}5} \]</div></div>
-        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_7=\cssId{r7-c}{(1+\cssId{r7-g2}{2{,}5}^2)}\cssId{r7-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r7-a2}{2})-Q(\cssId{r7-b2}{3})\big]}}+\cssId{r7-fa}{(\cssId{r7-a3}{2}-2\cdot \cssId{r7-g3}{2{,}5})\color[RGB]{0,59,92}{\varphi(2)}}\cssId{r7-fb}{-(\cssId{r7-b3}{3}-2\cdot \cssId{r7-g4}{2{,}5})\color[RGB]{176,58,46}{\varphi(3)}} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_7=\cssId{r7-c}{(1+\cssId{r7-g2}{2{,}5}^2)}\cssId{r7-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r7-a2}{2})-Q(\cssId{r7-b2}{3})\big]}}+\cssId{r7-fa}{(\cssId{r7-a3}{2}-2\cdot \cssId{r7-g3}{2{,}5}){\color[RGB]{0,59,92}{\varphi(2)}}}\cssId{r7-fb}{-(\cssId{r7-b3}{3}-2\cdot \cssId{r7-g4}{2{,}5}){\color[RGB]{176,58,46}{\varphi(3)}}} \]</div></div>
         <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r7-c2}{7{,}25}\times\cssId{r7-q2}{0{,}021400}\cssId{r7-fa2}{-3\times0{,}053991}\cssId{r7-fb2}{+2\times0{,}004432}=0{,}155150-0{,}161973+0{,}008864=\boxed{0{,}002041} \]</div></div>
         <div class="step"><div class="why">Fronteiras 60 e ∞, nível 70, divididos por σ = 20</div><div class="m">\[ k=8:\quad \alpha=\tfrac{60}{20}=\cssId{r8-a}{3},\quad \beta=\cssId{r8-b}{\infty},\quad \gamma=\tfrac{70}{20}=\cssId{r8-g}{3{,}5} \]</div></div>
-        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_8=\cssId{r8-c}{(1+\cssId{r8-g2}{3{,}5}^2)}\cssId{r8-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r8-a2}{3})-Q(\cssId{r8-b2}{\infty})\big]}}+\cssId{r8-fa}{(\cssId{r8-a3}{3}-2\cdot \cssId{r8-g3}{3{,}5})\color[RGB]{0,59,92}{\varphi(3)}}-\underbrace{(\beta-2\gamma)\varphi(\beta)}_{\to\,0} \]</div></div>
+        <div class="step"><div class="why">Leva α, β e γ na fórmula de \(I_k\)</div><div class="m">\[ I_8=\cssId{r8-c}{(1+\cssId{r8-g2}{3{,}5}^2)}\cssId{r8-q}{\color[RGB]{0,102,51}{\big[Q(\cssId{r8-a2}{3})-Q(\cssId{r8-b2}{\infty})\big]}}+\cssId{r8-fa}{(\cssId{r8-a3}{3}-2\cdot \cssId{r8-g3}{3{,}5}){\color[RGB]{0,59,92}{\varphi(3)}}}-\underbrace{(\beta-2\gamma)\varphi(\beta)}_{\to\,0} \]</div></div>
         <div class="step"><div class="why">Valores da tabela</div><div class="m">\[ =\cssId{r8-c2}{13{,}25}\times\cssId{r8-q2}{0{,}001350}\cssId{r8-fa2}{-4\times0{,}004432}=0{,}017888-0{,}017728=\boxed{0{,}000160} \]</div></div>
     </div>
   </div>
