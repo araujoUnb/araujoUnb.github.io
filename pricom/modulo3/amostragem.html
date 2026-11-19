@@ -440,7 +440,18 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt">As amostras ficam nas áreas dos impulsos. E o espectro?</div>
       </div>
       <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="390" aria-label="Sinal, trem de impulsos e sinal amostrado"></canvas><div class="figcap"></div></div>
+        <style>#ideal svg.sysd { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+#ideal .idbd { background: #fff; border: 1px solid var(--rule); padding: 4px 8px; }
+#ideal svg.sysd .bx { fill: #fff; stroke: var(--unb-muted); stroke-width: 1.6; }
+#ideal svg.sysd .bx.m3 { stroke: var(--unb-primary); stroke-width: 2.2; }
+#ideal svg.sysd .t2 { font-size: 18px; fill: var(--unb-muted); text-anchor: middle; }
+#ideal svg.sysd .ar { fill: none; stroke: var(--unb-muted); stroke-width: 1.8; }
+#ideal svg.sysd .ar.red { stroke: var(--unb-alert); }
+#ideal svg.sysd .sig { font-size: 21px; fill: var(--unb-primary); font-style: italic; }
+#ideal svg.sysd .sig.red { fill: var(--unb-alert); }
+#ideal svg.sysd .sw { fill: none; stroke: var(--unb-primary); stroke-width: 2.4; }
+#ideal svg.sysd .pin { fill: #fff; stroke: var(--unb-primary); stroke-width: 2; }
+#ideal svg.sysd .mul { stroke: var(--unb-primary); stroke-width: 2.6; }</style><div class="idbd"><svg class="sysd" viewBox="0 18 640 140" role="img" aria-label="Diagrama: o amostrador ideal equivale a multiplicar x(t) pelo trem de impulsos"><defs><marker id="id-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878"/></marker><marker id="id-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B03A2E"/></marker></defs><g data-show="1-1"><path class="ar" d="M16,80 H218" marker-end="url(#id-ah)"/><rect class="bx m3" x="222" y="44" width="176" height="72" rx="8"/><text class="t2" x="310" y="36">amostrador ideal</text><circle cx="262" cy="80" r="4" class="pin"/><circle cx="358" cy="80" r="4" class="pin"/><path d="M222,80 H258 M362,80 H398 M264,78 L346,58" class="sw"/><path d="M336,54 A26,26 0 0 1 352,74" class="ar red" marker-end="url(#id-ahr)"/><text class="t2" x="310" y="138">fecha por um instante a cada Tₛ</text><path class="ar" d="M398,80 H600" marker-end="url(#id-ah)"/></g><g data-show="2-"><path class="ar" d="M16,80 H282" marker-end="url(#id-ah)"/><circle cx="310" cy="80" r="26" class="bx m3"/><path d="M292,62 L328,98 M328,62 L292,98" class="mul"/><path class="ar red" d="M310,150 V109" marker-end="url(#id-ahr)"/><text class="sig red" x="322" y="146">δ<tspan dy="5" style="font-size:13px">Tₛ</tspan><tspan dy="-5">(t)</tspan></text><text class="t2" x="310" y="36">amostrador ideal = produto pelo trem de impulsos</text><path class="ar" d="M336,80 H600" marker-end="url(#id-ah)"/></g><text class="sig" x="16" y="68">x(t)</text><text class="sig" x="548" y="68">x<tspan dy="5" style="font-size:13px">δ</tspan><tspan dy="-5">(t)</tspan></text></svg></div><div class="fig"><canvas data-figcanvas height="285" aria-label="Sinal, trem de impulsos e sinal amostrado"></canvas><div class="figcap"></div></div>
         <dl class="syms">
           <div data-from="1"><dt>\(x(t)\)</dt><dd>sinal contínuo a amostrar</dd></div>
           <div data-from="2"><dt>\(T_s,\ \delta_{T_s}(t)\)</dt><dd>intervalo de amostragem, em s; trem de impulsos de área 1</dd></div>
@@ -521,7 +532,20 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt">Para cada \(k\), uma cópia de \(X(f)\) centrada em \(kf_s\). Amostrar no tempo replica o espectro com período \(f_s\).</div>
       </div>
       <div class="figcol">
-        <div class="fig"><canvas data-figcanvas height="250" aria-label="Espectro do sinal e suas réplicas"></canvas><div class="figcap"></div></div>
+        <style>#espec svg.sysd { width: 100%; height: auto; display: block; overflow: visible; font-family: "Source Sans 3", sans-serif; }
+#espec .esbd { background: #fff; border: 1px solid var(--rule); padding: 4px 8px; }
+#espec svg.sysd .bx { fill: #fff; stroke: var(--unb-muted); stroke-width: 1.6; }
+#espec svg.sysd .bx.m3 { stroke: var(--unb-primary); stroke-width: 2.2; }
+#espec svg.sysd .ar { fill: none; stroke: var(--unb-muted); stroke-width: 1.8; }
+#espec svg.sysd .ar.k { stroke: var(--unb-primary); stroke-width: 2; }
+#espec svg.sysd .ax { fill: none; stroke: #9a9a9a; stroke-width: 1.2; }
+#espec svg.sysd .spin { fill: rgba(138,138,138,.18); stroke: #8a8a8a; stroke-width: 2; }
+#espec svg.sysd .spout { fill: color-mix(in srgb, var(--unb-primary) 16%, transparent); stroke: var(--unb-primary); stroke-width: 2; }
+#espec svg.sysd .sig { font-size: 20px; fill: var(--unb-primary); font-style: italic; }
+#espec svg.sysd .sig.red { fill: var(--unb-alert); }
+#espec svg.sysd .tk { font-size: 15px; fill: var(--unb-muted); text-anchor: middle; font-style: italic; }
+#espec svg.sysd .q { font-size: 52px; fill: var(--unb-alert); font-weight: 700; text-anchor: middle; }
+#espec svg.sysd .mul { stroke: var(--unb-primary); stroke-width: 2.6; }</style><div class="esbd"><svg class="sysd" viewBox="0 30 640 175" role="img" aria-label="Diagrama: X(f) entra no multiplicador pelo trem de impulsos; o espectro da saída é a pergunta"><defs><marker id="es-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#787878"/></marker><marker id="es-ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#B03A2E"/></marker><marker id="es-ahk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#003B5C"/></marker></defs><path class="ar" d="M16,112 H292" marker-end="url(#es-ah)"/><circle cx="320" cy="112" r="26" class="bx m3"/><path d="M302,94 L338,130 M338,94 L302,130" class="mul"/><path class="ar" d="M320,196 V141" marker-end="url(#es-ah)"/><text class="sig" x="332" y="192">δ<tspan dy="5" style="font-size:13px">Tₛ</tspan><tspan dy="-5">(t)</tspan></text><path class="ar" d="M346,112 H622" marker-end="url(#es-ah)"/><text class="sig" x="20" y="138">x(t)</text><text class="sig" x="560" y="138">x<tspan dy="5" style="font-size:13px">δ</tspan><tspan dy="-5">(t)</tspan></text><path class="ax" d="M30,92 H210"/><path class="spin" d="M86,92 L120,42 L154,92 Z"/><text class="sig" x="160" y="56">X(f)</text><text class="tk" x="86" y="106">−W</text><text class="tk" x="154" y="106">W</text><g data-show="2-"><path class="ax" d="M146,190 H296"/><path class="ar k" d="M160,190 V164" marker-end="url(#es-ahk)"/><path class="ar k" d="M190,190 V164" marker-end="url(#es-ahk)"/><path class="ar k" d="M220,190 V164" marker-end="url(#es-ahk)"/><path class="ar k" d="M250,190 V164" marker-end="url(#es-ahk)"/><path class="ar k" d="M280,190 V164" marker-end="url(#es-ahk)"/><text class="sig red" x="146" y="154">Δ(f)</text><text class="tk" x="236" y="154">1/Tₛ</text></g><g data-show="1-4"><text class="q" x="485" y="88">?</text><text class="sig red" x="510" y="66">X<tspan dy="5" style="font-size:13px">δ</tspan><tspan dy="-5">(f)</tspan></text></g><g data-show="5-"><path class="ax" d="M376,92 H612"/><path class="spout" d="M398,92 L420,58 L442,92 Z"/><path class="spout" d="M463,92 L485,58 L507,92 Z"/><path class="spout" d="M528,92 L550,58 L572,92 Z"/><text class="tk" x="380" y="70">⋯</text><text class="tk" x="600" y="70">⋯</text><text class="tk" x="485" y="106">0</text><text class="tk" x="550" y="106">fₛ</text><text class="tk" x="420" y="106">−fₛ</text><text class="sig red" x="485" y="44" text-anchor="middle">X<tspan dy="5" style="font-size:13px">δ</tspan><tspan dy="-5">(f)</tspan></text></g></svg></div><div class="fig"><canvas data-figcanvas height="250" aria-label="Espectro do sinal e suas réplicas"></canvas><div class="figcap"></div></div>
         <dl class="syms">
           <div data-from="1"><dt>\(X(f)\)</dt><dd>espectro de \(x(t)\), nulo para \(|f|&gt;W\)</dd></div>
           <div data-from="1"><dt>\(X_\delta(f)\)</dt><dd>espectro do sinal amostrado</dd></div>
@@ -534,22 +558,6 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="link" data-on="3" data-from="es-D" data-to="es-sum">substitui (4)</div>
   <div class="link" data-on="4" data-from="es-x3" data-to="es-conv">X(f) entra na soma</div>
   <div class="link" data-on="5" data-from="es-conv" data-to="es-sh">δ(f − kfₛ) desloca X para kfₛ</div>
-  <aside class="notes"></aside>
-</section>
-
-<section class="slide" id="replicas" data-sec="1 Amostragem ideal · réplicas no espectro" data-fig="replicas">
-  <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Réplicas no espectro</h2><div class="sub">Eq. (5) desenhada · pressione → para avançar</div><div class="bar"></div></div>
-  <div class="body" style="gap:10px">
-    <div class="fig"><canvas data-figcanvas height="440" aria-label="Espectro na entrada e na saída do amostrador, com as réplicas"></canvas></div>
-    <div class="deriv solo">
-      <div class="step txt">Entrada: \(X(f)\), limitado à banda de \(-W\) a \(W\).</div>
-      <div class="step txt">A réplica de \(k=0\) é o próprio \(X(f)\), com a altura multiplicada por \(1/T_s\).</div>
-      <div class="step txt">As réplicas de \(k=\pm 1\) são \(X(f)\) deslocado de \(\pm f_s\).</div>
-      <div class="step txt">As demais réplicas se repetem a cada \(f_s\). Entre réplicas vizinhas sobra um vão de \(f_s-2W\).</div>
-      <div class="step txt">Amostrar no tempo replica o espectro com período \(f_s\). Se \(f_s&gt;2W\), as réplicas não se tocam e \(X(f)\) pode ser recuperado: é o teorema da seção 2.</div>
-    </div>
-  </div>
   <aside class="notes"></aside>
 </section>
 
@@ -840,7 +848,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Filtro anti-aliasing</h2><div class="sub">Na prática · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body" style="gap:6px">
-    <div class="fig"><canvas data-figcanvas height="330" aria-label="Espectro real sem limite de banda, réplicas que se sobrepõem e o efeito do filtro anti-aliasing"></canvas></div>
+    <div class="fig"><canvas data-figcanvas height="285" aria-label="Espectro real sem limite de banda, réplicas que se sobrepõem e o efeito do filtro anti-aliasing"></canvas></div>
     <div class="deriv board" style="gap:14px">
       <div class="step txt">Na prática, nenhum sinal tem banda estritamente limitada: o espectro decai, mas nunca chega a zero.</div>
       <div class="step"><div class="why">Eq. (5) dentro de \(|f|&lt;f_s/2\): as caudas das réplicas vizinhas caem na banda</div><div class="m">\[ X_\delta(f)=\frac{1}{T_s}\Big[\,X(f)+\cssId{aa-tail}{\underbrace{\cr{X(f-f_s)+X(f+f_s)+\cdots}}_{\ne\,0\text{ em }|f|&lt;f_s/2}}\Big] \]</div></div>
@@ -1061,7 +1069,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       </div>
     </div>
     <div class="figfloat" data-show="1-5">
-      <div class="fig"><canvas data-figcanvas height="330" aria-label="Módulo do sinc normalizado para f_s de 48 e 192 kHz com a borda da banda W"></canvas></div>
+      <div class="fig"><canvas data-figcanvas height="285" aria-label="Módulo do sinc normalizado para f_s de 48 e 192 kHz com a borda da banda W"></canvas></div>
     </div>
   </div>
   <div class="link" data-on="3" data-from="z2-75" data-to="z2-a75">180° × 20/48 = 75°</div>
@@ -1103,7 +1111,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <path class="ar" d="M1080,95 H1330" marker-end="url(#zd-ah)"/><text class="sig" x="1360" y="101" text-anchor="middle" style="font-size:22px">x(t)</text>
 <path d="M1110,150 C1160,110 1200,160 1250,120 S1300,110 1320,115" style="fill:none;stroke:var(--unb-text);stroke-width:2.4"/></svg></div>
     <div class="figfloat" data-show="1-6">
-      <div class="fig"><canvas data-figcanvas height="330" aria-label="Módulo do sinc normalizado para f_s = 192 kHz com a borda da banda W"></canvas></div>
+      <div class="fig"><canvas data-figcanvas height="285" aria-label="Módulo do sinc normalizado para f_s = 192 kHz com a borda da banda W"></canvas></div>
     </div>
   </div>
   <div class="link" data-on="2" data-from="z2-18" data-to="z2-a18">180° × 20/192 = 18,75°</div>
