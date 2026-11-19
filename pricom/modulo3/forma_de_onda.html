@@ -613,7 +613,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Compressor no quadro</h2><div class="sub">Uma amostra pequena e uma grande passando pela curva · pressione → para avançar</div><div class="bar"></div></div>
   <div class="body">
     <div class="cols" style="grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px">
-      <div class="fig"><canvas data-figcanvas height="500" aria-label="Curva do compressor com níveis e fronteiras"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="550" aria-label="Curva do compressor com níveis e fronteiras"></canvas><div class="figcap"></div></div>
       <div class="solo">
         <div class="step txt">Compressor logarítmico, aqui com \(\mu = 20\) para enxergar a curva, e só o lado positivo:
           \[ g(x) = \frac{\ln(1 + 20x)}{\ln 21} \]
@@ -623,6 +623,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
         <div class="step txt">Projetando as fronteiras pela curva até o eixo \(x\): regiões estreitas perto de zero e largas perto de 1.
           \[ x_k = g^{-1}\!\left(\tfrac{k}{8}\right) = \frac{21^{k/8} - 1}{20} \]
           A primeira região tem largura 0,023 e a última 0,33.</div>
+        <div class="step txt">Os 8 níveis, levados pela curva até o eixo \(x\), em azul:
+          \[ \begin{aligned} \hat{x}_k &= g^{-1}\!\left(\tfrac{2k+1}{16}\right)\\ &= 0{,}010;\ 0{,}039;\ 0{,}080;\ 0{,}139;\\ &\phantom{=}\ 0{,}227;\ 0{,}356;\ 0{,}543;\ 0{,}818 \end{aligned} \]
+          Na faixa de baixo, comparados com o uniforme, que tem um nível a cada 0,125. Perto de zero o degrau é fino, de 0,03, e perto de 1 é grosso, de 0,27. Abaixo de 0,18 o companding põe 4 níveis e o uniforme só 1.</div>
         <div class="step txt">Amostra pequena, em verde:
           \[ \begin{aligned} x &= 0{,}05 \;\to\; g(x) = 0{,}228\\ &\to\; \text{nível } 0{,}1875\\ &\to\; \hat{x} = g^{-1}(0{,}1875) = 0{,}039 \end{aligned} \]
           Erro de 0,011.</div>
@@ -1956,7 +1959,7 @@ function figCompand(ctx, w, h, s, t) {
   return ["Fig. 7.8 do Proakis.", "O compressor reduz a faixa dinâmica.", "O PCM continua uniforme, agora sobre g(x).", "O expansor aplica g^{−1}.", "Em laranja: o conjunto é um quantizador não uniforme em x."][s - 1];
 }
 function figCompq(ctx, w, h, s, t) {
-  const c = C(), r = { x: 74, y: 14, w: w - 96, h: h - 72 }, el = since("compq", s, t);
+  const c = C(), r = { x: 74, y: 14, w: w - 96, h: h - 196 }, el = since("compq", s, t);
   const { X, Y } = frame(ctx, r, { xmin: 0, xmax: 1.05, ymin: 0, ymax: 1.08, xt: [0, 0.5, 1], yt: [0, 0.5, 1], xl: "x", yl: "g(x)", ylo: 50 });
   if (s >= 2) { for (let k = 1; k < 8; k++) line(ctx, X(0), Y(k / 8), X(0.03), Y(k / 8), BLU, 2); for (let k = 0; k < 8; k++) dot(ctx, X(0), Y((2 * k + 1) / 16), 4.5, BLU); }
   if (s >= 3) for (let k = 1; k < 8; k++) { const xb = G20I(k / 8); line(ctx, X(0), Y(k / 8), X(xb), Y(k / 8), ORG, 1.4, [5, 4]); line(ctx, X(xb), Y(k / 8), X(xb), Y(0), ORG, 1.4, [5, 4]); }
@@ -1967,7 +1970,18 @@ function figCompq(ctx, w, h, s, t) {
     if (p * 4 > 2) ring(ctx, X(0), Y(lv), 9, col, 2.4);
     return { g, lv, xh };
   };
-  if (s >= 4) { path(0.05, c.G, 4); txt(ctx, "0,05", X(0.05) + 4, Y(0) - 14, { size: 15, c: c.G });
+  if (s >= 4) { // níveis levados ao eixo x e faixa uniforme x companding
+    const lvU = (k) => (2 * k + 1) / 16, lvC = (k) => G20I((2 * k + 1) / 16), ya = r.y + r.h + 74, yb = ya + 50;
+    if (s === 4) for (let k = 0; k < 8; k++) { const xk = lvC(k), yk = lvU(k); line(ctx, X(0), Y(yk), X(xk), Y(yk), BLU, 1.3, [2, 3]); line(ctx, X(xk), Y(yk), X(xk), yb, BLU, 1.3, [2, 3]); }
+    ctx.save(); ctx.fillStyle = tint("#006633", 0.12); ctx.fillRect(X(0), ya - 16, X(0.179) - X(0), yb - ya + 32); ctx.restore();
+    [[ya, lvU, (k) => k / 8, c.M, "uniforme"], [yb, lvC, (k) => G20I(k / 8), BLU, "companding"]].forEach(([yy, lv, bd, col, nm]) => {
+      line(ctx, X(0), yy, X(1), yy, c.M, 1.2); for (let k = 1; k < 8; k++) line(ctx, X(bd(k)), yy - 8, X(bd(k)), yy + 8, ORG, 1.4);
+      for (let k = 0; k < 8; k++) dot(ctx, X(lv(k)), yy, 4.5, col); txt(ctx, nm, X(1), yy - 16, { size: 14, align: "right", c: col }); });
+    if (s === 4) txt(ctx, "abaixo de 0,18: 1 nível no uniforme, 4 no companding", X(0), yb + 30, { size: 15, c: c.G });
+    if (s >= 5) { line(ctx, X(0.05), yb - 14, X(0.05), yb + 14, c.G, 2.4); ring(ctx, X(lvC(1)), yb, 8, c.G, 2.2); txt(ctx, "erro 0,011", X(0.05) + 6, yb + 30, { size: 15, c: c.G }); }
+    if (s >= 6) { line(ctx, X(0.7), yb - 14, X(0.7), yb + 14, c.R, 2.4); ring(ctx, X(lvC(7)), yb, 8, c.R, 2.2); arrowTo(ctx, X(0.7), yb + 18, X(lvC(7)), yb + 18, c.R, 2, 8); txt(ctx, "erro 0,118", X(0.76), yb + 34, { size: 15, c: c.R, align: "center" }); }
+  }
+  if (s >= 5) { path(0.05, c.G, 5); txt(ctx, "0,05", X(0.05) + 4, Y(0) - 14, { size: 15, c: c.G });
     // lupa na amostra pequena, no canto de baixo à direita
     const bx = { x: X(0.27), y: Y(0.44), w: X(0.64) - X(0.27), h: Y(0.04) - Y(0.44) }; ctx.save(); ctx.fillStyle = "#fff"; ctx.fillRect(bx.x - 50, bx.y - 8, bx.w + 58, bx.h + 34); ctx.restore(); rrect(ctx, bx.x - 50, bx.y - 8, bx.w + 58, bx.h + 34, 6, c.M, null, 1.2);
     const { X: Xz, Y: Yz } = frame(ctx, bx, { xmin: 0, xmax: 0.08, ymin: 0, ymax: 0.3, xt: [0, 0.04, 0.08], yt: [0, 0.125, 0.25] });
@@ -1976,8 +1990,8 @@ function figCompq(ctx, w, h, s, t) {
     const g5 = G20(0.05), l5 = 0.1875, h5 = G20I(l5);
     curve(ctx, [0.05, 0.05, 0], [0, g5, g5], Xz, Yz, c.G, 2.2); curve(ctx, [0, h5, h5], [l5, l5, 0], Xz, Yz, c.G, 2.2, [6, 4]);
     txt(ctx, "x\u0302 = 0,039", Xz(h5) - 4, Yz(0.03), { size: 14, align: "right", c: c.G }); txt(ctx, "zoom", bx.x + bx.w - 4, bx.y + 10, { size: 13, align: "right", c: c.M }); }
-  if (s >= 5) { const { xh } = path(0.7, c.R, 5); txt(ctx, "0,7", X(0.7) + 6, Y(0) - 14, { size: 15, c: c.R }); if (el > 1.8 || s > 5) txt(ctx, "x\u0302 = 0,818", X(xh) + 6, Y(0.05), { size: 15, c: c.R }); }
-  return ["g(x) = ln(1 + 20x)/ln 21: inclinação 20/ln 21 = 6,6 na origem.", "8 faixas iguais no eixo vertical, nível no meio de cada uma.", "Fronteiras projetadas: a primeira região tem 0,023 e a última 0,33.", "Verde: sobe até a curva, vai ao eixo, pula para o nível e volta pela curva.", "Vermelho: a amostra grande cai numa região larga, erro maior."][s - 1];
+  if (s >= 6) { const { xh } = path(0.7, c.R, 6); txt(ctx, "0,7", X(0.7) + 6, Y(0) - 14, { size: 15, c: c.R }); if (el > 1.8 || s > 6) txt(ctx, "x\u0302 = 0,818", X(xh) + 6, Y(0.05), { size: 15, c: c.R }); }
+  return ["g(x) = ln(1 + 20x)/ln 21: inclinação 20/ln 21 = 6,6 na origem.", "8 faixas iguais no eixo vertical, nível no meio de cada uma.", "Fronteiras projetadas: a primeira região tem 0,023 e a última 0,33.", "Níveis no eixo x: juntos perto de zero, espalhados perto de 1.", "Verde: sobe até a curva, vai ao eixo, pula para o nível e volta pela curva.", "Vermelho: a amostra grande cai numa região larga, erro maior."][s - 1];
 }
 function figLeiMu(ctx, w, h, s, t) {
   const c = C(), r = { x: 70, y: 14, w: w - 90, h: h - 70 };
