@@ -577,6 +577,21 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <aside class="notes"></aside>
 </section>
 
+<section class="slide" id="probunif" data-sec="2 PCM não uniforme · o problema" data-fig="probunif">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>O problema do PCM uniforme</h2><div class="sub">Mesmos níveis para voz alta e voz baixa · pressione → para avançar</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="fig"><canvas data-figcanvas height="360" aria-label="Quantizador uniforme com voz alta e voz baixa, e a densidade da voz"></canvas><div class="figcap"></div></div>
+    <div class="solo">
+      <div class="step txt">Quantizador uniforme de 8 níveis em \([-1,1]\), \(\Delta=0{,}25\). Voz alta, amplitude 1: cada amostra, em cinza, cai num nível perto dela, em vermelho. SQNR de 19 dB.</div>
+      <div class="step txt">Voz baixa, amplitude 0,1, com os mesmos níveis: toda amostra cai em \(\pm0{,}125\), os dois níveis do meio. A saída vira uma onda quadrada, o erro tem o tamanho do sinal e a SQNR cai para 0,3 dB.</div>
+      <div class="step txt">E a voz passa a maior parte do tempo com amplitudes pequenas: a densidade da amplitude se concentra perto de zero, justamente onde o uniforme tem só dois níveis.</div>
+      <div class="step txt">O erro do uniforme, \(\Delta^2/12\), é o mesmo para qualquer volume, então a SQNR cai 1 dB a cada dB a menos de sinal. Precisamos de níveis apertados perto de zero e largos nas bordas, em verde: um quantizador não uniforme.</div>
+    </div>
+  </div>
+  <aside class="notes"></aside>
+</section>
+
 <section class="slide" id="compand" data-sec="2 Companding · diagrama" data-fig="compand">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Companding</h2><div class="sub">Compressor, PCM uniforme e expansor · Fig. 7.8 do Proakis</div><div class="bar"></div></div>
@@ -1784,6 +1799,36 @@ const EX = (() => {
 })();
 
 // ---------- (c) figuras animadas ----------
+function figProbUnif(ctx, w, h, s, t) {
+  const c = C(), q = (x) => Math.max(-0.875, Math.min(0.875, (Math.floor(x / 0.25) + 0.5) * 0.25));
+  const gap = 70, x0 = 60, pw = (w - x0 - 2 * gap - 20) * 0.39, pd = (w - x0 - 2 * gap - 20) * 0.22, r0 = { y: 34, h: h - 70 };
+  const panel = (x, A, lab, sq_, show) => {
+    const r = { x, y: r0.y, w: pw, h: r0.h }, { X, Y } = frame(ctx, r, { xmin: 0, xmax: 1, ymin: -1.05, ymax: 1.05, yt: [-1, 0, 1] });
+    for (let k = -3.5; k <= 3.5; k++) line(ctx, X(0), Y(k * 0.25), X(1), Y(k * 0.25), LG, 1, [5, 4]);
+    txt(ctx, lab, r.x + r.w / 2, r.y - 16, { size: 17, align: "center", c: c.P });
+    if (!show) return;
+    const ts = range(0, 1, 300); curve(ctx, ts, ts.map((u) => A * Math.sin(TAU * u)), X, Y, LG, 2);
+    const N = 20; let px = null, py = null;
+    for (let n = 0; n < N; n++) { const u = (n + 0.5) / N, xv = A * Math.sin(TAU * u), qv = q(xv);
+      if (px !== null) line(ctx, px, py, X(u), py, c.R, 2.2); if (px !== null) line(ctx, X(u), py, X(u), Y(qv), c.R, 2.2);
+      px = X(u); py = Y(qv); dot(ctx, X(u), Y(xv), 3.5, c.M); sq(ctx, X(u), Y(qv), 4, c.R); }
+    txt(ctx, sq_, r.x + r.w / 2, r.y + r.h + 18, { size: 18, align: "center", c: c.R });
+    return { X, Y };
+  };
+  panel(x0, 1, "voz alta, amplitude 1", "SQNR ≈ 19 dB", true);
+  panel(x0 + pw + gap, 0.1, "voz baixa, amplitude 0,1", "SQNR ≈ 0,3 dB", s >= 2);
+  if (s >= 3) {
+    const r = { x: x0 + 2 * (pw + gap), y: r0.y, w: pd, h: r0.h }, { X, Y } = frame(ctx, r, { xmin: 0, xmax: 1, ymin: -1.05, ymax: 1.05, yt: [-1, 0, 1] });
+    txt(ctx, "densidade da voz", r.x + r.w / 2, r.y - 16, { size: 17, align: "center", c: c.P });
+    const ys = range(-1, 1, 300), f = (y) => Math.exp(-Math.abs(y) / 0.12);
+    ctx.save(); ctx.fillStyle = "rgba(0,59,92,0.18)"; ctx.beginPath(); ctx.moveTo(X(0), Y(-1)); ys.forEach((y) => ctx.lineTo(X(0.95 * f(y)), Y(y))); ctx.lineTo(X(0), Y(1)); ctx.closePath(); ctx.fill(); ctx.restore();
+    curve(ctx, ys.map((y) => 0.95 * f(y)), ys, X, Y, c.P, 2.2);
+    for (let k = -3.5; k <= 3.5; k++) line(ctx, X(0), Y(k * 0.25), X(1), Y(k * 0.25), LG, 1.4, [5, 4]);
+    if (s >= 4) { const mu = 10; for (let k = 0; k < 4; k++) { const yv = (k + 0.5) / 4, xv = (Math.pow(1 + mu, yv) - 1) / mu; for (const sg of [1, -1]) line(ctx, X(0), Y(sg * xv), X(1), Y(sg * xv), c.G, 2.4); }
+      txt(ctx, "não uniforme", r.x + r.w / 2, r.y + r.h + 18, { size: 18, align: "center", c: c.G }); }
+  }
+  return ["Voz alta: a escada vermelha acompanha a senoide.", "Voz baixa: só os dois níveis do meio, a saída vira onda quadrada.", "A voz fica quase sempre perto de zero, onde há poucos níveis.", "Níveis não uniformes, em verde: apertados no centro, largos nas bordas."][s - 1];
+}
 function figCopiar(ctx, w, h, s, t) {
   const c = C(), r = { x: 80, y: 14, w: w - 100, h: h - 66 }, el = since("copiar", s, t);
   const { X, Y } = frame(ctx, r, { xmin: -0.3, xmax: 14.6, ymin: -0.25, ymax: 1.0, xt: [0, 2, 4, 6, 8, 10, 12, 14], yt: [0, 0.5, 1], xl: "n", yl: "x_n", ylo: 50 });
@@ -2222,7 +2267,7 @@ function figExComp(ctx, w, h, s, t) {
     txt(ctx, fmtc(v, 1) + " dB", X2(i + 0.5), Y2(v) - 12, { size: 16, align: "center", c: col }); txt(ctx, `${n}, ${nb} bits`, X2(i + 0.5), r2.y + r2.h + 16, { size: 16, align: "center" }); });
   return s < 5 ? "Acima: amostras e reconstruções. Abaixo: SQNR de cada um." : "Sinal lento favorece DPCM e DM; num sinal rápido o PCM ganharia.";
 }
-Object.assign(FIGS, { copiar: figCopiar, pcmchain: figPcmChain, pcmunif: figPcmUnif, exunif: figExUnif, banda: figBanda, faixa: figFaixa, compand: figCompand, compq: figCompq, leimu: figLeiMu, leia: figLeiA, porlog: figPorLog, sqnrmu: figSqnrMu, muunif: figMuUnif, viz: figViz, potdif: figPotDif, acum: figAcum, dpcmdiag: figDpcmDiag, errodpcm: figErroDpcm, dpcmpasso: figDpcmPasso, ex742: figEx742, dmdiag: figDmDiag, dmpasso: figDmPasso, gran: figGran, limite: figLimite, adm: figAdm, exenun: figExEnun, expcm: figExPcm, exdpcm: figExDpcm, exdm: figExDm, excomp: figExComp });
+Object.assign(FIGS, { probunif: figProbUnif, copiar: figCopiar, pcmchain: figPcmChain, pcmunif: figPcmUnif, exunif: figExUnif, banda: figBanda, faixa: figFaixa, compand: figCompand, compq: figCompq, leimu: figLeiMu, leia: figLeiA, porlog: figPorLog, sqnrmu: figSqnrMu, muunif: figMuUnif, viz: figViz, potdif: figPotDif, acum: figAcum, dpcmdiag: figDpcmDiag, errodpcm: figErroDpcm, dpcmpasso: figDpcmPasso, ex742: figEx742, dmdiag: figDmDiag, dmpasso: figDmPasso, gran: figGran, limite: figLimite, adm: figAdm, exenun: figExEnun, expcm: figExPcm, exdpcm: figExDpcm, exdm: figExDm, excomp: figExComp });
 // ----- exercícios da seção 6: telefonia, companding e predição -----
 const LNG = (pt, en) => ((document.documentElement.lang || "").startsWith("en") ? en : pt);
 const TSU = 1e6 / 9000;   // T_s em µs, f_s = 9 kHz
