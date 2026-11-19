@@ -420,9 +420,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="fig"><canvas data-figcanvas height="340" aria-label="Samples of a slow signal"></canvas><div class="figcap"></div></div>
     <div class="solo">
       <div class="step txt">A waveform coder tries to reproduce at the destination the same waveform as the source, sample by sample, with the smallest possible distortion. It does not look at the mechanism that generated the signal, only at properties of the waveform. That is why it works for very different sources.</div>
-      <div class="step txt">PCM: each sample is quantized and encoded on its own. The encoder sends the full height of each blue bar.</div>
-      <div class="step txt">DPCM: neighboring samples are similar, so it sends only the jump from one to the next, the red arrows. The jumps are much smaller than the heights and fit in fewer bits.</div>
-      <div class="step txt">DM: the extreme case of DPCM, with sampling so fast that the jump is encoded with a single bit, up or down.</div>
+      <div class="step txt">PCM: each sample is quantized and encoded on its own. It sends the value of each sample, the height of the blue bar. With 8 levels, each value becomes the level index in 3 bits: the bottom row.</div>
+      <div class="step txt">DPCM: neighboring samples are similar, so it sends only the jump \(d_n=x_n-x_{n-1}\), the red arrow. The jumps are much smaller than the heights: 4 levels are enough, 2 bits per sample.</div>
+      <div class="step txt">DM: the extreme case of DPCM, with sampling so fast that only the direction of the jump is sent: 1 up, 0 down, 1 bit per sample.</div>
     </div>
   </div>
   <aside class="notes"></aside>
@@ -1771,9 +1771,17 @@ function figCopiar(ctx, w, h, s, t) {
     const y0 = Y(f(n - 1)), y1 = Y(f(n - 1) + (f(n) - f(n - 1)) * p);
     line(ctx, X(n - 1), y0, X(n), y0, c.GR, 1.4, [4, 4]);
     arrowTo(ctx, X(n), y0, X(n), y1, c.R, 3.4, Math.min(11, Math.abs(y1 - y0) * 0.8 + 2));
-    if (s === 4) { const up = f(n) >= f(n - 1); txt(ctx, up ? "1" : "0", X(n), Y(-0.15), { size: 20, mono: true, align: "center", c: up ? c.G : c.R }); }
   }
-  return ["Slow signal with 15 samples, n = 0, …, 14.", "PCM: the full height of each sample, blue bars.", "DPCM: only the jump between neighbors, red arrows, much smaller than the height.", "DM: only the direction of the jump, 1 up and 0 down, one bit per sample."][s - 1];
+  const B = (v, nb) => v.toString(2).padStart(nb, "0"), rv = Y(-0.07), rb = Y(-0.18), lab = { size: 14, align: "right", c: c.M };
+  if (s >= 2) { txt(ctx, "value:", r.x - 8, rv, lab); txt(ctx, "bits:", r.x - 8, rb, lab); }
+  const mono = (v, x, y, col) => txt(ctx, v, x, y, { size: 14, mono: true, align: "center", c: col });
+  const qp = (v) => Math.min(7, Math.floor(v * 8)), qd = (v) => Math.max(0, Math.min(3, Math.floor((v + 0.16) / 0.08)));
+  if (s === 2) for (let n = 0; n <= 14; n++) { mono(fmtc(f(n), 2), X(n), rv, c.P); mono(B(qp(f(n)), 3), X(n), rb, c.K); }
+  if (s === 3) { mono(fmtc(f(0), 2), X(0), rv, c.P); mono(B(qp(f(0)), 3), X(0), rb, c.K);
+    for (let n = 1; n <= 14; n++) { const dd = f(n) - f(n - 1); mono((dd >= 0 ? "+" : "") + fmtc(dd, 2), X(n), rv, c.R); mono(B(qd(dd), 2), X(n), rb, c.K); }
+    txt(ctx, "d_n = x_n − x_{n−1}", X(9.4), Y(0.78), { size: 18, italic: true, c: c.R }); }
+  if (s === 4) for (let n = 1; n <= 14; n++) { const up = f(n) >= f(n - 1); mono(up ? "up" : "down", X(n), rv, up ? c.G : c.R); mono(up ? "1" : "0", X(n), rb, up ? c.G : c.R); }
+  return ["Slow signal with 15 samples, n = 0, …, 14.", "PCM: value x_n quantized to 8 levels, 3 bits per sample.", "DPCM: jump d_n quantized to 4 levels, 2 bits per sample.", "DM: only the direction of the jump, 1 bit per sample."][s - 1];
 }
 function figPcmChain(ctx, w, h, s, t) {
   const c = C(), sc = (w - 30) / 13.6, ox = 15 + 0.35 * sc, cy = 62, PX = (cm) => ox + cm * sc, el = since("pcmc", s, t);

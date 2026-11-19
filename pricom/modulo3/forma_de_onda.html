@@ -420,9 +420,9 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
     <div class="fig"><canvas data-figcanvas height="340" aria-label="Amostras de um sinal lento"></canvas><div class="figcap"></div></div>
     <div class="solo">
       <div class="step txt">O codificador de forma de onda tenta reproduzir no destino a mesma forma de onda da fonte, amostra por amostra, com a menor distorção possível. Ele não olha para o mecanismo que gerou o sinal, só para propriedades da forma de onda. Por isso serve para fontes muito diferentes.</div>
-      <div class="step txt">PCM: cada amostra é quantizada e codificada sozinha. O codificador manda a altura inteira de cada barra azul.</div>
-      <div class="step txt">DPCM: amostras vizinhas são parecidas, então manda só o salto de uma para a outra, as setas vermelhas. Os saltos são bem menores que as alturas e cabem em menos bits.</div>
-      <div class="step txt">DM: o caso extremo do DPCM, com amostragem tão rápida que o salto é codificado com um único bit, sobe ou desce.</div>
+      <div class="step txt">PCM: cada amostra é quantizada e codificada sozinha. Manda o valor de cada amostra, a altura da barra azul. Com 8 níveis, cada valor vira o índice do nível em 3 bits: a linha de baixo.</div>
+      <div class="step txt">DPCM: amostras vizinhas são parecidas, então manda só o salto \(d_n=x_n-x_{n-1}\), a seta vermelha. Os saltos são bem menores que as alturas: 4 níveis bastam, 2 bits por amostra.</div>
+      <div class="step txt">DM: o caso extremo do DPCM, com amostragem tão rápida que do salto só se manda o sentido: 1 sobe, 0 desce, 1 bit por amostra.</div>
     </div>
   </div>
   <aside class="notes"></aside>
@@ -1771,9 +1771,17 @@ function figCopiar(ctx, w, h, s, t) {
     const y0 = Y(f(n - 1)), y1 = Y(f(n - 1) + (f(n) - f(n - 1)) * p);
     line(ctx, X(n - 1), y0, X(n), y0, c.GR, 1.4, [4, 4]);
     arrowTo(ctx, X(n), y0, X(n), y1, c.R, 3.4, Math.min(11, Math.abs(y1 - y0) * 0.8 + 2));
-    if (s === 4) { const up = f(n) >= f(n - 1); txt(ctx, up ? "1" : "0", X(n), Y(-0.15), { size: 20, mono: true, align: "center", c: up ? c.G : c.R }); }
   }
-  return ["Sinal lento com 15 amostras, n = 0, …, 14.", "PCM: a altura inteira de cada amostra, barras azuis.", "DPCM: só o salto entre vizinhas, setas vermelhas, bem menor que a altura.", "DM: só o sentido do salto, 1 sobe e 0 desce, um bit por amostra."][s - 1];
+  const B = (v, nb) => v.toString(2).padStart(nb, "0"), rv = Y(-0.07), rb = Y(-0.18), lab = { size: 14, align: "right", c: c.M };
+  if (s >= 2) { txt(ctx, "valor:", r.x - 8, rv, lab); txt(ctx, "bits:", r.x - 8, rb, lab); }
+  const mono = (v, x, y, col) => txt(ctx, v, x, y, { size: 14, mono: true, align: "center", c: col });
+  const qp = (v) => Math.min(7, Math.floor(v * 8)), qd = (v) => Math.max(0, Math.min(3, Math.floor((v + 0.16) / 0.08)));
+  if (s === 2) for (let n = 0; n <= 14; n++) { mono(fmtc(f(n), 2), X(n), rv, c.P); mono(B(qp(f(n)), 3), X(n), rb, c.K); }
+  if (s === 3) { mono(fmtc(f(0), 2), X(0), rv, c.P); mono(B(qp(f(0)), 3), X(0), rb, c.K);
+    for (let n = 1; n <= 14; n++) { const dd = f(n) - f(n - 1); mono((dd >= 0 ? "+" : "") + fmtc(dd, 2), X(n), rv, c.R); mono(B(qd(dd), 2), X(n), rb, c.K); }
+    txt(ctx, "d_n = x_n − x_{n−1}", X(9.4), Y(0.78), { size: 18, italic: true, c: c.R }); }
+  if (s === 4) for (let n = 1; n <= 14; n++) { const up = f(n) >= f(n - 1); mono(up ? "sobe" : "desce", X(n), rv, up ? c.G : c.R); mono(up ? "1" : "0", X(n), rb, up ? c.G : c.R); }
+  return ["Sinal lento com 15 amostras, n = 0, …, 14.", "PCM: valor x_n quantizado em 8 níveis, 3 bits por amostra.", "DPCM: salto d_n quantizado em 4 níveis, 2 bits por amostra.", "DM: só o sentido do salto, 1 bit por amostra."][s - 1];
 }
 function figPcmChain(ctx, w, h, s, t) {
   const c = C(), sc = (w - 30) / 13.6, ox = 15 + 0.35 * sc, cy = 62, PX = (cm) => ox + cm * sc, el = since("pcmc", s, t);
