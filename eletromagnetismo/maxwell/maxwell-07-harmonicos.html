@@ -395,6 +395,11 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
 /* roteiro com 11 partes: um pouco mais compacto (o modo estreito do modelo continua valendo) */
 .toc { gap: 12px 60px; font-size: 26px; }
 .toc .d { font-size: 17px; }
+/* grifo animado: <span class="grifo">texto<span class="gm" data-s="k"></span></span> (marca-texto entra no passo k) */
+.grifo { position: relative; z-index: 0; }
+.grifo > .gm { position: absolute; left: -4px; right: -4px; top: 8%; bottom: -3px; border-radius: 4px; z-index: -1;
+  background: rgba(255, 205, 0, .45); transform-origin: left center; transition: transform .55s ease; }
+.grifo > .gm.off { transform: scaleX(0); opacity: 1; visibility: visible; }
 
 </style>
 </head>
@@ -979,7 +984,7 @@ function lenzPanel(ox, dir, sB, sI) {
   const labels = `<div class="lb W" style="left:${ox + 72}px;top:${cy}px">S</div><div class="lb W" style="left:${ox + 178}px;top:${cy}px">N</div>` +
     lb(ox + 130, cy - 90, Rw`\vec{\mathbf u}`) + lb(ox + 622, cy - 26, Rw`\vB`, "G") +
     lb(dir > 0 ? ox + 625 : ox + 625, cy + 30, Rw`\vB_{\mathrm{ind}}`, "R", S(sI)) + lb(lx + 48, cy - 112, "i", "R", S(sI)) +
-    lbt(ox + 330, cy + 160, dir > 0 ? "aproximando: Ψ aumenta" : "afastando: Ψ diminui") +
+    lbt(ox + 330, cy + 160, dir > 0 ? "aproximando: mais linhas atravessam a espira" : "afastando: menos linhas atravessam a espira") +
     lbt(ox + 330, cy + 192, dir > 0 ? "B<sub>ind</sub> contrário a B" : "B<sub>ind</sub> no mesmo sentido de B", "", S(sI)) +
     lbt(lx - 58, cy - 78, `<b>${dir > 0 ? "N" : "S"}</b>`, "R", S(sI)) + lb(ox + 130, cy + 82, Rw`\vec{\mathbf F}`, "R", S(sI)) +
     lbt(ox + 330, cy + 224, dir > 0 ? "face N da bobina voltada para o ímã: repulsão" : "face S da bobina voltada para o ímã: atração", "R", S(sI));
@@ -1004,10 +1009,10 @@ function lenzMini(cy, face, fdir, ext) {
 }
 function boardLenzEn() {
   const [s1, l1] = lenzMini(120, "S", 1, false), [s2, l2] = lenzMini(370, "N", -1, true);
-  const svg = G.g(S("1-3"), s1 + G.g(S("3"), G.ln(20, 30, 540, 220, "R", 4) + G.ln(20, 220, 540, 30, "R", 4))) + G.g(S("4"), s2 + G.ln(10, 245, 550, 245, "M", 1.2, "", "6 6"));
-  const lab = `<div ${S("1-3")}>${l1}${lbt(470, 120, "face S atrai:<br>F a favor de u", "")}</div>` +
-    `<div ${S("4")}>${l2}${lbt(470, 370, "face N repele:<br>F contra u", "")}</div>` + lbt(280, 14, "hipótese contrária", "M", S("1-3")) + lbt(280, 270, "sentido de Lenz", "M", S("4"));
-  return board(560, 470, svg, lab);
+  const svg = G.g(S("1-3"), s1 + G.g(S("3"), G.ln(20, 30, 600, 220, "R", 4) + G.ln(20, 220, 600, 30, "R", 4))) + G.g(S("4"), s2 + G.ln(10, 245, 610, 245, "M", 1.2, "", "6 6"));
+  const lab = `<div ${S("1-3")}>${l1}${lbt(530, 120, "face S atrai:<br>F a favor de u", "")}</div>` +
+    `<div ${S("4")}>${l2}${lbt(530, 370, "face N repele:<br>F contra u", "")}</div>` + lbt(280, 14, "hipótese contrária", "M", S("1-3")) + lbt(280, 270, "sentido de Lenz", "M", S("4"));
+  return board(620, 470, svg, lab);
 }
 
 function boardObs() {
@@ -1574,6 +1579,14 @@ function boardCcLoop(isH) {
   const c = isH ? "G" : "P";
   svg += G.ar(x0 - 10, yI - hh - 60, x1 - 20, yI - hh - 60, c, 3.4) + G.ar(x0 - 10, yI + hh + 100, x1 - 120, yI + hh + 100, c, 3.4);
   svg += G.brace(x0, yI + hh + 14, x1, yI + hh + 14, 10, "M") + G.ln(x1 + 18, yI - hh, x1 + 18, yI + hh, "M", 1.6) + G.ln(x1 + 12, yI - hh, x1 + 24, yI - hh, "M", 1.6) + G.ln(x1 + 12, yI + hh, x1 + 24, yI + hh, "M", 1.6);
+  {   // destaques passo a passo: lados horizontais, verticais, (corrente K) e área, cada um só no seu passo
+    const p = isH ? "ch" : "ce", sA = isH ? "7-7" : "6-6";
+    svg += G.g(S("3-3"), G.ln(x0, yI - hh, x1, yI - hh, "R", 7, `id="${p}-top" style="stroke-opacity:.55"`));
+    svg += G.g(S("4-4"), G.ln(x0, yI + hh, x1, yI + hh, "R", 7, `id="${p}-bot" style="stroke-opacity:.55"`));
+    svg += G.g(S("5-5"), `<g id="${p}-vert">` + G.ln(x0, yI - hh, x0, yI + hh, "R", 7) + G.ln(x1, yI - hh, x1, yI + hh, "R", 7) + `</g>`);
+    if (isH) svg += G.g(S("6-6"), `<rect id="ch-K" x="${x0}" y="${yI - 14}" width="${x1 - x0}" height="28" style="fill:rgba(176,58,46,.25);stroke:var(--cR);stroke-width:2"/>`);
+    svg += G.g(S(sA), `<rect id="${p}-area" x="${x0}" y="${yI - hh}" width="${x1 - x0}" height="${2 * hh}" style="fill:rgba(0,102,51,.22)"/>`);
+  }
   if (isH) for (const x of [200, 280, 360]) svg += G.sym(x, yI, 10, true, "R");
   else svg += G.sym(280, yI - 22, 11, false, "G") + G.sym(280, yI + 22, 11, false, "G");
   const labels = B.labels + lb(x1 + 6, yI - hh - 82, isH ? Rw`H_{1t}` : Rw`E_{1t}`, c) + lb(x1 - 92, yI + hh + 100, isH ? Rw`H_{2t}` : Rw`E_{2t}`, c) +
@@ -1588,6 +1601,11 @@ function boardCcPill() {
   for (const x of [190, 240, 290, 340]) svg += `<text x="${x}" y="${yI + 7}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
   svg += G.ar(cx, yI - hh, cx, yI - hh - 110, "P", 3.4) + G.ar(cx, yI + hh + 110, cx, yI + hh, "P", 3.4);
   svg += G.ar(cx + 70, yI - hh, cx + 70, yI - hh - 60, "K", 2) + G.ar(cx + 70, yI + hh, cx + 70, yI + hh + 60, "K", 2);
+  // destaques passo a passo: topo, base, lateral, carga na interface
+  svg += G.g(S("3-3"), G.ell(cx, yI - hh, rx, ry, "rgba(176,58,46,.25)", "R", 4, `id="pl-top"`));
+  svg += G.g(S("4-4"), G.ell(cx, yI + hh, rx, ry, "rgba(176,58,46,.25)", "R", 4, `id="pl-bot"`));
+  svg += G.g(S("5-5"), `<g id="pl-lat">` + G.ln(cx - rx, yI - hh, cx - rx, yI + hh, "R", 7) + G.ln(cx + rx, yI - hh, cx + rx, yI + hh, "R", 7) + `</g>`);
+  svg += G.g(S("6-6"), G.ell(cx, yI, rx, ry, "rgba(0,102,51,.25)", "G", 3, `id="pl-q"`));
   const labels = B.labels + lb(cx + 40, yI - hh - 100, Rw`D_{1n}`, "P") + lb(cx + 40, yI + hh + 100, Rw`D_{2n}`, "P") + lb(cx + 110, yI - hh - 50, Rw`\Delta S`, "sm") +
     lb(cx + rx + 40, yI - 20, Rw`\rho_s`, "R", `id="cp-lrho"`) + lb(cx - rx - 44, yI, Rw`\Delta h`, "sm");
   return board(560, 440, svg, labels);
@@ -2132,9 +2150,30 @@ $("fz2-rst")?.addEventListener("click", () => {
   fz2Reset(); fz2Draw(true);
 });
 
+function boardFzbPsi() {   // Ψ(t) = 0,4 d0 + 2t com d0 = 2 m: reta de inclinação 2 Wb/s
+  const X0 = 80, Y0 = 400, X = (t) => X0 + t * 120, Y = (p) => Y0 - p * 42, P = (t) => 0.8 + 2 * t;
+  let svg = G.ar(X0, Y0, 540, Y0, "K", 1.6) + G.ar(X0, Y0, X0, 40, "K", 1.6);
+  svg += G.ln(X(0), Y(P(0)), X(3.5), Y(P(3.5)), "P", 3.2) + G.dot(X(0), Y(P(0)), 6, "P");
+  svg += G.g(S("3"), G.ln(X(1.5), Y(P(1.5)), X(2.5), Y(P(1.5)), "M", 2, "", "6 4") + G.ln(X(2.5), Y(P(1.5)), X(2.5), Y(P(2.5)), "M", 2, "", "6 4"));
+  const labels = lb(530, Y0 + 24, Rw`t\,(\mathrm s)`, "sm") + lb(X0 + 10, 24, Rw`\Psi\,(\mathrm{Wb})`, "sm") +
+    lb(X0 - 40, Y(P(0)), "0{,}8", "P sm") + lb(X(1), Y0 + 24, "1", "sm") + lb(X(2), Y0 + 24, "2", "sm") + lb(X(3), Y0 + 24, "3", "sm") +
+    lb(X(2), Y(P(1.5)) + 22, Rw`1\ \mathrm s`, "M sm", S("3")) + lb(X(2.5) + 50, Y(P(2)), Rw`2\ \mathrm{Wb}`, "M sm", `id="fzp-l" ${S("3")}`) +
+    lbt(300, 440, "ilustração com d<sub>0</sub> = 2 m");
+  return board(560, 470, svg, labels);
+}
+function boardCcTan() {   // vista lateral: a_n para cima, E decomposto, a_n × E saindo da tela
+  const yI = 260, B = ccBase(560, 440, yI), O = [200, yI], E = [430, yI - 170];
+  let svg = B.svg + G.ar(O[0], O[1], O[0], O[1] - 120, "K", 3) + G.ar(O[0], O[1], E[0], E[1], "P", 3.6);
+  svg += G.ln(E[0], E[1], E[0], yI, "P", 1.4, "", "5 4") + G.ar(O[0], O[1] + 2, E[0], O[1] + 2, "R", 3.4) + G.ar(O[0] - 26, O[1], O[0] - 26, E[1], "M", 2.6);
+  svg += G.g(S("2"), G.sym(O[0] + 115, yI + 70, 14, false, "G"));
+  const labels = B.labels + lb(O[0] - 4, O[1] - 140, Rw`\hat{\mathbf a}_n`) + lb(E[0] + 22, E[1] - 10, Rw`\vE`, "P") + lb((O[0] + E[0]) / 2, yI + 30, Rw`\vE_t`, "R") +
+    lb(O[0] - 60, (O[1] + E[1]) / 2, Rw`\vE_n`, "M") + lb(O[0] + 210, yI + 70, Rw`\hat{\mathbf a}_n\times\vE`, "G", `id="tg-l" ${S("2")}`) +
+    lbt(O[0] + 210, yI + 110, "saindo da tela (⊥ ao plano de a<sub>n</sub> e E)", "G sm", S("2"));
+  return board(560, 440, svg, labels);
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, lenzen: boardLenzEn, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, gaussd: boardGaussD, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
-  pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, harm1d: () => boardHarm1d({ lam: "6" }), harm1dv: () => boardHarm1d({ shift: "2" }), planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, ondaex3: boardOndaEx3, extriade: boardExTriade,
+  pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, harm1d: () => boardHarm1d({ lam: "6" }), harm1dv: () => boardHarm1d({ shift: "2" }), planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, cctan: boardCcTan, fzbpsi: boardFzbPsi, ondaex3: boardOndaEx3, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
   poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
   ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
@@ -2870,7 +2909,50 @@ $("ant-heat")?.addEventListener("change", drawAnt);
 $("ant-play")?.addEventListener("click", () => { ANT.play = !ANT.play; $("ant-play").textContent = ANT.play ? "Pausar" : "Animar"; });
 
 const FIGS = {};
-const DRAW = { anel: startAnel, ima: startIma, exi: drawExi, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb, ant: startAnt, fz2: startFz2 };
+// ---------- instrumento: onda estacionária do exemplo da forma final ----------
+// E_y = 50 sen(2πx) sen(ωt), η0 H_z = 50 cos(2πx) cos(ωt)
+const EST = { play: false, last: null };
+function drawEst() {   // vista oblíqua: x para a direita, y para cima, z saindo da tela (diagonal)
+  const cv = $("est-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C(), wt = val("est-t") * DEG;
+  const xm = 2, ml = 150, mr = 60, sx = (w - ml - mr) / xm, A = h * 0.30, dz = [-0.62, 0.42], x0 = ml, y0 = h * 0.47;
+  const P = (x, ey, hz) => [x0 + x * sx + hz * A * dz[0], y0 - ey * A + hz * A * dz[1]];   // ey, hz normalizados (±1)
+  ctx.clearRect(0, 0, w, h);
+  // planos xy e xz (faixas claras)
+  const quad = (pts, fill) => { ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); pts.forEach((p, k) => k ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath(); ctx.fill(); ctx.restore(); };
+  quad([P(0, -1, 0), P(xm, -1, 0), P(xm, 1, 0), P(0, 1, 0)], "rgba(0,59,92,.05)");
+  quad([P(0, 0, -1), P(xm, 0, -1), P(xm, 0, 1), P(0, 0, 1)], "rgba(0,102,51,.06)");
+  // eixos
+  arrowTo(ctx, ...P(-0.05, 0, 0), ...P(xm + 0.12, 0, 0), c.K, 1.6, 10); txt(ctx, "x (m)", ...P(xm + 0.14, 0.12, 0), { size: 16, italic: true, c: c.M });
+  arrowTo(ctx, ...P(0, 0, 0), ...P(0, 1.25, 0), c.K, 1.4, 9); txt(ctx, "y", ...P(0.03, 1.32, 0), { size: 17, italic: true });
+  arrowTo(ctx, ...P(0, 0, 0), ...P(0, 0, 1.5), c.K, 1.4, 9); txt(ctx, "z", ...P(0, -0.08, 1.62), { size: 17, italic: true });
+  for (let q = 1; q <= 4; q++) { const x = q * 0.5, [px, py] = P(x, 0, 0); line(ctx, px, py - 5, px, py + 5, c.K, 1.4); txt(ctx, fmtc(x, 1), px + 14, py + 18, { align: "center", size: 14, c: c.M }); }
+  const Ey = (x) => Math.sin(TAU * x) * Math.sin(wt), Hz = (x) => Math.cos(TAU * x) * Math.cos(wt);   // normalizados por 50 V/m
+  // envoltórias tracejadas
+  const path = (f, col, lw, dash) => { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.beginPath();
+    for (let k = 0; k <= 400; k++) { const x = xm * k / 400, p = f(x); k ? ctx.lineTo(...p) : ctx.moveTo(...p); } ctx.stroke(); ctx.restore(); };
+  for (const sg of [1, -1]) { path((x) => P(x, sg * Math.abs(Math.sin(TAU * x)), 0), c.P, 1, [5, 5]); path((x) => P(x, 0, sg * Math.abs(Math.cos(TAU * x))), c.G, 1, [5, 5]); }
+  // setas de H (em z) e de E (em y)
+  for (let k = 0; k <= 32; k++) {
+    const x = xm * k / 32, e = Ey(x), hh = Hz(x);
+    if (Math.abs(hh) > 0.08) arrowTo(ctx, ...P(x, 0, 0), ...P(x, 0, hh), c.G, 2, 8);
+    if (Math.abs(e) > 0.08) arrowTo(ctx, ...P(x, 0, 0), ...P(x, e, 0), c.P, 2, 8);
+  }
+  path((x) => P(x, 0, Hz(x)), c.G, 3);
+  path((x) => P(x, Ey(x), 0), c.P, 3);
+  txt(ctx, "E_y (direção y)", w - 230, 30, { size: 17, c: c.P }); txt(ctx, "η₀H_z (direção z)", w - 230, 56, { size: 17, c: c.G });
+}
+function estFrame(ts) {
+  if (!EST.play) return;
+  const sl = $("est-cv").closest(".slide"); if (!sl.classList.contains("active")) { EST.play = false; $("est-play").textContent = "Animar"; return; }
+  const dt = EST.last === null ? 0 : (ts - EST.last) / 1000; EST.last = ts;
+  const el = $("est-t"); let v = Number(el.value) + dt * 60; if (v > 360) v -= 360; el.value = v; $("est-t-o").textContent = Math.round(v) + "°"; drawEst();
+  requestAnimationFrame(estFrame);
+}
+bindIf(["est-t"], { "est-t": (v) => Math.round(v) + "°" }, drawEst);
+$("est-play")?.addEventListener("click", () => { EST.play = !EST.play; EST.last = null; $("est-play").textContent = EST.play ? "Pausar" : "Animar"; if (EST.play) requestAnimationFrame(estFrame); });
+
+const DRAW = { est: drawEst, anel: startAnel, ima: startIma, exi: drawExi, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb, ant: startAnt, fz2: startFz2 };
 
 // ---------- modo rolável (celular, tablet em pé): quadros e equações cabem na largura ----------
 function narrowFit() {

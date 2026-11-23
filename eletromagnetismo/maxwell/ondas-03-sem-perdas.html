@@ -989,7 +989,7 @@ function lenzPanel(ox, dir, sB, sI) {
   const labels = `<div class="lb W" style="left:${ox + 72}px;top:${cy}px">S</div><div class="lb W" style="left:${ox + 178}px;top:${cy}px">N</div>` +
     lb(ox + 130, cy - 90, Rw`\vec{\mathbf u}`) + lb(ox + 622, cy - 26, Rw`\vB`, "G") +
     lb(dir > 0 ? ox + 625 : ox + 625, cy + 30, Rw`\vB_{\mathrm{ind}}`, "R", S(sI)) + lb(lx + 48, cy - 112, "i", "R", S(sI)) +
-    lbt(ox + 330, cy + 160, dir > 0 ? "aproximando: Ψ aumenta" : "afastando: Ψ diminui") +
+    lbt(ox + 330, cy + 160, dir > 0 ? "aproximando: mais linhas atravessam a espira" : "afastando: menos linhas atravessam a espira") +
     lbt(ox + 330, cy + 192, dir > 0 ? "B<sub>ind</sub> contrário a B" : "B<sub>ind</sub> no mesmo sentido de B", "", S(sI)) +
     lbt(lx - 58, cy - 78, `<b>${dir > 0 ? "N" : "S"}</b>`, "R", S(sI)) + lb(ox + 130, cy + 82, Rw`\vec{\mathbf F}`, "R", S(sI)) +
     lbt(ox + 330, cy + 224, dir > 0 ? "face N da bobina voltada para o ímã: repulsão" : "face S da bobina voltada para o ímã: atração", "R", S(sI));
@@ -1014,10 +1014,10 @@ function lenzMini(cy, face, fdir, ext) {
 }
 function boardLenzEn() {
   const [s1, l1] = lenzMini(120, "S", 1, false), [s2, l2] = lenzMini(370, "N", -1, true);
-  const svg = G.g(S("1-3"), s1 + G.g(S("3"), G.ln(20, 30, 540, 220, "R", 4) + G.ln(20, 220, 540, 30, "R", 4))) + G.g(S("4"), s2 + G.ln(10, 245, 550, 245, "M", 1.2, "", "6 6"));
-  const lab = `<div ${S("1-3")}>${l1}${lbt(470, 120, "face S atrai:<br>F a favor de u", "")}</div>` +
-    `<div ${S("4")}>${l2}${lbt(470, 370, "face N repele:<br>F contra u", "")}</div>` + lbt(280, 14, "hipótese contrária", "M", S("1-3")) + lbt(280, 270, "sentido de Lenz", "M", S("4"));
-  return board(560, 470, svg, lab);
+  const svg = G.g(S("1-3"), s1 + G.g(S("3"), G.ln(20, 30, 600, 220, "R", 4) + G.ln(20, 220, 600, 30, "R", 4))) + G.g(S("4"), s2 + G.ln(10, 245, 610, 245, "M", 1.2, "", "6 6"));
+  const lab = `<div ${S("1-3")}>${l1}${lbt(530, 120, "face S atrai:<br>F a favor de u", "")}</div>` +
+    `<div ${S("4")}>${l2}${lbt(530, 370, "face N repele:<br>F contra u", "")}</div>` + lbt(280, 14, "hipótese contrária", "M", S("1-3")) + lbt(280, 270, "sentido de Lenz", "M", S("4"));
+  return board(620, 470, svg, lab);
 }
 
 function boardObs() {
