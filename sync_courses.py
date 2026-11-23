@@ -178,14 +178,26 @@ COURSES = {
                      ("maxwell-01-estatica.html", "Estática e regime variante", "Statics and time-varying fields"),
                      ("maxwell-02-faraday.html", "Lei de Faraday", "Faraday's law"),
                      ("maxwell-03-ampere-maxwell.html", "Lei de Ampère–Maxwell", "Ampère–Maxwell law"),
-                     ("maxwell-04-onda.html", "Equação de onda 3D", "3D wave equation"),
-                     ("maxwell-05-perdas.html", "Meios com perdas", "Lossy media"),
-                     ("maxwell-06-poynting.html", "Vetor de Poynting", "Poynting vector"),
-                     ("maxwell-07-polarizacao.html", "Polarização", "Polarization"),
-                     ("maxwell-08-contorno.html", "Condições de contorno", "Boundary conditions"),
-                     ("maxwell-09-reflexao-normal.html", "Reflexão em incidência normal", "Reflection at normal incidence"),
-                     ("maxwell-10-reflexao-obliqua.html", "Reflexão em incidência oblíqua", "Reflection at oblique incidence"),
-                     ("maxwell-11-dipolo-hertz.html", "Antena: o dipolo de Hertz", "Antenna: the Hertzian dipole"),
+                     ("maxwell-04-forma-final.html", "Equações de Maxwell na forma final", "Maxwell's equations in final form"),
+                     ("maxwell-05-contorno.html", "Condições de contorno", "Boundary conditions"),
+                     ("maxwell-06-potenciais.html", "Potenciais variantes no tempo", "Time-varying potentials"),
+                     ("maxwell-07-harmonicos.html", "Campos harmônicos no tempo", "Time-harmonic fields"),
+                 ],
+                  # endereços antigos (SIGAA): redirecionam para as partes novas
+                  "extra": ["maxwell-04-onda.html", "maxwell-05-perdas.html", "maxwell-06-poynting.html",
+                            "maxwell-07-polarizacao.html", "maxwell-08-contorno.html", "maxwell-09-reflexao-normal.html",
+                            "maxwell-10-reflexao-obliqua.html", "maxwell-11-dipolo-hertz.html"]}),
+                (("Propagação de ondas", "Wave propagation"),
+                 {"html": "maxwell/html/ondas.html", "parts": [
+                     ("ondas-01-equacao-de-onda.html", "Ondas em geral: a equação de onda", "Waves in general: the wave equation"),
+                     ("ondas-02-dieletricos-com-perdas.html", "Ondas em dielétricos com perdas", "Waves in lossy dielectrics"),
+                     ("ondas-03-sem-perdas.html", "Dielétricos sem perdas e espaço livre", "Lossless dielectrics and free space"),
+                     ("ondas-04-bons-condutores.html", "Ondas em bons condutores", "Waves in good conductors"),
+                     ("ondas-05-polarizacao.html", "Polarização", "Polarization"),
+                     ("ondas-06-poynting.html", "Vetor de Poynting", "Poynting vector"),
+                     ("ondas-07-reflexao-normal.html", "Reflexão em incidência normal", "Reflection at normal incidence"),
+                     ("ondas-08-reflexao-obliqua.html", "Reflexão em incidência oblíqua", "Reflection at oblique incidence"),
+                     ("ondas-09-dipolo-hertz.html", "Antena: o dipolo de Hertz", "Antenna: the Hertzian dipole"),
                  ]}),
             ]),
         ],
@@ -275,6 +287,8 @@ for name, c in COURSES.items():
                         copy_deck(tw, dst / pdir / tw.name, seen)
                     items.append(f'        <li>{names(p, e, f"{pdir}/{f}", f"{pdir}/{tw.name}" if tw.exists() else None)}</li>')
                 row += "\n      <ol>\n" + "\n".join(items) + "\n      </ol>\n    "
+                for f in files.get("extra", []):  # published but not listed (old URLs that redirect)
+                    copy_deck(base / f, dst / pdir / f, seen)
             rows.append(f"    <li>{row}</li>")
         sections.append(f'<h2>{html.escape(hpt)} <span class="sep">·</span> <span lang="en" class="en">{html.escape(hen)}</span></h2>\n'
                         "<ol>\n" + "\n".join(rows) + "\n</ol>")

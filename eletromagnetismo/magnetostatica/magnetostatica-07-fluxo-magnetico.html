@@ -17,8 +17,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <script>
   window.MathJax = {
-    loader: { load: ["[tex]/html", "[tex]/color"] },
-    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color"] }, macros: { cb: ["{\\color[RGB]{0,59,92}{#1}}", 1], cg: ["{\\color[RGB]{0,102,51}{#1}}", 1], cr: ["{\\color[RGB]{176,58,46}{#1}}", 1], sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vB: "\\vec{\\mathbf B}", vJ: "\\vec{\\mathbf J}", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", az: "\\hat{\\mathbf a}_z", arho: "\\hat{\\mathbf a}_\\rho", aphi: "\\hat{\\mathbf a}_\\phi", arr: "\\hat{\\mathbf a}_r", ath: "\\hat{\\mathbf a}_\\theta" } },
+    loader: { load: ["[tex]/html", "[tex]/color", "[tex]/cancel"] },
+    tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]], tags: "ams", packages: { "[+]": ["html", "color", "cancel"] }, macros: { cb: ["{\\color[RGB]{0,59,92}{#1}}", 1], cg: ["{\\color[RGB]{0,102,51}{#1}}", 1], cr: ["{\\color[RGB]{176,58,46}{#1}}", 1], sen: "\\operatorname{sen}", cotg: "\\operatorname{cotg}", cossec: "\\operatorname{cossec}", vE: "\\vec{\\mathbf E}", vD: "\\vec{\\mathbf D}", vH: "\\vec{\\mathbf H}", vB: "\\vec{\\mathbf B}", vJ: "\\vec{\\mathbf J}", ax: "\\hat{\\mathbf a}_x", ay: "\\hat{\\mathbf a}_y", az: "\\hat{\\mathbf a}_z", arho: "\\hat{\\mathbf a}_\\rho", aphi: "\\hat{\\mathbf a}_\\phi", arr: "\\hat{\\mathbf a}_r", ath: "\\hat{\\mathbf a}_\\theta" } },
     svg: { fontCache: "global", displayAlign: "left", displayIndent: "0" },
     options: { enableMenu: false },
     startup: { ready() { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__mathReady && window.__mathReady()); } }
