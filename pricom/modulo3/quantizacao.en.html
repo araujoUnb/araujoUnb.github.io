@@ -843,7 +843,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 <!-- ============ instrumento: SQNR ============ -->
 <section class="slide" id="sqnrinst" data-sec="3 Range · instrument" data-draw="sqnrinst">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>SQNR, bits and range</h2><div class="sub">Instrument · midrise uniform quantizer · Eqs. (3), (4) and (6)</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>SQNR, bits and range</h2><div class="sub">Instrument · midrise uniform quantizer</div><div class="bar"></div></div>
   <div class="body">
     <div class="inst">
       <div class="painel">
@@ -855,7 +855,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
       <div class="plots" style="gap:6px">
         <div class="plot"><canvas id="sq-pdf" height="190" aria-label="Density with the quantizer regions"></canvas></div>
         <div class="plot"><canvas id="sq-curve" height="270" aria-label="SQNR as a function of the range"></canvas></div>
-        <div class="legend"><span><i style="border-color:var(--unb-primary)"></i>exact SQNR, from (3) and (4)</span><span><i class="dash" style="border-color:var(--unb-alert)"></i>approximation (6), granular only</span><span class="try">With \(\nu=3\), compare \(x_{\max}=4\sigma\) and \(x_{\max}=2.34\sigma\), the \(\Delta=0.586\sigma\) of Table 7.1.</span></div>
+        <div class="legend" style="align-items:center"><span><i style="border-color:var(--unb-primary)"></i>exact SQNR: \(\displaystyle 10\log_{10}\frac{E[X^2]}{\sum_{k=1}^{N}\int_{a_{k-1}}^{a_k}(x-\hat x_k)^2 f_X(x)\,dx}\)</span><span><i class="dash" style="border-color:var(--unb-alert)"></i>with \(D\approx\Delta^2/12\): \(\displaystyle 4.77+6.02\,\nu+10\log_{10}\frac{E[X^2]}{x_{\max}^2}\)</span><span class="try" style="flex-basis:100%">With \(\nu=3\), compare \(x_{\max}=4\sigma\) and \(x_{\max}=2.34\sigma\), the \(\Delta=0.586\sigma\) of Table 7.1.</span></div>
       </div>
     </div>
   </div>
@@ -1049,7 +1049,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </style>
   <div class="body">
     <div class="deriv board" style="gap:18px">
-        <div class="step txt" style="font-size:20px;max-width:840px">Problem: design the optimal \(N=4\)-level quantizer for a source with a Laplacian density, similar to that of speech.</div>
+        <div class="step txt" style="font-size:20px;max-width:840px">Problem: design the optimal \(N=4\)-level quantizer for a source with a Laplacian density, similar to that of speech. Find:<ol type="a" style="margin:8px 0 0;padding-left:28px"><li>the power \(E[X^2]\) of the source;</li><li>the boundaries and the levels that minimize the distortion \(D\);</li><li>the SQNR of the starting uniform quantizer and of the optimal one, in dB;</li><li>the gain of the optimal one over the starting uniform quantizer, in dB.</li></ol></div>
         <div class="step"><div class="why">Laplacian density, similar to that of speech</div><div class="m">\[ f_X(x)=\cssId{lx-f}{\tfrac12\,e^{-|x|}} \]</div></div>
         <div class="step"><div class="why">Power: the density is even, double the positive side</div><div class="m">\[ E[X^2]=2\int_0^\infty x^2\,\cssId{lx-f2}{\tfrac12e^{-x}}\,dx=\cssId{lx-i2}{\int_0^\infty x^2e^{-x}\,dx} \]</div></div>
     </div>
@@ -1340,7 +1340,7 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
   <div class="frametitle"><h2>Exercise 1: SQNR of an A/D converter</h2><div class="sub">12 bits, range \(\pm 2.5\) V · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="deriv board" style="gap:18px">
-        <div class="step txt" style="max-width:840px">A \(\nu=12\)-bit A/D converter has a \(\pm 2.5\) V range and receives a sinusoid of amplitude \(A=1\) V. Compute \(\Delta\), \(D\) and the SQNR.</div>
+        <div class="step txt" style="max-width:840px">A \(\nu=12\)-bit A/D converter with uniform quantization has a \(\pm 2.5\) V range and receives a sinusoid of amplitude \(A=1\) V. Compute \(\Delta\), \(D\) and the SQNR.</div>
         <div class="step"><div class="why">\(2^{12}\) levels over \(2x_{\max}=5\) V</div><div class="m">\[ \Delta=\frac{2x_{\max}}{2^{\nu}}=\frac{5}{\underbrace{4096}_{2^{12}}}=\cssId{xa-dl}{1.22\ \text{mV}} \]</div></div>
         <div class="step"><div class="why">Take into (5)</div><div class="m">\[ D=\frac{\Delta^2}{12}=\frac{\cssId{xa-sq}{(1.22\times10^{-3})^2}}{12}=\frac{1.49\times10^{-6}}{12}=1.24\times10^{-7}\ \text{V}^2 \]</div></div>
         <div class="step"><div class="why">Power of the sinusoid: the mean of \(\cos^2\) is \(1/2\)</div><div class="m">\[ E[X^2]=\cssId{xa-ps}{\frac{A^2}{2}}=\frac{1^2}{2}=\cssId{xa-p}{0.5}\ \text{V}^2 \]</div></div>
@@ -1359,30 +1359,56 @@ html.narrow nav.ctrl #lang { min-height: 40px; box-shadow: 0 4px 14px rgba(0, 30
 </section>
 
 <!-- ============ exercise 1: backoff and bits ============ -->
-<section class="slide" id="exadb" data-sec="6 Exercise 1 · backoff and number of bits" data-fig="exadb">
+<section class="slide" id="exadb" data-sec="6 Exercise 1 · amplitude backoff" data-fig="exadb">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exercise 1: amplitude backoff and number of bits</h2><div class="sub">The same 1 V sinusoid · press → to advance</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>Exercise 1: amplitude backoff</h2><div class="sub">The same 1 V sinusoid · press → to advance</div><div class="bar"></div></div>
   <div class="body">
     <div class="deriv board" style="gap:18px">
-        <div class="step"><div class="why">Full-scale sinusoid, \(A=x_{\max}=2.5\) V</div><div class="m">\[ \text{SQNR}=1.76+6.02\times 12=74.0\ \text{dB} \]</div></div>
-        <div class="step"><div class="why">Amplitude backoff: \(D\) does not change, only the signal power drops</div><div class="m">\[ 20\log_{10}\frac{A}{x_{\max}}=20\log_{10}\frac{1}{2.5}=\cssId{xb-rec}{-7.96\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Add the two terms; matches the previous slide</div><div class="m">\[ \text{SQNR}=74.0\cssId{xb-rec2}{-7.96}=\cssId{xb-conf}{66.0\ \text{dB}} \]</div></div>
-        <div class="step"><div class="why">Target of \(80\) dB, take into (6)</div><div class="m">\[ 4.77+6.02\,\nu+\cssId{xb-fat}{10\log_{10}\underbrace{\frac{0.5}{6.25}}_{E[X^2]/x_{\max}^2}}\ \ge 80 \]</div></div>
+        <div class="step txt" style="max-width:840px">In the same converter, \(\nu=12\) bits and range \(\pm 2.5\) V: how many dB of SQNR does the \(A=1\) V sinusoid lose relative to the full-scale sinusoid, of amplitude \(A=x_{\max}=2.5\) V?</div>
+        <div class="step"><div class="why">SQNR of the uniform quantizer, formula (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\cssId{xb-f}{10\log_{10}\frac{E[X^2]}{x_{\max}^2}} \]</div></div>
+        <div class="step"><div class="why">Sinusoid: \(E[X^2]=A^2/2\); the log of a product becomes a sum</div><div class="m">\[ \cssId{xb-f2}{10\log_{10}\frac{A^2/2}{x_{\max}^2}}=\underbrace{10\log_{10}\tfrac12}_{-3.01}+20\log_{10}\frac{A}{x_{\max}} \]</div></div>
+        <div class="step"><div class="why">Take into the SQNR: \(4.77-3.01=1.76\)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=\cssId{xb-j}{1.76}+6.02\,\nu+\cssId{xb-g}{20\log_{10}\frac{A}{x_{\max}}} \]</div></div>
+        <div class="step"><div class="why">Full-scale sinusoid, \(A=x_{\max}=2.5\) V: the last term is zero</div><div class="m">\[ \text{SQNR}_{\text{dB}}=1.76+6.02\times12+\cssId{xb-z}{0}=\cssId{xb-ch}{74.0\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">\(1\) V sinusoid: \(D\) does not change, only the signal power drops</div><div class="m">\[ 20\log_{10}\frac{A}{x_{\max}}=20\log_{10}\frac{1}{2.5}=\cssId{xb-rec}{-7.96\ \text{dB}} \]</div></div>
+        <div class="step"><div class="why">Add the two terms; matches the previous slide</div><div class="m">\[ \text{SQNR}_{\text{dB}}=74.0\cssId{xb-rec2}{-7.96}=\cssId{xb-conf}{66.0\ \text{dB}} \]</div></div>
+    </div>
+    <div class="figfloat" data-show="5-">
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the full-scale sinusoid and the 1 V sinusoid"></canvas><div class="figcap"></div></div>
+    </div>
+  </div>
+  <div class="link" data-on="3" data-from="xb-f" data-to="xb-f2">sinusoid: A²/2 in place of E[X²]</div>
+  <div class="link" data-on="5" data-from="xb-g" data-to="xb-z">A = xₘₐₓ: log of 1 is zero</div>
+  <div class="link" data-on="7" data-from="xb-rec" data-to="xb-rec2">add in dB</div>
+  <div class="note" data-on="4" data-to="xb-j">\(4.77-3.01=1.76\)</div>
+  <div class="note" data-on="5" data-to="xb-ch">full-scale sinusoid: \(A=x_{\max}\)</div>
+  <div class="note" data-on="6" data-to="xb-rec">\(D\) does not change, only the signal power drops</div>
+  <div class="note" data-on="7" data-to="xb-conf">matches the previous slide: the loss is \(7.96\) dB</div>
+  <aside class="notes"></aside>
+</section>
+
+<!-- ============ exercise 1: number of bits ============ -->
+<section class="slide" id="exadb2" data-sec="6 Exercise 1 · number of bits" data-fig="exadb2">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exercise 1: number of bits</h2><div class="sub">The same 1 V sinusoid · press → to advance</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="deriv board" style="gap:18px">
+        <div class="step txt" style="max-width:840px">In the same \(\pm 2.5\) V range, how many bits must the converter have for the \(A=1\) V sinusoid to reach at least \(80\) dB of SQNR?</div>
+        <div class="step"><div class="why">SQNR of the uniform quantizer, formula (6)</div><div class="m">\[ \text{SQNR}_{\text{dB}}=4.77+6.02\,\nu+\cssId{xb-fb}{10\log_{10}\frac{E[X^2]}{x_{\max}^2}}\ \cssId{xb-meta}{\ge 80} \]</div></div>
+        <div class="step"><div class="why">Take in \(E[X^2]=A^2/2=0.5\) V² and \(x_{\max}^2=6.25\) V²; target of \(80\) dB</div><div class="m">\[ 4.77+6.02\,\nu+\cssId{xb-fat}{10\log_{10}\underbrace{\frac{0.5}{6.25}}_{0.08}}\ \ge 80 \]</div></div>
         <div class="step"><div class="why">\(10\log_{10}0.08=-10.97\)</div><div class="m">\[ 4.77+6.02\,\nu\cssId{xb-mv}{-10.97}\ \ge 80 \]</div></div>
         <div class="step"><div class="why">Solve for \(\nu\): \(-10.97\) moves to the right with its sign flipped</div><div class="m">\[ \nu\ge\frac{80-4.77\cssId{xb-mv2}{+10.97}}{6.02}=\frac{86.20}{6.02}=\cssId{xb-14}{14.32} \]</div></div>
         <div class="step"><div class="why">\(\nu\) is an integer: round up; with \(14\) bits it would be \(78.1\) dB</div><div class="m">\[ \cssId{xb-15}{\boxed{\nu=15\ \text{bits}}}\qquad \cssId{xb-ver}{4.77+90.30-10.97=84.1\ \text{dB}} \]</div></div>
     </div>
     <div class="figfloat" data-show="1-">
-      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the full-scale sinusoid and the 1 V sinusoid, with the 80 dB target"></canvas><div class="figcap"></div></div>
+      <div class="fig"><canvas data-figcanvas height="440" aria-label="SQNR versus number of bits for the 1 V sinusoid, with the 80 dB target"></canvas><div class="figcap"></div></div>
     </div>
   </div>
-  <div class="link" data-on="3" data-from="xb-rec" data-to="xb-rec2">add in dB</div>
-  <div class="link" data-on="5" data-from="xb-fat" data-to="xb-mv">10 log₁₀0.08 = −10.97</div>
-  <div class="link" data-on="6" data-from="xb-mv" data-to="xb-mv2">move to the right: sign flipped</div>
-  <div class="link" data-on="7" data-from="xb-14" data-to="xb-15">integer: round up</div>
-  <div class="note" data-on="2" data-to="xb-rec">\(D\) does not change, only the signal power drops</div>
-  <div class="note" data-on="3" data-to="xb-conf">matches the previous slide</div>
-  <div class="note" data-on="7" data-to="xb-ver">with \(14\) bits it would be \(78.1\) dB, below the target</div>
+  <div class="link" data-on="3" data-from="xb-fb" data-to="xb-fat">take in the sinusoid values</div>
+  <div class="link" data-on="4" data-from="xb-fat" data-to="xb-mv">10 log₁₀0.08 = −10.97</div>
+  <div class="link" data-on="5" data-from="xb-mv" data-to="xb-mv2">move to the right: sign flipped</div>
+  <div class="link" data-on="6" data-from="xb-14" data-to="xb-15">integer: round up</div>
+  <div class="note" data-on="2" data-to="xb-meta">target: \(80\) dB</div>
+  <div class="note" data-on="6" data-to="xb-ver">with \(14\) bits it would be \(78.1\) dB, below the target</div>
   <aside class="notes"></aside>
 </section>
 
@@ -2340,7 +2366,8 @@ const FIGS = {
     }
     return XL.capA[Math.min(s, XL.capA.length) - 1];
   },
-  exadb(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 2, 3, 4, 4, 5, 6][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
+  exadb2(ctx, w, h, s, t) { return this.exadb(ctx, w, h, -([0, 3, 4, 4, 4, 5, 6][s] || 6), t); },
+  exadb(ctx, w, h, s) { s = s < 0 ? -s : ([0, 1, 1, 1, 1, 1, 2, 3][s] || s);   // passos do quadro -> passos da figura; negativo: passo já pronto
     const c = C(), { X, Y } = frame(w, h, { xmin: 7.5, xmax: 16.5, ymin: 40, ymax: 100, ml: 54, mr: 16, mt: 14, mb: 42, top: 0 });
     for (let v = 40; v <= 100; v += 10) { line(ctx, X(7.5), Y(v), X(16.5), Y(v), c.GR, 1); txt(ctx, String(v), X(7.5) - 8, Y(v), { size: 14, c: c.M, align: "right" }); }
     for (let v = 8; v <= 16; v++) { line(ctx, X(v), Y(40), X(v), Y(100), c.GR, 1); txt(ctx, String(v), X(v), Y(40) + 14, { size: 14, c: c.M, align: "center" }); }
@@ -2467,7 +2494,7 @@ function drawSqnrInst() {
     txt(ctx, "−x_{max}", X(-r), Y(0) + 14, { size: 14, c: c.R, align: "center", italic: true }); txt(ctx, "x_{max}", X(r), Y(0) + 14, { size: 14, c: c.R, align: "center", italic: true });
   }
   const u = sk === "g" ? "σ" : "A";
-  $("sq-read").innerHTML = [`N = 2<sup>ν</sup>: <b>${N(nu)}</b> levels`, `Δ = 2x<sub>max</sub>/N: <b>${fmtc(2 * r / 2 ** nu, 4)}</b>${u}`, `P, overload: <b>${fexp(src.pover(r), 2)}</b>`, `granular D: <b>${fexp(dg / src.E2, 3)}</b>·E[X²]`, `overload D: <b>${fexp(dov / src.E2, 3)}</b>·E[X²]`, `exact SQNR: <b>${fdb2(sq)}</b>`, `SQNR from (6): <b>${fdb2(sa)}</b>`, `best range: <b>${fmtc(xs[ib], 2)}</b>${u}, <b>${fdb2(ex[ib])}</b>`].map((l) => `<div>${l}</div>`).join("");
+  $("sq-read").innerHTML = [`N = 2<sup>ν</sup>: <b>${N(nu)}</b> levels`, `Δ = 2x<sub>max</sub>/N: <b>${fmtc(2 * r / 2 ** nu, 4)}</b>${u}`, `P, overload: <b>${fexp(src.pover(r), 2)}</b>`, `granular D: <b>${fexp(dg / src.E2, 3)}</b>·E[X²]`, `overload D: <b>${fexp(dov / src.E2, 3)}</b>·E[X²]`, `exact SQNR: <b>${fdb2(sq)}</b>`, `SQNR with D ≈ Δ²/12: <b>${fdb2(sa)}</b>`, `best range: <b>${fmtc(xs[ib], 2)}</b>${u}, <b>${fdb2(ex[ib])}</b>`].map((l) => `<div>${l}</div>`).join("");
   function N(n) { return 2 ** n; }
 }
 
