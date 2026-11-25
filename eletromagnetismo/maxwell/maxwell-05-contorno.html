@@ -341,6 +341,7 @@ svg.ink { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; poi
 .qd { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 44px; flex: 1; min-height: 0; align-items: start; }
 .board { position: relative; flex: none; }
 .board svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.board.pcb .lb mjx-container svg { position: static; }   /* rótulos centrados de fato no ponto */
 .board .lb { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; font-size: 25px; line-height: 1; }
 .board .lb.sm { font-size: 20px; }
 .board .lb.txt { font-size: 19px; color: var(--unb-muted); }
@@ -401,6 +402,22 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   background: rgba(255, 205, 0, .45); transform-origin: left center; transition: transform .55s ease; }
 .grifo > .gm.off { transform: scaleX(0); opacity: 1; visibility: visible; }
 
+/* condição geral -> seta com a hipótese -> forma do caso */
+.simp { display: grid; grid-template-columns: max-content max-content minmax(0, 1fr); column-gap: 18px; row-gap: 4px; align-items: center; }
+html.narrow .simp { grid-template-columns: max-content minmax(0, 1fr); column-gap: 8px; }
+html.narrow .simp > :nth-child(3n+1) { grid-column: 1 / -1; }
+html.narrow .simp > .m, html.narrow .simp > .m mjx-container { font-size: 15.5px !important; }
+/* fases de um mesmo slide: uma dedução aparece, some, e o slide continua (cada .qd com seu intervalo data-s) */
+.stack.fases { flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr); align-items: start; }
+html.narrow .stack.fases { display: flex; flex-direction: column; gap: 28px; }
+html.narrow .stack.fases > .qd.off { opacity: 1; visibility: visible; }
+html.narrow .stack.fases .stack > .off { display: none; }
+/* giro de um vetor no plano em perspectiva: --m = matriz do plano, --b -> --a = ângulos; .late = seta final, depois do giro */
+.rotp { transform-origin: 0 0; transform-box: view-box; transform: var(--m) rotate(var(--a)); transition: transform 1.1s ease-in-out; }
+.rotp.off { transform: var(--m) rotate(var(--b)); transition: none; }
+.late { transition: opacity .3s ease 1s; }
+.late.off { transition: none; }
+
 </style>
 </head>
 <body>
@@ -450,7 +467,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
       <a href="maxwell-02-faraday.html#s-far"><b>2.</b>Lei de Faraday<span class="d">experimentos de Faraday, fluxo, lei de Lenz e conservação da energia, formas integral e pontual, fem de transformador e de movimento, exemplos</span></a>
       <a href="maxwell-03-ampere-maxwell.html#s-am"><b>3.</b>Lei de Ampère–Maxwell<span class="d">conservação da carga, corrente de deslocamento, forma integral, exemplo</span></a>
       <a href="maxwell-04-forma-final.html#s-mxf"><b>4.</b>Equações de Maxwell na forma final<span class="d">formas pontual e integral, relações constitutivas, continuidade, força de Lorentz, exemplo</span></a>
-      <a data-go="s-cc"><b>5.</b>Condições de contorno<span class="d">E e H tangenciais, D e B normais, refração das linhas de campo, condutor perfeito, exemplo</span></a>
+      <a data-go="s-cc"><b>5.</b>Condições de contorno<span class="d">E e H tangenciais, D e B normais, refração das linhas de campo, dois dielétricos, parede elétrica e parede magnética</span></a>
       <a href="maxwell-06-potenciais.html#s-pot"><b>6.</b>Potenciais variantes no tempo<span class="d">potenciais V e A, condição de Lorenz, equações de onda com fonte, potenciais retardados, exemplo</span></a>
       <a href="maxwell-07-harmonicos.html#s-harm"><b>7.</b>Campos harmônicos no tempo<span class="d">fasores, equações de Maxwell em fasores, permissividade complexa, exemplo</span></a>
     </div>
@@ -505,7 +522,7 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
           <div class="ln" data-s="6-6"><div class="nt">Fluxo pela área \(\Delta w\,\Delta h\) do retângulo.</div></div>
           <div class="ln" data-s="7"><div class="nt">Achatando o retângulo, \(\Delta h\to0\), com \(\vB\) finito: os termos com \(\Delta h\) somem.</div></div>
         </div>
-        <div class="ln eqbox" data-s="8"><div class="m">\[ \boxed{\,E_{1t}=E_{2t}\,}\qquad\text{ou}\qquad \hat{\mathbf a}_n\times(\vE_1-\vE_2)=0 \]</div></div>
+        <div class="ln eqbox" data-s="8"><div class="m">\[ \boxed{\,E_{1t}=E_{2t}\,} \]</div></div>
         <div class="ln" data-s="9"><div class="nt">A componente tangencial de \(\vE\) é contínua através de qualquer interface.</div></div>
       </div>
     </div>
@@ -526,15 +543,17 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
       <div class="dv">
         <div class="ln"><div class="nt">Parte normal pelo produto escalar; o resto é tangencial:</div>
           <div class="m">\[ \vE_n=(\vE\cdot\hat{\mathbf a}_n)\,\hat{\mathbf a}_n,\qquad \vE_t=\vE-(\vE\cdot\hat{\mathbf a}_n)\,\hat{\mathbf a}_n \]</div></div>
-        <div class="ln" data-s="2"><div class="nt" id="tg-n2">Produto vetorial com \(\hat{\mathbf a}_n\): a parte normal é paralela a \(\hat{\mathbf a}_n\) e some,</div>
-          <div class="m">\[ \hat{\mathbf a}_n\times\vE=\hat{\mathbf a}_n\times\vE_t+\cancel{\hat{\mathbf a}_n\times\vE_n}=\hat{\mathbf a}_n\times\vE_t \]</div>
-          <div class="nt">É \(\vE_t\) girado de \(90^\circ\) no plano da interface, com o mesmo módulo.</div></div>
-        <div class="ln" data-s="3"><div class="nt">Aplicando de novo (\(\vec{\mathbf a}\times(\vec{\mathbf b}\times\vec{\mathbf c})=\vec{\mathbf b}(\vec{\mathbf a}\cdot\vec{\mathbf c})-\vec{\mathbf c}(\vec{\mathbf a}\cdot\vec{\mathbf b})\)) volta-se a \(\vE_t\):</div>
+        <div class="ln" data-s="2"><div class="nt">Produto vetorial com \(\hat{\mathbf a}_n\): a parte normal é paralela a \(\hat{\mathbf a}_n\) e some,</div>
+          <div class="m">\[ \hat{\mathbf a}_n\times\vE=\hat{\mathbf a}_n\times\vE_t+\cancel{\hat{\mathbf a}_n\times\vE_n}=\hat{\mathbf a}_n\times\vE_t \]</div></div>
+        <div class="ln" data-s="3"><div class="nt" id="tg-n2">É \(\vE_t\) girado de \(90^\circ\) no plano da interface, com o mesmo módulo (regra da mão direita: o polegar em \(\hat{\mathbf a}_n\) dá o sentido do giro).</div></div>
+        <div class="ln" data-s="4"><div class="nt" id="tg-n3">Aplicando o produto vetorial de novo, outro giro de \(90^\circ\): o resultado é oposto a \(\vE_t\). Com \(\vec{\mathbf a}\times(\vec{\mathbf b}\times\vec{\mathbf c})=\vec{\mathbf b}(\vec{\mathbf a}\cdot\vec{\mathbf c})-\vec{\mathbf c}(\vec{\mathbf a}\cdot\vec{\mathbf b})\):</div>
+          <div class="m">\[ \hat{\mathbf a}_n\times\big(\hat{\mathbf a}_n\times\vE\big)=\underbrace{\hat{\mathbf a}_n(\hat{\mathbf a}_n\cdot\vE)}_{\vE_n}-\vE\underbrace{(\hat{\mathbf a}_n\cdot\hat{\mathbf a}_n)}_{1}=-\vE_t \]</div></div>
+        <div class="ln eqbox" data-s="5"><div class="nt">O sinal menos completa a volta e recupera \(\vE_t\):</div>
           <div class="m">\[ \boxed{\,\vE_t=-\hat{\mathbf a}_n\times\big(\hat{\mathbf a}_n\times\vE\big)\,} \]</div></div>
       </div>
     </div>
   </div>
-  <span class="lk" data-a="#tg-l" data-b="#tg-n2" data-s="2" data-pa="r" data-pb="l" data-bend="80"></span>
+  <span class="lk" data-a="#tg-l" data-b="#tg-n2" data-s="3-3" data-pa="r" data-pb="l" data-bend="60"></span>
 </section>
 
 <section class="slide" data-sec="Contorno · forma vetorial da condição">
@@ -636,6 +655,28 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   <span class="lk" data-a="#cp-lrho" data-b="#cp-e" data-s="8-8" data-pa="r" data-pb="l" data-bend="90"></span>
 </section>
 
+<section class="slide" data-sec="Contorno · as quatro condições">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>As quatro condições de contorno</h2><div class="sub">Válidas em qualquer interface; \(\hat{\mathbf a}_n\) aponta do meio 2 para o meio 1</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccquatro"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Cada equação de Maxwell na forma integral dá uma condição na interface:</div></div>
+        <div class="simp">
+          <div class="m" data-s="2">\[ \oint_S\vD\cdot\dvS=Q_{\mathrm{env}} \]</div><div class="m" data-s="2">\[ \longrightarrow \]</div><div class="m" data-s="2">\[ \boxed{\,\hat{\mathbf a}_n\cdot(\vD_1-\vD_2)=\rho_s\,} \]</div>
+          <div class="m" data-s="3">\[ \oint_S\vB\cdot\dvS=0 \]</div><div class="m" data-s="3">\[ \longrightarrow \]</div><div class="m" data-s="3">\[ \boxed{\,\hat{\mathbf a}_n\cdot(\vB_1-\vB_2)=0\,} \]</div>
+          <div class="m" data-s="4">\[ \oint_L\vE\cdot\dvl=-\frac{d}{dt}\int_S\vB\cdot\dvS \]</div><div class="m" data-s="4">\[ \longrightarrow \]</div><div class="m" data-s="4">\[ \boxed{\,\hat{\mathbf a}_n\times(\vE_1-\vE_2)=0\,} \]</div>
+          <div class="m" data-s="5">\[ \oint_L\vH\cdot\dvl=I_{\mathrm{env}}+\frac{d}{dt}\int_S\vD\cdot\dvS \]</div><div class="m" data-s="5">\[ \longrightarrow \]</div><div class="m" data-s="5">\[ \boxed{\,\hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K}\,} \]</div>
+        </div>
+        <div class="ln" data-s="6"><div class="nt">\(B_n\) e \(E_t\) são sempre contínuas. \(D_n\) salta de \(\rho_s\) e \(H_t\) salta de \(K\):</div>
+          <div class="m">\[ D_{1n}-D_{2n}=\rho_s,\qquad B_{1n}=B_{2n} \]</div>
+          <div class="m">\[ E_{1t}=E_{2t},\qquad H_{1t}-H_{2t}=K \]</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="slide" data-sec="Contorno · refração das linhas">
   <img class="logo-head" alt="">
   <div class="frametitle"><h2>Refração das linhas de \(\vE\)</h2><div class="sub">Dois dielétricos, sem cargas nem correntes na interface</div><div class="bar"></div></div>
@@ -679,23 +720,150 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   </div>
 </section>
 
-<section class="slide" data-sec="Contorno · condutor perfeito">
+<section class="slide" data-sec="Contorno · dois dielétricos">
   <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Interface com um condutor perfeito</h2><div class="sub">\(\sigma\to\infty\): os campos variáveis não penetram</div><div class="bar"></div></div>
+  <div class="frametitle"><h2>Caso 1: interface entre dois dielétricos</h2><div class="sub">Meios sem perdas: sem carga livre e sem corrente na interface</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccdiel"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt"><span class="grifo" id="dl-n">Dielétricos sem perdas não têm cargas livres nem corrente de condução.<span class="gm" data-s="2"></span></span></div></div>
+        <div class="ln" data-s="3"><div class="nt" id="dl-n2">Na interface, portanto, \(\rho_s=0\) e \(\vec{\mathbf K}=0\).</div></div>
+        <div class="ln" data-s="4"><div class="nt">Condições gerais, já derivadas, e sua forma neste caso:</div></div>
+        <div class="simp">
+          <div class="m" data-s="4">\[ \hat{\mathbf a}_n\cdot(\vD_1-\vD_2)=\rho_s \]</div><div class="m" data-s="5">\[ \xrightarrow{\ \textstyle \rho_s=0\ } \]</div><div class="m" data-s="5">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vD_1=\hat{\mathbf a}_n\cdot\vD_2\,} \]</div>
+          <div class="m" data-s="4">\[ \hat{\mathbf a}_n\cdot(\vB_1-\vB_2)=0 \]</div><div class="m" data-s="6">\[ \xrightarrow{\ \textstyle \text{vale sempre}\ } \]</div><div class="m" data-s="6">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vB_1=\hat{\mathbf a}_n\cdot\vB_2\,} \]</div>
+          <div class="m" data-s="4">\[ \hat{\mathbf a}_n\times(\vE_1-\vE_2)=0 \]</div><div class="m" data-s="7">\[ \xrightarrow{\ \textstyle \text{vale sempre}\ } \]</div><div class="m" data-s="7">\[ \boxed{\,\hat{\mathbf a}_n\times\vE_1=\hat{\mathbf a}_n\times\vE_2\,} \]</div>
+          <div class="m" data-s="4">\[ \hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K} \]</div><div class="m" data-s="8">\[ \xrightarrow{\ \textstyle \vec{\mathbf K}=0\ } \]</div><div class="m" data-s="8">\[ \boxed{\,\hat{\mathbf a}_n\times\vH_1=\hat{\mathbf a}_n\times\vH_2\,} \]</div>
+        </div>
+        <div class="ln" data-s="9"><div class="nt">\(D_n\), \(B_n\), \(E_t\) e \(H_t\) são contínuas. Em componentes: \(\varepsilon_1E_{1n}=\varepsilon_2E_{2n}\) e \(\mu_1H_{1n}=\mu_2H_{2n}\), logo \(E_n\) e \(H_n\) saltam.</div></div>
+        <div class="ln" data-s="10"><div class="nt">As quatro não são independentes: em campos variantes no tempo, impor \(E_t\) e \(H_t\) contínuas já garante \(D_n\) e \(B_n\) contínuas.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#dl-if" data-b="#dl-n" data-s="2-2" data-pa="r" data-pb="b" data-bend="130" data-c="R"></span>
+  <span class="lk" data-a="#dl-l" data-b="#dl-n2" data-s="3-3" data-pa="r" data-pb="l" data-bend="60" data-c="R"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · parede elétrica">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Caso 2: condutor perfeito (parede elétrica)</h2><div class="sub">\(\sigma\to\infty\): os campos variáveis não penetram</div><div class="bar"></div></div>
   <div class="body">
     <div class="qd">
       <div data-mount="ccpec"></div>
       <div class="dv">
-        <div class="ln"><div class="nt">Num condutor perfeito, \(\sigma\to\infty\): \(\vJ=\sigma\vE\) finito exige \(\vE=0\) no interior; pela lei de Faraday, \(\partial\vB/\partial t=0\), e um campo variante no tempo não sobrevive lá dentro. No meio 2:</div>
-          <div class="m">\[ \vE_2=0,\qquad \vH_2=0 \]</div></div>
-        <div class="ln" data-s="2"><div class="nt">As quatro condições, com o meio 2 zerado:</div>
-          <div class="m">\[ \boxed{\,E_{1t}=0\,},\qquad \boxed{\,B_{1n}=0\,},\qquad \boxed{\,D_{1n}=\rho_s\,},\qquad \boxed{\,\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\,} \]</div></div>
-        <div class="ln" data-s="3"><div class="nt" id="pc-n">Junto ao condutor, \(\vE\) é normal e \(\vH\) é tangente à superfície. A corrente superficial \(\vec{\mathbf K}\) e a carga \(\rho_s\) se ajustam ao campo de fora.</div></div>
-        <div class="ln" data-s="4"><div class="nt">Bons condutores reais, como o cobre, se aproximam bem disso: no tópico de ondas veremos que os campos penetram só alguns micrômetros. É o ponto de partida da reflexão de uma onda num condutor.</div></div>
+        <div class="ln"><div class="nt">\(\vJ=\sigma\vE\) finito com \(\sigma\to\infty\) exige \(\vE=0\) no interior; pela lei de Faraday, \(\partial\vB/\partial t=0\), e um campo variante no tempo não existe lá dentro. No meio 2, \(\vE_2=\vD_2=0\) e \(\vH_2=\vB_2=0\).</div></div>
+        <div class="ln" data-s="2"><div class="nt">Condições gerais, já derivadas, e sua forma neste caso:</div></div>
+        <div class="simp">
+          <div class="m" data-s="2">\[ \hat{\mathbf a}_n\cdot(\vD_1-\vD_2)=\rho_s \]</div><div class="m" data-s="3">\[ \xrightarrow{\ \textstyle \vD_2=0\ } \]</div><div class="m" data-s="3">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vD_1=\rho_s\,} \]</div>
+          <div class="m" data-s="2">\[ \hat{\mathbf a}_n\cdot(\vB_1-\vB_2)=0 \]</div><div class="m" data-s="4">\[ \xrightarrow{\ \textstyle \vB_2=0\ } \]</div><div class="m" data-s="4">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vB_1=0\,} \]</div>
+          <div class="m" data-s="2">\[ \hat{\mathbf a}_n\times(\vE_1-\vE_2)=0 \]</div><div class="m" data-s="5">\[ \xrightarrow{\ \textstyle \vE_2=0\ } \]</div><div class="m" data-s="5">\[ \boxed{\,\hat{\mathbf a}_n\times\vE_1=0\,} \]</div>
+          <div class="m" data-s="2">\[ \hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K} \]</div><div class="m" data-s="6">\[ \xrightarrow{\ \textstyle \vH_2=0\ } \]</div><div class="m" data-s="6">\[ \boxed{\,\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\,} \]</div>
+        </div>
+        <div class="ln" data-s="7"><div class="nt" id="pc-n">Junto à superfície, \(\vE\) é normal e \(\vH\) é tangente; \(\rho_s\) e \(\vec{\mathbf K}\) ficam na própria superfície.</div></div>
+        <div class="ln" data-s="8"><div class="nt"><b>Parede elétrica</b>: a superfície curto-circuita o campo elétrico tangencial, como a extremidade em curto de uma linha de transmissão.</div></div>
       </div>
     </div>
   </div>
-  <span class="lk" data-a="#pc-lK" data-b="#pc-n" data-s="3-3" data-pa="r" data-pb="l" data-bend="90"></span>
+  <span class="lk" data-a="#pc-lK" data-b="#pc-n" data-s="7-7" data-pa="r" data-pb="l" data-bend="90"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · parede magnética">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Caso 3: parede magnética</h2><div class="sub">Caso dual da parede elétrica: quem se anula é \(\vH\) tangencial</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="stack fases">
+    <div class="qd" data-s="1-7">
+      <div data-mount="ccdn"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Parede magnética: idealização \(\mu\to\infty\). Como a energia magnética \(\tfrac12\mu H^2\) é finita, \(\vH\to0\) no interior: no meio 2, \(\vH_2=0\).</div></div>
+        <div class="ln" data-s="2"><div class="nt">Curva fechada \(L\) dentro do meio 2, rente à superfície, limitando a área \(S\) de normal \(\hat{\mathbf a}_n\). Lei de Ampère–Maxwell:</div>
+          <div class="stack">
+            <div class="m" data-s="2-2">\[ \oint_L\vH_2\cdot\dvl=I_{\mathrm{env}}+\frac{d}{dt}\int_S\vD_2\cdot\dvS \]</div>
+            <div class="m" data-s="3-3">\[ \cssId{dn-t1}{\underbrace{\oint_L\vH_2\cdot\dvl}_{0}}=I_{\mathrm{env}}+\frac{d}{dt}\int_S\vD_2\cdot\dvS \]</div>
+            <div class="m" data-s="4-4">\[ \underbrace{\oint_L\vH_2\cdot\dvl}_{0}=\cssId{dn-t2}{\underbrace{I_{\mathrm{env}}}_{0}}+\frac{d}{dt}\int_S\vD_2\cdot\dvS \]</div>
+            <div class="m" data-s="5">\[ \cancel{\oint_L\vH_2\cdot\dvl}=\cancel{I_{\mathrm{env}}}+\frac{d}{dt}\int_S\vD_2\cdot\dvS\quad\Rightarrow\quad \frac{d}{dt}\int_S D_{2n}\,dS=0 \]</div>
+          </div></div>
+        <div class="stack" style="margin-top:34px">
+          <div class="ln" data-s="3-3"><div class="nt">\(\vH_2=0\) em todos os pontos de \(L\): a circulação é nula.</div></div>
+          <div class="ln" data-s="4-4"><div class="nt">Não há corrente atravessando \(S\).</div></div>
+          <div class="ln" data-s="5"><div class="nt">O fluxo de \(\vD_2\) por \(S\) não varia no tempo; em \(S\), \(\vD_2\cdot\dvS=D_{2n}\,dS\).</div></div>
+        </div>
+        <div class="ln" data-s="6"><div class="nt" id="dn-mt">Vale para qualquer outra curva \(L'\), por menor que seja e em qualquer lugar da superfície:</div>
+          <div class="m">\[ \frac{\partial D_{2n}}{\partial t}=0\quad\text{em cada ponto} \]</div></div>
+        <div class="ln eqbox" data-s="7"><div class="nt">Sem campo estático sobreposto:</div><div class="m">\[ \boxed{\,D_{2n}=0\,} \]</div></div>
+      </div>
+    </div>
+    <div class="qd" data-s="8-15">
+      <div data-mount="ccbn"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">\(\vE_{2t}=\vE_{1t}\) não se anula. Em incidência normal, é uniforme ao longo da superfície.</div></div>
+        <div class="ln" data-s="9"><div class="nt">Lei de Faraday na mesma curva \(L\) (dentro do meio 2), com dois lados de comprimento \(\ell\) paralelos a \(\vE_{2t}\):</div>
+          <div class="stack">
+            <div class="m" data-s="9-9">\[ \int_{\mathrm{frente}}\vE_2\cdot\dvl+\int_{\mathrm{fundo}}\vE_2\cdot\dvl+\int_{\mathrm{laterais}}\vE_2\cdot\dvl=-\frac{d}{dt}\int_S\vB_2\cdot\dvS \]</div>
+            <div class="m" data-s="10-10">\[ \underbrace{\int_{\mathrm{frente}}\vE_2\cdot\dvl}_{\cssId{bn-t1}{E_{2t}\,\ell}}+\int_{\mathrm{fundo}}\vE_2\cdot\dvl+\int_{\mathrm{laterais}}\vE_2\cdot\dvl=-\frac{d}{dt}\int_S\vB_2\cdot\dvS \]</div>
+            <div class="m" data-s="11-11">\[ \underbrace{\int_{\mathrm{frente}}\vE_2\cdot\dvl}_{\cssId{bn-t1}{E_{2t}\,\ell}}+\underbrace{\int_{\mathrm{fundo}}\vE_2\cdot\dvl}_{\cssId{bn-t2}{-E_{2t}\,\ell}}+\int_{\mathrm{laterais}}\vE_2\cdot\dvl=-\frac{d}{dt}\int_S\vB_2\cdot\dvS \]</div>
+            <div class="m" data-s="12-12">\[ \underbrace{\int_{\mathrm{frente}}\vE_2\cdot\dvl}_{\cssId{bn-t1}{E_{2t}\,\ell}}+\underbrace{\int_{\mathrm{fundo}}\vE_2\cdot\dvl}_{\cssId{bn-t2}{-E_{2t}\,\ell}}+\underbrace{\int_{\mathrm{laterais}}\vE_2\cdot\dvl}_{\cssId{bn-t3}{0}}=-\frac{d}{dt}\int_S\vB_2\cdot\dvS \]</div>
+            <div class="m" data-s="13">\[ \cancel{E_{2t}\,\ell}-\cancel{E_{2t}\,\ell}+0=-\frac{d}{dt}\int_S\vB_2\cdot\dvS\ \Rightarrow\ \frac{d}{dt}\int_S B_{2n}\,dS=0 \]</div>
+          </div></div>
+        <div class="stack" style="margin-top:34px">
+          <div class="ln" data-s="10-10"><div class="nt">Lado da frente, percorrido no sentido de \(\vE_{2t}\).</div></div>
+          <div class="ln" data-s="11-11"><div class="nt">Lado do fundo, no sentido contrário; mesmo campo, porque \(\vE_{2t}\) é uniforme.</div></div>
+          <div class="ln" data-s="12-12"><div class="nt">Lados laterais, perpendiculares a \(\vE_{2t}\).</div></div>
+          <div class="ln" data-s="13"><div class="nt">O fluxo de \(\vB_2\) por qualquer \(S\) da superfície não varia no tempo.</div></div>
+        </div>
+        <div class="ln eqbox" data-s="14"><div class="nt">Sem campo estático sobreposto:</div><div class="m">\[ \boxed{\,B_{2n}=0\,} \]</div></div>
+        <div class="ln" data-s="15"><div class="nt">Se \(\vE_{2t}\) variar ao longo da superfície, frente e fundo não se cancelam e pode haver \(B_{2n}\neq0\).</div></div>
+      </div>
+    </div>
+    <div class="qd" data-s="16">
+      <div data-mount="ccpmc"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">No meio 2, \(\vH_2=0\) e \(D_{2n}=0\); com \(\vE_t\) uniforme na superfície, também \(B_{2n}=0\).</div></div>
+        <div class="ln" data-s="17"><div class="nt">Na superfície não há carga livre nem corrente: \(\rho_s=0\) e \(\vec{\mathbf K}=0\).</div></div>
+        <div class="ln" data-s="18"><div class="nt">Condições gerais, já derivadas, e sua forma neste caso:</div></div>
+        <div class="simp">
+          <div class="m" data-s="18">\[ \hat{\mathbf a}_n\cdot(\vD_1-\vD_2)=\rho_s \]</div><div class="m" data-s="19">\[ \xrightarrow{\ \textstyle D_{2n}=0,\ \rho_s=0\ } \]</div><div class="m" data-s="19">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vD_1=0\,} \]</div>
+          <div class="m" data-s="18">\[ \hat{\mathbf a}_n\cdot(\vB_1-\vB_2)=0 \]</div><div class="m" data-s="20">\[ \xrightarrow{\ \textstyle B_{2n}=0\ } \]</div><div class="m" data-s="20">\[ \boxed{\,\hat{\mathbf a}_n\cdot\vB_1=0\,} \]</div>
+          <div class="m" data-s="18">\[ \hat{\mathbf a}_n\times(\vE_1-\vE_2)=0 \]</div><div class="m" data-s="21">\[ \xrightarrow{\ \textstyle \text{vale sempre}\ } \]</div><div class="m" data-s="21">\[ \boxed{\,\hat{\mathbf a}_n\times\vE_1=\hat{\mathbf a}_n\times\vE_2\,} \]</div>
+          <div class="m" data-s="18">\[ \hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K} \]</div><div class="m" data-s="22">\[ \xrightarrow{\ \textstyle \vH_2=0,\ \vec{\mathbf K}=0\ } \]</div><div class="m" data-s="22" id="pm-nH">\[ \boxed{\,\hat{\mathbf a}_n\times\vH_1=0\,} \]</div>
+        </div>
+        <div class="ln" data-s="23"><div class="nt">\(E_t\) não se anula na parede. Já \(B_{2n}=0\) supõe \(\vE_t\) uniforme ao longo da superfície, como em incidência normal.</div></div>
+        <div class="ln" data-s="24"><div class="nt">Não existe exatamente na prática; é aproximada por superfícies corrugadas e em linhas planares. Equivale à extremidade em <b>circuito aberto</b> de uma linha de transmissão.</div></div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#dn-t1" data-b="#dn-L" data-s="3-3" data-pa="b" data-pb="r" data-bend="46"></span>
+  <span class="lk" data-a="#dn-m" data-b="#dn-mt" data-s="6-6" data-pa="r" data-pb="l" data-bend="60" data-c="R"></span>
+  <span class="lk" data-a="#dn-t2" data-b="#dn-S" data-s="4-4" data-pa="b" data-pb="r" data-bend="46"></span>
+  <span class="lk" data-a="#bn-t1" data-b="#bn-f" data-s="10-10" data-pa="b" data-pb="r" data-bend="46"></span>
+  <span class="lk" data-a="#bn-t2" data-b="#bn-b" data-s="11-11" data-pa="b" data-pb="r" data-bend="46"></span>
+  <span class="lk" data-a="#bn-t3" data-b="#bn-l" data-s="12-12" data-pa="b" data-pb="r" data-bend="46"></span>
+</section>
+
+<section class="slide" data-sec="Contorno · exemplo de parede magnética">
+  <img class="logo-head" alt="">
+  <div class="frametitle"><h2>Exemplo: antena de microfita</h2><div class="sub">A borda aberta se comporta como uma parede magnética</div><div class="bar"></div></div>
+  <div class="body">
+    <div class="qd">
+      <div data-mount="ccfita"></div>
+      <div class="dv">
+        <div class="ln"><div class="nt">Placa metálica sobre um plano de terra, separados por um dielétrico fino. A lateral é <b>aberta</b>: não há metal ali.</div></div>
+        <div class="ln" data-s="2"><div class="nt" id="mf-n2">Entre as placas, \(\vE\) é normal aos dois metais, isto é, vertical.</div></div>
+        <div class="ln" data-s="3"><div class="nt">Na abertura, o campo é <b>tangente</b> e não se anula: passa com o mesmo valor do dielétrico (meio 1) para o ar (meio 2). A componente normal é nula:</div>
+          <div class="m">\[ E_{1t}=E_{2t}\neq0,\qquad \boxed{\,\hat{\mathbf a}_n\cdot\vD_1=0\,} \]</div></div>
+        <div class="ln" data-s="4"><div class="nt" id="mf-n3">Na face de baixo da placa há corrente superficial, \(\vec{\mathbf K}=\hat{\mathbf a}_{\mathrm{metal}}\times\vH_1\) (caso 2). Na borda o metal acaba e a corrente não tem para onde ir: a componente de \(\vec{\mathbf K}\) perpendicular à borda vai a zero.</div>
+          <div class="m">\[ K_\perp=0\ \ \Rightarrow\ \ H_{1\parallel\,\mathrm{borda}}=0 \]</div></div>
+        <div class="ln" data-s="5"><div class="nt">\(\vH_1\) é tangente aos metais, logo não tem componente vertical. As duas componentes de \(\vH_1\) tangentes à abertura são nulas:</div>
+          <div class="m">\[ \boxed{\,\hat{\mathbf a}_n\times\vH_1=0\,} \]</div></div>
+        <div class="ln" data-s="6"><div class="nt" id="mf-n5">A abertura se comporta como uma <b>parede magnética</b>. Se fosse fechada com metal, seria uma parede elétrica (\(E_{1t}=0\)).</div></div>
+        <div class="ln" data-s="7"><div class="nt">É uma aproximação: um pouco de campo escapa pela borda, tanto menos quanto mais fino o dielétrico. É o modelo usado para projetar antenas de microfita.</div></div>
+      </div>
+    </div>
+  </div>
+  <span class="lk" data-a="#mf-n3" data-b="#mf-b" data-s="4-4" data-pa="l" data-pb="r" data-bend="60" data-c="R"></span>
+  <span class="lk" data-a="#mf-n5" data-b="#mf-w" data-s="6-6" data-pa="l" data-pb="r" data-bend="60" data-c="R"></span>
 </section>
 
 <section class="slide" data-sec="Contorno · resumo">
@@ -703,65 +871,13 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
   <div class="frametitle"><h2>Resumo das condições de contorno</h2><div class="sub">\(\hat{\mathbf a}_n\) aponta do meio 2 para o meio 1</div><div class="bar"></div></div>
   <div class="body">
     <table class="cmp mx">
-      <tr><th></th><th>caso geral</th><th>dois dielétricos (\(\rho_s=0\), \(K=0\))</th><th>meio 2 condutor perfeito</th></tr>
-      <tr><td>\(\vE\) tangencial</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=0\)</td></tr>
-      <tr data-s="2"><td>\(\vH\) tangencial</td><td>\(\hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K}\)</td><td>\(H_{1t}=H_{2t}\)</td><td>\(\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\)</td></tr>
-      <tr data-s="3"><td>\(\vD\) normal</td><td>\(D_{1n}-D_{2n}=\rho_s\)</td><td>\(\varepsilon_1E_{1n}=\varepsilon_2E_{2n}\)</td><td>\(D_{1n}=\rho_s\)</td></tr>
-      <tr data-s="4"><td>\(\vB\) normal</td><td>\(B_{1n}=B_{2n}\)</td><td>\(\mu_1H_{1n}=\mu_2H_{2n}\)</td><td>\(B_{1n}=0\)</td></tr>
+      <tr><th></th><th>caso geral</th><th>dois dielétricos (\(\rho_s=0\), \(K=0\))</th><th>parede elétrica (condutor perfeito)</th><th>parede magnética</th></tr>
+      <tr><td>\(\vE\) tangencial</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=E_{2t}\)</td><td>\(E_{1t}=0\)</td><td>\(E_{1t}=E_{2t}\)</td></tr>
+      <tr data-s="2"><td>\(\vH\) tangencial</td><td>\(\hat{\mathbf a}_n\times(\vH_1-\vH_2)=\vec{\mathbf K}\)</td><td>\(H_{1t}=H_{2t}\)</td><td>\(\hat{\mathbf a}_n\times\vH_1=\vec{\mathbf K}\)</td><td>\(H_{1t}=0\)</td></tr>
+      <tr data-s="3"><td>\(\vD\) normal</td><td>\(D_{1n}-D_{2n}=\rho_s\)</td><td>\(\varepsilon_1E_{1n}=\varepsilon_2E_{2n}\)</td><td>\(D_{1n}=\rho_s\)</td><td>\(D_{1n}=0\)</td></tr>
+      <tr data-s="4"><td>\(\vB\) normal</td><td>\(B_{1n}=B_{2n}\)</td><td>\(\mu_1H_{1n}=\mu_2H_{2n}\)</td><td>\(B_{1n}=0\)</td><td>\(B_{1n}=0\) <span style="font-size:17px">(incidência normal)</span></td></tr>
     </table>
     <p class="ctxt" data-s="5" style="margin-top:14px">Só duas são independentes para ondas: \(E_t\) e \(H_t\). As normais saem delas pelas equações de Maxwell (com \(\nabla\cdot\vD=\rho_v\) e \(\nabla\cdot\vB=0\)). Na reflexão, basta impor a continuidade de \(E_t\) e \(H_t\).</p>
-  </div>
-</section>
-
-<section class="slide" data-sec="Contorno · exemplo">
-  <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exemplo: campos dos dois lados de uma interface</h2><div class="bar"></div></div>
-  <div class="body" style="gap:14px">
-    <p style="font-size:25px;margin:0">O plano \(z=0\) separa o meio 1 (\(z>0\): \(\varepsilon_{r1}=2\), \(\mu_{r1}=1\)) do meio 2 (\(z<0\): \(\varepsilon_{r2}=5\), \(\mu_{r2}=3\)). Não há cargas nem correntes na interface. Junto a ela, no meio 1,</p>
-    <div class="m" style="font-size:27px">\[ \vE_1=(3\,\ax-4\,\ay+5\,\az)\cos\omega t\ \ \mathrm{V/m},\qquad \vH_1=(2\,\ax+6\,\az)\cos\omega t\ \ \mathrm{A/m}. \]</div>
-    <p style="font-size:25px;margin:0">Determine, junto à interface:</p>
-    <ul class="sq f23" style="list-style:none;padding-left:10px">
-      <li>(a) \(\vE_2\);</li>
-      <li>(b) os ângulos que \(\vE_1\) e \(\vE_2\) fazem com a normal;</li>
-      <li>(c) \(\vD_2\);</li>
-      <li>(d) \(\vH_2\) e \(\vB_2\).</li>
-    </ul>
-  </div>
-</section>
-
-<section class="slide" data-sec="Contorno · exemplo (a) e (b)">
-  <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exemplo: \(\vE_2\) e os ângulos</h2><div class="sub">(a) \(\vE_2\); (b) os ângulos de \(\vE_1\) e \(\vE_2\) com a normal</div><div class="bar"></div></div>
-  <div class="body">
-    <div class="qd">
-      <div data-mount="ccex"></div>
-      <div class="dv">
-        <div class="ln"><div class="nt">\(\hat{\mathbf a}_n=\az\) (do meio 2 para o 1). Separando \(\vE_1\):</div>
-          <div class="m">\[ \vE_{1t}=(3\,\ax-4\,\ay)\cos\omega t,\qquad \vE_{1n}=5\,\az\cos\omega t \]</div></div>
-        <div class="ln" data-s="2"><div class="nt">\(E_t\) contínua; \(D_n\) contínua (\(\rho_s=0\)):</div>
-          <div class="m">\[ \vE_{2t}=\vE_{1t},\qquad E_{2n}=\frac{\varepsilon_{r1}}{\varepsilon_{r2}}\,E_{1n}=\frac25\,(5)=2 \]</div></div>
-        <div class="ln eqbox" data-s="3"><div class="m">\[ \boxed{\,\vE_2=(3\,\ax-4\,\ay+2\,\az)\cos\omega t\ \ \mathrm{V/m}\,} \]</div></div>
-        <div class="ln" data-s="4"><div class="nt">(b) Com \(|\vE_t|=\sqrt{3^2+4^2}=5\): \(\tan\theta_1=5/5\), \(\tan\theta_2=5/2\).</div>
-          <div class="m">\[ \boxed{\,\theta_1=45^\circ,\qquad \theta_2\approx68{,}2^\circ\,} \]</div></div>
-        <div class="ln" data-s="5"><div class="nt">Conferência: \(\tan\theta_1/\tan\theta_2=0{,}4=\varepsilon_{r1}/\varepsilon_{r2}\).</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="slide" data-sec="Contorno · exemplo (c) e (d)">
-  <img class="logo-head" alt="">
-  <div class="frametitle"><h2>Exemplo: \(\vD_2\), \(\vH_2\) e \(\vB_2\)</h2><div class="sub">(c) \(\vD_2\); (d) \(\vH_2\) e \(\vB_2\)</div><div class="bar"></div></div>
-  <div class="body">
-    <div class="dv" style="max-width:1300px">
-      <div class="ln"><div class="nt">(c) \(\vD_2=\varepsilon_0\varepsilon_{r2}\vE_2\), com \(5\varepsilon_0=4{,}427\times10^{-11}\) F/m:</div>
-        <div class="m">\[ \vD_2=5\varepsilon_0\,(3\,\ax-4\,\ay+2\,\az)\cos\omega t \]</div></div>
-      <div class="ln eqbox" data-s="2"><div class="m">\[ \boxed{\,\vD_2\approx(132{,}8\,\ax-177{,}1\,\ay+88{,}5\,\az)\cos\omega t\ \ \mathrm{pC/m^2}\,} \]</div></div>
-      <div class="ln" data-s="3"><div class="nt">(d) \(H_t\) contínua (\(K=0\)); \(B_n\) contínua, \(\mu_{r1}H_{1n}=\mu_{r2}H_{2n}\):</div>
-        <div class="m">\[ \vH_{2t}=2\,\ax\cos\omega t,\qquad H_{2n}=\frac{\mu_{r1}}{\mu_{r2}}\,H_{1n}=\frac13\,(6)=2 \]</div></div>
-      <div class="ln eqbox" data-s="4"><div class="m">\[ \boxed{\,\vH_2=(2\,\ax+2\,\az)\cos\omega t\ \ \mathrm{A/m}\,},\qquad \boxed{\,\vB_2=3\mu_0\vH_2\approx(7{,}54\,\ax+7{,}54\,\az)\cos\omega t\ \ \mu\mathrm{T}\,} \]</div></div>
-      <div class="ln" data-s="5"><div class="nt">Conferência: \(B_{1n}=\mu_0(6)=7{,}54\ \mu\)T \(=B_{2n}\).</div></div>
-    </div>
   </div>
 </section>
 
@@ -1781,27 +1897,118 @@ function boardCcRefr() {
     lb(a1x, a1y, Rw`\theta_1`, "M", `id="cr-l1"`) + lb(a2x + 6, a2y, Rw`\theta_2`, "M") + lb(O[0] + 24, 50, Rw`\hat{\mathbf a}_n`, "sm");
   return board(560, 440, svg, labels);
 }
-function boardCcPec() {
-  const yI = 250, B = ccBase(560, 440, yI, "meio 1", "condutor perfeito: E = 0, H = 0", "rgba(120,120,120,.28)");
-  let svg = B.svg;
-  for (const x of [110, 220, 330, 440]) svg += G.ar(x, yI - 6, x, yI - 120, "P", 3.2) + `<text x="${x}" y="${yI + 24}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
-  svg += G.ar(150, yI - 34, 400, yI - 34, "G", 3.2);
-  for (const x of [165, 275, 385]) svg += G.sym(x, yI + 50, 10, true, "R");
-  const labels = B.labels + lb(110 + 30, yI - 120, Rw`\vE_1`, "P") + lb(420, yI - 54, Rw`\vH_1`, "G") + lb(470, yI + 30, Rw`\rho_s`, "R sm") + lb(470, yI + 52, Rw`\vec{\mathbf K}`, "R sm", `id="pc-lK"`);
-  return board(560, 440, svg, labels);
+// três casos: dois dielétricos, parede elétrica (condutor perfeito) e parede magnética
+const pcb = (W, H, svg, labels) => board(W, H, svg, labels).replace('class="board"', 'class="board pcb"');   // .pcb: rótulos centrados de fato
+function ccWall(W, H, yI, fill, nome) {   // meio 2 = parede hachurada (hachura recortada), com placa de identificação
+  const Hc = H - yI; let hat = "";
+  for (let x = -Hc + 11; x < W; x += 24) { const u = Math.max(x, 0), v = Math.min(x + Hc, W); hat += G.ln(u, H - (u - x), v, H - (v - x), "M", 1, `stroke-opacity=".45"`); }
+  return { svg: `<rect x="0" y="0" width="${W}" height="${yI}" style="fill:rgba(0,59,92,.06)"/><rect x="0" y="${yI}" width="${W}" height="${Hc}" style="fill:${fill}"/>` + hat + G.ln(0, yI, W, yI, "K", 5) +
+    `<rect x="90" y="280" width="380" height="134" rx="10" style="fill:#fff;stroke:#6b7078;stroke-width:1.6"/>`,
+    labels: lbt(W / 2, 24, `<b style="color:#222">meio 1</b>`) + lbt(W / 2, 306, `<b style="color:#222;font-size:25px">${nome}</b>`) };
 }
-function boardCcEx() {
-  const yI = 240, B = ccBase(560, 440, yI, "meio 1: εr = 2", "meio 2: εr = 5"), O = [300, yI], k = 30;
-  let svg = B.svg + G.ln(O[0], 40, O[0], 420, "M", 1.4, "", "6 5");
-  // E1 = (5 tangencial, 5 normal), aponta para fora (para cima) na figura
-  svg += G.ar(O[0], O[1], O[0] - 5 * k, O[1] - 5 * k, "P", 3.6);
-  svg += G.g(S("3"), G.ar(O[0] + 5 * k, O[1] + 2 * k, O[0] + 3, O[1] + 2, "R", 3.6) + G.ln(O[0] + 5 * k, O[1] + 2 * k, O[0] + 5 * k, O[1], "R", 1.2, "", "4 4"));
-  svg += G.ln(O[0] - 5 * k, O[1] - 5 * k, O[0] - 5 * k, O[1], "P", 1.2, "", "4 4");
-  svg += G.arc(O[0], O[1], 60, -90, -135, "P", 2) + G.g(S("4"), G.arc(O[0], O[1], 60, 90, 90 - 68.2, "R", 2));
-  const labels = B.labels + lb(O[0] - 5 * k - 30, O[1] - 5 * k, Rw`\vE_1`, "P") + lb(O[0] - 2.5 * k, O[1] + 22, Rw`5`, "P sm") + lb(O[0] - 5 * k - 18, O[1] - 2.5 * k, "5", "P sm") + lb(O[0] - 34, O[1] - 84, Rw`\theta_1`, "P sm", `id="cx-l1"`) +
-    `<div ${S("3")}>` + lb(O[0] + 5 * k + 34, O[1] + 2 * k + 8, Rw`\vE_2`, "R") + lb(O[0] + 5 * k + 20, O[1] + k, "2", "R sm") + lb(O[0] + 2.5 * k, O[1] - 20, "5", "R sm") + `</div>` +
-    lb(O[0] + 52, O[1] + 80, Rw`\theta_2`, "R sm", S("4")) + lb(O[0] + 30, 52, Rw`\az`, "sm");
-  return board(560, 440, svg, labels);
+function boardCcQuatro() {   // interface geral: D_n salta de rho_s, H_t salta de K, B_n e E_t contínuas
+  const W = 560, H = 440, yI = 220;
+  let svg = `<rect x="0" y="0" width="${W}" height="${yI}" style="fill:rgba(0,59,92,.06)"/><rect x="0" y="${yI}" width="${W}" height="${H - yI}" style="fill:rgba(192,120,40,.14)"/>` + G.ln(0, yI, W, yI, "K", 3.4) + G.ar(232, yI - 3, 232, yI - 95, "K", 2.6);
+  const plus = (x) => `<circle cx="${x}" cy="${yI}" r="10" style="fill:#fff;stroke:var(--cR);stroke-width:1.4"/>` + G.ln(x - 5, yI, x + 5, yI, "R", 2.4) + G.ln(x, yI - 5, x, yI + 5, "R", 2.4);
+  svg += G.g(S("2"), G.ar(70, yI - 14, 70, yI - 130, "P", 3.6) + G.ar(70, yI + 84, 70, yI + 14, "P", 3.6) + plus(40) + plus(70) + plus(100));
+  svg += G.g(S("3"), G.ar(170, yI - 8, 170, yI - 108, "G", 3.6) + G.ar(170, yI + 108, 170, yI + 8, "G", 3.6));
+  svg += G.g(S("4"), G.ar(280, yI - 36, 380, yI - 36, "P", 3.6) + G.ar(280, yI + 36, 380, yI + 36, "P", 3.6));
+  svg += G.g(S("5"), G.ar(415, yI - 36, 545, yI - 36, "G", 3.6) + G.ar(415, yI + 36, 485, yI + 36, "G", 3.6) + [435, 480, 525].map((x) => G.sym(x, yI, 10, true, "R")).join(""));
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`;
+  const labels = lbt(W / 2, 26, `<b style="color:#222">meio 1 (ε₁, μ₁)</b>`) + lbt(W / 2, H - 26, `<b style="color:#222">meio 2 (ε₂, μ₂)</b>`) + lb(232, yI - 114, Rw`\hat{\mathbf a}_n`) +
+    L("2", lb(70, yI - 150, Rw`D_{1n}`, "P") + lb(70, yI + 106, Rw`D_{2n}`, "P") + lb(116, yI - 28, Rw`\rho_s`, "R sm")) +
+    L("3", lb(170, yI - 128, Rw`B_{1n}`, "G") + lb(170, yI + 130, Rw`B_{2n}`, "G")) +
+    L("4", lb(330, yI - 60, Rw`E_{1t}`, "P") + lb(330, yI + 62, Rw`E_{2t}`, "P")) +
+    L("5", lb(480, yI - 60, Rw`H_{1t}`, "G") + lb(450, yI + 62, Rw`H_{2t}`, "G") + lb(398, yI - 18, Rw`\vec{\mathbf K}`, "R sm"));
+  return pcb(W, H, svg, labels);
+}
+function boardCcDiel() {   // vista 3D: bloco de baixo = meio 2, bloco transparente de cima = meio 1; E_t e H_t em direções diferentes do plano
+  const y0 = 292, d = 118, up = 124, q = (u, v) => [15 + 420 * u + 115 * v, y0 - 112 * v], sh = (a, dy) => [a[0], a[1] + dy];
+  const A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), top = [A, B, C_, D];
+  let svg = G.poly([A, B, sh(B, d), sh(A, d)], "#f3e3d3", "K", 1.6) + G.poly([B, C_, sh(C_, d), sh(B, d)], "#e8d2bb", "K", 1.6) + G.poly(top, "#f8eee4", "K", 2.6);
+  svg += G.poly(top, "none", "R", 3, S("2")) + G.poly(top, "rgba(255,205,0,.5)", "R", 3, `id="dl-if" ${S("2-4")}`);
+  // meio 1 (transparente): face de trás, lateral, frente e topo
+  svg += G.ln(D[0], D[1], D[0], D[1] - up, "M", 1.2, "", "5 4") + G.poly([A, B, sh(B, -up), sh(A, -up)], "rgba(0,59,92,.05)", "M", 1.3) + G.poly([B, C_, sh(C_, -up), sh(B, -up)], "rgba(0,59,92,.09)", "M", 1.3) + G.poly(top.map((a) => sh(a, -up)), "rgba(0,59,92,.04)", "M", 1.3);
+  const norm = (u, c) => { const a = q(u, 0.5); return G.ar(a[0], a[1] - 4, a[0], a[1] - 82, c, 3.6) + G.ar(a[0], a[1] + 84, a[0], a[1] + 4, c, 3.6, "", "7 4") + G.dot(a[0], a[1], 4, c); };
+  const tang = (a, b, c) => G.ar(a[0], a[1] - 28, b[0], b[1] - 28, c, 3.6) + G.ar(a[0], a[1] + 28, b[0], b[1] + 28, c, 3.6, "", "7 4") + [a, b].map((e) => G.ln(e[0], e[1] - 26, e[0], e[1] + 26, "M", 1, "", "2 3")).join("");
+  const e0 = q(0.43, 0.5), e1 = q(0.65, 0.5), h0 = q(0.8, 0.12), h1 = q(0.8, 0.88), pd = q(0.1, 0.5), pb = q(0.26, 0.5);
+  svg += G.g(S("5"), norm(0.1, "P")) + G.g(S("6"), norm(0.26, "G")) + G.g(S("7"), tang(e0, e1, "P")) + G.g(S("8"), tang(h0, h1, "G"));
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`;
+  const labels = lbt(250, 92, `<b style="color:#222">meio 1: dielétrico (ε₁, μ₁)</b>`) + lbt(225, y0 + d - 20, `<b style="color:#222">meio 2: dielétrico (ε₂, μ₂)</b>`) +
+    L("2", lbt(345, 24, "interface", "R")) + L("3", lb(470, 22, Rw`\rho_s=0,\ \ \vec{\mathbf K}=0`, "R sm", `id="dl-l"`)) +
+    L("5", lb(pd[0] - 32, pd[1] - 44, Rw`D_{1n}`, "P") + lb(pd[0] - 34, pd[1] + 76, Rw`D_{2n}`, "P")) +
+    L("6", lb(pb[0] + 34, pb[1] - 44, Rw`B_{1n}`, "G") + lb(pb[0] + 34, pb[1] + 76, Rw`B_{2n}`, "G")) +
+    L("7", lb((e0[0] + e1[0]) / 2, e0[1] - 48, Rw`E_{1t}`, "P") + lb(e0[0] - 26, e0[1] + 28, Rw`E_{2t}`, "P")) +
+    L("8", lb(h1[0] - 2, h1[1] - 50, Rw`H_{1t}`, "G") + lb(h0[0] + 36, h0[1] + 36, Rw`H_{2t}`, "G"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcPec() {   // vista 3D: E normal, H tangente e K = a_n x H (para o fundo) na superfície
+  const q = (u, v) => ccPu(u, v), A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), d = 150, y0 = A[1], x0 = A[0], x1 = B[0];
+  let hat = ""; for (let x = x0 - d + 12; x < x1; x += 24) { const a = Math.max(x, x0), b = Math.min(x + d, x1); hat += G.ln(a, y0 + d - (a - x), b, y0 + d - (b - x), "M", 1, `stroke-opacity=".45"`); }
+  let svg = G.poly([A, B, [B[0], B[1] + d], [A[0], A[1] + d]], "#cfd2d6", "K", 1.6) + hat + G.poly([B, C_, [C_[0], C_[1] + d], [B[0], B[1] + d]], "#b9bdc3", "K", 1.6) + G.poly([A, B, C_, D], "#e6e8eb", "K", 2.6) +
+    `<rect x="${x0 + 22}" y="${y0 + 26}" width="${x1 - x0 - 44}" height="100" rx="10" style="fill:#fff;stroke:#6b7078;stroke-width:1.6"/>`;
+  // K (fundo) e H (direita), na superfície
+  for (const u of [0.28, 0.62]) { const a = q(u, 0.08), b = q(u, 0.92); svg += G.ar(a[0], a[1], b[0], b[1], "R", 3.4); }
+  const h0 = q(0.03, 0.5), h1 = q(0.84, 0.5); svg += G.ar(h0[0], h0[1], h1[0], h1[1], "G", 3.6);
+  const r0 = q(0.62, 0.5), ra = q(0.665, 0.5), rb = q(0.665, 0.61), rc = q(0.62, 0.61); svg += G.pa(`M${ra} L${rb} L${rc}`, "K", 1.6);
+  for (const v of [0.78, 0.24]) for (const u of [0.11, 0.45, 0.79]) { const [x, y] = q(u, v); svg += G.ar(x, y - 11, x, y - 92, "P", 3.2) + `<circle cx="${x}" cy="${y}" r="10" style="fill:#fff;stroke:var(--cR);stroke-width:1.4"/>` + G.ln(x - 5, y, x + 5, y, "R", 2.4) + G.ln(x, y - 5, x, y + 5, "R", 2.4); }
+  const n0 = q(0.96, 0.5); svg += G.ar(n0[0], n0[1], n0[0], n0[1] - 112, "K", 2.4);
+  const e = q(0.11, 0.78), rs = q(0.79, 0.24), k = q(0.62, 0.92);
+  const labels = lbt(60, 26, `<b style="color:#222">meio 1</b>`) + lbt((x0 + x1) / 2, y0 + 48, `<b style="color:#222;font-size:23px">CONDUTOR PERFEITO (meio 2)</b>`) + lb((x0 + x1) / 2, y0 + 94, Rw`\sigma\to\infty,\quad \vE_2=0,\quad \vH_2=0`, "sm") +
+    lb(n0[0] + 24, n0[1] - 104, Rw`\hat{\mathbf a}_n`) + lb(e[0] - 28, e[1] - 78, Rw`\vE_1`, "P") + lb(h1[0] + 22, h1[1] + 2, Rw`\vH_1`, "G") + lb(rs[0] + 28, rs[1] + 8, Rw`\rho_s`, "R") + lb(k[0] + 24, k[1] - 2, Rw`\vec{\mathbf K}`, "R", `id="pc-lK"`);
+  return pcb(560, 440, svg, labels);
+}
+// parede magnética em perspectiva: curva L deitada na superfície (u: para a direita, v: para o fundo)
+const ccPu = (u, v) => [20 + 410 * u + 115 * v, 262 - 160 * v];
+function ccPlano() {
+  const q = (u, v) => ccPu(u, v), A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), d = 150;
+  const svg = G.poly([A, B, C_, D], "#e4dff0", "K", 2.4) + G.poly([A, B, [B[0], B[1] + d], [A[0], A[1] + d]], "#cbc2de", "K", 1.6) + G.poly([B, C_, [C_[0], C_[1] + d], [B[0], B[1] + d]], "#b9aed2", "K", 1.6);
+  const labels = lbt(225, 352, `<b style="color:#222;font-size:21px">PAREDE MAGNÉTICA (meio 2)</b>`) + lb(225, 388, Rw`\mu\to\infty,\qquad \vH_2=0`) + lbt(60, 26, `<b style="color:#222">meio 1</b>`);
+  const n0 = q(0.1, 0.62);
+  return { svg: svg + G.ar(n0[0], n0[1], n0[0], n0[1] - 95, "K", 2.6), labels: labels + lb(n0[0] - 22, n0[1] - 88, Rw`\hat{\mathbf a}_n`) };
+}
+const ccL = () => [ccPu(0.27, 0.22), ccPu(0.77, 0.22), ccPu(0.77, 0.8), ccPu(0.27, 0.8)];
+function ccLaco(c, w, ex = "") {   // L percorrida no sentido positivo para a_n para cima
+  const p = ccL(); let o = "";
+  for (let k = 0; k < 4; k++) { const a = p[k], b = p[(k + 1) % 4], m = [a[0] + (b[0] - a[0]) * 0.58, a[1] + (b[1] - a[1]) * 0.58]; o += G.ln(a[0], a[1], b[0], b[1], c, w) + G.ar(a[0], a[1], m[0], m[1], c, w); }
+  return `<g ${ex}>${o}</g>`;
+}
+function boardCcDn() {
+  const B = ccPlano(), p = ccL(); let svg = B.svg;
+  svg += G.g(S("2"), G.poly(p, "rgba(255,255,255,.75)", "R", 0)) + ccLaco("R", 3, S("2"));
+  svg += G.g(S("3-3"), `<g id="dn-L">` + G.poly(p, "none", "R", 9, `stroke-opacity=".45"`) + `</g>`) + G.g(S("4-4"), G.poly(p, "rgba(255,205,0,.65)", "R", 3, `id="dn-S"`));
+  const pts = [[0.4, 0.38], [0.64, 0.38], [0.4, 0.64], [0.64, 0.64]].map(([u, v]) => ccPu(u, v));
+  let ar = "", xs = ""; for (const [x, y] of pts) { ar += G.ar(x, y + 84, x, y + 2, "P", 3.2, "", "7 4") + G.dot(x, y, 4, "P"); xs += G.ln(x - 12, y + 34, x + 12, y + 60, "R", 4) + G.ln(x - 12, y + 60, x + 12, y + 34, "R", 4); }
+  let mini = "", ml = ""; const cs = [[0.05, 0.08], [0.83, 0.06], [0.84, 0.62]];
+  cs.forEach(([u, v], k) => { const a = ccPu(u, v), b = ccPu(u + 0.1, v), c = ccPu(u + 0.1, v + 0.15), d = ccPu(u, v + 0.15); mini += G.poly([a, b, c, d], "rgba(255,255,255,.75)", "R", 2.4, k === 2 ? `id="dn-m"` : "") + G.ar(a[0], a[1], a[0] + 28, a[1], "R", 2); ml += lb((a[0] + c[0]) / 2, a[1] - 34, "L'", "R sm"); });
+  svg += G.g(S("6"), mini) + G.g(S("5"), ar) + G.g(S("7"), xs);
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`, c = ccPu(0.77, 0.5);
+  const labels = B.labels + L("2", lb(c[0] + 26, c[1] + 6, "L", "R") + lb(ccPu(0.52, 0.5)[0], ccPu(0.52, 0.5)[1], "S", "M")) +
+    L("3-3", lb(ccPu(0.5, 0.1)[0], ccPu(0.5, 0.1)[1], Rw`\vH_2=0\ \text{em}\ L`, "R sm")) + L("6", ml) + L("5", lb(pts[0][0] - 34, pts[0][1] + 78, Rw`D_{2n}`, "P"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcBn() {   // passos 9-14: segunda fase do slide da parede magnética
+  const B = ccPlano(), p = ccL(); let svg = B.svg;
+  for (const v of [0.36, 0.66, 0.92]) { const a = ccPu(0.04, v), b = ccPu(0.97, v); svg += G.ar(a[0], a[1], b[0], b[1], "P", 2.2); }
+  svg += ccLaco("R", 3, S("9"));
+  const hl = (a, b, id) => G.ln(a[0], a[1], b[0], b[1], "R", 10, `id="${id}" style="stroke:var(--cR);stroke-width:10;stroke-opacity:.45"`);
+  svg += G.g(S("10-10"), hl(p[0], p[1], "bn-f")) + G.g(S("11-11"), hl(p[2], p[3], "bn-b")) + G.g(S("12-12"), `<g id="bn-l">` + hl(p[1], p[2], "bn-l1") + hl(p[3], p[0], "bn-l2") + `</g>`);
+  const pts = [[0.42, 0.5], [0.62, 0.5]].map(([u, v]) => ccPu(u, v)); let ar = "", xs = "";
+  for (const [x, y] of pts) { ar += G.ar(x, y + 100, x, y + 2, "G", 3.2, "", "7 4") + G.dot(x, y, 4, "G"); xs += G.ln(x - 12, y + 50, x + 12, y + 76, "R", 4) + G.ln(x - 12, y + 76, x + 12, y + 50, "R", 4); }
+  svg += G.g(S("13"), ar) + G.g(S("14"), xs);
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`, c = ccPu(0.77, 0.5), f = ccPu(0.52, 0.22), e = ccPu(0.97, 0.92);
+  const labels = B.labels + lb(e[0] - 6, e[1] - 34, Rw`\vE_{2t}`, "P") + L("9", lb(c[0] + 26, c[1] + 2, "L", "R") + lb(f[0] - 72, f[1] + 18, Rw`\ell`, "R")) + L("13", lb(pts[0][0] - 34, pts[0][1] + 100, Rw`B_{2n}`, "G"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcPmc() {   // H tangencial vai a zero na superfície; E tangencial é contínuo e não se anula
+  const W = 560, H = 440, yI = 230, B = ccWall(W, H, yI, "#d9d3e6", "PAREDE MAGNÉTICA (meio 2)");
+  let svg = B.svg;
+  for (const [y, r] of [[yI - 160, 15], [yI - 115, 11], [yI - 72, 6.5]]) for (const x of [70, 170, 270, 370]) svg += G.sym(x, y, r, true, "G");
+  svg += G.ar(30, yI - 30, 395, yI - 30, "P", 3.6) + G.ar(500, yI - 44, 500, yI - 5, "R", 2.2) + G.ar(440, yI - 4, 440, yI - 130, "K", 2.4);
+  svg += G.ar(30, yI + 28, 395, yI + 28, "P", 3.6);
+  const labels = B.labels + lb(W / 2, 344, Rw`\mu\to\infty`) + lb(W / 2, 386, Rw`\vH_2=0`) + lb(462, yI - 124, Rw`\hat{\mathbf a}_n`) +
+    lb(415, yI - 34, Rw`\vE_{1t}`, "P") + lb(418, yI + 26, Rw`\vE_{2t}`, "P") + lb(24, yI - 115, Rw`\vH_1`, "G") + lbt(220, yI - 52, "H tangencial → 0", "G", `id="pm-lH"`) + lbt(500, yI - 92, "na superfície", "R") + lb(500, yI - 62, Rw`H_t=0`, "R sm");
+  return pcb(W, H, svg, labels);
 }
 // ---------- quadros: reflexão em incidência normal ----------
 // meio 1 à esquerda (z < 0), meio 2 à direita; z para a direita, x para cima, y saindo da tela
@@ -2321,22 +2528,59 @@ function boardFzbPsi() {   // Ψ(t) = 0,4 d0 + 2t com d0 = 2 m: reta de inclina�
     lbt(300, 440, "ilustração com d<sub>0</sub> = 2 m");
   return board(560, 470, svg, labels);
 }
-function boardCcTan() {   // vista lateral: a_n para cima, E decomposto, a_n × E saindo da tela
-  const yI = 260, B = ccBase(560, 440, yI), O = [200, yI], E = [430, yI - 170];
-  let svg = B.svg + G.ar(O[0], O[1], O[0], O[1] - 120, "K", 3) + G.ar(O[0], O[1], E[0], E[1], "P", 3.6);
-  svg += G.ln(E[0], E[1], E[0], yI, "P", 1.4, "", "5 4") + G.ar(O[0], O[1] + 2, E[0], O[1] + 2, "R", 3.4) + G.ar(O[0] - 26, O[1], O[0] - 26, E[1], "M", 2.6);
-  svg += G.g(S("2"), G.sym(O[0] + 115, yI + 70, 14, false, "G"));
-  const labels = B.labels + lb(O[0] - 4, O[1] - 140, Rw`\hat{\mathbf a}_n`) + lb(E[0] + 22, E[1] - 10, Rw`\vE`, "P") + lb((O[0] + E[0]) / 2, yI + 30, Rw`\vE_t`, "R") +
-    lb(O[0] - 60, (O[1] + E[1]) / 2, Rw`\vE_n`, "M") + lb(O[0] + 210, yI + 70, Rw`\hat{\mathbf a}_n\times\vE`, "G", `id="tg-l" ${S("2")}`) +
-    lbt(O[0] + 210, yI + 110, "saindo da tela (⊥ ao plano de a<sub>n</sub> e E)", "G sm", S("2"));
-  return board(560, 440, svg, labels);
+function boardCcTan() {   // vista 3D: a_n x (.) gira E_t de 90° no plano da interface (u: direita, v: fundo, normal: para cima)
+  const O = [275, 296], eu = [150, 0], ev = [80, -95], t0 = -30, hE = 195;
+  const P = (a, b, z = 0) => [O[0] + a * eu[0] + b * ev[0], O[1] + a * eu[1] + b * ev[1] - z], C_ = (t, r = 1, z = 0) => P(r * Math.cos(t * DEG), r * Math.sin(t * DEG), z);
+  const arcP = (t1, t2, r) => { let d = ""; for (let k = 0; k <= 40; k++) { const q = C_(t1 + (t2 - t1) * k / 40, r); d += (k ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1); } return d; };
+  const ar = (a, b, c, w = 3.6, ex = "", ds = "") => G.ar(a[0], a[1], b[0], b[1], c, w, ex, ds), ln = (a, b, c, w, ds) => G.ln(a[0], a[1], b[0], b[1], c, w, "", ds);
+  const right = (t, r = 0.17) => { const a = C_(t, r), b = C_(t + 45, r * Math.SQRT2), c = C_(t + 90, r); return G.pa(`M${a} L${b} L${c}`, "K", 1.5); };
+  // giro: segmento em coordenadas do plano (matriz da perspectiva) com rotate() animado por CSS
+  const giro = (st, a, b, c) => `<g class="rotp" data-s="${st}" style="--m:matrix(${eu[0]},${eu[1]},${ev[0]},${ev[1]},${O[0]},${O[1]});--b:${a}deg;--a:${b}deg"><line x1="0" y1="0" x2="${Math.cos(t0 * DEG)}" y2="${Math.sin(t0 * DEG)}" style="stroke:var(--c${c});stroke-width:7;stroke-opacity:.45;vector-effect:non-scaling-stroke"/></g>`;
+  const pl = [P(-1.22, -1.12), P(1.22, -1.12), P(1.22, 1.12), P(-1.22, 1.12)], T = C_(t0), E = C_(t0, 1, hE), d = 34;
+  let svg = G.poly([pl[0], pl[1], [pl[1][0], pl[1][1] + d], [pl[0][0], pl[0][1] + d]], "rgba(192,120,40,.22)", "M", 1.2) + G.poly([pl[1], pl[2], [pl[2][0], pl[2][1] + d], [pl[1][0], pl[1][1] + d]], "rgba(192,120,40,.32)", "M", 1.2) + G.poly(pl, "rgba(0,59,92,.07)", "K", 2);
+  svg += G.pa(arcP(0, 360, 1), "M", 1.1, "", "4 5");
+  svg += G.g(S("2"), G.poly([O, T, E, P(0, 0, hE)], "rgba(0,59,92,.09)", "M", 1, "", "4 4"));
+  svg += ln(T, E, "M", 1.4, "5 4") + ln(P(0, 0, hE), E, "M", 1.4, "5 4") + ar([O[0] - 4, O[1]], P(0, 0, hE).map((v, k) => k ? v : v - 4), "M", 2.6) + ar([O[0] + 2, O[1]], [O[0] + 2, O[1] - 84], "K", 3.2) + ar(O, E, "P") + ar(O, T, "R");
+  svg += giro("3", 0, 90, "G") + G.g(`class="late" ${S("3")}`, ar(O, C_(t0 + 90), "G") + right(t0)) + G.g(S("3"), G.pa(arcP(t0 + 5, t0 + 84, 0.55), "G", 2.4, `marker-end="url(#mG)"`));
+  svg += giro("4", 90, 180, "K") + G.g(`class="late" ${S("4")}`, ar(O, C_(t0 + 180), "K") + right(t0 + 90)) + G.g(S("4"), G.pa(arcP(t0 + 95, t0 + 174, 0.55), "K", 2.4, `marker-end="url(#mK)"`));
+  svg += giro("5", 180, 360, "R") + G.g(S("5"), G.pa(arcP(t0 + 186, t0 + 352, 0.75), "R", 2.4, `marker-end="url(#mR)"`));
+  const L = (k, h, c = "") => `<div ${S(k)} ${c}>${h}</div>`, g = C_(t0 + 90), n = C_(t0 + 180), a1 = C_(t0 + 48, 0.72), a3 = C_(t0 + 276, 0.95);
+  const labels = lbt(70, 26, `<b style="color:#222">meio 1</b>`) + lbt(pl[0][0] + 60, pl[0][1] + 18, `<b style="color:#222">meio 2</b>`) + lb(O[0] + 24, O[1] - 72, Rw`\hat{\mathbf a}_n`) + lb(O[0] - 28, O[1] - 168, Rw`\vE_n`, "M") + lb(E[0] + 24, E[1] - 6, Rw`\vE`, "P") + lb(T[0] + 25, T[1] + 1, Rw`\vE_t`, "R") +
+    L("3", lb(g[0] + 48, g[1] + 6, Rw`\hat{\mathbf a}_n\times\vE`, "G", `id="tg-l"`) + lb(a1[0] + 12, a1[1], Rw`90^\circ`, "G sm")) +
+    L("4", lb(n[0] - 64, n[1] - 80, Rw`\hat{\mathbf a}_n\times(\hat{\mathbf a}_n\times\vE)`, "sm", `id="tg-l2"`) + lb(240, 226, Rw`90^\circ`, "sm")) + L("5", lb(a3[0], a3[1] + 6, Rw`-1:\ \text{meia volta}`, "R sm"));
+  return pcb(560, 440, svg, labels);
+}
+// exemplo de parede magnética: abertura lateral sob uma placa de microfita (altura do substrato exagerada)
+function boardCcFita() {
+  const hs = 92, q = (u, v, z = 0) => [75 + 320 * u + 110 * v, 282 - 120 * v - hs * z];
+  const gnd = [q(-0.16, -0.22), q(1.12, -0.22), q(1.12, 1.15), q(-0.16, 1.15)], F = [q(0, 0), q(1, 0), q(1, 0, 1), q(0, 0, 1)], R = [q(1, 0), q(1, 1), q(1, 1, 1), q(1, 0, 1)], T = [q(0, 0, 1), q(1, 0, 1), q(1, 1, 1), q(0, 1, 1)];
+  let svg = G.poly(gnd, "#cfd2d6", "K", 1.8) + G.poly(F, "rgba(0,59,92,.07)", "M", 1.4) + G.poly(R, "rgba(0,59,92,.12)", "M", 1.4) + G.poly(T, "#eed2b4", "K", 2.6);
+  svg += G.g(S("6"), G.poly(F, "rgba(120,90,170,.32)", "R", 3.2, `id="mf-w"`));
+  let e = ""; for (const u of [0.1, 0.37, 0.64, 0.91]) { const a = q(u, 0, 0.03), b = q(u, 0, 0.97); e += G.ar(a[0], a[1], b[0], b[1], "P", 3.4); }
+  svg += G.g(S("2"), e);
+  // corte vertical na borda: meio 1 (dielétrico sob a placa) | abertura | meio 2 (ar)
+  const X = 285, y0 = 408, y1 = 560, ym = 484, cm = q(0.775, 0.13, 1), cb = q(0.775, 0);
+  let co = G.ln(cm[0], cm[1], q(0.775, 0, 1)[0], q(0.775, 0, 1)[1], "G", 2.4, "", "7 5") + G.ln(q(0.775, 0, 1)[0], q(0.775, 0, 1)[1], cb[0], cb[1], "G", 2.4, "", "7 5") + G.ln(cb[0], cb[1], q(0.775, -0.2)[0], q(0.775, -0.2)[1], "G", 2.4, "", "7 5");
+  co += G.poly([[30, y0], [X, y0], [X, y1], [30, y1]], "rgba(0,59,92,.10)", "M", 0.01) + G.poly([[30, y0 - 11], [X, y0 - 11], [X, y0], [30, y0]], "#eed2b4", "K", 2) + G.poly([[30, y1], [530, y1], [530, y1 + 14], [30, y1 + 14]], "#cfd2d6", "K", 1.8);
+  co += G.ln(X, y0, X, y1, "G", 3, "", "8 6");
+  co += G.ar(X - 62, ym + 52, X - 62, ym - 52, "P", 5) + G.ar(X + 62, ym + 52, X + 62, ym - 52, "P", 5) + G.ar(X, ym + 34, X - 48, ym + 34, "K", 3) + G.pa(`M${X - 14},${ym + 34} L${X - 14},${ym + 20} L${X},${ym + 20}`, "K", 1.5);
+  svg += G.g(S("3"), co) + G.g(S("6"), G.ln(X, y0, X, y1, "R", 6, `stroke-opacity=".75"`)) + G.g(S("7"), G.pa(`M${X + 34},${y1} Q${X + 44},${ym - 10} ${X + 4},${y0 + 4}`, "M", 2, `marker-end="url(#mM)"`) + G.pa(`M${X + 150},${y1} Q${X + 150},${y0 - 34} ${X + 4},${y0 - 12}`, "M", 2, `marker-end="url(#mM)"`));
+  let k = ""; for (const u of [0.2, 0.5, 0.8]) for (const [v, L] of [[0.66, 0.3], [0.31, 0.17]]) { const a = q(u, v + L / 2, 1), b = q(u, v - L / 2, 1); k += G.ar(a[0], a[1], b[0], b[1], "R", 3); }
+  const b0 = q(0, 0, 1), b1 = q(1, 0, 1);
+  svg += G.g(S("4"), k) + G.g(S("4-5"), G.ln(b0[0], b0[1], b1[0], b1[1], "R", 7, `stroke-opacity=".6" id="mf-b"`));
+  const L = (n, h) => `<div ${S(n)}>${h}</div>`, c = q(0.5, 1.0, 1), g = q(0.48, -0.13);
+  const labels = lbt(c[0], c[1] - 20, `<b style="color:#222">placa metálica</b>`) + lbt(g[0] - 72, g[1], `<b style="color:#222">plano de terra (metal)</b>`) + lbt(120, 16, "(altura do dielétrico exagerada)") +
+    L("2", lb(q(0.235, 0, 0.5)[0], q(0.235, 0, 0.5)[1], Rw`\vE`, "P")) +
+    L("3", lbt(q(0.775, -0.2)[0] + 34, q(0.775, -0.2)[1] + 14, "corte", "G") + lbt(96, y0 - 28, `<b style="color:#222">corte na borda</b>`) + lbt(116, y0 + 18, "meio 1: dielétrico") + lbt(485, y0 + 18, "meio 2: ar") + lb(X - 94, ym - 4, Rw`\vE_{1t}`, "P") + lb(X + 94, ym - 4, Rw`\vE_{2t}`, "P") + lb(X - 26, ym + 56, Rw`\hat{\mathbf a}_n`) + lb(470, y0 - 30, Rw`E_{1t}=E_{2t}\neq0`, "G")) +
+    L("4", lb(q(0.66, 0.5, 1)[0], q(0.66, 0.5, 1)[1], Rw`\vec{\mathbf K}`, "R")) + L("6", lbt(X, y1 + 32, "abertura: parede magnética", "R"));
+  return pcb(560, 610, svg, labels);
 }
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, lenzen: boardLenzEn, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, gaussd: boardGaussD, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
   pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, harm1d: () => boardHarm1d({ lam: "6" }), harm1dv: () => boardHarm1d({ shift: "2" }), planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, cctan: boardCcTan, fzbpsi: boardFzbPsi, ondaex3: boardOndaEx3, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
   poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
-  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
+  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccquatro: boardCcQuatro, ccdiel: boardCcDiel, ccpec: boardCcPec, ccpmc: boardCcPmc, ccfita: boardCcFita, ccdn: boardCcDn, ccbn: boardCcBn,
   rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT,
   obk: boardObK, obplano: boardObPlano, obfase: boardObFase, obpols: boardObPols, obperp: boardObPerp, obpar: boardObPar, obbrew: boardObBrew, obgraf: boardObGraf, obtir: boardObTir, obpow: boardObPow,
   obexen: boardObExEn, obexk: boardObExK, obext: boardObExT, obexh: boardObExH,

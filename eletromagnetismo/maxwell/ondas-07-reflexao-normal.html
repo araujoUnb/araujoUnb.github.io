@@ -341,6 +341,7 @@ svg.ink { position: absolute; left: 0; top: 0; width: 1600px; height: 900px; poi
 .qd { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 44px; flex: 1; min-height: 0; align-items: start; }
 .board { position: relative; flex: none; }
 .board svg { position: absolute; left: 0; top: 0; overflow: visible; }
+.board.pcb .lb mjx-container svg { position: static; }   /* rótulos centrados de fato no ponto */
 .board .lb { position: absolute; transform: translate(-50%, -50%); white-space: nowrap; font-size: 25px; line-height: 1; }
 .board .lb.sm { font-size: 20px; }
 .board .lb.txt { font-size: 19px; color: var(--unb-muted); }
@@ -395,6 +396,27 @@ nav.ctrl select#navsec { font: inherit; font-size: 15px; color: var(--unb-primar
 /* roteiro com 11 partes: um pouco mais compacto (o modo estreito do modelo continua valendo) */
 .toc { gap: 12px 60px; font-size: 26px; }
 .toc .d { font-size: 17px; }
+/* grifo animado: <span class="grifo">texto<span class="gm" data-s="k"></span></span> (marca-texto entra no passo k) */
+.grifo { position: relative; z-index: 0; }
+.grifo > .gm { position: absolute; left: -4px; right: -4px; top: 8%; bottom: -3px; border-radius: 4px; z-index: -1;
+  background: rgba(255, 205, 0, .45); transform-origin: left center; transition: transform .55s ease; }
+.grifo > .gm.off { transform: scaleX(0); opacity: 1; visibility: visible; }
+
+/* condição geral -> seta com a hipótese -> forma do caso */
+.simp { display: grid; grid-template-columns: max-content max-content minmax(0, 1fr); column-gap: 18px; row-gap: 4px; align-items: center; }
+html.narrow .simp { grid-template-columns: max-content minmax(0, 1fr); column-gap: 8px; }
+html.narrow .simp > :nth-child(3n+1) { grid-column: 1 / -1; }
+html.narrow .simp > .m, html.narrow .simp > .m mjx-container { font-size: 15.5px !important; }
+/* fases de um mesmo slide: uma dedução aparece, some, e o slide continua (cada .qd com seu intervalo data-s) */
+.stack.fases { flex: 1; min-height: 0; grid-template-columns: minmax(0, 1fr); align-items: start; }
+html.narrow .stack.fases { display: flex; flex-direction: column; gap: 28px; }
+html.narrow .stack.fases > .qd.off { opacity: 1; visibility: visible; }
+html.narrow .stack.fases .stack > .off { display: none; }
+/* giro de um vetor no plano em perspectiva: --m = matriz do plano, --b -> --a = ângulos; .late = seta final, depois do giro */
+.rotp { transform-origin: 0 0; transform-box: view-box; transform: var(--m) rotate(var(--a)); transition: transform 1.1s ease-in-out; }
+.rotp.off { transform: var(--m) rotate(var(--b)); transition: none; }
+.late { transition: opacity .3s ease 1s; }
+.late.off { transition: none; }
 
 </style>
 </head>
@@ -1730,6 +1752,14 @@ function boardCcLoop(isH) {
   const c = isH ? "G" : "P";
   svg += G.ar(x0 - 10, yI - hh - 60, x1 - 20, yI - hh - 60, c, 3.4) + G.ar(x0 - 10, yI + hh + 100, x1 - 120, yI + hh + 100, c, 3.4);
   svg += G.brace(x0, yI + hh + 14, x1, yI + hh + 14, 10, "M") + G.ln(x1 + 18, yI - hh, x1 + 18, yI + hh, "M", 1.6) + G.ln(x1 + 12, yI - hh, x1 + 24, yI - hh, "M", 1.6) + G.ln(x1 + 12, yI + hh, x1 + 24, yI + hh, "M", 1.6);
+  {   // destaques passo a passo: lados horizontais, verticais, (corrente K) e área, cada um só no seu passo
+    const p = isH ? "ch" : "ce", sA = isH ? "7-7" : "6-6";
+    svg += G.g(S("3-3"), G.ln(x0, yI - hh, x1, yI - hh, "R", 7, `id="${p}-top" style="stroke-opacity:.55"`));
+    svg += G.g(S("4-4"), G.ln(x0, yI + hh, x1, yI + hh, "R", 7, `id="${p}-bot" style="stroke-opacity:.55"`));
+    svg += G.g(S("5-5"), `<g id="${p}-vert">` + G.ln(x0, yI - hh, x0, yI + hh, "R", 7) + G.ln(x1, yI - hh, x1, yI + hh, "R", 7) + `</g>`);
+    if (isH) svg += G.g(S("6-6"), `<rect id="ch-K" x="${x0}" y="${yI - 14}" width="${x1 - x0}" height="28" style="fill:rgba(176,58,46,.25);stroke:var(--cR);stroke-width:2"/>`);
+    svg += G.g(S(sA), `<rect id="${p}-area" x="${x0}" y="${yI - hh}" width="${x1 - x0}" height="${2 * hh}" style="fill:rgba(0,102,51,.22)"/>`);
+  }
   if (isH) for (const x of [200, 280, 360]) svg += G.sym(x, yI, 10, true, "R");
   else svg += G.sym(280, yI - 22, 11, false, "G") + G.sym(280, yI + 22, 11, false, "G");
   const labels = B.labels + lb(x1 + 6, yI - hh - 82, isH ? Rw`H_{1t}` : Rw`E_{1t}`, c) + lb(x1 - 92, yI + hh + 100, isH ? Rw`H_{2t}` : Rw`E_{2t}`, c) +
@@ -1744,6 +1774,11 @@ function boardCcPill() {
   for (const x of [190, 240, 290, 340]) svg += `<text x="${x}" y="${yI + 7}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
   svg += G.ar(cx, yI - hh, cx, yI - hh - 110, "P", 3.4) + G.ar(cx, yI + hh + 110, cx, yI + hh, "P", 3.4);
   svg += G.ar(cx + 70, yI - hh, cx + 70, yI - hh - 60, "K", 2) + G.ar(cx + 70, yI + hh, cx + 70, yI + hh + 60, "K", 2);
+  // destaques passo a passo: topo, base, lateral, carga na interface
+  svg += G.g(S("3-3"), G.ell(cx, yI - hh, rx, ry, "rgba(176,58,46,.25)", "R", 4, `id="pl-top"`));
+  svg += G.g(S("4-4"), G.ell(cx, yI + hh, rx, ry, "rgba(176,58,46,.25)", "R", 4, `id="pl-bot"`));
+  svg += G.g(S("5-5"), `<g id="pl-lat">` + G.ln(cx - rx, yI - hh, cx - rx, yI + hh, "R", 7) + G.ln(cx + rx, yI - hh, cx + rx, yI + hh, "R", 7) + `</g>`);
+  svg += G.g(S("6-6"), G.ell(cx, yI, rx, ry, "rgba(0,102,51,.25)", "G", 3, `id="pl-q"`));
   const labels = B.labels + lb(cx + 40, yI - hh - 100, Rw`D_{1n}`, "P") + lb(cx + 40, yI + hh + 100, Rw`D_{2n}`, "P") + lb(cx + 110, yI - hh - 50, Rw`\Delta S`, "sm") +
     lb(cx + rx + 40, yI - 20, Rw`\rho_s`, "R", `id="cp-lrho"`) + lb(cx - rx - 44, yI, Rw`\Delta h`, "sm");
   return board(560, 440, svg, labels);
@@ -1759,27 +1794,118 @@ function boardCcRefr() {
     lb(a1x, a1y, Rw`\theta_1`, "M", `id="cr-l1"`) + lb(a2x + 6, a2y, Rw`\theta_2`, "M") + lb(O[0] + 24, 50, Rw`\hat{\mathbf a}_n`, "sm");
   return board(560, 440, svg, labels);
 }
-function boardCcPec() {
-  const yI = 250, B = ccBase(560, 440, yI, "meio 1", "condutor perfeito: E = 0, H = 0", "rgba(120,120,120,.28)");
-  let svg = B.svg;
-  for (const x of [110, 220, 330, 440]) svg += G.ar(x, yI - 6, x, yI - 120, "P", 3.2) + `<text x="${x}" y="${yI + 24}" text-anchor="middle" style="font:700 22px sans-serif;fill:var(--cR)">+</text>`;
-  svg += G.ar(150, yI - 34, 400, yI - 34, "G", 3.2);
-  for (const x of [165, 275, 385]) svg += G.sym(x, yI + 50, 10, true, "R");
-  const labels = B.labels + lb(110 + 30, yI - 120, Rw`\vE_1`, "P") + lb(420, yI - 54, Rw`\vH_1`, "G") + lb(470, yI + 30, Rw`\rho_s`, "R sm") + lb(470, yI + 52, Rw`\vec{\mathbf K}`, "R sm", `id="pc-lK"`);
-  return board(560, 440, svg, labels);
+// três casos: dois dielétricos, parede elétrica (condutor perfeito) e parede magnética
+const pcb = (W, H, svg, labels) => board(W, H, svg, labels).replace('class="board"', 'class="board pcb"');   // .pcb: rótulos centrados de fato
+function ccWall(W, H, yI, fill, nome) {   // meio 2 = parede hachurada (hachura recortada), com placa de identificação
+  const Hc = H - yI; let hat = "";
+  for (let x = -Hc + 11; x < W; x += 24) { const u = Math.max(x, 0), v = Math.min(x + Hc, W); hat += G.ln(u, H - (u - x), v, H - (v - x), "M", 1, `stroke-opacity=".45"`); }
+  return { svg: `<rect x="0" y="0" width="${W}" height="${yI}" style="fill:rgba(0,59,92,.06)"/><rect x="0" y="${yI}" width="${W}" height="${Hc}" style="fill:${fill}"/>` + hat + G.ln(0, yI, W, yI, "K", 5) +
+    `<rect x="90" y="280" width="380" height="134" rx="10" style="fill:#fff;stroke:#6b7078;stroke-width:1.6"/>`,
+    labels: lbt(W / 2, 24, `<b style="color:#222">meio 1</b>`) + lbt(W / 2, 306, `<b style="color:#222;font-size:25px">${nome}</b>`) };
 }
-function boardCcEx() {
-  const yI = 240, B = ccBase(560, 440, yI, "meio 1: εr = 2", "meio 2: εr = 5"), O = [300, yI], k = 30;
-  let svg = B.svg + G.ln(O[0], 40, O[0], 420, "M", 1.4, "", "6 5");
-  // E1 = (5 tangencial, 5 normal), aponta para fora (para cima) na figura
-  svg += G.ar(O[0], O[1], O[0] - 5 * k, O[1] - 5 * k, "P", 3.6);
-  svg += G.g(S("3"), G.ar(O[0] + 5 * k, O[1] + 2 * k, O[0] + 3, O[1] + 2, "R", 3.6) + G.ln(O[0] + 5 * k, O[1] + 2 * k, O[0] + 5 * k, O[1], "R", 1.2, "", "4 4"));
-  svg += G.ln(O[0] - 5 * k, O[1] - 5 * k, O[0] - 5 * k, O[1], "P", 1.2, "", "4 4");
-  svg += G.arc(O[0], O[1], 60, -90, -135, "P", 2) + G.g(S("4"), G.arc(O[0], O[1], 60, 90, 90 - 68.2, "R", 2));
-  const labels = B.labels + lb(O[0] - 5 * k - 30, O[1] - 5 * k, Rw`\vE_1`, "P") + lb(O[0] - 2.5 * k, O[1] + 22, Rw`5`, "P sm") + lb(O[0] - 5 * k - 18, O[1] - 2.5 * k, "5", "P sm") + lb(O[0] - 34, O[1] - 84, Rw`\theta_1`, "P sm", `id="cx-l1"`) +
-    `<div ${S("3")}>` + lb(O[0] + 5 * k + 34, O[1] + 2 * k + 8, Rw`\vE_2`, "R") + lb(O[0] + 5 * k + 20, O[1] + k, "2", "R sm") + lb(O[0] + 2.5 * k, O[1] - 20, "5", "R sm") + `</div>` +
-    lb(O[0] + 52, O[1] + 80, Rw`\theta_2`, "R sm", S("4")) + lb(O[0] + 30, 52, Rw`\az`, "sm");
-  return board(560, 440, svg, labels);
+function boardCcQuatro() {   // interface geral: D_n salta de rho_s, H_t salta de K, B_n e E_t contínuas
+  const W = 560, H = 440, yI = 220;
+  let svg = `<rect x="0" y="0" width="${W}" height="${yI}" style="fill:rgba(0,59,92,.06)"/><rect x="0" y="${yI}" width="${W}" height="${H - yI}" style="fill:rgba(192,120,40,.14)"/>` + G.ln(0, yI, W, yI, "K", 3.4) + G.ar(232, yI - 3, 232, yI - 95, "K", 2.6);
+  const plus = (x) => `<circle cx="${x}" cy="${yI}" r="10" style="fill:#fff;stroke:var(--cR);stroke-width:1.4"/>` + G.ln(x - 5, yI, x + 5, yI, "R", 2.4) + G.ln(x, yI - 5, x, yI + 5, "R", 2.4);
+  svg += G.g(S("2"), G.ar(70, yI - 14, 70, yI - 130, "P", 3.6) + G.ar(70, yI + 84, 70, yI + 14, "P", 3.6) + plus(40) + plus(70) + plus(100));
+  svg += G.g(S("3"), G.ar(170, yI - 8, 170, yI - 108, "G", 3.6) + G.ar(170, yI + 108, 170, yI + 8, "G", 3.6));
+  svg += G.g(S("4"), G.ar(280, yI - 36, 380, yI - 36, "P", 3.6) + G.ar(280, yI + 36, 380, yI + 36, "P", 3.6));
+  svg += G.g(S("5"), G.ar(415, yI - 36, 545, yI - 36, "G", 3.6) + G.ar(415, yI + 36, 485, yI + 36, "G", 3.6) + [435, 480, 525].map((x) => G.sym(x, yI, 10, true, "R")).join(""));
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`;
+  const labels = lbt(W / 2, 26, `<b style="color:#222">meio 1 (ε₁, μ₁)</b>`) + lbt(W / 2, H - 26, `<b style="color:#222">meio 2 (ε₂, μ₂)</b>`) + lb(232, yI - 114, Rw`\hat{\mathbf a}_n`) +
+    L("2", lb(70, yI - 150, Rw`D_{1n}`, "P") + lb(70, yI + 106, Rw`D_{2n}`, "P") + lb(116, yI - 28, Rw`\rho_s`, "R sm")) +
+    L("3", lb(170, yI - 128, Rw`B_{1n}`, "G") + lb(170, yI + 130, Rw`B_{2n}`, "G")) +
+    L("4", lb(330, yI - 60, Rw`E_{1t}`, "P") + lb(330, yI + 62, Rw`E_{2t}`, "P")) +
+    L("5", lb(480, yI - 60, Rw`H_{1t}`, "G") + lb(450, yI + 62, Rw`H_{2t}`, "G") + lb(398, yI - 18, Rw`\vec{\mathbf K}`, "R sm"));
+  return pcb(W, H, svg, labels);
+}
+function boardCcDiel() {   // vista 3D: bloco de baixo = meio 2, bloco transparente de cima = meio 1; E_t e H_t em direções diferentes do plano
+  const y0 = 292, d = 118, up = 124, q = (u, v) => [15 + 420 * u + 115 * v, y0 - 112 * v], sh = (a, dy) => [a[0], a[1] + dy];
+  const A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), top = [A, B, C_, D];
+  let svg = G.poly([A, B, sh(B, d), sh(A, d)], "#f3e3d3", "K", 1.6) + G.poly([B, C_, sh(C_, d), sh(B, d)], "#e8d2bb", "K", 1.6) + G.poly(top, "#f8eee4", "K", 2.6);
+  svg += G.poly(top, "none", "R", 3, S("2")) + G.poly(top, "rgba(255,205,0,.5)", "R", 3, `id="dl-if" ${S("2-4")}`);
+  // meio 1 (transparente): face de trás, lateral, frente e topo
+  svg += G.ln(D[0], D[1], D[0], D[1] - up, "M", 1.2, "", "5 4") + G.poly([A, B, sh(B, -up), sh(A, -up)], "rgba(0,59,92,.05)", "M", 1.3) + G.poly([B, C_, sh(C_, -up), sh(B, -up)], "rgba(0,59,92,.09)", "M", 1.3) + G.poly(top.map((a) => sh(a, -up)), "rgba(0,59,92,.04)", "M", 1.3);
+  const norm = (u, c) => { const a = q(u, 0.5); return G.ar(a[0], a[1] - 4, a[0], a[1] - 82, c, 3.6) + G.ar(a[0], a[1] + 84, a[0], a[1] + 4, c, 3.6, "", "7 4") + G.dot(a[0], a[1], 4, c); };
+  const tang = (a, b, c) => G.ar(a[0], a[1] - 28, b[0], b[1] - 28, c, 3.6) + G.ar(a[0], a[1] + 28, b[0], b[1] + 28, c, 3.6, "", "7 4") + [a, b].map((e) => G.ln(e[0], e[1] - 26, e[0], e[1] + 26, "M", 1, "", "2 3")).join("");
+  const e0 = q(0.43, 0.5), e1 = q(0.65, 0.5), h0 = q(0.8, 0.12), h1 = q(0.8, 0.88), pd = q(0.1, 0.5), pb = q(0.26, 0.5);
+  svg += G.g(S("5"), norm(0.1, "P")) + G.g(S("6"), norm(0.26, "G")) + G.g(S("7"), tang(e0, e1, "P")) + G.g(S("8"), tang(h0, h1, "G"));
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`;
+  const labels = lbt(250, 92, `<b style="color:#222">meio 1: dielétrico (ε₁, μ₁)</b>`) + lbt(225, y0 + d - 20, `<b style="color:#222">meio 2: dielétrico (ε₂, μ₂)</b>`) +
+    L("2", lbt(345, 24, "interface", "R")) + L("3", lb(470, 22, Rw`\rho_s=0,\ \ \vec{\mathbf K}=0`, "R sm", `id="dl-l"`)) +
+    L("5", lb(pd[0] - 32, pd[1] - 44, Rw`D_{1n}`, "P") + lb(pd[0] - 34, pd[1] + 76, Rw`D_{2n}`, "P")) +
+    L("6", lb(pb[0] + 34, pb[1] - 44, Rw`B_{1n}`, "G") + lb(pb[0] + 34, pb[1] + 76, Rw`B_{2n}`, "G")) +
+    L("7", lb((e0[0] + e1[0]) / 2, e0[1] - 48, Rw`E_{1t}`, "P") + lb(e0[0] - 26, e0[1] + 28, Rw`E_{2t}`, "P")) +
+    L("8", lb(h1[0] - 2, h1[1] - 50, Rw`H_{1t}`, "G") + lb(h0[0] + 36, h0[1] + 36, Rw`H_{2t}`, "G"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcPec() {   // vista 3D: E normal, H tangente e K = a_n x H (para o fundo) na superfície
+  const q = (u, v) => ccPu(u, v), A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), d = 150, y0 = A[1], x0 = A[0], x1 = B[0];
+  let hat = ""; for (let x = x0 - d + 12; x < x1; x += 24) { const a = Math.max(x, x0), b = Math.min(x + d, x1); hat += G.ln(a, y0 + d - (a - x), b, y0 + d - (b - x), "M", 1, `stroke-opacity=".45"`); }
+  let svg = G.poly([A, B, [B[0], B[1] + d], [A[0], A[1] + d]], "#cfd2d6", "K", 1.6) + hat + G.poly([B, C_, [C_[0], C_[1] + d], [B[0], B[1] + d]], "#b9bdc3", "K", 1.6) + G.poly([A, B, C_, D], "#e6e8eb", "K", 2.6) +
+    `<rect x="${x0 + 22}" y="${y0 + 26}" width="${x1 - x0 - 44}" height="100" rx="10" style="fill:#fff;stroke:#6b7078;stroke-width:1.6"/>`;
+  // K (fundo) e H (direita), na superfície
+  for (const u of [0.28, 0.62]) { const a = q(u, 0.08), b = q(u, 0.92); svg += G.ar(a[0], a[1], b[0], b[1], "R", 3.4); }
+  const h0 = q(0.03, 0.5), h1 = q(0.84, 0.5); svg += G.ar(h0[0], h0[1], h1[0], h1[1], "G", 3.6);
+  const r0 = q(0.62, 0.5), ra = q(0.665, 0.5), rb = q(0.665, 0.61), rc = q(0.62, 0.61); svg += G.pa(`M${ra} L${rb} L${rc}`, "K", 1.6);
+  for (const v of [0.78, 0.24]) for (const u of [0.11, 0.45, 0.79]) { const [x, y] = q(u, v); svg += G.ar(x, y - 11, x, y - 92, "P", 3.2) + `<circle cx="${x}" cy="${y}" r="10" style="fill:#fff;stroke:var(--cR);stroke-width:1.4"/>` + G.ln(x - 5, y, x + 5, y, "R", 2.4) + G.ln(x, y - 5, x, y + 5, "R", 2.4); }
+  const n0 = q(0.96, 0.5); svg += G.ar(n0[0], n0[1], n0[0], n0[1] - 112, "K", 2.4);
+  const e = q(0.11, 0.78), rs = q(0.79, 0.24), k = q(0.62, 0.92);
+  const labels = lbt(60, 26, `<b style="color:#222">meio 1</b>`) + lbt((x0 + x1) / 2, y0 + 48, `<b style="color:#222;font-size:23px">CONDUTOR PERFEITO (meio 2)</b>`) + lb((x0 + x1) / 2, y0 + 94, Rw`\sigma\to\infty,\quad \vE_2=0,\quad \vH_2=0`, "sm") +
+    lb(n0[0] + 24, n0[1] - 104, Rw`\hat{\mathbf a}_n`) + lb(e[0] - 28, e[1] - 78, Rw`\vE_1`, "P") + lb(h1[0] + 22, h1[1] + 2, Rw`\vH_1`, "G") + lb(rs[0] + 28, rs[1] + 8, Rw`\rho_s`, "R") + lb(k[0] + 24, k[1] - 2, Rw`\vec{\mathbf K}`, "R", `id="pc-lK"`);
+  return pcb(560, 440, svg, labels);
+}
+// parede magnética em perspectiva: curva L deitada na superfície (u: para a direita, v: para o fundo)
+const ccPu = (u, v) => [20 + 410 * u + 115 * v, 262 - 160 * v];
+function ccPlano() {
+  const q = (u, v) => ccPu(u, v), A = q(0, 0), B = q(1, 0), C_ = q(1, 1), D = q(0, 1), d = 150;
+  const svg = G.poly([A, B, C_, D], "#e4dff0", "K", 2.4) + G.poly([A, B, [B[0], B[1] + d], [A[0], A[1] + d]], "#cbc2de", "K", 1.6) + G.poly([B, C_, [C_[0], C_[1] + d], [B[0], B[1] + d]], "#b9aed2", "K", 1.6);
+  const labels = lbt(225, 352, `<b style="color:#222;font-size:21px">PAREDE MAGNÉTICA (meio 2)</b>`) + lb(225, 388, Rw`\mu\to\infty,\qquad \vH_2=0`) + lbt(60, 26, `<b style="color:#222">meio 1</b>`);
+  const n0 = q(0.1, 0.62);
+  return { svg: svg + G.ar(n0[0], n0[1], n0[0], n0[1] - 95, "K", 2.6), labels: labels + lb(n0[0] - 22, n0[1] - 88, Rw`\hat{\mathbf a}_n`) };
+}
+const ccL = () => [ccPu(0.27, 0.22), ccPu(0.77, 0.22), ccPu(0.77, 0.8), ccPu(0.27, 0.8)];
+function ccLaco(c, w, ex = "") {   // L percorrida no sentido positivo para a_n para cima
+  const p = ccL(); let o = "";
+  for (let k = 0; k < 4; k++) { const a = p[k], b = p[(k + 1) % 4], m = [a[0] + (b[0] - a[0]) * 0.58, a[1] + (b[1] - a[1]) * 0.58]; o += G.ln(a[0], a[1], b[0], b[1], c, w) + G.ar(a[0], a[1], m[0], m[1], c, w); }
+  return `<g ${ex}>${o}</g>`;
+}
+function boardCcDn() {
+  const B = ccPlano(), p = ccL(); let svg = B.svg;
+  svg += G.g(S("2"), G.poly(p, "rgba(255,255,255,.75)", "R", 0)) + ccLaco("R", 3, S("2"));
+  svg += G.g(S("3-3"), `<g id="dn-L">` + G.poly(p, "none", "R", 9, `stroke-opacity=".45"`) + `</g>`) + G.g(S("4-4"), G.poly(p, "rgba(255,205,0,.65)", "R", 3, `id="dn-S"`));
+  const pts = [[0.4, 0.38], [0.64, 0.38], [0.4, 0.64], [0.64, 0.64]].map(([u, v]) => ccPu(u, v));
+  let ar = "", xs = ""; for (const [x, y] of pts) { ar += G.ar(x, y + 84, x, y + 2, "P", 3.2, "", "7 4") + G.dot(x, y, 4, "P"); xs += G.ln(x - 12, y + 34, x + 12, y + 60, "R", 4) + G.ln(x - 12, y + 60, x + 12, y + 34, "R", 4); }
+  let mini = "", ml = ""; const cs = [[0.05, 0.08], [0.83, 0.06], [0.84, 0.62]];
+  cs.forEach(([u, v], k) => { const a = ccPu(u, v), b = ccPu(u + 0.1, v), c = ccPu(u + 0.1, v + 0.15), d = ccPu(u, v + 0.15); mini += G.poly([a, b, c, d], "rgba(255,255,255,.75)", "R", 2.4, k === 2 ? `id="dn-m"` : "") + G.ar(a[0], a[1], a[0] + 28, a[1], "R", 2); ml += lb((a[0] + c[0]) / 2, a[1] - 34, "L'", "R sm"); });
+  svg += G.g(S("6"), mini) + G.g(S("5"), ar) + G.g(S("7"), xs);
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`, c = ccPu(0.77, 0.5);
+  const labels = B.labels + L("2", lb(c[0] + 26, c[1] + 6, "L", "R") + lb(ccPu(0.52, 0.5)[0], ccPu(0.52, 0.5)[1], "S", "M")) +
+    L("3-3", lb(ccPu(0.5, 0.1)[0], ccPu(0.5, 0.1)[1], Rw`\vH_2=0\ \text{em}\ L`, "R sm")) + L("6", ml) + L("5", lb(pts[0][0] - 34, pts[0][1] + 78, Rw`D_{2n}`, "P"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcBn() {   // passos 9-14: segunda fase do slide da parede magnética
+  const B = ccPlano(), p = ccL(); let svg = B.svg;
+  for (const v of [0.36, 0.66, 0.92]) { const a = ccPu(0.04, v), b = ccPu(0.97, v); svg += G.ar(a[0], a[1], b[0], b[1], "P", 2.2); }
+  svg += ccLaco("R", 3, S("9"));
+  const hl = (a, b, id) => G.ln(a[0], a[1], b[0], b[1], "R", 10, `id="${id}" style="stroke:var(--cR);stroke-width:10;stroke-opacity:.45"`);
+  svg += G.g(S("10-10"), hl(p[0], p[1], "bn-f")) + G.g(S("11-11"), hl(p[2], p[3], "bn-b")) + G.g(S("12-12"), `<g id="bn-l">` + hl(p[1], p[2], "bn-l1") + hl(p[3], p[0], "bn-l2") + `</g>`);
+  const pts = [[0.42, 0.5], [0.62, 0.5]].map(([u, v]) => ccPu(u, v)); let ar = "", xs = "";
+  for (const [x, y] of pts) { ar += G.ar(x, y + 100, x, y + 2, "G", 3.2, "", "7 4") + G.dot(x, y, 4, "G"); xs += G.ln(x - 12, y + 50, x + 12, y + 76, "R", 4) + G.ln(x - 12, y + 76, x + 12, y + 50, "R", 4); }
+  svg += G.g(S("13"), ar) + G.g(S("14"), xs);
+  const L = (k, h) => `<div ${S(k)}>${h}</div>`, c = ccPu(0.77, 0.5), f = ccPu(0.52, 0.22), e = ccPu(0.97, 0.92);
+  const labels = B.labels + lb(e[0] - 6, e[1] - 34, Rw`\vE_{2t}`, "P") + L("9", lb(c[0] + 26, c[1] + 2, "L", "R") + lb(f[0] - 72, f[1] + 18, Rw`\ell`, "R")) + L("13", lb(pts[0][0] - 34, pts[0][1] + 100, Rw`B_{2n}`, "G"));
+  return pcb(560, 440, svg, labels);
+}
+function boardCcPmc() {   // H tangencial vai a zero na superfície; E tangencial é contínuo e não se anula
+  const W = 560, H = 440, yI = 230, B = ccWall(W, H, yI, "#d9d3e6", "PAREDE MAGNÉTICA (meio 2)");
+  let svg = B.svg;
+  for (const [y, r] of [[yI - 160, 15], [yI - 115, 11], [yI - 72, 6.5]]) for (const x of [70, 170, 270, 370]) svg += G.sym(x, y, r, true, "G");
+  svg += G.ar(30, yI - 30, 395, yI - 30, "P", 3.6) + G.ar(500, yI - 44, 500, yI - 5, "R", 2.2) + G.ar(440, yI - 4, 440, yI - 130, "K", 2.4);
+  svg += G.ar(30, yI + 28, 395, yI + 28, "P", 3.6);
+  const labels = B.labels + lb(W / 2, 344, Rw`\mu\to\infty`) + lb(W / 2, 386, Rw`\vH_2=0`) + lb(462, yI - 124, Rw`\hat{\mathbf a}_n`) +
+    lb(415, yI - 34, Rw`\vE_{1t}`, "P") + lb(418, yI + 26, Rw`\vE_{2t}`, "P") + lb(24, yI - 115, Rw`\vH_1`, "G") + lbt(220, yI - 52, "H tangencial → 0", "G", `id="pm-lH"`) + lbt(500, yI - 92, "na superfície", "R") + lb(500, yI - 62, Rw`H_t=0`, "R sm");
+  return pcb(W, H, svg, labels);
 }
 // ---------- quadros: reflexão em incidência normal ----------
 // meio 1 à esquerda (z < 0), meio 2 à direita; z para a direita, x para cima, y saindo da tela
@@ -2288,12 +2414,70 @@ $("fz2-rst")?.addEventListener("click", () => {
   fz2Reset(); fz2Draw(true);
 });
 
+function boardFzbPsi() {   // Ψ(t) = 0,4 d0 + 2t com d0 = 2 m: reta de inclinação 2 Wb/s
+  const X0 = 80, Y0 = 400, X = (t) => X0 + t * 120, Y = (p) => Y0 - p * 42, P = (t) => 0.8 + 2 * t;
+  let svg = G.ar(X0, Y0, 540, Y0, "K", 1.6) + G.ar(X0, Y0, X0, 40, "K", 1.6);
+  svg += G.ln(X(0), Y(P(0)), X(3.5), Y(P(3.5)), "P", 3.2) + G.dot(X(0), Y(P(0)), 6, "P");
+  svg += G.g(S("3"), G.ln(X(1.5), Y(P(1.5)), X(2.5), Y(P(1.5)), "M", 2, "", "6 4") + G.ln(X(2.5), Y(P(1.5)), X(2.5), Y(P(2.5)), "M", 2, "", "6 4"));
+  const labels = lb(530, Y0 + 24, Rw`t\,(\mathrm s)`, "sm") + lb(X0 + 10, 24, Rw`\Psi\,(\mathrm{Wb})`, "sm") +
+    lb(X0 - 40, Y(P(0)), "0{,}8", "P sm") + lb(X(1), Y0 + 24, "1", "sm") + lb(X(2), Y0 + 24, "2", "sm") + lb(X(3), Y0 + 24, "3", "sm") +
+    lb(X(2), Y(P(1.5)) + 22, Rw`1\ \mathrm s`, "M sm", S("3")) + lb(X(2.5) + 50, Y(P(2)), Rw`2\ \mathrm{Wb}`, "M sm", `id="fzp-l" ${S("3")}`) +
+    lbt(300, 440, "ilustração com d<sub>0</sub> = 2 m");
+  return board(560, 470, svg, labels);
+}
+function boardCcTan() {   // vista 3D: a_n x (.) gira E_t de 90° no plano da interface (u: direita, v: fundo, normal: para cima)
+  const O = [275, 296], eu = [150, 0], ev = [80, -95], t0 = -30, hE = 195;
+  const P = (a, b, z = 0) => [O[0] + a * eu[0] + b * ev[0], O[1] + a * eu[1] + b * ev[1] - z], C_ = (t, r = 1, z = 0) => P(r * Math.cos(t * DEG), r * Math.sin(t * DEG), z);
+  const arcP = (t1, t2, r) => { let d = ""; for (let k = 0; k <= 40; k++) { const q = C_(t1 + (t2 - t1) * k / 40, r); d += (k ? "L" : "M") + q[0].toFixed(1) + "," + q[1].toFixed(1); } return d; };
+  const ar = (a, b, c, w = 3.6, ex = "", ds = "") => G.ar(a[0], a[1], b[0], b[1], c, w, ex, ds), ln = (a, b, c, w, ds) => G.ln(a[0], a[1], b[0], b[1], c, w, "", ds);
+  const right = (t, r = 0.17) => { const a = C_(t, r), b = C_(t + 45, r * Math.SQRT2), c = C_(t + 90, r); return G.pa(`M${a} L${b} L${c}`, "K", 1.5); };
+  // giro: segmento em coordenadas do plano (matriz da perspectiva) com rotate() animado por CSS
+  const giro = (st, a, b, c) => `<g class="rotp" data-s="${st}" style="--m:matrix(${eu[0]},${eu[1]},${ev[0]},${ev[1]},${O[0]},${O[1]});--b:${a}deg;--a:${b}deg"><line x1="0" y1="0" x2="${Math.cos(t0 * DEG)}" y2="${Math.sin(t0 * DEG)}" style="stroke:var(--c${c});stroke-width:7;stroke-opacity:.45;vector-effect:non-scaling-stroke"/></g>`;
+  const pl = [P(-1.22, -1.12), P(1.22, -1.12), P(1.22, 1.12), P(-1.22, 1.12)], T = C_(t0), E = C_(t0, 1, hE), d = 34;
+  let svg = G.poly([pl[0], pl[1], [pl[1][0], pl[1][1] + d], [pl[0][0], pl[0][1] + d]], "rgba(192,120,40,.22)", "M", 1.2) + G.poly([pl[1], pl[2], [pl[2][0], pl[2][1] + d], [pl[1][0], pl[1][1] + d]], "rgba(192,120,40,.32)", "M", 1.2) + G.poly(pl, "rgba(0,59,92,.07)", "K", 2);
+  svg += G.pa(arcP(0, 360, 1), "M", 1.1, "", "4 5");
+  svg += G.g(S("2"), G.poly([O, T, E, P(0, 0, hE)], "rgba(0,59,92,.09)", "M", 1, "", "4 4"));
+  svg += ln(T, E, "M", 1.4, "5 4") + ln(P(0, 0, hE), E, "M", 1.4, "5 4") + ar([O[0] - 4, O[1]], P(0, 0, hE).map((v, k) => k ? v : v - 4), "M", 2.6) + ar([O[0] + 2, O[1]], [O[0] + 2, O[1] - 84], "K", 3.2) + ar(O, E, "P") + ar(O, T, "R");
+  svg += giro("3", 0, 90, "G") + G.g(`class="late" ${S("3")}`, ar(O, C_(t0 + 90), "G") + right(t0)) + G.g(S("3"), G.pa(arcP(t0 + 5, t0 + 84, 0.55), "G", 2.4, `marker-end="url(#mG)"`));
+  svg += giro("4", 90, 180, "K") + G.g(`class="late" ${S("4")}`, ar(O, C_(t0 + 180), "K") + right(t0 + 90)) + G.g(S("4"), G.pa(arcP(t0 + 95, t0 + 174, 0.55), "K", 2.4, `marker-end="url(#mK)"`));
+  svg += giro("5", 180, 360, "R") + G.g(S("5"), G.pa(arcP(t0 + 186, t0 + 352, 0.75), "R", 2.4, `marker-end="url(#mR)"`));
+  const L = (k, h, c = "") => `<div ${S(k)} ${c}>${h}</div>`, g = C_(t0 + 90), n = C_(t0 + 180), a1 = C_(t0 + 48, 0.72), a3 = C_(t0 + 276, 0.95);
+  const labels = lbt(70, 26, `<b style="color:#222">meio 1</b>`) + lbt(pl[0][0] + 60, pl[0][1] + 18, `<b style="color:#222">meio 2</b>`) + lb(O[0] + 24, O[1] - 72, Rw`\hat{\mathbf a}_n`) + lb(O[0] - 28, O[1] - 168, Rw`\vE_n`, "M") + lb(E[0] + 24, E[1] - 6, Rw`\vE`, "P") + lb(T[0] + 25, T[1] + 1, Rw`\vE_t`, "R") +
+    L("3", lb(g[0] + 48, g[1] + 6, Rw`\hat{\mathbf a}_n\times\vE`, "G", `id="tg-l"`) + lb(a1[0] + 12, a1[1], Rw`90^\circ`, "G sm")) +
+    L("4", lb(n[0] - 64, n[1] - 80, Rw`\hat{\mathbf a}_n\times(\hat{\mathbf a}_n\times\vE)`, "sm", `id="tg-l2"`) + lb(240, 226, Rw`90^\circ`, "sm")) + L("5", lb(a3[0], a3[1] + 6, Rw`-1:\ \text{meia volta}`, "R sm"));
+  return pcb(560, 440, svg, labels);
+}
+// exemplo de parede magnética: abertura lateral sob uma placa de microfita (altura do substrato exagerada)
+function boardCcFita() {
+  const hs = 92, q = (u, v, z = 0) => [75 + 320 * u + 110 * v, 282 - 120 * v - hs * z];
+  const gnd = [q(-0.16, -0.22), q(1.12, -0.22), q(1.12, 1.15), q(-0.16, 1.15)], F = [q(0, 0), q(1, 0), q(1, 0, 1), q(0, 0, 1)], R = [q(1, 0), q(1, 1), q(1, 1, 1), q(1, 0, 1)], T = [q(0, 0, 1), q(1, 0, 1), q(1, 1, 1), q(0, 1, 1)];
+  let svg = G.poly(gnd, "#cfd2d6", "K", 1.8) + G.poly(F, "rgba(0,59,92,.07)", "M", 1.4) + G.poly(R, "rgba(0,59,92,.12)", "M", 1.4) + G.poly(T, "#eed2b4", "K", 2.6);
+  svg += G.g(S("6"), G.poly(F, "rgba(120,90,170,.32)", "R", 3.2, `id="mf-w"`));
+  let e = ""; for (const u of [0.1, 0.37, 0.64, 0.91]) { const a = q(u, 0, 0.03), b = q(u, 0, 0.97); e += G.ar(a[0], a[1], b[0], b[1], "P", 3.4); }
+  svg += G.g(S("2"), e);
+  // corte vertical na borda: meio 1 (dielétrico sob a placa) | abertura | meio 2 (ar)
+  const X = 285, y0 = 408, y1 = 560, ym = 484, cm = q(0.775, 0.13, 1), cb = q(0.775, 0);
+  let co = G.ln(cm[0], cm[1], q(0.775, 0, 1)[0], q(0.775, 0, 1)[1], "G", 2.4, "", "7 5") + G.ln(q(0.775, 0, 1)[0], q(0.775, 0, 1)[1], cb[0], cb[1], "G", 2.4, "", "7 5") + G.ln(cb[0], cb[1], q(0.775, -0.2)[0], q(0.775, -0.2)[1], "G", 2.4, "", "7 5");
+  co += G.poly([[30, y0], [X, y0], [X, y1], [30, y1]], "rgba(0,59,92,.10)", "M", 0.01) + G.poly([[30, y0 - 11], [X, y0 - 11], [X, y0], [30, y0]], "#eed2b4", "K", 2) + G.poly([[30, y1], [530, y1], [530, y1 + 14], [30, y1 + 14]], "#cfd2d6", "K", 1.8);
+  co += G.ln(X, y0, X, y1, "G", 3, "", "8 6");
+  co += G.ar(X - 62, ym + 52, X - 62, ym - 52, "P", 5) + G.ar(X + 62, ym + 52, X + 62, ym - 52, "P", 5) + G.ar(X, ym + 34, X - 48, ym + 34, "K", 3) + G.pa(`M${X - 14},${ym + 34} L${X - 14},${ym + 20} L${X},${ym + 20}`, "K", 1.5);
+  svg += G.g(S("3"), co) + G.g(S("6"), G.ln(X, y0, X, y1, "R", 6, `stroke-opacity=".75"`)) + G.g(S("7"), G.pa(`M${X + 34},${y1} Q${X + 44},${ym - 10} ${X + 4},${y0 + 4}`, "M", 2, `marker-end="url(#mM)"`) + G.pa(`M${X + 150},${y1} Q${X + 150},${y0 - 34} ${X + 4},${y0 - 12}`, "M", 2, `marker-end="url(#mM)"`));
+  let k = ""; for (const u of [0.2, 0.5, 0.8]) for (const [v, L] of [[0.66, 0.3], [0.31, 0.17]]) { const a = q(u, v + L / 2, 1), b = q(u, v - L / 2, 1); k += G.ar(a[0], a[1], b[0], b[1], "R", 3); }
+  const b0 = q(0, 0, 1), b1 = q(1, 0, 1);
+  svg += G.g(S("4"), k) + G.g(S("4-5"), G.ln(b0[0], b0[1], b1[0], b1[1], "R", 7, `stroke-opacity=".6" id="mf-b"`));
+  const L = (n, h) => `<div ${S(n)}>${h}</div>`, c = q(0.5, 1.0, 1), g = q(0.48, -0.13);
+  const labels = lbt(c[0], c[1] - 20, `<b style="color:#222">placa metálica</b>`) + lbt(g[0] - 72, g[1], `<b style="color:#222">plano de terra (metal)</b>`) + lbt(120, 16, "(altura do dielétrico exagerada)") +
+    L("2", lb(q(0.235, 0, 0.5)[0], q(0.235, 0, 0.5)[1], Rw`\vE`, "P")) +
+    L("3", lbt(q(0.775, -0.2)[0] + 34, q(0.775, -0.2)[1] + 14, "corte", "G") + lbt(96, y0 - 28, `<b style="color:#222">corte na borda</b>`) + lbt(116, y0 + 18, "meio 1: dielétrico") + lbt(485, y0 + 18, "meio 2: ar") + lb(X - 94, ym - 4, Rw`\vE_{1t}`, "P") + lb(X + 94, ym - 4, Rw`\vE_{2t}`, "P") + lb(X - 26, ym + 56, Rw`\hat{\mathbf a}_n`) + lb(470, y0 - 30, Rw`E_{1t}=E_{2t}\neq0`, "G")) +
+    L("4", lb(q(0.66, 0.5, 1)[0], q(0.66, 0.5, 1)[1], Rw`\vec{\mathbf K}`, "R")) + L("6", lbt(X, y1 + 32, "abertura: parede magnética", "R"));
+  return pcb(560, 610, svg, labels);
+}
 const BOARDS = { flux: boardFluxo, lenz: boardLenz, lenzen: boardLenzEn, obs: boardObs, fint: boardFint, fpont: boardFpont, exa: boardExA, exb: boardExB, exc: boardExC, exd: boardExD,
   cont: boardCont, gaussd: boardGaussD, capd: boardCapD, amint: boardAmInt, fase: boardFase, excap: () => boardExCap(1), excap2: () => boardExCap(2),
-  pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, harm1d: () => boardHarm1d({ lam: "6" }), harm1dv: () => boardHarm1d({ shift: "2" }), planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, ondaex3: boardOndaEx3, extriade: boardExTriade,
+  pulso: boardPulso, fasor: boardFasor, atenua: boardAtenua, defasa: boardDefasa, tanp: boardTanP, pele: boardPele, ex1pc: boardEx1pc, zplanos: boardZPlanos, caract: boardCaract, planos0: boardPlanos0, harm1d: () => boardHarm1d({ lam: "6" }), harm1dv: () => boardHarm1d({ shift: "2" }), planos: boardPlanos, triade1: () => boardTriade(false), triade: () => boardTriade(true), exonda: boardExOnda, cctan: boardCcTan, fzbpsi: boardFzbPsi, ondaex3: boardOndaEx3, extriade: boardExTriade,
   poyvol: boardPoyVol, poyfio: boardPoyFio, poycos: boardPoyCos, poyprod: boardPoyProd, sol: boardSol, poyex2: boardPoyEx2,
   poldef: boardPolDef, pollin: boardPolLin, polell: boardPolEll, polcirc: boardPolCirc, polsent: boardPolSent, polexab: boardPolExAB, polexc: boardPolExC,
-  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccpec: boardCcPec, ccex: boardCcEx,
+  ccsetup: boardCcSetup, ccloope: () => boardCcLoop(false), cclooph: () => boardCcLoop(true), ccpill: boardCcPill, ccrefr: boardCcRefr, ccquatro: boardCcQuatro, ccdiel: boardCcDiel, ccpec: boardCcPec, ccpmc: boardCcPmc, ccfita: boardCcFita, ccdn: boardCcDn, ccbn: boardCcBn,
   rnsetup: boardRnSetup, rnbc: boardRnBC, rnpec: boardRnPec, rnpech: boardRnPecH, rnenv: boardRnEnv, rnpow: boardRnPow, rnexen: boardRnExEn, rnexir: boardRnExIR, rnext: boardRnExT,
   obk: boardObK, obplano: boardObPlano, obfase: boardObFase, obpols: boardObPols, obperp: boardObPerp, obpar: boardObPar, obbrew: boardObBrew, obgraf: boardObGraf, obtir: boardObTir, obpow: boardObPow,
   obexen: boardObExEn, obexk: boardObExK, obext: boardObExT, obexh: boardObExH,
@@ -3026,7 +3210,50 @@ $("ant-heat")?.addEventListener("change", drawAnt);
 $("ant-play")?.addEventListener("click", () => { ANT.play = !ANT.play; $("ant-play").textContent = ANT.play ? "Pausar" : "Animar"; });
 
 const FIGS = {};
-const DRAW = { anel: startAnel, ima: startIma, exi: drawExi, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb, ant: startAnt, fz2: startFz2 };
+// ---------- instrumento: onda estacionária do exemplo da forma final ----------
+// E_y = 50 sen(2πx) sen(ωt), η0 H_z = 50 cos(2πx) cos(ωt)
+const EST = { play: false, last: null };
+function drawEst() {   // vista oblíqua: x para a direita, y para cima, z saindo da tela (diagonal)
+  const cv = $("est-cv"); if (!cv || !cv.clientWidth) return;
+  const { ctx, w, h } = setupCanvas(cv), c = C(), wt = val("est-t") * DEG;
+  const xm = 2, ml = 150, mr = 60, sx = (w - ml - mr) / xm, A = h * 0.30, dz = [-0.62, 0.42], x0 = ml, y0 = h * 0.47;
+  const P = (x, ey, hz) => [x0 + x * sx + hz * A * dz[0], y0 - ey * A + hz * A * dz[1]];   // ey, hz normalizados (±1)
+  ctx.clearRect(0, 0, w, h);
+  // planos xy e xz (faixas claras)
+  const quad = (pts, fill) => { ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); pts.forEach((p, k) => k ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath(); ctx.fill(); ctx.restore(); };
+  quad([P(0, -1, 0), P(xm, -1, 0), P(xm, 1, 0), P(0, 1, 0)], "rgba(0,59,92,.05)");
+  quad([P(0, 0, -1), P(xm, 0, -1), P(xm, 0, 1), P(0, 0, 1)], "rgba(0,102,51,.06)");
+  // eixos
+  arrowTo(ctx, ...P(-0.05, 0, 0), ...P(xm + 0.12, 0, 0), c.K, 1.6, 10); txt(ctx, "x (m)", ...P(xm + 0.14, 0.12, 0), { size: 16, italic: true, c: c.M });
+  arrowTo(ctx, ...P(0, 0, 0), ...P(0, 1.25, 0), c.K, 1.4, 9); txt(ctx, "y", ...P(0.03, 1.32, 0), { size: 17, italic: true });
+  arrowTo(ctx, ...P(0, 0, 0), ...P(0, 0, 1.5), c.K, 1.4, 9); txt(ctx, "z", ...P(0, -0.08, 1.62), { size: 17, italic: true });
+  for (let q = 1; q <= 4; q++) { const x = q * 0.5, [px, py] = P(x, 0, 0); line(ctx, px, py - 5, px, py + 5, c.K, 1.4); txt(ctx, fmtc(x, 1), px + 14, py + 18, { align: "center", size: 14, c: c.M }); }
+  const Ey = (x) => Math.sin(TAU * x) * Math.sin(wt), Hz = (x) => Math.cos(TAU * x) * Math.cos(wt);   // normalizados por 50 V/m
+  // envoltórias tracejadas
+  const path = (f, col, lw, dash) => { ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.beginPath();
+    for (let k = 0; k <= 400; k++) { const x = xm * k / 400, p = f(x); k ? ctx.lineTo(...p) : ctx.moveTo(...p); } ctx.stroke(); ctx.restore(); };
+  for (const sg of [1, -1]) { path((x) => P(x, sg * Math.abs(Math.sin(TAU * x)), 0), c.P, 1, [5, 5]); path((x) => P(x, 0, sg * Math.abs(Math.cos(TAU * x))), c.G, 1, [5, 5]); }
+  // setas de H (em z) e de E (em y)
+  for (let k = 0; k <= 32; k++) {
+    const x = xm * k / 32, e = Ey(x), hh = Hz(x);
+    if (Math.abs(hh) > 0.08) arrowTo(ctx, ...P(x, 0, 0), ...P(x, 0, hh), c.G, 2, 8);
+    if (Math.abs(e) > 0.08) arrowTo(ctx, ...P(x, 0, 0), ...P(x, e, 0), c.P, 2, 8);
+  }
+  path((x) => P(x, 0, Hz(x)), c.G, 3);
+  path((x) => P(x, Ey(x), 0), c.P, 3);
+  txt(ctx, "E_y (direção y)", w - 230, 30, { size: 17, c: c.P }); txt(ctx, "η₀H_z (direção z)", w - 230, 56, { size: 17, c: c.G });
+}
+function estFrame(ts) {
+  if (!EST.play) return;
+  const sl = $("est-cv").closest(".slide"); if (!sl.classList.contains("active")) { EST.play = false; $("est-play").textContent = "Animar"; return; }
+  const dt = EST.last === null ? 0 : (ts - EST.last) / 1000; EST.last = ts;
+  const el = $("est-t"); let v = Number(el.value) + dt * 60; if (v > 360) v -= 360; el.value = v; $("est-t-o").textContent = Math.round(v) + "°"; drawEst();
+  requestAnimationFrame(estFrame);
+}
+bindIf(["est-t"], { "est-t": (v) => Math.round(v) + "°" }, drawEst);
+$("est-play")?.addEventListener("click", () => { EST.play = !EST.play; EST.last = null; $("est-play").textContent = EST.play ? "Pausar" : "Animar"; if (EST.play) requestAnimationFrame(estFrame); });
+
+const DRAW = { est: drawEst, anel: startAnel, ima: startIma, exi: drawExi, razao: drawRazao, pulso: drawPulso, plana: startPlana, perdas: startPerdas, poy: startPoy, pol: startPol, cc: drawCc, rn: startRn, ob: startOb, ant: startAnt, fz2: startFz2 };
 
 // ---------- modo rolável (celular, tablet em pé): quadros e equações cabem na largura ----------
 function narrowFit() {
